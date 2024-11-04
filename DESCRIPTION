@@ -10,6 +10,8 @@ Authors@R:  c(
     person("Stéphane", "Guerrier", role = "aut")
     )
 Description: Implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024) <doi:10.48550/arXiv.2409.05160>.
+             The GMWMX estimator allows to estimate functional and stochastic parameters of linear models with correlated residuals in presence of missing data.
+             The 'gmwmx2' package provides functions to load and plot Global Navigation Satellite System (GNSS) data from the Nevada Geodetic Laboratory and functions to estimate linear model model with correlated residuals in presence of missing data.
 License: AGPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -19,4 +21,8 @@ Depends:
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 Imports: 
-    Rcpp
+    Rcpp,
+    data.table,
+    dplyr,
+    magrittr
+Suggests: knitr
