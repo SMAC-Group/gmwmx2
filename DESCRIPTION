@@ -1,0 +1,22 @@
+Package: gmwmx2
+Title: Estimate Functional and Stochastic Parameters of Linear Models with Correlated Residuals and Missing Data
+Version: 0.0.1
+Authors@R:  c(
+    person("Lionel", "Voirol", email = "lionelvoirol@hotmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1696-1407")),
+    person("Haotian", "Xu", role = "aut"),
+    person("Yuming", "Zhang", role = "aut"),
+    person("Luca", "Insolia", role = "aut"),
+    person("Roberto", "Molinari", role = "aut"),
+    person("Stéphane", "Guerrier", role = "aut")
+    )
+Description: Implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024) <doi:10.48550/arXiv.2409.05160>.
+License: AGPL-3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends:
+    R (>= 4.0.0)
+VignetteBuilder: knitr
+LinkingTo: Rcpp, RcppArmadillo
+Imports: 
+    Rcpp
