@@ -1,4 +1,4 @@
-#'Load .tenv3 GNSS position time series format and steps reference from Nevada Geodetic Laboratory with IGS14  reference frame.
+#' Download the .tenv3 GNSS position time series format and steps reference from Nevada Geodetic Laboratory with IGS14  reference frame.
 #'
 #' @importFrom data.table fread
 #' @importFrom utils read.table

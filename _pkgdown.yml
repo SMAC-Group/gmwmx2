@@ -1,0 +1,26 @@
+url: ~
+template:
+  params:
+    bootswatch: flatly
+
+    
+reference:
+  - title: Load and plot NGL data
+    contents:
+    - download_station_ngl
+    - download_all_stations_names_ngl
+    - plot.gnss_ts_ngl
+
+
+
+navbar:
+  left:
+  - icon: fa-home
+    href: index.html
+  - text: Reference
+    href: reference/index.html
+  right:
+  - icon: fa-github
+    href: https://github.com/SMAC-Group/gmwmx2
+    
+

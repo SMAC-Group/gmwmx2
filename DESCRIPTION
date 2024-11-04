@@ -3,11 +3,11 @@ Title: Estimate Functional and Stochastic Parameters of Linear Models with Corre
 Version: 0.0.1
 Authors@R:  c(
     person("Lionel", "Voirol", email = "lionelvoirol@hotmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1696-1407")),
-    person("Haotian", "Xu", role = "aut"),
-    person("Yuming", "Zhang", role = "aut"),
-    person("Luca", "Insolia", role = "aut"),
-    person("Roberto", "Molinari", role = "aut"),
-    person("Stéphane", "Guerrier", role = "aut")
+    person("Haotian", "Xu", role = "aut",  comment = c(ORCID = "0000-0001-8336-4536")),
+    person("Yuming", "Zhang", role = "aut",  comment = c(ORCID = "0000-0003-2293-9601")),
+    person("Luca", "Insolia", role = "aut", comment = c(ORCID = "0000-0003-4169-5446")),
+    person("Roberto", "Molinari", role = "aut", comment = c(ORCID = "0000-0001-8766-6902")),
+    person("Stéphane", "Guerrier", role = "aut", comment = c(ORCID = "0000-0003-0002-8794"))
     )
 Description: Implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024) <doi:10.48550/arXiv.2409.05160>.
              The GMWMX estimator allows to estimate functional and stochastic parameters of linear models with correlated residuals in presence of missing data.

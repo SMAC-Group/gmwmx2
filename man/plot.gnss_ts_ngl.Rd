@@ -6,6 +6,9 @@
 \usage{
 \method{plot}{gnss_ts_ngl}(x, component = NULL)
 }
+\value{
+No return value. Plot a \code{gnss_ts_ngl} object.
+}
 \description{
 Plot a \code{gnss_ts_ngl} object
 }

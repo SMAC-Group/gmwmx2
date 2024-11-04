@@ -1,4 +1,4 @@
-# `gmwmx2` Overview <a href="https://smac-group.com/"><img src="man/figures/logo.png" align="right" style="width: 20%; height: 20%"/></a>
+# `gmwmx2` Overview <img src="man/figures/logo.png" align="right" style="width: 20%; height: 20%"/>
 
 The `gmwmx2` `R` package implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160) and provides functions to estimate times series models that can be expressed as linear models with correlated residuals in presence of missing data.
 Moreover, the `gmwmx2` package provides tools to load an plot Global Navigation Satellite System (GNSS) data from the Nevada Geodetic Laboratory.
@@ -30,4 +30,5 @@ The `gmwmx2` package relies on a limited number of external libraries, but notab
 This source code is released under is the GNU AFFERO GENERAL PUBLIC LICENSE (AGPL) v3.0. 
 
 ## References
-Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024). Inference for Large Scale Regression Models with Dependent Errors. <doi:10.48550/arXiv.2409.05160>.
+Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R., and Guerrier, S. (2024). Inference for Large Scale Regression Models with Dependent Errors. [doi:10.48550/arXiv.2409.05160](https://doi.org/10.48550/arXiv.2409.05160).
+
