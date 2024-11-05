@@ -1,0 +1,62 @@
+---
+title: "Load and plot data from Nevada Geodetic Laboratory (NGL)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Load and plot data from Nevada Geodetic Laboratory}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 8,       # Set default plot width (adjust as needed)
+  fig.height = 6,      # Set default plot height (adjust as needed)
+  fig.align = 'center' # Center align all plots
+)
+```
+
+
+
+Let us first load the `gmwmx2` package.
+```{r}
+library(gmwmx2)
+
+```
+
+# Download all available stations from NGL
+
+```{r}
+all_stations = download_all_stations_names_ngl()
+head(all_stations)
+```
+
+# Download one station
+```{r}
+all_stations[1]
+data_1LSU = download_station_ngl("1LSU")
+```
+# Extract GNSS position time series of station
+```{r}
+str(data_1LSU)
+head(data_1LSU$df_position)
+```
+
+# Extract equipment or software changes steps
+```{r}
+head(data_1LSU$df_equipment_software_changes)
+```
+
+# Extract equipment or software changes steps
+```{r}
+head(data_1LSU$df_earthquakes)
+```
+
+
+
+# Plot GNSS position time series 
+```{r}
+plot(data_1LSU)
+plot(data_1LSU, component = "N")
+plot(data_1LSU, component = "E")
+plot(data_1LSU, component = "V")
+```

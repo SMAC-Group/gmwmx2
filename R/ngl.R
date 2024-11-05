@@ -22,9 +22,12 @@ download_station_ngl = function(station_name) {
   # -------------- load .tenv3 file
   name_tmp_dir = tempdir()
   name_tmp_file = paste0(name_tmp_dir,"/", station_name, ".tenv3")
-  cmd = paste0("wget -O ", name_tmp_file," ", "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+  name_web_page_to_acces = paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+  download.file(name_web_page_to_acces, name_tmp_file, quiet = TRUE)
+
+  # cmd = paste0("wget -O ", name_tmp_file," ", "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
   # run command
-  system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  # system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
   # extract file from temporary
   df_position = read.table(name_tmp_file, header = T)
   # rewrite colnames
@@ -58,10 +61,12 @@ download_station_ngl = function(station_name) {
   # see README for step file: http://geodesy.unr.edu/NGLStationPages/steps_readme.txt
   name_tmp_dir = tempdir()
   name_tmp_file = paste0(name_tmp_dir,"/", "steps.txt")
-  cmd = paste0("wget -O ", name_tmp_file," ", " http://geodesy.unr.edu/NGLStationPages/steps.txt")
+  download.file("http://geodesy.unr.edu/NGLStationPages/steps.txt", name_tmp_file, quiet = TRUE)
+
+  # cmd = paste0("wget -O ", name_tmp_file," ", " http://geodesy.unr.edu/NGLStationPages/steps.txt")
 
   # run command
-  system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  # system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   # read all lines
   all_lines = readLines(name_tmp_file)
@@ -115,10 +120,12 @@ download_all_stations_names_ngl = function(){
   # load file from http://geodesy.unr.edu/NGLStationPages/llh.out
   name_tmp_dir = tempdir()
   name_tmp_file = paste0(name_tmp_dir,"/", "all_stations.txt")
-  cmd = paste0("wget -O ", name_tmp_file," ", " http://geodesy.unr.edu/NGLStationPages/llh.out")
+  download.file("http://geodesy.unr.edu/NGLStationPages/llh.out", name_tmp_file, quiet = TRUE)
+
+  # cmd = paste0("wget -O ", name_tmp_file," ", " http://geodesy.unr.edu/NGLStationPages/llh.out")
 
   # run command
-  system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
+  # system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
 
   # read all lines
   df_all_stations = read.table(name_tmp_file)

@@ -3,7 +3,7 @@ template:
   params:
     bootswatch: flatly
 
-    
+
 reference:
   - title: Load and plot NGL data
     contents:
@@ -19,8 +19,12 @@ navbar:
     href: index.html
   - text: Reference
     href: reference/index.html
+  - text: "Examples"
+    menu:
+    - text: "Load and plot data from Nevada Geodetic Laboratory"
+      href: articles/load_plot_data_ngl.html
   right:
   - icon: fa-github
     href: https://github.com/SMAC-Group/gmwmx2
-    
+
 
