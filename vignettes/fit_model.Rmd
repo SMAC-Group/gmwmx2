@@ -1,0 +1,45 @@
+---
+title: "Estimate a model, extract estimated parameters and plot estimated model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimate a model, extract estimated parameters and plot estimated model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 8,       # Set default plot width (adjust as needed)
+  fig.height = 6,      # Set default plot height (adjust as needed)
+  fig.align = 'center' # Center align all plots
+)
+```
+
+
+
+Let us first load the `gmwmx2` package.
+```{r}
+library(gmwmx2)
+
+```
+
+# Download a station from Nevada Geodetic Laboratory
+```{r}
+station_data = download_station_ngl("0AMB")
+```
+
+# Plot North component
+```{r}
+plot(station_data, component = "N")
+```
+
+# Estimate model on station data
+```{r}
+fit_N = gmwmx2(station_data, n_seasonal = 2, component = "N")
+```
+
+# Plot estimated model
+```{r}
+plot(fit_N)
+```
+

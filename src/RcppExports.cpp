@@ -11,60 +11,27 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// gen_flicker
-arma::vec gen_flicker(int N, double sigma);
-RcppExport SEXP _gmwmx2_gen_flicker(SEXP NSEXP, SEXP sigmaSEXP) {
+// estimate_p1_p2_mle_cpp
+arma::vec estimate_p1_p2_mle_cpp(arma::vec omega);
+RcppExport SEXP _gmwmx2_estimate_p1_p2_mle_cpp(SEXP omegaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(gen_flicker(N, sigma));
+    Rcpp::traits::input_parameter< arma::vec >::type omega(omegaSEXP);
+    rcpp_result_gen = Rcpp::wrap(estimate_p1_p2_mle_cpp(omega));
     return rcpp_result_gen;
 END_RCPP
 }
-// create_var_cov_flicker
-arma::mat create_var_cov_flicker(double sigma_pl, int N);
-RcppExport SEXP _gmwmx2_create_var_cov_flicker(SEXP sigma_plSEXP, SEXP NSEXP) {
+// create_vec_theo_autocov_omega_cpp
+arma::vec create_vec_theo_autocov_omega_cpp(double p1, double p2, int n);
+RcppExport SEXP _gmwmx2_create_vec_theo_autocov_omega_cpp(SEXP p1SEXP, SEXP p2SEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type sigma_pl(sigma_plSEXP);
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_var_cov_flicker(sigma_pl, N));
-    return rcpp_result_gen;
-END_RCPP
-}
-// create_U_flicker
-arma::mat create_U_flicker(int N);
-RcppExport SEXP _gmwmx2_create_U_flicker(SEXP NSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(create_U_flicker(N));
-    return rcpp_result_gen;
-END_RCPP
-}
-// mean_all_diagonals
-arma::vec mean_all_diagonals(arma::mat matrix);
-RcppExport SEXP _gmwmx2_mean_all_diagonals(SEXP matrixSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type matrix(matrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(mean_all_diagonals(matrix));
-    return rcpp_result_gen;
-END_RCPP
-}
-// mean_all_upper_diagonals
-arma::vec mean_all_upper_diagonals(arma::mat matrix);
-RcppExport SEXP _gmwmx2_mean_all_upper_diagonals(SEXP matrixSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type matrix(matrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(mean_all_upper_diagonals(matrix));
+    Rcpp::traits::input_parameter< double >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< double >::type p2(p2SEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(create_vec_theo_autocov_omega_cpp(p1, p2, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -80,39 +47,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// return_cumsum_product_of_shifted_vector_cpp
-arma::vec return_cumsum_product_of_shifted_vector_cpp(const arma::vec& vec_x, int shift);
-RcppExport SEXP _gmwmx2_return_cumsum_product_of_shifted_vector_cpp(SEXP vec_xSEXP, SEXP shiftSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec& >::type vec_x(vec_xSEXP);
-    Rcpp::traits::input_parameter< int >::type shift(shiftSEXP);
-    rcpp_result_gen = Rcpp::wrap(return_cumsum_product_of_shifted_vector_cpp(vec_x, shift));
-    return rcpp_result_gen;
-END_RCPP
-}
-// vec_mean_autocov_per_diag_cpp
-arma::vec vec_mean_autocov_per_diag_cpp(double kappa, int N);
-RcppExport SEXP _gmwmx2_vec_mean_autocov_per_diag_cpp(SEXP kappaSEXP, SEXP NSEXP) {
+// vec_mean_autocov_powerlaw
+arma::vec vec_mean_autocov_powerlaw(double kappa, int N);
+RcppExport SEXP _gmwmx2_vec_mean_autocov_powerlaw(SEXP kappaSEXP, SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
     Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(vec_mean_autocov_per_diag_cpp(kappa, N));
-    return rcpp_result_gen;
-END_RCPP
-}
-// vec_mean_autocov_per_diag_2_cpp
-arma::vec vec_mean_autocov_per_diag_2_cpp(double kappa, int N);
-RcppExport SEXP _gmwmx2_vec_mean_autocov_per_diag_2_cpp(SEXP kappaSEXP, SEXP NSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    rcpp_result_gen = Rcpp::wrap(vec_mean_autocov_per_diag_2_cpp(kappa, N));
+    rcpp_result_gen = Rcpp::wrap(vec_mean_autocov_powerlaw(kappa, N));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -126,29 +69,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     rcpp_result_gen = Rcpp::wrap(var_cov_powerlaw_cpp(sigma2, kappa, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// wn_autocovariance
-arma::vec wn_autocovariance(double sigma2_wn, int n);
-RcppExport SEXP _gmwmx2_wn_autocovariance(SEXP sigma2_wnSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type sigma2_wn(sigma2_wnSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(wn_autocovariance(sigma2_wn, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// fast_toeplitz_matrix_from_vector_cpp
-arma::mat fast_toeplitz_matrix_from_vector_cpp(const arma::vec& v);
-RcppExport SEXP _gmwmx2_fast_toeplitz_matrix_from_vector_cpp(SEXP vSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP);
-    rcpp_result_gen = Rcpp::wrap(fast_toeplitz_matrix_from_vector_cpp(v));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -176,71 +96,229 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// get_mean_per_diag_I_minus_H_Sigma_cpp_4
-arma::vec get_mean_per_diag_I_minus_H_Sigma_cpp_4(const arma::mat& mat_I_minus_H, const arma::mat& mat_Sigma);
-RcppExport SEXP _gmwmx2_get_mean_per_diag_I_minus_H_Sigma_cpp_4(SEXP mat_I_minus_HSEXP, SEXP mat_SigmaSEXP) {
+// compute_cov_W_scale_1_cpp
+arma::mat compute_cov_W_scale_1_cpp(arma::mat Sigma_X);
+RcppExport SEXP _gmwmx2_compute_cov_W_scale_1_cpp(SEXP Sigma_XSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type mat_I_minus_H(mat_I_minus_HSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type mat_Sigma(mat_SigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_mean_per_diag_I_minus_H_Sigma_cpp_4(mat_I_minus_H, mat_Sigma));
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma_X(Sigma_XSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cov_W_scale_1_cpp(Sigma_X));
     return rcpp_result_gen;
 END_RCPP
 }
-// objective_function_wn_flicker_eps_hat_cpp
-arma::vec objective_function_wn_flicker_eps_hat_cpp(const arma::vec theta, const arma::vec scales, const arma::vec wv_var, const arma::vec wv_ci_up, const arma::vec wv_ci_low, const int n, const arma::mat& Q_matrix);
-RcppExport SEXP _gmwmx2_objective_function_wn_flicker_eps_hat_cpp(SEXP thetaSEXP, SEXP scalesSEXP, SEXP wv_varSEXP, SEXP wv_ci_upSEXP, SEXP wv_ci_lowSEXP, SEXP nSEXP, SEXP Q_matrixSEXP) {
+// compute_cov_W_all_scales_cpp
+Rcpp::List compute_cov_W_all_scales_cpp(arma::mat Sigma_X);
+RcppExport SEXP _gmwmx2_compute_cov_W_all_scales_cpp(SEXP Sigma_XSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type scales(scalesSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type wv_var(wv_varSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type wv_ci_up(wv_ci_upSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type wv_ci_low(wv_ci_lowSEXP);
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Q_matrix(Q_matrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(objective_function_wn_flicker_eps_hat_cpp(theta, scales, wv_var, wv_ci_up, wv_ci_low, n, Q_matrix));
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma_X(Sigma_XSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cov_W_all_scales_cpp(Sigma_X));
     return rcpp_result_gen;
 END_RCPP
 }
-// objective_function_wn_flicker_eps_hat_cpp_2
-arma::vec objective_function_wn_flicker_eps_hat_cpp_2(const arma::vec theta, const arma::vec scales, const arma::vec wv_var, const arma::vec wv_ci_up, const arma::vec wv_ci_low, const int n, const arma::mat& Q_matrix);
-RcppExport SEXP _gmwmx2_objective_function_wn_flicker_eps_hat_cpp_2(SEXP thetaSEXP, SEXP scalesSEXP, SEXP wv_varSEXP, SEXP wv_ci_upSEXP, SEXP wv_ci_lowSEXP, SEXP nSEXP, SEXP Q_matrixSEXP) {
+// compute_index_pairs_scales_cpp
+arma::mat compute_index_pairs_scales_cpp(int max_j);
+RcppExport SEXP _gmwmx2_compute_index_pairs_scales_cpp(SEXP max_jSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type scales(scalesSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type wv_var(wv_varSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type wv_ci_up(wv_ci_upSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type wv_ci_low(wv_ci_lowSEXP);
-    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Q_matrix(Q_matrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(objective_function_wn_flicker_eps_hat_cpp_2(theta, scales, wv_var, wv_ci_up, wv_ci_low, n, Q_matrix));
+    Rcpp::traits::input_parameter< int >::type max_j(max_jSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_index_pairs_scales_cpp(max_j));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_cov_W_between_scales_all_scales_cpp
+Rcpp::List compute_cov_W_between_scales_all_scales_cpp(arma::mat mat_index, int n, Rcpp::List lst_cov_W);
+RcppExport SEXP _gmwmx2_compute_cov_W_between_scales_all_scales_cpp(SEXP mat_indexSEXP, SEXP nSEXP, SEXP lst_cov_WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type mat_index(mat_indexSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type lst_cov_W(lst_cov_WSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cov_W_between_scales_all_scales_cpp(mat_index, n, lst_cov_W));
+    return rcpp_result_gen;
+END_RCPP
+}
+// f_jk_cpp
+double f_jk_cpp(int h, arma::mat cov_Wj_Wjk, int Mjk, int Mj);
+RcppExport SEXP _gmwmx2_f_jk_cpp(SEXP hSEXP, SEXP cov_Wj_WjkSEXP, SEXP MjkSEXP, SEXP MjSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type h(hSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type cov_Wj_Wjk(cov_Wj_WjkSEXP);
+    Rcpp::traits::input_parameter< int >::type Mjk(MjkSEXP);
+    Rcpp::traits::input_parameter< int >::type Mj(MjSEXP);
+    rcpp_result_gen = Rcpp::wrap(f_jk_cpp(h, cov_Wj_Wjk, Mjk, Mj));
+    return rcpp_result_gen;
+END_RCPP
+}
+// f_jk_approx_cpp
+double f_jk_approx_cpp(int h, arma::mat cov_Wj_Wjk, int Mjk, int Mj, std::string approx_type);
+RcppExport SEXP _gmwmx2_f_jk_approx_cpp(SEXP hSEXP, SEXP cov_Wj_WjkSEXP, SEXP MjkSEXP, SEXP MjSEXP, SEXP approx_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type h(hSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type cov_Wj_Wjk(cov_Wj_WjkSEXP);
+    Rcpp::traits::input_parameter< int >::type Mjk(MjkSEXP);
+    Rcpp::traits::input_parameter< int >::type Mj(MjSEXP);
+    Rcpp::traits::input_parameter< std::string >::type approx_type(approx_typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(f_jk_approx_cpp(h, cov_Wj_Wjk, Mjk, Mj, approx_type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_cov_wv_cpp_1
+arma::mat compute_cov_wv_cpp_1(Rcpp::List cov_W_j, int J, int n, arma::mat mat_index);
+RcppExport SEXP _gmwmx2_compute_cov_wv_cpp_1(SEXP cov_W_jSEXP, SEXP JSEXP, SEXP nSEXP, SEXP mat_indexSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type cov_W_j(cov_W_jSEXP);
+    Rcpp::traits::input_parameter< int >::type J(JSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mat_index(mat_indexSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cov_wv_cpp_1(cov_W_j, J, n, mat_index));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_cov_wv_cpp
+arma::mat compute_cov_wv_cpp(arma::mat Sigma_X);
+RcppExport SEXP _gmwmx2_compute_cov_wv_cpp(SEXP Sigma_XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma_X(Sigma_XSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cov_wv_cpp(Sigma_X));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_power
+double test_power(int j);
+RcppExport SEXP _gmwmx2_test_power(SEXP jSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_power(j));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_l_index_to_compute_cpp
+arma::uvec compute_l_index_to_compute_cpp(int Mjk, std::string approx_type);
+RcppExport SEXP _gmwmx2_compute_l_index_to_compute_cpp(SEXP MjkSEXP, SEXP approx_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type Mjk(MjkSEXP);
+    Rcpp::traits::input_parameter< std::string >::type approx_type(approx_typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_l_index_to_compute_cpp(Mjk, approx_type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_indices
+arma::uvec compute_indices(const arma::uvec& all_l_values, const arma::uvec& lst_index_row);
+RcppExport SEXP _gmwmx2_compute_indices(SEXP all_l_valuesSEXP, SEXP lst_index_rowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uvec& >::type all_l_values(all_l_valuesSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec& >::type lst_index_row(lst_index_rowSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_indices(all_l_values, lst_index_row));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_cov_wv_cpp_approx_faster
+arma::mat compute_cov_wv_cpp_approx_faster(arma::mat Sigma_X, std::string approx_type);
+RcppExport SEXP _gmwmx2_compute_cov_wv_cpp_approx_faster(SEXP Sigma_XSEXP, SEXP approx_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type Sigma_X(Sigma_XSEXP);
+    Rcpp::traits::input_parameter< std::string >::type approx_type(approx_typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_cov_wv_cpp_approx_faster(Sigma_X, approx_type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sum_all_upper_diagonals
+arma::vec sum_all_upper_diagonals(const arma::mat& matrix);
+RcppExport SEXP _gmwmx2_sum_all_upper_diagonals(SEXP matrixSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type matrix(matrixSEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_all_upper_diagonals(matrix));
+    return rcpp_result_gen;
+END_RCPP
+}
+// linear_interp_cpp
+arma::vec linear_interp_cpp(const arma::uvec& x, const arma::vec& y, const arma::vec& xout);
+RcppExport SEXP _gmwmx2_linear_interp_cpp(SEXP xSEXP, SEXP ySEXP, SEXP xoutSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::uvec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type xout(xoutSEXP);
+    rcpp_result_gen = Rcpp::wrap(linear_interp_cpp(x, y, xout));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pre_compute_quantities_on_D_only_required_smarter_cpp
+Rcpp::List pre_compute_quantities_on_D_only_required_smarter_cpp(const arma::mat& D, std::string approx_type);
+RcppExport SEXP _gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp(SEXP DSEXP, SEXP approx_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type D(DSEXP);
+    Rcpp::traits::input_parameter< std::string >::type approx_type(approx_typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_all_mean_diag_fast_w_linear_interp_only_required_cpp
+arma::vec compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(const arma::mat& mat_D_q_term_1, const arma::mat& mat_D_q_term_2, const arma::vec& sum_on_sub_diag_of_D, const arma::vec& vec_autocov, std::string approx_type);
+RcppExport SEXP _gmwmx2_compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(SEXP mat_D_q_term_1SEXP, SEXP mat_D_q_term_2SEXP, SEXP sum_on_sub_diag_of_DSEXP, SEXP vec_autocovSEXP, SEXP approx_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type mat_D_q_term_1(mat_D_q_term_1SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type mat_D_q_term_2(mat_D_q_term_2SEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type sum_on_sub_diag_of_D(sum_on_sub_diag_of_DSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type vec_autocov(vec_autocovSEXP);
+    Rcpp::traits::input_parameter< std::string >::type approx_type(approx_typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(mat_D_q_term_1, mat_D_q_term_2, sum_on_sub_diag_of_D, vec_autocov, approx_type));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_gmwmx2_gen_flicker", (DL_FUNC) &_gmwmx2_gen_flicker, 2},
-    {"_gmwmx2_create_var_cov_flicker", (DL_FUNC) &_gmwmx2_create_var_cov_flicker, 2},
-    {"_gmwmx2_create_U_flicker", (DL_FUNC) &_gmwmx2_create_U_flicker, 1},
-    {"_gmwmx2_mean_all_diagonals", (DL_FUNC) &_gmwmx2_mean_all_diagonals, 1},
-    {"_gmwmx2_mean_all_upper_diagonals", (DL_FUNC) &_gmwmx2_mean_all_upper_diagonals, 1},
+    {"_gmwmx2_estimate_p1_p2_mle_cpp", (DL_FUNC) &_gmwmx2_estimate_p1_p2_mle_cpp, 1},
+    {"_gmwmx2_create_vec_theo_autocov_omega_cpp", (DL_FUNC) &_gmwmx2_create_vec_theo_autocov_omega_cpp, 3},
     {"_gmwmx2_compute_h_cpp", (DL_FUNC) &_gmwmx2_compute_h_cpp, 2},
-    {"_gmwmx2_return_cumsum_product_of_shifted_vector_cpp", (DL_FUNC) &_gmwmx2_return_cumsum_product_of_shifted_vector_cpp, 2},
-    {"_gmwmx2_vec_mean_autocov_per_diag_cpp", (DL_FUNC) &_gmwmx2_vec_mean_autocov_per_diag_cpp, 2},
-    {"_gmwmx2_vec_mean_autocov_per_diag_2_cpp", (DL_FUNC) &_gmwmx2_vec_mean_autocov_per_diag_2_cpp, 2},
+    {"_gmwmx2_vec_mean_autocov_powerlaw", (DL_FUNC) &_gmwmx2_vec_mean_autocov_powerlaw, 2},
     {"_gmwmx2_var_cov_powerlaw_cpp", (DL_FUNC) &_gmwmx2_var_cov_powerlaw_cpp, 3},
-    {"_gmwmx2_wn_autocovariance", (DL_FUNC) &_gmwmx2_wn_autocovariance, 2},
-    {"_gmwmx2_fast_toeplitz_matrix_from_vector_cpp", (DL_FUNC) &_gmwmx2_fast_toeplitz_matrix_from_vector_cpp, 1},
     {"_gmwmx2_compute_power_of_a_base", (DL_FUNC) &_gmwmx2_compute_power_of_a_base, 2},
     {"_gmwmx2_autocovariance_to_wv", (DL_FUNC) &_gmwmx2_autocovariance_to_wv, 2},
-    {"_gmwmx2_get_mean_per_diag_I_minus_H_Sigma_cpp_4", (DL_FUNC) &_gmwmx2_get_mean_per_diag_I_minus_H_Sigma_cpp_4, 2},
-    {"_gmwmx2_objective_function_wn_flicker_eps_hat_cpp", (DL_FUNC) &_gmwmx2_objective_function_wn_flicker_eps_hat_cpp, 7},
-    {"_gmwmx2_objective_function_wn_flicker_eps_hat_cpp_2", (DL_FUNC) &_gmwmx2_objective_function_wn_flicker_eps_hat_cpp_2, 7},
+    {"_gmwmx2_compute_cov_W_scale_1_cpp", (DL_FUNC) &_gmwmx2_compute_cov_W_scale_1_cpp, 1},
+    {"_gmwmx2_compute_cov_W_all_scales_cpp", (DL_FUNC) &_gmwmx2_compute_cov_W_all_scales_cpp, 1},
+    {"_gmwmx2_compute_index_pairs_scales_cpp", (DL_FUNC) &_gmwmx2_compute_index_pairs_scales_cpp, 1},
+    {"_gmwmx2_compute_cov_W_between_scales_all_scales_cpp", (DL_FUNC) &_gmwmx2_compute_cov_W_between_scales_all_scales_cpp, 3},
+    {"_gmwmx2_f_jk_cpp", (DL_FUNC) &_gmwmx2_f_jk_cpp, 4},
+    {"_gmwmx2_f_jk_approx_cpp", (DL_FUNC) &_gmwmx2_f_jk_approx_cpp, 5},
+    {"_gmwmx2_compute_cov_wv_cpp_1", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp_1, 4},
+    {"_gmwmx2_compute_cov_wv_cpp", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp, 1},
+    {"_gmwmx2_test_power", (DL_FUNC) &_gmwmx2_test_power, 1},
+    {"_gmwmx2_compute_l_index_to_compute_cpp", (DL_FUNC) &_gmwmx2_compute_l_index_to_compute_cpp, 2},
+    {"_gmwmx2_compute_indices", (DL_FUNC) &_gmwmx2_compute_indices, 2},
+    {"_gmwmx2_compute_cov_wv_cpp_approx_faster", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp_approx_faster, 2},
+    {"_gmwmx2_sum_all_upper_diagonals", (DL_FUNC) &_gmwmx2_sum_all_upper_diagonals, 1},
+    {"_gmwmx2_linear_interp_cpp", (DL_FUNC) &_gmwmx2_linear_interp_cpp, 3},
+    {"_gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp", (DL_FUNC) &_gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp, 2},
+    {"_gmwmx2_compute_all_mean_diag_fast_w_linear_interp_only_required_cpp", (DL_FUNC) &_gmwmx2_compute_all_mean_diag_fast_w_linear_interp_only_required_cpp, 5},
     {NULL, NULL, 0}
 };
 

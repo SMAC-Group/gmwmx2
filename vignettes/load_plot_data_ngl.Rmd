@@ -2,7 +2,7 @@
 title: "Load and plot data from Nevada Geodetic Laboratory (NGL)"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Load and plot data from Nevada Geodetic Laboratory}
+  %\VignetteIndexEntry{Load and plot data from Nevada Geodetic Laboratory (NGL)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,7 +32,6 @@ head(all_stations)
 
 # Download one station
 ```{r}
-all_stations[1]
 data_1LSU = download_station_ngl("1LSU")
 ```
 # Extract GNSS position time series of station
@@ -46,7 +45,7 @@ head(data_1LSU$df_position)
 head(data_1LSU$df_equipment_software_changes)
 ```
 
-# Extract equipment or software changes steps
+# Extract earthquakes steps
 ```{r}
 head(data_1LSU$df_earthquakes)
 ```

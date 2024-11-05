@@ -24,5 +24,6 @@ Imports:
     Rcpp,
     data.table,
     dplyr,
-    magrittr
+    magrittr,
+    wv
 Suggests: knitr
