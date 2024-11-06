@@ -467,9 +467,6 @@ double test_power(int j){
 
 
 
-
-
-
 // [[Rcpp::export]]
 arma::uvec compute_l_index_to_compute_cpp(int Mjk, std::string approx_type) {
   int nbr_l_index_to_compute = 0;

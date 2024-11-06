@@ -4,7 +4,12 @@
 \alias{gmwmx2}
 \title{Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.}
 \usage{
-gmwmx2(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, component = "N")
+gmwmx2(
+  x,
+  n_seasonal = 2,
+  vec_earthquakes_relaxation_time = NULL,
+  component = "N"
+)
 }
 \description{
 Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.

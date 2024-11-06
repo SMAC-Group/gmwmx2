@@ -3,21 +3,24 @@ create_X_matrix = function (all_mjd_index,
                             n_seasonal,
                             vec_earthquakes_index_mjd,
                             vec_earthquakes_relaxation_time) {
-  # all_stations = download_all_stations_names_ngl()
-  # x = download_station_ngl("AGDS")
-  # x$df_equipment_software_changes
-  # x$df_earthquakes
-  # dim(x$df_position)
-  # x$df_earthquakes
+
+
+
+  # x = download_station_ngl("CHML") # problem here
+  # # create all jumps by combining jumps due to equipment change and jumps due to earthquakes
+  # jumps = c(x$df_equipment_software_changes$modified_julian_date,
+  #           x$df_earthquakes$modified_julian_date )
   #
-  # # create full index
-  # all_mjd_index = seq(head(x$df_position$modified_julian_day,1), tail(x$df_position$modified_julian_day, 1))
-  # jumps = c(x$df_equipment_software_changes$modified_julian_date,x$df_earthquakes$modified_julian_date )
-  # # remove jumps that are after or before the last/first index
-  # jumps_inside_interval_mjd = dplyr::between(jumps, left = head(x$df_position$modified_julian_day,1), right = tail(x$df_position$modified_julian_day,1))
-  # jumps= jumps[jumps_inside_interval_mjd]
+  # # if multiple jumps  to prevent not invertible matrix
+  # jumps = unique(jumps)
   # vec_earthquakes_index_mjd = c(x$df_earthquakes$modified_julian_date)
-  # n_seasonal = 2
+  # # if multiple earthquakes  to prevent not invertible matrix
+  # vec_earthquakes_index_mjd = unique(vec_earthquakes_index_mjd)
+  # vec_earthquakes_relaxation_time = NULL
+  #
+  # all_mjd_index = seq(head(x$df_position$modified_julian_day, 1), tail(x$df_position$modified_julian_day, 1))
+
+
 
   # ensure that vec_earthquakes_relaxation_time is the same length as vec_earthquakes_index_mjd if not NULL
   if(!is.null(vec_earthquakes_relaxation_time)){
@@ -40,14 +43,15 @@ create_X_matrix = function (all_mjd_index,
   # add bias, intercept
   X[, 1] = 1
 
+  # add component for trend
   X[,2] = all_mjd_index
 
 
   # add seasonal
   if (n_seasonal > 0) {
     for (i in 1:n_seasonal) {
-      X[, 2 + (i - 1) * 2 + 1] = sin((all_mjd_index - 51544) *  i * 2 * pi/365.25)
-      X[, 2 + (i - 1) * 2 + 2] = cos((all_mjd_index - 51544) * i * 2 * pi/365.25)
+      X[, 2 + (i - 1) * 2 + 1] = sin((all_mjd_index) *  i * 2 * pi/365.25)
+      X[, 2 + (i - 1) * 2 + 2] = cos((all_mjd_index) * i * 2 * pi/365.25)
     }
   }
 
@@ -61,16 +65,30 @@ create_X_matrix = function (all_mjd_index,
     }
   }
 
+
+  # see https://www.mdpi.com/2072-4292/13/17/3369 and https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/84/3/780/102685/Postseismic-deformation-following-the-Landers
   # exponential decay function for post seismic relaxation
   if(!is.null(vec_earthquakes_index_mjd)){
     for(i in seq_along(vec_earthquakes_index_mjd)){
-      tau_i = vec_relaxation_time[i]
+      tau_i = vec_earthquakes_relaxation_time[i]
       earthquake_mjd_i = vec_earthquakes_index_mjd[i]
+      # create vector
+      decay_values <- ifelse(all_mjd_index > earthquake_mjd_i,
+                             1 - exp(-(all_mjd_index - earthquake_mjd_i) / tau_i),
+                             0)
+
       # create column in matrix
-      X[, 2 + 2 * n_seasonal + length(jumps) + i] = 1-exp(-(all_mjd_index- earthquake_mjd_i)/tau_i)
+      X[, 2 + 2 * n_seasonal + length(jumps) + i] = decay_values
     }
   }
 
+  # dim(X)
+  #
+  # id_in_signal = which(all_mjd_index%in% x$df_position$modified_julian_day)
+  # X_sub = X[id_in_signal, ]
+  # plot(x$df_position$modified_julian_day, x$df_position$northings_fractional_portion, type="l")
+  # fit = .lm.fit(x = X_sub, y=x$df_position$northings_fractional_portion)
+  # lines(x=X_sub[,2], y= X_sub %*% fit$coefficients, col="red")
 
   # # Slow slip events (tanh)
   # if(!is.null(vec_tanh_mid_point)){
@@ -126,17 +144,18 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 #' @importFrom wv wvar
 #' @importFrom dplyr between
 #' @importFrom Matrix solve
+#' @importFrom MASS ginv
 #' @export
-gmwmx2 = function(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, component ="N"){
+gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, component ="N"){
 
-  # all_stations = download_all_stations_names_ngl()
-  # x = download_station_ngl("0AMB")
-  # dim(x$df_position)
-  # x$df_earthquakes
-  # x$df_equipment_software_changes
-  # n_seasonal=2
+  # x = download_station_ngl("CHML")
+  # plot(x, component = "N")
   # vec_earthquakes_relaxation_time = NULL
-  # component = "E"
+  # component ="N"
+  # n_seasonal=2
+
+
+
 
   # check that component is either N, E or V
   if(!component %in% c("N", "E", "V")){
@@ -150,10 +169,11 @@ gmwmx2 = function(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, compone
   jumps = c(x$df_equipment_software_changes$modified_julian_date,
             x$df_earthquakes$modified_julian_date )
 
-  # # remove jumps that are after or before the last/first index
-  jumps_inside_interval_mjd = dplyr::between(jumps, left = head(x$df_position$modified_julian_day,1), right = tail(x$df_position$modified_julian_day,1))
-  jumps = jumps[jumps_inside_interval_mjd]
+  # if multiple jumps  to prevent not invertible matrix
+  jumps = unique(jumps)
   vec_earthquakes_index_mjd = c(x$df_earthquakes$modified_julian_date)
+  # if multiple earthquakes  to prevent not invertible matrix
+  vec_earthquakes_index_mjd = unique(vec_earthquakes_index_mjd)
 
   if(length(jumps) == 0){
     jumps=NULL
@@ -166,6 +186,7 @@ gmwmx2 = function(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, compone
                       vec_earthquakes_index_mjd = vec_earthquakes_index_mjd,
                       vec_earthquakes_relaxation_time = vec_earthquakes_relaxation_time )
 
+  # solve(t(X)%*%X)
 
   # obtain X_sub
   id_X_sub = which(rownames(X) %in% x$df_position$modified_julian_day)
@@ -210,7 +231,9 @@ gmwmx2 = function(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, compone
   # get vec autocovariance theo omega
   vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], length(all_mjd_index))
 
-  H <- X %*% solve(t(X) %*% X) %*% t(X)
+  XtX = t(X) %*% X
+  inv_XtX = MASS::ginv(XtX) # to check later, why does when we have multiple earthquake XtX becomes not invertible
+  H <- X %*% inv_XtX %*% t(X)
   D <- diag(length(all_mjd_index)) - H
 
   # precompute quantities on D
@@ -300,11 +323,11 @@ gmwmx2 = function(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, compone
 
   # Compute variance covariance of beta hat
   if (no_missing) {
-    XtX_inv <- Matrix::solve(t(X) %*% X)
-    var_cov_beta_hat = XtX_inv %*% t(X) %*% var_cov_mat_epsilon  %*% X %*% XtX_inv
+    # XtX_inv <- Matrix::solve(t(X) %*% X)
+    var_cov_beta_hat = inv_XtX %*% t(X) %*% var_cov_mat_epsilon  %*% X %*% inv_XtX
   } else {
-    XtX_inv <- Matrix::solve(t(X) %*% X)
-    var_cov_beta_hat <- pstar_hat^(-2) * XtX_inv %*% t(X) %*% ((var_cov_omega + pstar_hat^2) * var_cov_mat_epsilon) %*% X %*% XtX_inv
+    # XtX_inv <- Matrix::solve(t(X) %*% X)
+    var_cov_beta_hat <- pstar_hat^(-2) * inv_XtX %*% t(X) %*% ((var_cov_omega + pstar_hat^2) * var_cov_mat_epsilon) %*% X %*% inv_XtX
   }
 
   std_beta_hat_gmwmx_3 <- sqrt(diag(var_cov_beta_hat))
@@ -331,17 +354,45 @@ gmwmx2 = function(x, n_seasonal, vec_earthquakes_relaxation_time = NULL, compone
 
 
 
+#' Extract estimated parameters from a \code{fit_gnss_ts_ngl}
+#' @export
+summary.fit_gnss_ts_ngl <- function(x) {
+  # Print header
+  cat("Summary of Estimated Model\n")
+  cat("-------------------------------------------------------------\n")
+  cat("Functional parameters\n")
+  cat("-------------------------------------------------------------\n")
+
+  cat(" Estimate       Std_Deviation     95% CI Lower    95% CI Upper\n")
+  cat("-------------------------------------------------------------\n")
+
+  for (i in seq_along(x$beta_hat)) {
+    lower_ci <- x$beta_hat[i] - 1.96 * x$std_beta_hat[i]
+    upper_ci <- x$beta_hat[i] + 1.96 * x$std_beta_hat[i]
+
+    # Print values with 8 decimal places
+    cat(sprintf("%14.8f %16.8f %16.8f %16.8f\n",
+                x$beta_hat[i], x$std_beta_hat[i], lower_ci, upper_ci))
+  }
+
+  cat("-------------------------------------------------------------\n")
+  cat("Stochastic parameters\n")
+  cat("-------------------------------------------------------------\n")
+  cat(sprintf(" White Noise Variance  : %14.8f\n", x$gamma_hat[1]))
+  cat(sprintf(" Flicker Noise Variance: %14.8f\n", x$gamma_hat[2]))
+
+  cat("-------------------------------------------------------------\n")
+}
 
 
 
 
 #' Plot a \code{fit_gnss_ts_ngl} object
 #' @export
-#' @importFrom wv plot.wvar
 #' @return No return value. Plot a \code{fit_gnss_ts_ngl} object.
 plot.fit_gnss_ts_ngl = function(x){
   #
-  # #
+  #
   # library(gmwmx2)
   # station_data = download_station_ngl("0AMB")
   # x = gmwmx2(station_data, n_seasonal = 2, component = "N")
@@ -401,7 +452,6 @@ plot.fit_gnss_ts_ngl = function(x){
   }
   box()
 
-  # plot wvar
   plot(x$empirical_wvar)
   # add theoretical implied wv
   lines(x=x$empirical_wvar$scales, y=x$theoretical_wvar, col="red")

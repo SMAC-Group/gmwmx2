@@ -2,9 +2,12 @@
 
 S3method(plot,fit_gnss_ts_ngl)
 S3method(plot,gnss_ts_ngl)
-export(download_all_stations_names_ngl)
+S3method(summary,fit_gnss_ts_ngl)
+export(download_all_stations_ngl)
+export(download_estimated_velocities_ngl)
 export(download_station_ngl)
 export(gmwmx2)
+importFrom(MASS,ginv)
 importFrom(Matrix,solve)
 importFrom(Rcpp,sourceCpp)
 importFrom(data.table,fread)

@@ -15,8 +15,8 @@ download_station_ngl = function(station_name) {
   # see help file for .tenv3 file here : http://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
   # station_name="1LSU"
   # check that station is available
-  all_stations = download_all_stations_names_ngl()
-  if(! station_name %in% all_stations){
+  df_all_stations = download_all_stations_ngl()
+  if(! station_name %in% df_all_stations$station_name){
     stop("Invalid station name")
   }
   # -------------- load .tenv3 file
@@ -25,10 +25,6 @@ download_station_ngl = function(station_name) {
   name_web_page_to_acces = paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
   download.file(name_web_page_to_acces, name_tmp_file, quiet = TRUE)
 
-  # cmd = paste0("wget -O ", name_tmp_file," ", "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
-  # run command
-  # system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
-  # extract file from temporary
   df_position = read.table(name_tmp_file, header = T)
   # rewrite colnames
   colnames(df_position) =  c(
@@ -62,16 +58,10 @@ download_station_ngl = function(station_name) {
   name_tmp_dir = tempdir()
   name_tmp_file = paste0(name_tmp_dir,"/", "steps.txt")
   download.file("http://geodesy.unr.edu/NGLStationPages/steps.txt", name_tmp_file, quiet = TRUE)
-
-  # cmd = paste0("wget -O ", name_tmp_file," ", " http://geodesy.unr.edu/NGLStationPages/steps.txt")
-
-  # run command
-  # system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
-
   # read all lines
   all_lines = readLines(name_tmp_file)
 
-  # Count words in each line
+  # Count words in each line to identify equipment/software changes vs earthquakes
   word_counts <- sapply(strsplit(trimws(all_lines), "\\s+"), length)
   id_equipment_software_changes = which(word_counts==4)
   id_earthquakes = which(word_counts==7)
@@ -102,7 +92,7 @@ download_station_ngl = function(station_name) {
 }
 
 convert_to_mjd_2 = function(vec_date){
-  dt = as.POSIXct(vec_date, format = "%d%b%y", tz = "UTC")
+  dt = as.POSIXct(vec_date, format = "%y%b%d", tz = "UTC")
   # Calculate Julian Date
   jd <- as.numeric(dt) / 86400 + 2440587.5
 
@@ -113,25 +103,56 @@ convert_to_mjd_2 = function(vec_date){
 
 
 
-
-#' Download all stations name from Nevada Geodetic Laboratory
+#' Download all stations name and location from Nevada Geodetic Laboratory (NGL)
 #' @export
-download_all_stations_names_ngl = function(){
+#' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
+download_all_stations_ngl = function(){
   # load file from http://geodesy.unr.edu/NGLStationPages/llh.out
   name_tmp_dir = tempdir()
   name_tmp_file = paste0(name_tmp_dir,"/", "all_stations.txt")
   download.file("http://geodesy.unr.edu/NGLStationPages/llh.out", name_tmp_file, quiet = TRUE)
 
-  # cmd = paste0("wget -O ", name_tmp_file," ", " http://geodesy.unr.edu/NGLStationPages/llh.out")
-
-  # run command
-  # system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
-
-  # read all lines
+  # load all stations
   df_all_stations = read.table(name_tmp_file)
-  vec_all_stations = df_all_stations[,1]
-  return(vec_all_stations)
+  colnames(df_all_stations) = c("station_name", "latitude", "longitude", "height")
+  return(df_all_stations)
 }
+
+
+
+#' Download estimated velocities using the MIDAS estimator provided by the Nevada Geodetic Laboratory (NGL)
+#' @export
+#' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
+download_estimated_velocities_ngl = function(){
+  # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
+  name_tmp_dir = tempdir()
+  name_tmp_file = paste0(name_tmp_dir,"/", "estimated_velocities_midas.txt")
+  download.file("http://geodesy.unr.edu/velocities/midas.IGS14.txt", name_tmp_file, quiet = TRUE)
+
+  # load all stations
+  df_estimated_velocities_midas= read.table(name_tmp_file)
+
+  # subset columns
+  df_estimated_velocities_midas = df_estimated_velocities_midas[, c(1,2,5,9,10,11,12,13,14,25,26,27)]
+
+  colnames(df_estimated_velocities_midas) =  c(
+    "station_name",                 # Column 1: 4 character station ID
+    "midas_version_label",           # Column 2: MIDAS version label
+    "time_series_duration_year",     # Column 5: Time series duration (years)
+    "east_velocity_m_yr",            # Column 9: East  velocity (m/yr)
+    "north_velocity_m_yr",           # Column 10: North  velocity (m/yr)
+    "up_velocity_m_yr",              # Column 11: Up  velocity (m/yr)
+    "east_velocity_unc_m_yr",        # Column 12: East mode velocity uncertainty (m/yr)
+    "north_velocity_unc_m_yr",       # Column 13: North mode velocity uncertainty (m/yr)
+    "up_velocity_unc_m_yr",          # Column 14: Up mode velocity uncertainty (m/yr)
+    "latitude",                      # Column 25: Latitude (degrees)
+    "longitude",                     # Column 26: Longitude (degrees)
+    "height"                         # Column 27: Height (m) of station
+  )
+  return(df_estimated_velocities_midas)
+}
+
+
 
 
 

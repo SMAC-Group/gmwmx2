@@ -5,8 +5,6 @@ using namespace Rcpp;
 using namespace arma;
 
 
-
-
 // Function to calculate mean of all diagonals of a matrix
 // [[Rcpp::export]]
 arma::vec sum_all_upper_diagonals(const arma::mat& matrix) {
@@ -31,9 +29,6 @@ arma::vec sum_all_upper_diagonals(const arma::mat& matrix) {
 
   return diagonal_sums;
 }
-
-
-
 
 
 

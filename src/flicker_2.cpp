@@ -125,9 +125,3 @@ arma::vec autocovariance_to_wv(const arma::vec& acf, const arma::vec& tau) {
 }
 
 
-
-
-/*** R
-
-
-*/

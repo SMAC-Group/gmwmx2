@@ -8,8 +8,14 @@ reference:
   - title: Load and plot NGL data
     contents:
     - download_station_ngl
-    - download_all_stations_names_ngl
+    - download_all_stations_ngl
+    - download_estimated_velocities_ngl
     - plot.gnss_ts_ngl
+  - title: Estimate a model
+    contents:
+    - gmwmx2
+    - summary.fit_gnss_ts_ngl
+    - plot.fit_gnss_ts_ngl
 
 
 
@@ -23,6 +29,8 @@ navbar:
     menu:
     - text: "Load and plot data from the Nevada Geodetic Laboratory (NGL)"
       href: articles/load_plot_data_ngl.html
+    - text: "Estimate a model"
+      href: articles/fit_model.html
   right:
   - icon: fa-github
     href: https://github.com/SMAC-Group/gmwmx2

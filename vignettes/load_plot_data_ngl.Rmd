@@ -26,7 +26,7 @@ library(gmwmx2)
 # Download all available stations from NGL
 
 ```{r}
-all_stations = download_all_stations_names_ngl()
+all_stations = download_all_stations_ngl()
 head(all_stations)
 ```
 
