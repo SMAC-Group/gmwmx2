@@ -3,6 +3,7 @@
 #' @importFrom data.table fread
 #' @importFrom utils read.table
 #' @importFrom dplyr filter
+#' @importFrom  utils download.file
 #' @importFrom magrittr %>%
 #' @param  station_name A \code{string} specifying the station name.
 #' @export
@@ -157,8 +158,11 @@ download_estimated_velocities_ngl = function(){
 
 
 #' Plot a \code{gnss_ts_ngl} object
+#' @param x A \code{gnss_ts_ngl} object.
+#' @param component A \code{string} with value either "N", "E" or "V" that specify which component to plot (Northing, Easting or Vertical).
+#' @param ... Additional graphical parameters.
 #' @importFrom utils head tail
-#' @importFrom graphics abline box layout legend par plot.new
+#' @importFrom graphics abline box layout legend par plot.new lines
 #' @export
 #' @examples
 #' station_1LSU = download_station_ngl("1LSU")
@@ -167,7 +171,7 @@ download_estimated_velocities_ngl = function(){
 #' plot(station_1LSU, component = "E")
 #' plot(station_1LSU, component = "V")
 #' @return No return value. Plot a \code{gnss_ts_ngl} object.
-plot.gnss_ts_ngl = function(x, component =NULL){
+plot.gnss_ts_ngl = function(x, component =NULL, ...){
 
   # compute NA over the time series
   all_mjd = seq(head(x$df_position$modified_julian_day,1),

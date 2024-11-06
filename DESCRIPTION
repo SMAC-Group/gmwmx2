@@ -25,7 +25,10 @@ Imports:
     data.table,
     dplyr,
     magrittr,
-    wv
-Suggests: knitr
+    wv,
+    MASS,
+    Matrix
+Suggests: knitr,
+          rmarkdown
 URL: https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues

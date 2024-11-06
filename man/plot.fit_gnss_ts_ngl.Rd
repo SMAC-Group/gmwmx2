@@ -4,7 +4,12 @@
 \alias{plot.fit_gnss_ts_ngl}
 \title{Plot a \code{fit_gnss_ts_ngl} object}
 \usage{
-\method{plot}{fit_gnss_ts_ngl}(x)
+\method{plot}{fit_gnss_ts_ngl}(x, ...)
+}
+\arguments{
+\item{x}{A \code{fit_gnss_ts_ngl} object.}
+
+\item{...}{Additional graphical parameters.}
 }
 \value{
 No return value. Plot a \code{fit_gnss_ts_ngl} object.

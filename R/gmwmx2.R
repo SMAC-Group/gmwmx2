@@ -141,10 +141,15 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 
 
 #' Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
+#' @param x A \code{gnss_ts_ngl} object.
+#' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series.
+#' @param vec_earthquakes_relaxation_time A \code{vecor} specifying the relaxation time for each earthquakes indicated for the time series.
+#' @param component A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).
 #' @importFrom wv wvar
 #' @importFrom dplyr between
 #' @importFrom Matrix solve
 #' @importFrom MASS ginv
+#' @importFrom stats .lm.fit optim toeplitz
 #' @export
 gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, component ="N"){
 
@@ -355,8 +360,10 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
 
 
 #' Extract estimated parameters from a \code{fit_gnss_ts_ngl}
+#' @param object A \code{fit_gnss_ts_ngl} object.
+#' @param ... Additional parameters.
 #' @export
-summary.fit_gnss_ts_ngl <- function(x) {
+summary.fit_gnss_ts_ngl <- function(object, ...) {
   # Print header
   cat("Summary of Estimated Model\n")
   cat("-------------------------------------------------------------\n")
@@ -366,20 +373,20 @@ summary.fit_gnss_ts_ngl <- function(x) {
   cat(" Estimate       Std_Deviation     95% CI Lower    95% CI Upper\n")
   cat("-------------------------------------------------------------\n")
 
-  for (i in seq_along(x$beta_hat)) {
-    lower_ci <- x$beta_hat[i] - 1.96 * x$std_beta_hat[i]
-    upper_ci <- x$beta_hat[i] + 1.96 * x$std_beta_hat[i]
+  for (i in seq_along(object$beta_hat)) {
+    lower_ci <- object$beta_hat[i] - 1.96 * object$std_beta_hat[i]
+    upper_ci <- object$beta_hat[i] + 1.96 * object$std_beta_hat[i]
 
     # Print values with 8 decimal places
     cat(sprintf("%14.8f %16.8f %16.8f %16.8f\n",
-                x$beta_hat[i], x$std_beta_hat[i], lower_ci, upper_ci))
+                object$beta_hat[i], object$std_beta_hat[i], lower_ci, upper_ci))
   }
 
   cat("-------------------------------------------------------------\n")
   cat("Stochastic parameters\n")
   cat("-------------------------------------------------------------\n")
-  cat(sprintf(" White Noise Variance  : %14.8f\n", x$gamma_hat[1]))
-  cat(sprintf(" Flicker Noise Variance: %14.8f\n", x$gamma_hat[2]))
+  cat(sprintf(" White Noise Variance  : %14.8f\n", object$gamma_hat[1]))
+  cat(sprintf(" Flicker Noise Variance: %14.8f\n", object$gamma_hat[2]))
 
   cat("-------------------------------------------------------------\n")
 }
@@ -388,9 +395,11 @@ summary.fit_gnss_ts_ngl <- function(x) {
 
 
 #' Plot a \code{fit_gnss_ts_ngl} object
+#' @param x A \code{fit_gnss_ts_ngl} object.
+#' @param ... Additional graphical parameters.
 #' @export
 #' @return No return value. Plot a \code{fit_gnss_ts_ngl} object.
-plot.fit_gnss_ts_ngl = function(x){
+plot.fit_gnss_ts_ngl = function(x, ...){
   #
   #
   # library(gmwmx2)

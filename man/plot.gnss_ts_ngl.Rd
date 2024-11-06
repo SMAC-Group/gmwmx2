@@ -4,7 +4,14 @@
 \alias{plot.gnss_ts_ngl}
 \title{Plot a \code{gnss_ts_ngl} object}
 \usage{
-\method{plot}{gnss_ts_ngl}(x, component = NULL)
+\method{plot}{gnss_ts_ngl}(x, component = NULL, ...)
+}
+\arguments{
+\item{x}{A \code{gnss_ts_ngl} object.}
+
+\item{component}{A \code{string} with value either "N", "E" or "V" that specify which component to plot (Northing, Easting or Vertical).}
+
+\item{...}{Additional graphical parameters.}
 }
 \value{
 No return value. Plot a \code{gnss_ts_ngl} object.

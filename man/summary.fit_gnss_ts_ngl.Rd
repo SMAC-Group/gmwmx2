@@ -4,7 +4,12 @@
 \alias{summary.fit_gnss_ts_ngl}
 \title{Extract estimated parameters from a \code{fit_gnss_ts_ngl}}
 \usage{
-\method{summary}{fit_gnss_ts_ngl}(x)
+\method{summary}{fit_gnss_ts_ngl}(object, ...)
+}
+\arguments{
+\item{object}{A \code{fit_gnss_ts_ngl} object.}
+
+\item{...}{Additional parameters.}
 }
 \description{
 Extract estimated parameters from a \code{fit_gnss_ts_ngl}

@@ -11,6 +11,15 @@ gmwmx2(
   component = "N"
 )
 }
+\arguments{
+\item{x}{A \code{gnss_ts_ngl} object.}
+
+\item{n_seasonal}{An \code{integer} specifying the number of seasonal signals in the time series.}
+
+\item{vec_earthquakes_relaxation_time}{A \code{vecor} specifying the relaxation time for each earthquakes indicated for the time series.}
+
+\item{component}{A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).}
+}
 \description{
 Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
 }

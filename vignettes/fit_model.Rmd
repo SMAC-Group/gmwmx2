@@ -101,7 +101,7 @@ plot(station_data)
 ```
 
 
-# Plot easting component
+# Plot Northing component
 ```{r}
 plot(station_data, component = "N")
 ```
