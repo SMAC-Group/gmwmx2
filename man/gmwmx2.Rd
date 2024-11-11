@@ -14,7 +14,7 @@ gmwmx2(
 \arguments{
 \item{x}{A \code{gnss_ts_ngl} object.}
 
-\item{n_seasonal}{An \code{integer} specifying the number of seasonal signals in the time series.}
+\item{n_seasonal}{An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.}
 
 \item{vec_earthquakes_relaxation_time}{A \code{vecor} specifying the relaxation time for each earthquakes indicated for the time series.}
 

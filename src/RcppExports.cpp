@@ -35,6 +35,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gen_flicker
+arma::vec gen_flicker(int N, double sigma);
+RcppExport SEXP _gmwmx2_gen_flicker(SEXP NSEXP, SEXP sigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(gen_flicker(N, sigma));
+    return rcpp_result_gen;
+END_RCPP
+}
 // compute_h_cpp
 arma::vec compute_h_cpp(double kappa, int N);
 RcppExport SEXP _gmwmx2_compute_h_cpp(SEXP kappaSEXP, SEXP NSEXP) {
@@ -243,6 +255,111 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sum_of_powers_of_2
+int sum_of_powers_of_2(int from, int to);
+RcppExport SEXP _gmwmx2_sum_of_powers_of_2(SEXP fromSEXP, SEXP toSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type from(fromSEXP);
+    Rcpp::traits::input_parameter< int >::type to(toSEXP);
+    rcpp_result_gen = Rcpp::wrap(sum_of_powers_of_2(from, to));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_cov_W_scale_1_from_autocov_cpp_with_treshold
+double get_cov_W_scale_1_from_autocov_cpp_with_treshold(int h, const arma::vec autocov_vec, int lag_treshold);
+RcppExport SEXP _gmwmx2_get_cov_W_scale_1_from_autocov_cpp_with_treshold(SEXP hSEXP, SEXP autocov_vecSEXP, SEXP lag_tresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type autocov_vec(autocov_vecSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_treshold(lag_tresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_cov_W_scale_1_from_autocov_cpp_with_treshold(h, autocov_vec, lag_treshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_all_cov_wv_recursive_2_cpp_with_mat
+arma::mat compute_all_cov_wv_recursive_2_cpp_with_mat(int n, const arma::vec autocov_vec, int lag_treshold);
+RcppExport SEXP _gmwmx2_compute_all_cov_wv_recursive_2_cpp_with_mat(SEXP nSEXP, SEXP autocov_vecSEXP, SEXP lag_tresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type autocov_vec(autocov_vecSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_treshold(lag_tresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_all_cov_wv_recursive_2_cpp_with_mat(n, autocov_vec, lag_treshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_autocov_W_j_equal_1_from_autocov_X
+arma::vec compute_autocov_W_j_equal_1_from_autocov_X(const arma::vec autocov_vec, int n, int lag_treshold);
+RcppExport SEXP _gmwmx2_compute_autocov_W_j_equal_1_from_autocov_X(SEXP autocov_vecSEXP, SEXP nSEXP, SEXP lag_tresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type autocov_vec(autocov_vecSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_treshold(lag_tresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_autocov_W_j_equal_1_from_autocov_X(autocov_vec, n, lag_treshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// compute_all_cov_W_recursive_from_j_2
+arma::mat compute_all_cov_W_recursive_from_j_2(int n, arma::vec autocov_W_j_equal_1);
+RcppExport SEXP _gmwmx2_compute_all_cov_W_recursive_from_j_2(SEXP nSEXP, SEXP autocov_W_j_equal_1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type autocov_W_j_equal_1(autocov_W_j_equal_1SEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_all_cov_W_recursive_from_j_2(n, autocov_W_j_equal_1));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_cov_wvar_cpp
+double get_cov_wvar_cpp(int j, int k, int n, arma::mat mat_autocov_W);
+RcppExport SEXP _gmwmx2_get_cov_wvar_cpp(SEXP jSEXP, SEXP kSEXP, SEXP nSEXP, SEXP mat_autocov_WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type mat_autocov_W(mat_autocov_WSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_cov_wvar_cpp(j, k, n, mat_autocov_W));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_var_wvar_j_from_autcov_W_j_cpp
+double get_var_wvar_j_from_autcov_W_j_cpp(int j, int n, arma::vec autocov_W);
+RcppExport SEXP _gmwmx2_get_var_wvar_j_from_autcov_W_j_cpp(SEXP jSEXP, SEXP nSEXP, SEXP autocov_WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type autocov_W(autocov_WSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_var_wvar_j_from_autcov_W_j_cpp(j, n, autocov_W));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_theo_cov_matrix_wvar_cpp
+arma::mat get_theo_cov_matrix_wvar_cpp(int n, Rcpp::Nullable<arma::vec> autocov_vec_X, Rcpp::Nullable<arma::vec> autocov_vec_W, int num_off_diagonal, int lag_treshold);
+RcppExport SEXP _gmwmx2_get_theo_cov_matrix_wvar_cpp(SEXP nSEXP, SEXP autocov_vec_XSEXP, SEXP autocov_vec_WSEXP, SEXP num_off_diagonalSEXP, SEXP lag_tresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<arma::vec> >::type autocov_vec_X(autocov_vec_XSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<arma::vec> >::type autocov_vec_W(autocov_vec_WSEXP);
+    Rcpp::traits::input_parameter< int >::type num_off_diagonal(num_off_diagonalSEXP);
+    Rcpp::traits::input_parameter< int >::type lag_treshold(lag_tresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_theo_cov_matrix_wvar_cpp(n, autocov_vec_X, autocov_vec_W, num_off_diagonal, lag_treshold));
+    return rcpp_result_gen;
+END_RCPP
+}
 // sum_all_upper_diagonals
 arma::vec sum_all_upper_diagonals(const arma::mat& matrix);
 RcppExport SEXP _gmwmx2_sum_all_upper_diagonals(SEXP matrixSEXP) {
@@ -298,6 +415,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_gmwmx2_estimate_p1_p2_mle_cpp", (DL_FUNC) &_gmwmx2_estimate_p1_p2_mle_cpp, 1},
     {"_gmwmx2_create_vec_theo_autocov_omega_cpp", (DL_FUNC) &_gmwmx2_create_vec_theo_autocov_omega_cpp, 3},
+    {"_gmwmx2_gen_flicker", (DL_FUNC) &_gmwmx2_gen_flicker, 2},
     {"_gmwmx2_compute_h_cpp", (DL_FUNC) &_gmwmx2_compute_h_cpp, 2},
     {"_gmwmx2_vec_mean_autocov_powerlaw", (DL_FUNC) &_gmwmx2_vec_mean_autocov_powerlaw, 2},
     {"_gmwmx2_var_cov_powerlaw_cpp", (DL_FUNC) &_gmwmx2_var_cov_powerlaw_cpp, 3},
@@ -315,6 +433,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gmwmx2_compute_l_index_to_compute_cpp", (DL_FUNC) &_gmwmx2_compute_l_index_to_compute_cpp, 2},
     {"_gmwmx2_compute_indices", (DL_FUNC) &_gmwmx2_compute_indices, 2},
     {"_gmwmx2_compute_cov_wv_cpp_approx_faster", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp_approx_faster, 2},
+    {"_gmwmx2_sum_of_powers_of_2", (DL_FUNC) &_gmwmx2_sum_of_powers_of_2, 2},
+    {"_gmwmx2_get_cov_W_scale_1_from_autocov_cpp_with_treshold", (DL_FUNC) &_gmwmx2_get_cov_W_scale_1_from_autocov_cpp_with_treshold, 3},
+    {"_gmwmx2_compute_all_cov_wv_recursive_2_cpp_with_mat", (DL_FUNC) &_gmwmx2_compute_all_cov_wv_recursive_2_cpp_with_mat, 3},
+    {"_gmwmx2_compute_autocov_W_j_equal_1_from_autocov_X", (DL_FUNC) &_gmwmx2_compute_autocov_W_j_equal_1_from_autocov_X, 3},
+    {"_gmwmx2_compute_all_cov_W_recursive_from_j_2", (DL_FUNC) &_gmwmx2_compute_all_cov_W_recursive_from_j_2, 2},
+    {"_gmwmx2_get_cov_wvar_cpp", (DL_FUNC) &_gmwmx2_get_cov_wvar_cpp, 4},
+    {"_gmwmx2_get_var_wvar_j_from_autcov_W_j_cpp", (DL_FUNC) &_gmwmx2_get_var_wvar_j_from_autcov_W_j_cpp, 3},
+    {"_gmwmx2_get_theo_cov_matrix_wvar_cpp", (DL_FUNC) &_gmwmx2_get_theo_cov_matrix_wvar_cpp, 5},
     {"_gmwmx2_sum_all_upper_diagonals", (DL_FUNC) &_gmwmx2_sum_all_upper_diagonals, 1},
     {"_gmwmx2_linear_interp_cpp", (DL_FUNC) &_gmwmx2_linear_interp_cpp, 3},
     {"_gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp", (DL_FUNC) &_gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp, 2},

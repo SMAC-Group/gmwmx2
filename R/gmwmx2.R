@@ -140,17 +140,17 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 #' @importFrom wv wvar
 #' @importFrom dplyr between
 #' @importFrom Matrix solve
-#' @importFrom MASS ginv
 #' @importFrom stats .lm.fit optim toeplitz
 #' @export
 gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, component ="N"){
 
-  # x = download_station_ngl("CHML")
+  # x = readRDS("chml.rds")
   # plot(x, component = "N")
   # vec_earthquakes_relaxation_time = NULL
   # component ="N"
   # n_seasonal=2
-
+  # x$df_equipment_software_changes
+  # x$df_earthquakes
 
 
 
@@ -201,8 +201,8 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   beta_hat <- .lm.fit(y = y , x = X_sub)$coefficients
 
   # # plot signal and estimated model
-  # plot(x=X_sub[,2], y=y, type="l")
-  # lines(x=X_sub[, 2], y= X_sub%*% beta_hat, col="red")
+  # plot(x=rownames(X_sub), y=y, type="l")
+  # lines(x=rownames(X_sub), y= X_sub%*% beta_hat, col="red")
   # # obtain observed residuals
   eps_hat_sub <- y - X_sub %*% beta_hat
 
@@ -228,7 +228,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], length(all_mjd_index))
 
   XtX = t(X) %*% X
-  inv_XtX = Matrix::solve(XtX) # to check later, why does when we have multiple earthquake XtX becomes not invertible
+  inv_XtX = Matrix::solve(XtX)
   H <- X %*% inv_XtX %*% t(X)
   D <- diag(length(all_mjd_index)) - H
 
@@ -244,7 +244,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
 
 
   # define gamma init
-  gamma_init = c(log(8e-7), log(8e-9)) # arbitrary values around the ones observed in practice for these kind of data
+  gamma_init = log(find_initial_values_wn_fl(wv_emp_eps_hat_filled))
 
   # fit gmwmx on empirical wv
   res_gmwmx <- optim(
@@ -262,22 +262,62 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   # res_gmwmx
   gamma_hat_1 = exp(res_gmwmx$par)
 
-  # construct sigma matrix of white noise + ficker
-  var_cov_mat_wn = gamma_hat_1[1] * diag(length(vec_omega))
-  var_cov_mat_flicker = var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
-  var_cov_mat_epsilon = var_cov_mat_wn+var_cov_mat_flicker
+  if(toeplitz_approx_var_cov_wv){
 
-  # get var cov missingness process
-  var_cov_omega = toeplitz(as.vector(vec_autocov_omega))
+    #define max J
+    max_J = wv_emp_eps_hat_filled$J
 
-  # define variance covariance of residuals with missing
-  var_cov_eps_hat_w_missing = var_cov_mat_epsilon * ( var_cov_omega + pstar_hat^2)
+    # minimum n required for computing var of wv
+    min_n_to_get_var_wv <- length(vec_omega) + sum_of_powers_of_2(1, max_J - 1) + 2
 
-  # compute variance of wavelet variance computed on epsilon (negleting the fact that we compute the wv on the "estimated" residuals)
-  var_cov_nu_hat = compute_cov_wv_cpp_approx_faster(Sigma_X = var_cov_eps_hat_w_missing)
+    # get autocov of stochastic process (true residuals)
+    vec_mean_autocov <- vec_mean_autocov_powerlaw(-1, length(vec_omega)) *  gamma_hat_1[2]
+    vec_mean_autocov[1] <- vec_mean_autocov[1] +   gamma_hat_1[1]
 
-  # get inverse
-  inv_var_cov_nu_hat =  Matrix::solve(var_cov_nu_hat)
+    # get mean autocov of (I-H)Sigma
+    vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
+      mat_D_q_term_1 = quantities_D$mat_D_q_term_1,
+      mat_D_q_term_2 = quantities_D$mat_D_q_term_2,
+      sum_on_sub_diag_of_D = quantities_D$sum_on_sub_diag_of_D,
+      vec_autocov = vec_mean_autocov,
+      approx_type = "3"
+    )
+
+    # get autocov of process times markov process
+    if (!no_missing) {
+      autocov_wn_fl_times_omega <- vec_mean_autocov_eps_hat * (vec_autocov_omega + pstar_hat^2)
+    } else {
+      autocov_wn_fl_times_omega <- vec_mean_autocov_eps_hat
+    }
+
+    # fill in zero after this entry 8to compute autocovariance of wavelet coefficients of alls scales
+    # autocov of wave coef will be wrong for some entries but the one used will be correct
+    # tested and all good
+    autocov_wn_fl_times_omega_w_zeroes <- vector(mode = "numeric", length = min_n_to_get_var_wv)
+    autocov_wn_fl_times_omega_w_zeroes[1:(length(vec_omega))] <- autocov_wn_fl_times_omega
+
+    # get variance of wv based on this process
+    Sigma_wv <- get_theo_cov_matrix_wvar_cpp(n = length(vec_omega), autocov_vec_X = autocov_wn_fl_times_omega_w_zeroes)
+    inv_var_cov_nu_hat <- Matrix::solve(Sigma_wv)
+  }else{
+
+    # construct sigma matrix of white noise + ficker
+    var_cov_mat_wn = gamma_hat_1[1] * diag(length(vec_omega))
+    var_cov_mat_flicker = var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
+    var_cov_mat_epsilon = var_cov_mat_wn+var_cov_mat_flicker
+
+    # get var cov missingness process
+    var_cov_omega = toeplitz(as.vector(vec_autocov_omega))
+
+    # define variance covariance of residuals with missing
+    var_cov_eps_hat_w_missing = var_cov_mat_epsilon * ( var_cov_omega + pstar_hat^2)
+
+    # compute variance of wavelet variance computed on epsilon (negleting the fact that we compute the wv on the "estimated" residuals)
+    var_cov_nu_hat = compute_cov_wv_cpp_approx_faster(Sigma_X = var_cov_eps_hat_w_missing)
+
+    # get inverse
+    inv_var_cov_nu_hat =  Matrix::solve(var_cov_nu_hat)
+  }
 
   # re estimate gamma with optimal weighting matrix
   res_gmwmx_2 <- optim(

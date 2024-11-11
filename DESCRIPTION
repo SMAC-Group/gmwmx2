@@ -26,7 +26,6 @@ Imports:
     dplyr,
     magrittr,
     wv,
-    MASS,
     Matrix
 Suggests: knitr,
           rmarkdown

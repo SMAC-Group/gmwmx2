@@ -9,6 +9,10 @@ create_vec_theo_autocov_omega_cpp <- function(p1, p2, n) {
     .Call(`_gmwmx2_create_vec_theo_autocov_omega_cpp`, p1, p2, n)
 }
 
+gen_flicker <- function(N, sigma) {
+    .Call(`_gmwmx2_gen_flicker`, N, sigma)
+}
+
 compute_h_cpp <- function(kappa, N) {
     .Call(`_gmwmx2_compute_h_cpp`, kappa, N)
 }
@@ -75,6 +79,38 @@ compute_indices <- function(all_l_values, lst_index_row) {
 
 compute_cov_wv_cpp_approx_faster <- function(Sigma_X, approx_type = "1") {
     .Call(`_gmwmx2_compute_cov_wv_cpp_approx_faster`, Sigma_X, approx_type)
+}
+
+sum_of_powers_of_2 <- function(from, to) {
+    .Call(`_gmwmx2_sum_of_powers_of_2`, from, to)
+}
+
+get_cov_W_scale_1_from_autocov_cpp_with_treshold <- function(h, autocov_vec, lag_treshold = -1L) {
+    .Call(`_gmwmx2_get_cov_W_scale_1_from_autocov_cpp_with_treshold`, h, autocov_vec, lag_treshold)
+}
+
+compute_all_cov_wv_recursive_2_cpp_with_mat <- function(n, autocov_vec, lag_treshold = -1L) {
+    .Call(`_gmwmx2_compute_all_cov_wv_recursive_2_cpp_with_mat`, n, autocov_vec, lag_treshold)
+}
+
+compute_autocov_W_j_equal_1_from_autocov_X <- function(autocov_vec, n, lag_treshold = -1L) {
+    .Call(`_gmwmx2_compute_autocov_W_j_equal_1_from_autocov_X`, autocov_vec, n, lag_treshold)
+}
+
+compute_all_cov_W_recursive_from_j_2 <- function(n, autocov_W_j_equal_1) {
+    .Call(`_gmwmx2_compute_all_cov_W_recursive_from_j_2`, n, autocov_W_j_equal_1)
+}
+
+get_cov_wvar_cpp <- function(j, k, n, mat_autocov_W) {
+    .Call(`_gmwmx2_get_cov_wvar_cpp`, j, k, n, mat_autocov_W)
+}
+
+get_var_wvar_j_from_autcov_W_j_cpp <- function(j, n, autocov_W) {
+    .Call(`_gmwmx2_get_var_wvar_j_from_autcov_W_j_cpp`, j, n, autocov_W)
+}
+
+get_theo_cov_matrix_wvar_cpp <- function(n, autocov_vec_X = NULL, autocov_vec_W = NULL, num_off_diagonal = -1L, lag_treshold = -1L) {
+    .Call(`_gmwmx2_get_theo_cov_matrix_wvar_cpp`, n, autocov_vec_X, autocov_vec_W, num_off_diagonal, lag_treshold)
 }
 
 sum_all_upper_diagonals <- function(matrix) {

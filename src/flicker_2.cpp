@@ -5,6 +5,47 @@ using namespace Rcpp;
 using namespace arma;
 
 
+
+
+
+// [[Rcpp::export]]
+arma::vec gen_flicker(int N, double sigma) {
+  double kappa=-1;
+
+  // // Set seed for reproducibility
+  // arma::arma_rng::set_seed(0);
+
+  // Flicker noise parameters
+  double h_prev = 1.0;
+  arma::vec h = arma::zeros<arma::vec>(2 * N);
+  h(0) = 1.0;  // Eq. (25)
+
+  // Generate h values
+  for (int i = 1; i < N; ++i) {
+    h(i) = (i - kappa / 2 - 1) / static_cast<double>(i) * h_prev;  // Eq. (25)
+    h_prev = h(i);
+  }
+
+  // Generate v values
+  arma::vec v = arma::zeros<arma::vec>(2 * N);
+  v.subvec(0, N - 1) = arma::randn<arma::vec>(N) * sigma;
+
+  // Compute w values
+  arma::cx_vec fft_v = arma::fft(v);
+  arma::cx_vec fft_h = arma::fft(h);
+  arma::cx_vec w1 = arma::ifft(fft_v % fft_h);
+
+  // Extract real part of w
+  arma::vec w2 = arma::real(arma::vectorise(w1));
+
+  // Extract the first N elements of w
+  arma::vec y = w2.subvec(0, N - 1);
+
+  return y;
+}
+
+
+
 // [[Rcpp::export]]
 arma::vec compute_h_cpp(double kappa, int N) {
   arma::vec vec_h(N);
