@@ -41,7 +41,7 @@ create_X_matrix = function (all_mjd_index,
   # add bias, intercept
   X[, 1] = 1
 
-  # add component for trend
+  # add component for trend and scale with respect to middle of time axis
   reference_time =  0.5*(all_mjd_index[1]+tail(all_mjd_index,1))
   X[,2] = all_mjd_index - reference_time
 
@@ -132,7 +132,7 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 
 
 
-#' Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
+#' Estimate a linear model with White noise and Flicker noise as the stochastic model for the residuals in presence of missing data using the GMWMX estimator.
 #' @param x A \code{gnss_ts_ngl} object.
 #' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.
 #' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.
@@ -162,6 +162,11 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
     stop("Specified component should be either 'N', 'E' or 'V'")
   }
 
+  # check that n_seasonal is either 1 or 2
+  if(!n_seasonal %in% c(1,2)){
+    stop("Argument `n_seasonal` should take either value `1` or `2`")
+  }
+
   # create full index
   all_mjd_index = seq(head(x$df_position$modified_julian_day,1), tail(x$df_position$modified_julian_day, 1),by =1)
 
@@ -173,7 +178,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   jumps = unique(jumps)
   vec_earthquakes_index_mjd = c(x$df_earthquakes$modified_julian_date)
 
-  # if multiple earthquakes  to prevent not invertible matrix
+  # if multiple earthquakes to prevent not invertible matrix
   vec_earthquakes_index_mjd = unique(vec_earthquakes_index_mjd)
 
   if(length(jumps) == 0){
@@ -218,10 +223,10 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   # # obtain observed residuals
   eps_hat_sub <- y - X_sub %*% beta_hat
 
-  # create
+  # create vector that contains either estimated residual or 0 if data point is not observed
   eps_hat_filled <- vector(mode = "numeric", length = length(all_mjd_index))
 
-  # fill in observed residuals
+  # fill in observed residuals when we observe data
   eps_hat_filled[id_X_sub] = eps_hat_sub
 
   # compute empirical wv variance on the "filled" vector of residuals
@@ -234,18 +239,21 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   # estimate parameter of Markov process missingness process using the MLE
   p_hat <- estimate_p1_p2_mle_cpp(vec_omega)
 
-  # define pstar hat
+  # define pstar hat (expecation of missingness process)
   pstar_hat <- p_hat[2] / (p_hat[1] + p_hat[2])
 
   # get vec autocovariance theo omega
   vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], length(all_mjd_index))
 
+  # compute (X^TX)^{-1}
   XtX = t(X) %*% X
   inv_XtX = Matrix::solve(XtX)
+
+  # compute hat matrix
   H <- X %*% inv_XtX %*% t(X)
   D <- diag(length(all_mjd_index)) - H
 
-  # precompute quantities on D
+  # pre-compute quantities on D
   quantities_D <- pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type = "3")
 
   # define missingness case
@@ -254,7 +262,6 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   } else {
     no_missing <- FALSE
   }
-
 
   # define gamma init
   gamma_init = log(find_initial_values_wn_fl(wv_emp_eps_hat_filled))
@@ -272,7 +279,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
     no_missing = no_missing
   )
 
-  # res_gmwmx
+  # extract estimated stochastic parameters
   gamma_hat_1 = exp(res_gmwmx$par)
 
   if(toeplitz_approx_var_cov_wv){
@@ -303,9 +310,8 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
       autocov_wn_fl_times_omega <- vec_mean_autocov_eps_hat
     }
 
-    # fill in zero after this entry 8to compute autocovariance of wavelet coefficients of alls scales
-    # autocov of wave coef will be wrong for some entries but the one used will be correct
-    # tested and all good
+    # fill in zero after this entry to compute autocovariance of wavelet coefficients of all scales
+    # autocov of wavelet coef will be wrong for some entries but the one used will be correct
     autocov_wn_fl_times_omega_w_zeroes <- vector(mode = "numeric", length = min_n_to_get_var_wv)
     autocov_wn_fl_times_omega_w_zeroes[1:(length(vec_omega))] <- autocov_wn_fl_times_omega
 
@@ -415,13 +421,14 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
 
 #' Extract estimated parameters from a \code{fit_gnss_ts_ngl}
 #' @param object A \code{fit_gnss_ts_ngl} object.
+#' @param scale_parameters A \code{boolean} indicating whether or not to scale estimated parameters so that the returned estimated trend is provided in m/year instead of m/day. Default is FALSE.
 #' @param ... Additional parameters.
 #' @examples
 #' x = download_station_ngl("CHML")
 #' fit = gmwmx2(x,n_seasonal = 2, component = "N")
 #' summary(fit)
 #' @export
-summary.fit_gnss_ts_ngl <- function(object, ...) {
+summary.fit_gnss_ts_ngl <- function(object, scale_parameters=FALSE, ...) {
   # Print header
   cat("Summary of Estimated Model\n")
   cat("-------------------------------------------------------------\n")
@@ -435,15 +442,29 @@ summary.fit_gnss_ts_ngl <- function(object, ...) {
 
   for (i in seq_along(object$beta_hat)) {
 
-    lower_ci <- object$beta_hat[i] - 1.96 * object$std_beta_hat[i]
-    upper_ci <- object$beta_hat[i] + 1.96 * object$std_beta_hat[i]
+    if(scale_parameters){
+      lower_ci <- object$beta_hat[i]*365.25 - qnorm(.975) * object$std_beta_hat[i]*365.25
+      upper_ci <- object$beta_hat[i]*365.25 + qnorm(.975) * object$std_beta_hat[i]*365.25
+    }else{
+      lower_ci <- object$beta_hat[i] - qnorm(.975) * object$std_beta_hat[i]
+      upper_ci <- object$beta_hat[i] + qnorm(.975) * object$std_beta_hat[i]
+
+    }
+
 
     # Print values with 8 decimal places, left-align the names, and align other columns
+    if(scale_parameters){
+      cat(sprintf("%-20s %12.8f %12.8f %12.8f %12.8f\n",
+                  names(object$beta_hat)[i],
+                  object$beta_hat[i]*365.25, object$std_beta_hat[i]*365.25,
+                  lower_ci, upper_ci))
+    }else{
+      cat(sprintf("%-20s %12.8f %12.8f %12.8f %12.8f\n",
+                  names(object$beta_hat)[i],
+                  object$beta_hat[i], object$std_beta_hat[i],
+                  lower_ci, upper_ci))
 
-    cat(sprintf("%-20s %12.8f %12.8f %12.8f %12.8f\n",
-                names(object$beta_hat)[i],
-                object$beta_hat[i], object$std_beta_hat[i],
-                lower_ci, upper_ci))
+    }
 
   }
 

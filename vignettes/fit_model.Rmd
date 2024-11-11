@@ -35,7 +35,7 @@ We then define the a random variable $\boldsymbol{Z} =\{Z_{i}\}_{i=1,\ldots,n}$ 
 
 We then assume that we only observe the stochastic process $\tilde{\boldsymbol{Y}} = \boldsymbol{Z} \odot \boldsymbol{Y}$, where $\odot$ denotes the Hadamard product. Hence, $\tilde{\boldsymbol{Y}} \in \mathbb{R}^n = \boldsymbol{Y} \odot \boldsymbol{Z}$ represents the observed process vector with null elements in the positions where observations are missing. 
 
-Using $\otimes$ to denote the Kronecker product, we define $\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X} \in \mathbb{R}^{n \times p}$ as the design matrix $\boldsymbol{X}$ with zero-valued vectors for the rows where observations are missing in $\boldsymbol{Y}$ (here $\boldsymbol{1}$ represents a vector of ones of dimension $p$).
+Using $\otimes$ to denote the Kronecker product, we then define $\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X} \in \mathbb{R}^{n \times p}$ as the design matrix $\boldsymbol{X}$ with zero-valued vectors for the rows where observations are missing in $\boldsymbol{Y}$ (where $\boldsymbol{1}$ represents a vector of ones of dimension $p$).
 
 We estimate the parameters $\boldsymbol{\beta}$ with the least square estimator:
 
@@ -43,9 +43,9 @@ We estimate the parameters $\boldsymbol{\beta}$ with the least square estimator:
     \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}}.
 \end{equation}
 
-We then compute the estimated residuals as $\hat{\boldsymbol{\varepsilon}} = {\tilde{\boldsymbol{Y}}} - \tilde{{\boldsymbol{X}}} \hat{\boldsymbol{\beta}}$.
+We compute the estimated residuals as $\hat{\boldsymbol{\varepsilon}} = {\tilde{\boldsymbol{Y}}} - \tilde{{\boldsymbol{X}}} \hat{\boldsymbol{\beta}}$.
 
-We then estimate the parameters $\boldsymbol{\vartheta}$ of the the missingness process $\boldsymbol{Z}$ assuming that $\boldsymbol{Z}$ is generated from a Markov model with the following transition probabilities:
+We then estimate with the Maximum Likelihood Estimator the parameters $\boldsymbol{\vartheta}$ of the missingness process $\boldsymbol{Z}$ assuming that $\boldsymbol{Z}$ is generated from a Markov model with the following transition probabilities:
 
 \begin{equation}
     \label{eq:markov_model_def}
@@ -79,9 +79,9 @@ starts in Modified Julian Date (MJD) and $T_j$ is the relaxation period in days 
 
 More precisely, when loading data from a specific station using the function `gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory the position time series in  GD coordinates, the time steps associated with a equipment or software change and the time steps associated with an earthquake near the station. All these objects are stored in a object of class `gnss_ts_ngl`.  
 
-When applying the function `gmwmx2::gmwmx2()` to an object of class `gnss_ts_ngl`, we construct the design matrix $\boldsymbol{X}$ by considering an offset term for all equipment or software changes steps and all earthquakes indicated by the NGL. We also specify a post-seismic relaxation term for all all earthquakes indicated by the NGL. If no relaxation time is specified in the argument `vec_earthquakes_relaxation_time`, we consider a default relaxation time of $365.25$ days. 
+When applying the function `gmwmx2::gmwmx2()` to an object of class `gnss_ts_ngl`, we construct the design matrix $\boldsymbol{X}$ by considering an offset term for all equipment or software changes steps and all earthquakes indicated by the NGL. We also specify a post-seismic relaxation term for all earthquakes indicated by the NGL. If no relaxation time is specified in the argument `vec_earthquakes_relaxation_time`, we consider a default relaxation time of $365.25$ days. 
 
-Regarding the stochastic model, the `gmwmx2` package currently only support one stochastic model which is a combination of White noise and Flicker/pink noise which is the most common stochastic model considered for GNSS position time series ([He, X., Bos, M.S., Fernandes, R.M.S., 2019](https://link.springer.com/article/10.1007/s00190-019-01244-y)).
+Regarding the stochastic model, the `gmwmx2` package currently only support one stochastic model for the error term which is a combination of White noise and Flicker/pink noise which is the most common stochastic model considered for GNSS position time series ([He, X., Bos, M.S., Fernandes, R.M.S., 2019](https://link.springer.com/article/10.1007/s00190-019-01244-y)).
 
 Let us showcase how to estimate the tectonic velocity in for one specific component (North, East or Vertical) of one station.
 

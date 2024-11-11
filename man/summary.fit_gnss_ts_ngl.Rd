@@ -4,10 +4,12 @@
 \alias{summary.fit_gnss_ts_ngl}
 \title{Extract estimated parameters from a \code{fit_gnss_ts_ngl}}
 \usage{
-\method{summary}{fit_gnss_ts_ngl}(object, ...)
+\method{summary}{fit_gnss_ts_ngl}(object, scale_parameters = FALSE, ...)
 }
 \arguments{
 \item{object}{A \code{fit_gnss_ts_ngl} object.}
+
+\item{scale_parameters}{A \code{boolean} indicating whether or not to scale estimated parameters so that the returned estimated trend is provided in m/year instead of m/day. Default is FALSE.}
 
 \item{...}{Additional parameters.}
 }
