@@ -4,12 +4,11 @@ library(gmwmx2)
 library(dplyr)
 library(maps)
 
-
-library(gmwmx2)
 all_velocities = download_estimated_velocities_ngl()
 name_tmp_dir = tempdir()
 name_tmp_file = paste0(name_tmp_dir,"/", "steps.txt")
 download.file("http://geodesy.unr.edu/NGLStationPages/steps.txt", name_tmp_file, quiet = TRUE)
+
 # read all lines
 all_lines = readLines(name_tmp_file)
 
@@ -37,18 +36,23 @@ df_count_equipment_software_changes = df_equipment_software_changes %>%
   group_by(station_name) %>%
   summarise("n_equipment_change" =n())
 
-
 df_station_time = all_velocities %>% select(station_name, time_series_duration_year)
 
-
-#merge
+# merge station duration and number of earthquakes, equipment changes
 df1 = dplyr::full_join(df_count_earthquake, df_count_equipment_software_changes)
 df2 = dplyr::full_join(df1,df_station_time )
-df3 = df2 %>% filter(time_series_duration_year <6, n_earthquake>1, n_equipment_change>1)
+
+# select only long stations
+n_year_min = 5
+df3 = df2 %>% filter(time_series_duration_year == n_year_min, n_earthquake==1,
+                     n_equipment_change==3)
 
 
 df3$station_name
-x = download_station_ngl("CHML") # problem here
+station_name_1 = df3$station_name[2]
+station_name_1
+x = download_station_ngl(station_name_1) # problem here
+plot(x)
 plot(x, component = "N")
 fit = gmwmx2(x, n_seasonal = 2, component = "N")
 plot(fit)

@@ -20,7 +20,7 @@ No return value. Plot a \code{gnss_ts_ngl} object.
 Plot a \code{gnss_ts_ngl} object
 }
 \examples{
-station_1LSU = download_station_ngl("1LSU")
+station_1LSU <- download_station_ngl("1LSU")
 plot(station_1LSU)
 plot(station_1LSU, component = "N")
 plot(station_1LSU, component = "E")

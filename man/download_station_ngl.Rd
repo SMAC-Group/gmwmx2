@@ -17,6 +17,6 @@ A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}:
 Download GNSS position time series and steps reference from Nevada Geodetic Laboratory with IGS14 reference frame.
 }
 \examples{
-station_1LSU = download_station_ngl("1LSU")
+station_1LSU <- download_station_ngl("1LSU")
 attributes(station_1LSU)
 }

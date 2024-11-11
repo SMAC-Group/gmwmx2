@@ -18,7 +18,7 @@ No return value. Plot a \code{fit_gnss_ts_ngl} object.
 Plot a \code{fit_gnss_ts_ngl} object
 }
 \examples{
-x = download_station_ngl("CHML")
-fit = gmwmx2(x, n_seasonal = 2, component = "N")
+x <- download_station_ngl("CHML")
+fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 plot(fit)
 }

@@ -17,7 +17,7 @@
 Extract estimated parameters from a \code{fit_gnss_ts_ngl}
 }
 \examples{
-x = download_station_ngl("CHML")
-fit = gmwmx2(x,n_seasonal = 2, component = "N")
+x <- download_station_ngl("CHML")
+fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 summary(fit)
 }

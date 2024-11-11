@@ -44,7 +44,6 @@ create_X_matrix <- function(all_mjd_index,
   reference_time <- 0.5 * (all_mjd_index[1] + tail(all_mjd_index, 1))
   X[, 2] <- all_mjd_index - reference_time
 
-
   # add seasonal
   if (n_seasonal > 0) {
     for (i in 1:n_seasonal) {
@@ -65,7 +64,6 @@ create_X_matrix <- function(all_mjd_index,
     }
   }
 
-
   # exponential decay function for post seismic relaxation
   if (!is.null(vec_earthquakes_index_mjd)) {
     for (i in seq_along(vec_earthquakes_index_mjd)) {
@@ -82,7 +80,6 @@ create_X_matrix <- function(all_mjd_index,
     }
   }
 
-
   # # Slow slip events (tanh)
   # if(!is.null(vec_tanh_mid_point)){
   #   for(i in seq_along(vec_tanh_mid_point)){
@@ -97,7 +94,9 @@ create_X_matrix <- function(all_mjd_index,
 }
 
 
-# define optimization function
+# define optimization function for stochastic model White noise + Flicker model
+# In order to perform the optimization efficiently,
+# the objective function construct a fast approximation of the theoretical wavelet variance of the vector of missing and observed estimated residuals.
 objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities_D, approx_type, vec_autocov_omega, pstar_hat, no_missing = T, omega = NULL) {
   theta_t <- vector(mode = "numeric", length = 2)
   theta_t[1] <- exp(theta[1]) # sigma2 wn
@@ -131,7 +130,7 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 
 
 
-#' Estimate a fitted trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.
+#' Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.
 #' @param x A \code{gnss_ts_ngl} object.
 #' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.
 #' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.

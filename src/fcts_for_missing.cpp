@@ -24,7 +24,7 @@ arma::vec estimate_p1_p2_mle_cpp(arma::vec omega) {
 
 
 
-// Function to generate vector of autocovariance of omega process
+// Function to generate vector of autocovariance of omega process, A markov process that takes values 0 or 1 indicating respectively missingness or presence of the observation.
 // [[Rcpp::export]]
 arma::vec create_vec_theo_autocov_omega_cpp(double p1, double p2, int n) {
   double pstar = p2 / (p1 + p2);
