@@ -2,7 +2,7 @@
 % Please edit documentation in R/ngl.R
 \name{download_station_ngl}
 \alias{download_station_ngl}
-\title{Download the .tenv3 GNSS position time series format and steps reference from Nevada Geodetic Laboratory with IGS14  reference frame.}
+\title{Download GNSS position time series and steps reference from Nevada Geodetic Laboratory with IGS14 reference frame.}
 \usage{
 download_station_ngl(station_name)
 }
@@ -11,12 +11,12 @@ download_station_ngl(station_name)
 }
 \value{
 A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
-\code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specfiy the earthquakes associated with that station.
+\code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
 }
 \description{
-Download the .tenv3 GNSS position time series format and steps reference from Nevada Geodetic Laboratory with IGS14  reference frame.
+Download GNSS position time series and steps reference from Nevada Geodetic Laboratory with IGS14 reference frame.
 }
 \examples{
 station_1LSU = download_station_ngl("1LSU")
-str(station_1LSU)
+attributes(station_1LSU)
 }

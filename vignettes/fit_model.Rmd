@@ -14,9 +14,9 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  fig.width = 8,       # Set default plot width (adjust as needed)
-  fig.height = 6,      # Set default plot height (adjust as needed)
-  fig.align = 'center' # Center align all plots
+  fig.width = 8, # Set default plot width (adjust as needed)
+  fig.height = 6, # Set default plot height (adjust as needed)
+  fig.align = "center" # Center align all plots
 )
 ```
 
@@ -92,7 +92,7 @@ library(gmwmx2)
 
 # Download a station from Nevada Geodetic Laboratory
 ```{r}
-station_data = download_station_ngl("CHML")
+station_data <- download_station_ngl("CHML")
 ```
 
 # Plot Station
@@ -109,7 +109,7 @@ plot(station_data, component = "N")
 
 # Estimate model on station data
 ```{r}
-fit = gmwmx2(station_data, n_seasonal = 2, component = "N")
+fit <- gmwmx2(station_data, n_seasonal = 2, component = "N")
 ```
 
 # Extract estimated parameters

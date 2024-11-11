@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwmx2.R
 \name{gmwmx2}
 \alias{gmwmx2}
-\title{Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.}
+\title{Estimate a fitted trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.}
 \usage{
 gmwmx2(
   x,
@@ -24,7 +24,7 @@ gmwmx2(
 \item{toeplitz_approx_var_cov_wv}{A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.}
 }
 \description{
-Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
+Estimate a fitted trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.
 }
 \examples{
 x = download_station_ngl("CHML")

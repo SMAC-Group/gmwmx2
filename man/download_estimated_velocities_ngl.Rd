@@ -2,7 +2,7 @@
 % Please edit documentation in R/ngl.R
 \name{download_estimated_velocities_ngl}
 \alias{download_estimated_velocities_ngl}
-\title{Download estimated velocities using the MIDAS estimator provided by the Nevada Geodetic Laboratory (NGL)}
+\title{Download estimated velocities provided by the Nevada Geodetic Laboratory (NGL) for all stations.}
 \usage{
 download_estimated_velocities_ngl()
 }
@@ -10,5 +10,5 @@ download_estimated_velocities_ngl()
 Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
 }
 \description{
-Download estimated velocities using the MIDAS estimator provided by the Nevada Geodetic Laboratory (NGL)
+Download estimated velocities provided by the Nevada Geodetic Laboratory (NGL) for all stations.
 }
