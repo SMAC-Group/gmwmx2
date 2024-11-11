@@ -71,7 +71,7 @@ create_X_matrix = function (all_mjd_index,
       tau_i = vec_earthquakes_relaxation_time[i]
       earthquake_mjd_i = vec_earthquakes_index_mjd[i]
       # create vector
-      decay_values <- ifelse(all_mjd_index > earthquake_mjd_i,
+      decay_values <- ifelse(all_mjd_index >= earthquake_mjd_i,
                              1 - exp(-(all_mjd_index - earthquake_mjd_i) / tau_i),
                              0)
 
@@ -135,22 +135,25 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 #' Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
 #' @param x A \code{gnss_ts_ngl} object.
 #' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.
-#' @param vec_earthquakes_relaxation_time A \code{vecor} specifying the relaxation time for each earthquakes indicated for the time series.
+#' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.
 #' @param component A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).
+#' @param toeplitz_approx_var_cov_wv A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.
 #' @importFrom wv wvar
 #' @importFrom dplyr between
 #' @importFrom Matrix solve
 #' @importFrom stats .lm.fit optim toeplitz
+#' @examples
+#' x = download_station_ngl("CHML")
+#' fit = gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
-gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, component ="N"){
+gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, component ="N",toeplitz_approx_var_cov_wv=TRUE){
 
   # x = readRDS("chml.rds")
   # plot(x, component = "N")
   # vec_earthquakes_relaxation_time = NULL
   # component ="N"
   # n_seasonal=2
-  # x$df_equipment_software_changes
-  # x$df_earthquakes
+  # toeplitz_approx_var_cov_wv=TRUE
 
 
 
@@ -200,6 +203,15 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   # obtain beta hat
   beta_hat <- .lm.fit(y = y , x = X_sub)$coefficients
 
+
+  # create vector of name of parameters
+  if(n_seasonal==1){
+    names_beta_hat = c("Intercept","Trend", "Sin (Annual)","Cos (Annual)", paste0("Jump: ", jumps), paste0("Earthquake: ",vec_earthquakes_index_mjd))
+  }else if(n_seasonal==2){
+    names_beta_hat = c("Intercept","Trend", "Sin (Annual)","Cos (Annual)","Sin (Semi-Annual)","Cos (Semi-Annual)", paste0("Jump: ", jumps), paste0("Earthquake: ",vec_earthquakes_index_mjd))
+  }
+  names(beta_hat) = names_beta_hat
+
   # # plot signal and estimated model
   # plot(x=rownames(X_sub), y=y, type="l")
   # lines(x=rownames(X_sub), y= X_sub%*% beta_hat, col="red")
@@ -222,6 +234,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   # estimate parameter of Markov process missingness process using the MLE
   p_hat <- estimate_p1_p2_mle_cpp(vec_omega)
 
+  # define pstar hat
   pstar_hat <- p_hat[2] / (p_hat[1] + p_hat[2])
 
   # get vec autocovariance theo omega
@@ -237,9 +250,9 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
 
   # define missingness case
   if (all(vec_omega == 1)) {
-    no_missing <- T
+    no_missing <- TRUE
   } else {
-    no_missing <- F
+    no_missing <- FALSE
   }
 
 
@@ -296,9 +309,18 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
     autocov_wn_fl_times_omega_w_zeroes <- vector(mode = "numeric", length = min_n_to_get_var_wv)
     autocov_wn_fl_times_omega_w_zeroes[1:(length(vec_omega))] <- autocov_wn_fl_times_omega
 
+    # get var cov missingness process
+    var_cov_omega = toeplitz(as.vector(vec_autocov_omega))
+
     # get variance of wv based on this process
     Sigma_wv <- get_theo_cov_matrix_wvar_cpp(n = length(vec_omega), autocov_vec_X = autocov_wn_fl_times_omega_w_zeroes)
     inv_var_cov_nu_hat <- Matrix::solve(Sigma_wv)
+
+    # still build required matrices to compute later variance covariance of beta hat
+    var_cov_mat_wn = gamma_hat_1[1] * diag(length(vec_omega))
+    var_cov_mat_flicker = var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
+    var_cov_mat_epsilon = var_cov_mat_wn+var_cov_mat_flicker
+
   }else{
 
     # construct sigma matrix of white noise + ficker
@@ -318,6 +340,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
     # get inverse
     inv_var_cov_nu_hat =  Matrix::solve(var_cov_nu_hat)
   }
+
 
   # re estimate gamma with optimal weighting matrix
   res_gmwmx_2 <- optim(
@@ -393,6 +416,10 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
 #' Extract estimated parameters from a \code{fit_gnss_ts_ngl}
 #' @param object A \code{fit_gnss_ts_ngl} object.
 #' @param ... Additional parameters.
+#' @examples
+#' x = download_station_ngl("CHML")
+#' fit = gmwmx2(x,n_seasonal = 2, component = "N")
+#' summary(fit)
 #' @export
 summary.fit_gnss_ts_ngl <- function(object, ...) {
   # Print header
@@ -401,16 +428,23 @@ summary.fit_gnss_ts_ngl <- function(object, ...) {
   cat("Functional parameters\n")
   cat("-------------------------------------------------------------\n")
 
-  cat(" Estimate       Std_Deviation     95% CI Lower    95% CI Upper\n")
+  cat("Parameter             Estimate  Std_Deviation  95% CI Lower  95% CI Upper\n")
   cat("-------------------------------------------------------------\n")
 
+
+
   for (i in seq_along(object$beta_hat)) {
+
     lower_ci <- object$beta_hat[i] - 1.96 * object$std_beta_hat[i]
     upper_ci <- object$beta_hat[i] + 1.96 * object$std_beta_hat[i]
 
-    # Print values with 8 decimal places
-    cat(sprintf("%14.8f %16.8f %16.8f %16.8f\n",
-                object$beta_hat[i], object$std_beta_hat[i], lower_ci, upper_ci))
+    # Print values with 8 decimal places, left-align the names, and align other columns
+
+    cat(sprintf("%-20s %12.8f %12.8f %12.8f %12.8f\n",
+                names(object$beta_hat)[i],
+                object$beta_hat[i], object$std_beta_hat[i],
+                lower_ci, upper_ci))
+
   }
 
   cat("-------------------------------------------------------------\n")
@@ -429,6 +463,10 @@ summary.fit_gnss_ts_ngl <- function(object, ...) {
 #' @param x A \code{fit_gnss_ts_ngl} object.
 #' @param ... Additional graphical parameters.
 #' @export
+#' @examples
+#' x = download_station_ngl("CHML")
+#' fit = gmwmx2(x, n_seasonal = 2, component = "N")
+#' plot(fit)
 #' @return No return value. Plot a \code{fit_gnss_ts_ngl} object.
 plot.fit_gnss_ts_ngl = function(x, ...){
   #
@@ -466,10 +504,10 @@ plot.fit_gnss_ts_ngl = function(x, ...){
   }
 
   # plot data
-  plot(x$design_matrix_X[,2], x$y, type="l", las=1,ylab=axis_name, xlab="MJD")
+  plot(x=rownames(x$design_matrix_X), y=x$y, type="l", las=1,ylab=axis_name, xlab="MJD")
 
   # add estimated fit
-  lines(x=x$design_matrix_X[,2], y= x$design_matrix_X%*% x$beta_hat, col="red")
+  lines(x=rownames(x$design_matrix_X), y= x$design_matrix_X%*% x$beta_hat, col="red")
 
   # compute NA over the time series
   all_mjd = seq(head(x$df_position$modified_julian_day,1),

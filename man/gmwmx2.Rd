@@ -8,7 +8,8 @@ gmwmx2(
   x,
   n_seasonal = 2,
   vec_earthquakes_relaxation_time = NULL,
-  component = "N"
+  component = "N",
+  toeplitz_approx_var_cov_wv = TRUE
 )
 }
 \arguments{
@@ -16,10 +17,16 @@ gmwmx2(
 
 \item{n_seasonal}{An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.}
 
-\item{vec_earthquakes_relaxation_time}{A \code{vecor} specifying the relaxation time for each earthquakes indicated for the time series.}
+\item{vec_earthquakes_relaxation_time}{A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.}
 
 \item{component}{A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).}
+
+\item{toeplitz_approx_var_cov_wv}{A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.}
 }
 \description{
 Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
+}
+\examples{
+x = download_station_ngl("CHML")
+fit = gmwmx2(x, n_seasonal = 2, component = "N")
 }
