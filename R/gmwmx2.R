@@ -4,9 +4,7 @@ create_X_matrix = function (all_mjd_index,
                             vec_earthquakes_index_mjd,
                             vec_earthquakes_relaxation_time) {
 
-
-
-  # x = download_station_ngl("CHML") # problem here
+  # x = download_station_ngl("CHML")
   # # create all jumps by combining jumps due to equipment change and jumps due to earthquakes
   # jumps = c(x$df_equipment_software_changes$modified_julian_date,
   #           x$df_earthquakes$modified_julian_date )
@@ -30,13 +28,13 @@ create_X_matrix = function (all_mjd_index,
   }
 
 
-  # set to default 1 year if no earthquakes relaxation time provided
+  # set to default 365.25 days if no earthquakes relaxation time provided
   if(is.null(vec_earthquakes_relaxation_time)){
     vec_earthquakes_relaxation_time = rep(365.25, length(vec_earthquakes_index_mjd))
   }
 
 
-  # create empty matrix
+  # create empty matrix number of columns bias+trend+2*nbr sinusoidal + nbr jumps + number earthquakes
   X = matrix(0, nrow = length(all_mjd_index), ncol = 2 + 2 * n_seasonal +
                length(jumps) + length(vec_earthquakes_index_mjd))
 
@@ -44,21 +42,22 @@ create_X_matrix = function (all_mjd_index,
   X[, 1] = 1
 
   # add component for trend
-  X[,2] = all_mjd_index
+  reference_time =  0.5*(all_mjd_index[1]+tail(all_mjd_index,1))
+  X[,2] = all_mjd_index - reference_time
 
 
   # add seasonal
   if (n_seasonal > 0) {
     for (i in 1:n_seasonal) {
-      X[, 2 + (i - 1) * 2 + 1] = sin((all_mjd_index) *  i * 2 * pi/365.25)
-      X[, 2 + (i - 1) * 2 + 2] = cos((all_mjd_index) * i * 2 * pi/365.25)
+      omega_i = (i/365.25) * 2 * pi
+      X[, 2 + (i - 1) * 2 + 1] = sin((all_mjd_index) *  omega_i)
+      X[, 2 + (i - 1) * 2 + 2] = cos((all_mjd_index) *  omega_i)
     }
   }
 
   # add offsets
   if (!is.null(jumps)) {
     for (i in 1:length(jumps)) {
-      # i = 2
       it = min(which(all_mjd_index > jumps[i] - 1e-06))
       X[, 2 + 2 * n_seasonal + i] = c(rep(0, it - 1), rep(1,
                                                           length(all_mjd_index) - it + 1))
@@ -66,7 +65,6 @@ create_X_matrix = function (all_mjd_index,
   }
 
 
-  # see https://www.mdpi.com/2072-4292/13/17/3369 and https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/84/3/780/102685/Postseismic-deformation-following-the-Landers
   # exponential decay function for post seismic relaxation
   if(!is.null(vec_earthquakes_index_mjd)){
     for(i in seq_along(vec_earthquakes_index_mjd)){
@@ -82,13 +80,6 @@ create_X_matrix = function (all_mjd_index,
     }
   }
 
-  # dim(X)
-  #
-  # id_in_signal = which(all_mjd_index%in% x$df_position$modified_julian_day)
-  # X_sub = X[id_in_signal, ]
-  # plot(x$df_position$modified_julian_day, x$df_position$northings_fractional_portion, type="l")
-  # fit = .lm.fit(x = X_sub, y=x$df_position$northings_fractional_portion)
-  # lines(x=X_sub[,2], y= X_sub %*% fit$coefficients, col="red")
 
   # # Slow slip events (tanh)
   # if(!is.null(vec_tanh_mid_point)){
@@ -101,6 +92,7 @@ create_X_matrix = function (all_mjd_index,
   # }
   rownames(X) = all_mjd_index
   return(X)
+
 }
 
 
@@ -142,7 +134,7 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 
 #' Estimate a linear model with White noise and Flicker noise for the residuals in presence of missing data using the GMWMX estimator.
 #' @param x A \code{gnss_ts_ngl} object.
-#' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series.
+#' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.
 #' @param vec_earthquakes_relaxation_time A \code{vecor} specifying the relaxation time for each earthquakes indicated for the time series.
 #' @param component A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).
 #' @importFrom wv wvar
@@ -168,7 +160,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   }
 
   # create full index
-  all_mjd_index = seq(head(x$df_position$modified_julian_day,1), tail(x$df_position$modified_julian_day, 1))
+  all_mjd_index = seq(head(x$df_position$modified_julian_day,1), tail(x$df_position$modified_julian_day, 1),by =1)
 
   # create all jumps by combining jumps due to equipment change and jumps due to earthquakes
   jumps = c(x$df_equipment_software_changes$modified_julian_date,
@@ -177,6 +169,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   # if multiple jumps  to prevent not invertible matrix
   jumps = unique(jumps)
   vec_earthquakes_index_mjd = c(x$df_earthquakes$modified_julian_date)
+
   # if multiple earthquakes  to prevent not invertible matrix
   vec_earthquakes_index_mjd = unique(vec_earthquakes_index_mjd)
 
@@ -190,8 +183,6 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
                       n_seasonal = n_seasonal,
                       vec_earthquakes_index_mjd = vec_earthquakes_index_mjd,
                       vec_earthquakes_relaxation_time = vec_earthquakes_relaxation_time )
-
-  # solve(t(X)%*%X)
 
   # obtain X_sub
   id_X_sub = which(rownames(X) %in% x$df_position$modified_julian_day)
@@ -237,7 +228,7 @@ gmwmx2 = function(x, n_seasonal=2, vec_earthquakes_relaxation_time = NULL, compo
   vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], length(all_mjd_index))
 
   XtX = t(X) %*% X
-  inv_XtX = MASS::ginv(XtX) # to check later, why does when we have multiple earthquake XtX becomes not invertible
+  inv_XtX = Matrix::solve(XtX) # to check later, why does when we have multiple earthquake XtX becomes not invertible
   H <- X %*% inv_XtX %*% t(X)
   D <- diag(length(all_mjd_index)) - H
 
