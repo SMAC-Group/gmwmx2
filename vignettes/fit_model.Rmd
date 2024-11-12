@@ -15,6 +15,9 @@ knitr::opts_chunk$set(
   fig.height = 8, # Set default plot height (adjust as needed)
   fig.align = "center" # Center align all plots
 )
+
+# knitr::opts_chunk$set(eval = FALSE)
+
 ```
 
 
@@ -61,18 +64,24 @@ $$\boldsymbol{\Sigma}_{\hat{\boldsymbol{\varepsilon}}}(\boldsymbol{\gamma}) = [\
 
 where $\boldsymbol{P} = \boldsymbol{X}(\boldsymbol{X}^T\boldsymbol{X})^{-1}\boldsymbol{X}^T$ and $\boldsymbol{I}$ is the identity matrix of dimension $n\times n$.
 
+More precisely, we rely on the result of [Xu, H., Guerrier, S., Molinari, R., Zhang, Y., (2017)](https://ieeexplore.ieee.org/abstract/document/7964734) that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in [Xu, H., Guerrier, S., Molinari, R., Zhang, Y., (2017)](https://ieeexplore.ieee.org/abstract/document/7964734) they generalize the results in [Zhang, N., F., (2008)](https://iopscience.iop.org/article/10.1088/0026-1394/45/5/009/meta) to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWM, which uses this form, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector (these elements being averages of the diagonal and super-diagonals of the covariance matrix).
 
 
-While the GMWMX as described above and in more details in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160), is a general method for estimating large linear model with complex dependence structure in presence of missing data, the `gmwmx2` `R` package is currently developed specifically to estimate tectonic velocities from position times series in graticule distance coordinates system (GD) provided by the Nevada geodetic Laboratory ([Blewitt, G., (2024)](https://link.springer.com/article/10.1007/s00190-023-01815-0)).
 
-Hence, we construct the design matrix $\boldsymbol{X}$ such that $i$-th component of the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows:
+While the GMWMX as described above and in more details in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160), is a general method for estimating large linear model with complex dependence structure in presence of missing data, the `gmwmx2` `R` package is currently developed specifically to estimate tectonic velocities from position times series in graticule distance coordinates system (GD) provided by the Nevada geodetic Laboratory [Blewitt, G., (2024)](https://link.springer.com/article/10.1007/s00190-023-01815-0).
 
-\begin{equation}
-    \mathbb{E}[\mathbf{Y}_i] = \mathbf{X}_i^T {{\boldsymbol{\beta}}} = a+b\left(t_{i}\right)+\sum_{h=1}^{2}\left[c_{h} \sin \left(2 \pi f_{h} t_{i}\right)+d_{h} \cos \left(2 \pi f_{h} t_{i}\right)\right] + \sum_{k=1}^{n_{g}} g_{k} H\left(t_{i}-t_{k}\right) + \sum_{j = 1 }^{n_e}e_j (1- \exp(-(t_i-t_j)/T_j))H\left(t_{i}-T_j\right) ,
-\end{equation}
+Hence, to estimate the trajectory model (see e.g., [Bevis, M., Brown, A., (2014)](https://link.springer.com/article/10.1007/s00190-013-0685-5) for more details), we construct the design matrix $\boldsymbol{X}$ such that $i$-th component of the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows with $t_i$ representing the $i^{th}$ ordered time point (epoch) indicated in Modified Julian Date and $t_0$ representing the reference epoch located exactly in the middle of start and end point of
+the time series:
 
-where $a$ is the initial position at the reference epoch $t_0$, $b$ is the velocity parameter, $c_k$  and $d_k$ are the periodic motion parameters ($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms, respectively). The offset terms models earthquakes, equipment changes or human intervention in which $g_k$ is the magnitude of the change at epochs $t_k$, $n_g$ is the total number of offsets, $H$ is the Heaviside step function and the last term allow to model post-seismic deformation where $n_e$ is the number of post seismic relaxation time specified, $t_j$ is the time when the relaxation $j$
-starts in Modified Julian Date (MJD) and $T_j$ is the relaxation period in days for the post-seismic relaxation $j$. Note that the estimates of the parameters of the functional model are provided in unit/day.
+
+
+\begin{split}
+ \mathbb{E}[\mathbf{Y}_i] &= \mathbf{X}_i^T {{\boldsymbol{\beta}}}  \\
+&= a + b \left(t_{i} - t_0\right) +  \sum_{h=1}^{m}\left[c_{h} \sin \left(2 \pi f_{h} t_{i}\right)  + d_h \cos \left(2 \pi f_h t_i\right)\right] + \\& \sum_{j=1}^{r}e_j H\left(t_i - t_j\right) + \sum_{k = 1 }^{s} l_k \left[1- \exp\left(\frac{-(t_i-t_k)}{\tau_k}\right)\right]H\left(t_{i}-\tau_k\right) 
+\end{split}
+
+where $a$ is the initial position at the reference epoch $t_0$, $b$ is the velocity parameter, $c_h$  and $d_h$ are the periodic motion parameters ($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms, respectively with $f_1 = \frac{1}{365.25}$ and $f_2 = \frac{2}{365.25}$). The offset terms models earthquakes, equipment changes or human intervention in which $e_j$ is the magnitude of the step at epochs $t_j$, $r$ is the total number of offsets, $H$ is the Heaviside step function defined as $H(x):= \begin{cases}1, & x \geq 0 \\ 0, & x<0\end{cases}$ and the last term allow to model post-seismic deformation ([Sobrero, F. S., Bevos, M., G\'omez, D. D., Wang, F., (2020)](https://link.springer.com/article/10.1007/s00190-020-01413-4)) where $s$ is the number of post seismic relaxation time specified, $t_k$ is the time when the relaxation $k$
+starts in Modified Julian Date (MJD), $\tau_k$ is the relaxation period in days for the post-seismic relaxation $k$ and $l_k$ is the amplitude of the transient. Note that by default the estimates of the functional parameters  are provided in unit/day.
 
 More precisely, when loading data from a specific station using the function `gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory the position time series in  GD coordinates, the time steps associated with a equipment or software change and the time steps associated with an earthquake near the station. All these objects are stored in a object of class `gnss_ts_ngl`.  
 

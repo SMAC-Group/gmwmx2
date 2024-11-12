@@ -1,8 +1,9 @@
 # `gmwmx2` Overview <img src="man/figures/logo.png" align="right" style="width: 20%; height: 20%"/>
 
 The `gmwmx2` `R` package implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160).
-The GMWMX estimator is a computationally efficient estimator for large scale regression problems with complex dependence structure that allow to model functional parameters, stochastic parameters descrying the dependence between observations and a missingess process that model missing data.
-To illustrate the capability of the GMWMX estimator, the `gmwmx2` `R` package provides functions to to download an plot Global Navigation Satellite System (GNSS) position time series from the Nevada Geodetic Laboratory and allow to estimate linear model with a specific dependence structure modeled by composite stochastic processes, allowing to estimate tectonic velocities from GNSS position time series.
+The GMWMX estimator is a computationally efficient estimator to estimate large scale regression problems with complex dependence structure in presence of missing data.
+The `gmwmx2` `R` package  allows to estimate functional/structural parameters of time series trajectory models, stochastic parameters describing the dependence structure between observations and parameters of the missingness process that model missing data.
+To illustrate the capability of the GMWMX estimator, the `gmwmx2` `R` package provides functions to download an plot Global Navigation Satellite System (GNSS) position time series from the Nevada Geodetic Laboratory and allow to estimate linear model with a specific dependence structure modeled by composite stochastic processes, allowing to estimate tectonic velocities from GNSS position time series.
 
 Below are instructions on how to install and make use of the `gmwmx2` package.
 
@@ -33,3 +34,4 @@ This source code is released under is the GNU AFFERO GENERAL PUBLIC LICENSE (AGP
 ## References
 Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R., and Guerrier, S. (2024). Inference for Large Scale Regression Models with Dependent Errors. [doi:10.48550/arXiv.2409.05160](https://doi.org/10.48550/arXiv.2409.05160).
 
+Guerrier, S., Skaloud, J., Stebler, Y. and Victoria-Feser, M.P., 2013. Wavelet-variance-based estimation for composite stochastic processes. Journal of the American Statistical Association, 108(503), pp.1021-1030. [doi:10.1080/01621459.2013.799920](https://doi.org/10.1080/01621459.2013.799920)

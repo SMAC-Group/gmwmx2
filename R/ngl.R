@@ -110,6 +110,10 @@ convert_to_mjd_2 <- function(vec_date) {
 #' Download all stations name and location from Nevada Geodetic Laboratory (NGL)
 #' @export
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
+#' @examples
+#' df_all_stations = download_all_stations_ngl()
+#' head(df_all_stations)
+#'
 download_all_stations_ngl <- function() {
   # load file from http://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
 
@@ -128,6 +132,9 @@ download_all_stations_ngl <- function() {
 #' Download estimated velocities provided by the Nevada Geodetic Laboratory (NGL) for all stations.
 #' @export
 #' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
+#' @examples
+#' df_estimated_velocities = download_estimated_velocities_ngl()
+#' head(df_estimated_velocities)
 download_estimated_velocities_ngl <- function() {
 
   # # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
@@ -222,7 +229,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$northings_fractional_portion, type = "l",
       xlab = "", ylab = "", las = 1
     )
-    grid(col="grey80", lty=1)
+    grid(col="grey90", lty=2)
     lines(x$df_position$modified_julian_day,
           y = x$df_position$northings_fractional_portion)
     side_label_y = 3.5
@@ -251,7 +258,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$eastings_fractional_portion, type = "l",
       xlab = "", ylab = "", las = 1
     )
-    grid(col="grey80", lty=1)
+    grid(col="grey90", lty=2)
 
     lines(x$df_position$modified_julian_day,
           y = x$df_position$eastings_fractional_portion)
@@ -280,7 +287,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$vertical_fractional_portion,
       type = "l", xlab = "", ylab = "", las = 1
     )
-    grid(col="grey80", lty=1)
+    grid(col="grey90", lty=2)
 
 
     lines(x$df_position$modified_julian_day,
@@ -360,7 +367,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
          y = y, type = "l",
          xlab = "", ylab = "", las = 1
     )
-    grid(col="grey80", lty=1)
+    grid(col="grey90", lty=2)
 
     lines(x$df_position$modified_julian_day,
           y = y)

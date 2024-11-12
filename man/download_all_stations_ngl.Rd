@@ -12,3 +12,8 @@ Return a \code{data.frame} with all stations name, latitude, longitude and heigh
 \description{
 Download all stations name and location from Nevada Geodetic Laboratory (NGL)
 }
+\examples{
+df_all_stations = download_all_stations_ngl()
+head(df_all_stations)
+
+}

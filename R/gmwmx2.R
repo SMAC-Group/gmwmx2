@@ -416,7 +416,9 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     "theoretical_wvar" = theo_wv,
     "df_position" = x$df_position,
     "df_earthquakes" = x$df_earthquakes,
-    "df_equipment_software_changes" = x$df_equipment_software_changes
+    "df_equipment_software_changes" = x$df_equipment_software_changes,
+    "p_hat"= p_hat,
+    "p_star_hat" = pstar_hat
   )
 
   class(ret) <- "fit_gnss_ts_ngl"
@@ -482,34 +484,51 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
   cat(sprintf(" Flicker Noise Variance: %14.8f\n", object$gamma_hat[2]))
 
   cat("-------------------------------------------------------------\n")
+  cat("Missingness parameters\n")
+  cat("-------------------------------------------------------------\n")
+  cat(sprintf(" P(Z_{i+1} = 0 | Z_{i} = 1): %.8f\n", object$p_hat[1]))
+  cat(sprintf(" P(Z_{i+1} = 1 | Z_{i} = 0): %.8f\n", object$p_hat[2]))
+  cat(sprintf(" \\hat{E[Z]}: %.8f\n", object$p_star_hat))
+  cat("\n") # Adds a space between output blocks for clarity
+
 }
 
 
 
 
 #' Plot a \code{fit_gnss_ts_ngl} object
+#' @importFrom graphics axis grid mtext polygon
+#' @importFrom stats qnorm
 #' @param x A \code{fit_gnss_ts_ngl} object.
 #' @param ... Additional graphical parameters.
 #' @export
 #' @examples
-#' x <- download_station_ngl("CHML")
-#' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
-#' plot(fit)
+#' x <- download_station_ngl("0AMB")
+#' fit_N <- gmwmx2(x, n_seasonal = 2, component = "N")
+#' plot(fit_N)
+#' fit_E <- gmwmx2(x, n_seasonal = 2, component = "E")
+#' plot(fit_E)
 #' @return No return value. Plot a \code{fit_gnss_ts_ngl} object.
 plot.fit_gnss_ts_ngl <- function(x, ...) {
   #
   #
   # library(gmwmx2)
   # station_data = download_station_ngl("0AMB")
-  # x = gmwmx2(station_data, n_seasonal = 2, component = "N")
+  # x = gmwmx2(station_data, n_seasonal = 2, component = "E")
 
   # Save the current graphical parameters
   old_par <- par(no.readonly = TRUE)
 
   # set parameters for layout
-  mat_layout <- matrix(c(1, 2, 3), ncol = 1, nrow = 3)
-  layout(mat_layout, heights = c(.1, 1, 1))
+  mat_layout <- matrix(c(1, 2, 3,4), ncol = 1, nrow = 4)
+  layout(mat_layout, heights = c(.1,.1, 1, 1))
   par(mar = c(0, 0, 0, 0))
+  plot.new()
+  legend("center",
+         horiz = T,
+         legend = c(paste0("Station ", unique(x$df_position$station_name))),
+         bty = "n", cex=1.3
+  )
   plot.new()
   legend("center",
     horiz = T,
@@ -521,7 +540,7 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
     text.width = c(.1, .3, .2, .1),
     lty = c(NA, 1, 1, 1), bty = "n"
   )
-  par(mar = c(4, 4.1, 2, 2.1))
+  par(mar = c(3.5, 4.5, 2, 2.1))
 
 
   component <- x$component
@@ -534,7 +553,13 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
   }
 
   # plot data
-  plot(x = rownames(x$design_matrix_X), y = x$y, type = "l", las = 1, ylab = axis_name, xlab = "MJD")
+  plot(x = rownames(x$design_matrix_X), y = x$y, type = "l", las = 1, ylab = "", xlab = "")
+  mtext(side=1, "Modified Julian Date", line=3)
+  mtext(side=2, axis_name, line=3.2)
+
+  grid(col="grey90", lty=2)
+  # add signal
+  lines(x = rownames(x$design_matrix_X), y = x$y)
 
   # add estimated fit
   lines(x = rownames(x$design_matrix_X), y = x$design_matrix_X %*% x$beta_hat, col = "red")
@@ -562,9 +587,57 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
   }
   box()
 
-  plot(x$empirical_wvar)
-  # add theoretical implied wv
-  lines(x = x$empirical_wvar$scales, y = x$theoretical_wvar, col = "red")
+
+  # plot empirical WV and theorical implied wv
+  yl = c(min(x$empirical_wvar$ci_low), max(x$empirical_wvar$ci_high ))
+
+  plot(NA,
+       ylim = yl,
+       xlim = c(min((x$empirical_wvar$scales)), max(x$empirical_wvar$scales)),
+       main ="",
+       ylab = "",
+       xlab = "",
+       log = "xy",
+       xaxt = "n",
+       yaxt = "n")
+  mtext(side=1, text = "Scales", line=2.3)
+  mtext(side=2, text = "Wavelet Variance", line=3.2)
+
+  # Create a vector of labels in the desired format
+  exponents = log2(x$empirical_wvar$scales)
+  labels <- sapply(exponents, function(x) as.expression( bquote(2^.(x))))
+
+  axis(1, at=x$empirical_wvar$scales, labels=labels)
+
+  polygon(x = c(x$empirical_wvar$scales, rev(x$empirical_wvar$scales)),
+          y = c(x$empirical_wvar$ci_low, rev(x$empirical_wvar$ci_high)),
+          col = "#ccf1f8",
+          border = NA)
+
+  ylab = floor(log10(yl[1])):ceiling(log10(yl[2]))
+  axis(2, at=10^ylab, labels=parse(text=sprintf("10^%.0f",ylab)), las=1)
+
+  # add grid
+  abline(h=10^ylab, col="grey90", lt=2)
+  for(i in seq_along(exponents)){
+    abline(v=2^exponents[i], col="grey90", lt=2)
+  }
+
+  lines(x$empirical_wvar$scales, x$empirical_wvar$variance, type="b", col = "black", pch=16)
+  lines(x = x$empirical_wvar$scales, y = x$theoretical_wvar, type="b", col = "red", pch=21, cex=1.4)
+  # add empirical WV
+
+  legend(
+    "bottomleft",
+    legend=c("Empirical WV", "Estimated Theoretical WV"),
+    col = c("black", "red"),
+    pch = c(16,21),
+    pt.cex=c(1,1.4),
+    lty=c(1),
+    horiz = FALSE,
+    bty="n", bg="transparent"
+  )
+
   box()
 
   # Restore the original graphical parameters
