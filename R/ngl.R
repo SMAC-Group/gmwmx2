@@ -69,7 +69,7 @@ download_station_ngl <- function(station_name) {
               showProgress = FALSE,
               header = FALSE,  # Assuming no header
               na.strings = "") # Empty fields become NA
-
+  colnames(dt) = c("V1", "V2", "V3", "V4", "V5", "V6", "V7")
   # filter earthquakes from equipment / software changes
   df_equipment_software_changes = dt %>% dplyr::filter(V3 == 1 | V3 == 3) %>% dplyr::select(c("V1", "V2", "V3", "V4"))
   colnames(df_equipment_software_changes)= c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change")
