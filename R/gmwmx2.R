@@ -145,12 +145,14 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
 gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE) {
-  # x = readRDS("chml.rds")
-  # plot(x, component = "N")
-  # vec_earthquakes_relaxation_time <- NULL
-  # component <- "V"
-  # n_seasonal <- 2
-  # toeplitz_approx_var_cov_wv=TRUE
+
+
+#
+#   x = download_station_ngl("0AMB")
+#   vec_earthquakes_relaxation_time <- NULL
+#   component <- "N"
+#   n_seasonal <- 2
+#   toeplitz_approx_var_cov_wv=TRUE
 
 
 
@@ -220,19 +222,11 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     names_beta_hat <- c(
       "Intercept", "Trend", "Sin (Annual)", "Cos (Annual)",
       "Sin (Semi-Annual)", "Cos (Semi-Annual)",
-      if (length(jumps) > 0) paste0("Jump: MJD", jumps),
-      if (length(vec_earthquakes_index_mjd) > 0) paste0("Earthquake: MJD", vec_earthquakes_index_mjd)
+      if (length(jumps) > 0) paste0("Jump: MJD ", jumps),
+      if (length(vec_earthquakes_index_mjd) > 0) paste0("Earthquake: MJD ", vec_earthquakes_index_mjd)
     )
   }
 
-  names(beta_hat) <- names_beta_hat
-
-
-  if (n_seasonal == 1) {
-    names_beta_hat <- c("Intercept", "Trend", "Sin (Annual)", "Cos (Annual)", paste0("Jump: ", jumps), paste0("Earthquake: ", vec_earthquakes_index_mjd))
-  } else if (n_seasonal == 2) {
-    names_beta_hat <- c("Intercept", "Trend", "Sin (Annual)", "Cos (Annual)", "Sin (Semi-Annual)", "Cos (Semi-Annual)", paste0("Jump: ", jumps), paste0("Earthquake: ", vec_earthquakes_index_mjd))
-  }
   names(beta_hat) <- names_beta_hat
 
   # # plot signal and estimated model
