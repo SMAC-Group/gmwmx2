@@ -147,9 +147,9 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE) {
   # x = readRDS("chml.rds")
   # plot(x, component = "N")
-  vec_earthquakes_relaxation_time <- NULL
-  component <- "V"
-  n_seasonal <- 2
+  # vec_earthquakes_relaxation_time <- NULL
+  # component <- "V"
+  # n_seasonal <- 2
   # toeplitz_approx_var_cov_wv=TRUE
 
 
@@ -339,7 +339,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     Sigma_wv <- get_theo_cov_matrix_wvar_cpp(n = length(vec_omega), autocov_vec_X = autocov_wn_fl_times_omega_w_zeroes)
     inv_var_cov_nu_hat <- Matrix::solve(Sigma_wv)
 
-    # still build required matrices to compute later variance covariance of beta hat
+    # Build required matrices to compute later variance covariance of beta hat
     var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
     var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
     var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
@@ -401,10 +401,10 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 
   # Compute variance covariance of beta hat
   if (no_missing) {
-    # XtX_inv <- Matrix::solve(t(X) %*% X)
+
     var_cov_beta_hat <- inv_XtX %*% t(X) %*% var_cov_mat_epsilon %*% X %*% inv_XtX
   } else {
-    # XtX_inv <- Matrix::solve(t(X) %*% X)
+
     var_cov_beta_hat <- pstar_hat^(-2) * inv_XtX %*% t(X) %*% ((var_cov_omega + pstar_hat^2) * var_cov_mat_epsilon) %*% X %*% inv_XtX
   }
 
@@ -452,7 +452,7 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
   cat("-------------------------------------------------------------\n")
 
 
-
+  # define normal confidence interval for parameters of the trajectory model (betas), optionnal scaling
   for (i in seq_along(object$beta_hat)) {
     if (scale_parameters) {
       lower_ci <- object$beta_hat[i] * 365.25 - qnorm(.975) * object$std_beta_hat[i] * 365.25

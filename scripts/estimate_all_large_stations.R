@@ -4,6 +4,16 @@ library(gmwmx2)
 library(dplyr)
 library(maps)
 
+
+
+test = download_all_stations_ngl()
+x = download_station_ngl(test$station_name[56])
+plot(x)
+fit=gmwmx2(x = x, n_seasonal = 2)
+unique(x$df_position$station_name)
+
+
+
 all_velocities = download_estimated_velocities_ngl()
 name_tmp_dir = tempdir()
 name_tmp_file = paste0(name_tmp_dir,"/", "steps.txt")

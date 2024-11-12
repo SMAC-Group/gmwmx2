@@ -2,7 +2,7 @@
 #'
 #' @importFrom data.table fread
 #' @importFrom utils read.table
-#' @importFrom dplyr filter
+#' @importFrom dplyr filter select
 #' @importFrom  utils download.file
 #' @importFrom magrittr %>%
 #' @param  station_name A \code{string} specifying the station name.
@@ -13,20 +13,26 @@
 #' @return A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
 #' \code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
 download_station_ngl <- function(station_name) {
-  # see help file for .tenv3 file here : http://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
+
+
   # station_name="1LSU"
+
+  # download file from  string formatted as "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
+  # see help file for .tenv3 file here : http://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
+
   # check that station is available
   df_all_stations <- download_all_stations_ngl()
   if (!station_name %in% df_all_stations$station_name) {
     stop("Invalid station name")
   }
-  # -------------- load .tenv3 file
-  name_tmp_dir <- tempdir()
-  name_tmp_file <- paste0(name_tmp_dir, "/", station_name, ".tenv3")
-  name_web_page_to_acces <- paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
-  download.file(name_web_page_to_acces, name_tmp_file, quiet = TRUE)
 
-  df_position <- read.table(name_tmp_file, header = T)
+
+  # -------------- load .tenv3 file using data.table fread
+  df_position = data.table::fread(
+    paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"),
+    header = TRUE
+  )
+
   # rewrite colnames
   colnames(df_position) <- c(
     "station_name",
@@ -56,37 +62,27 @@ download_station_ngl <- function(station_name) {
 
   # load steps from file steps and extract all steps associated with the station
   # see README for step file: http://geodesy.unr.edu/NGLStationPages/steps_readme.txt
-  name_tmp_dir <- tempdir()
-  name_tmp_file <- paste0(name_tmp_dir, "/", "steps.txt")
-  download.file("http://geodesy.unr.edu/NGLStationPages/steps.txt", name_tmp_file, quiet = TRUE)
-  # read all lines
-  all_lines <- readLines(name_tmp_file)
 
-  # Count words in each line to identify equipment/software changes vs earthquakes
-  word_counts <- sapply(strsplit(trimws(all_lines), "\\s+"), length)
-  id_equipment_software_changes <- which(word_counts == 4)
-  id_earthquakes <- which(word_counts == 7)
+  # # Using fread for fast reading
+  dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
+              fill = 7,  # Handle varying number of columns
+              header = FALSE,  # Assuming no header
+              na.strings = "") # Empty fields become NA
 
-  # extract both dataset
-  df_equipment_software_changes <- data.table::fread(
-    text = all_lines[id_equipment_software_changes],
-    header = FALSE,
-    col.names = c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change")
-  )
+  # filter earthquakes from equipment / software changes
+  df_equipment_software_changes = dt %>% dplyr::filter(V3 == 1 | V3 == 3) %>% dplyr::select(c("V1", "V2", "V3", "V4"))
+  colnames(df_equipment_software_changes)= c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change")
+  df_earthquakes = dt %>% dplyr::filter(V3 == 2 )
+  colnames(df_earthquakes) = c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
+
   # subset
-  df_equipment_software_changes <- df_equipment_software_changes |> dplyr::filter(station_name == !!station_name)
-  # subset
-  df_earthquakes <- data.table::fread(
-    text = all_lines[id_earthquakes],
-    header = FALSE,
-    col.names = c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
-  )
-  df_earthquakes <- df_earthquakes |> dplyr::filter(station_name == !!station_name)
+  df_equipment_software_changes_sub <- df_equipment_software_changes |> dplyr::filter(station_name == !!station_name)
+  df_earthquakes_sub <- df_earthquakes |> dplyr::filter(station_name == !!station_name)
 
   # convert to MJD
-  df_equipment_software_changes$modified_julian_date <- convert_to_mjd_2(df_equipment_software_changes$date_YYMMDD)
+  df_equipment_software_changes_sub$modified_julian_date <- convert_to_mjd_2(df_equipment_software_changes_sub$date_YYMMDD)
   # convert to MJD
-  df_earthquakes$modified_julian_date <- convert_to_mjd_2(df_earthquakes$date_YYMMDD)
+  df_earthquakes_sub$modified_julian_date <- convert_to_mjd_2(df_earthquakes_sub$date_YYMMDD)
 
   ret <- list(
     "df_position" = df_position,
@@ -114,13 +110,13 @@ convert_to_mjd_2 <- function(vec_date) {
 #' @export
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
 download_all_stations_ngl <- function() {
-  # load file from http://geodesy.unr.edu/NGLStationPages/llh.out
-  name_tmp_dir <- tempdir()
-  name_tmp_file <- paste0(name_tmp_dir, "/", "all_stations.txt")
-  download.file("http://geodesy.unr.edu/NGLStationPages/llh.out", name_tmp_file, quiet = TRUE)
+  # load file from http://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
 
   # load all stations
-  df_all_stations <- read.table(name_tmp_file)
+  df_all_stations = data.table::fread(
+    "http://geodesy.unr.edu/NGLStationPages/llh.out",
+    header = FALSE
+  )
   colnames(df_all_stations) <- c("station_name", "latitude", "longitude", "height")
   return(df_all_stations)
 }
@@ -131,13 +127,15 @@ download_all_stations_ngl <- function() {
 #' @export
 #' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
 download_estimated_velocities_ngl <- function() {
-  # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
-  name_tmp_dir <- tempdir()
-  name_tmp_file <- paste0(name_tmp_dir, "/", "estimated_velocities_midas.txt")
-  download.file("http://geodesy.unr.edu/velocities/midas.IGS14.txt", name_tmp_file, quiet = TRUE)
 
-  # load all stations
-  df_estimated_velocities_midas <- read.table(name_tmp_file)
+  # # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
+  # README for file available at NGL website: http://geodesy.unr.edu/velocities/midas.readme.txt
+
+
+  df_estimated_velocities_midas = data.table::fread(
+    "http://geodesy.unr.edu/velocities/midas.IGS14.txt",
+    header = FALSE
+  )
 
   # subset columns
   df_estimated_velocities_midas <- df_estimated_velocities_midas[, c(1, 2, 5, 9, 10, 11, 12, 13, 14, 25, 26, 27)]

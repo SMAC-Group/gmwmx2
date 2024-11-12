@@ -65,10 +65,6 @@ compute_cov_wv_cpp <- function(Sigma_X) {
     .Call(`_gmwmx2_compute_cov_wv_cpp`, Sigma_X)
 }
 
-test_power <- function(j) {
-    .Call(`_gmwmx2_test_power`, j)
-}
-
 compute_l_index_to_compute_cpp <- function(Mjk, approx_type) {
     .Call(`_gmwmx2_compute_l_index_to_compute_cpp`, Mjk, approx_type)
 }

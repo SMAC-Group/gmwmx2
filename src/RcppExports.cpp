@@ -208,17 +208,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// test_power
-double test_power(int j);
-RcppExport SEXP _gmwmx2_test_power(SEXP jSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type j(jSEXP);
-    rcpp_result_gen = Rcpp::wrap(test_power(j));
-    return rcpp_result_gen;
-END_RCPP
-}
 // compute_l_index_to_compute_cpp
 arma::uvec compute_l_index_to_compute_cpp(int Mjk, std::string approx_type);
 RcppExport SEXP _gmwmx2_compute_l_index_to_compute_cpp(SEXP MjkSEXP, SEXP approx_typeSEXP) {
@@ -429,7 +418,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gmwmx2_f_jk_approx_cpp", (DL_FUNC) &_gmwmx2_f_jk_approx_cpp, 5},
     {"_gmwmx2_compute_cov_wv_cpp_1", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp_1, 4},
     {"_gmwmx2_compute_cov_wv_cpp", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp, 1},
-    {"_gmwmx2_test_power", (DL_FUNC) &_gmwmx2_test_power, 1},
     {"_gmwmx2_compute_l_index_to_compute_cpp", (DL_FUNC) &_gmwmx2_compute_l_index_to_compute_cpp, 2},
     {"_gmwmx2_compute_indices", (DL_FUNC) &_gmwmx2_compute_indices, 2},
     {"_gmwmx2_compute_cov_wv_cpp_approx_faster", (DL_FUNC) &_gmwmx2_compute_cov_wv_cpp_approx_faster, 2},

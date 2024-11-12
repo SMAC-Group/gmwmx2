@@ -459,11 +459,6 @@ arma::mat compute_cov_wv_cpp(arma::mat Sigma_X){
 
 
 
-// [[Rcpp::export]]
-double test_power(int j){
-  double res = 1 << j;
-  return(res);
-}
 
 
 
