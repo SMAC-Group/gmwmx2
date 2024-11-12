@@ -30,7 +30,7 @@ download_station_ngl <- function(station_name) {
   # -------------- load .tenv3 file using data.table fread
   df_position = data.table::fread(
     paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"),
-    header = TRUE
+    header = TRUE, showProgress = FALSE
   )
 
   # rewrite colnames
@@ -66,6 +66,7 @@ download_station_ngl <- function(station_name) {
   # # Using fread for fast reading
   dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
               fill = 7,  # Handle varying number of columns
+              showProgress = FALSE,
               header = FALSE,  # Assuming no header
               na.strings = "") # Empty fields become NA
 
@@ -86,8 +87,8 @@ download_station_ngl <- function(station_name) {
 
   ret <- list(
     "df_position" = df_position,
-    "df_equipment_software_changes" = df_equipment_software_changes,
-    "df_earthquakes" = df_earthquakes
+    "df_equipment_software_changes" = df_equipment_software_changes_sub,
+    "df_earthquakes" = df_earthquakes_sub
   )
   class(ret) <- "gnss_ts_ngl"
 
@@ -115,7 +116,8 @@ download_all_stations_ngl <- function() {
   # load all stations
   df_all_stations = data.table::fread(
     "http://geodesy.unr.edu/NGLStationPages/llh.out",
-    header = FALSE
+    header = FALSE,
+    showProgress = FALSE
   )
   colnames(df_all_stations) <- c("station_name", "latitude", "longitude", "height")
   return(df_all_stations)
@@ -134,7 +136,8 @@ download_estimated_velocities_ngl <- function() {
 
   df_estimated_velocities_midas = data.table::fread(
     "http://geodesy.unr.edu/velocities/midas.IGS14.txt",
-    header = FALSE
+    header = FALSE,
+    showProgress = FALSE
   )
 
   # subset columns
@@ -177,6 +180,9 @@ download_estimated_velocities_ngl <- function() {
 #' @return No return value. Plot a \code{gnss_ts_ngl} object.
 plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
   # compute NA over the time series
+  x = download_station_ngl("CHML")
+  # x$df_equipment_software_changes
+
   all_mjd <- seq(
     head(x$df_position$modified_julian_day, 1),
     tail(x$df_position$modified_julian_day, 1)

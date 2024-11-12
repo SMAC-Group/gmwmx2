@@ -97,7 +97,9 @@ station_data <- download_station_ngl("CHML")
 
 # Plot Station
 ```{r}
+# station_data$df_earthquakes
 plot(station_data)
+
 ```
 
 
