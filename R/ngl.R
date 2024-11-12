@@ -180,8 +180,9 @@ download_estimated_velocities_ngl <- function() {
 #' @return No return value. Plot a \code{gnss_ts_ngl} object.
 plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
   # compute NA over the time series
-  x = download_station_ngl("CHML")
-  # x$df_equipment_software_changes
+  # x = download_station_ngl("CHML")
+  # component ="N"
+
 
   all_mjd <- seq(
     head(x$df_position$modified_julian_day, 1),
@@ -194,9 +195,15 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
     old_par <- par(no.readonly = TRUE)
 
     # set parameters for layout
-    mat_layout <- matrix(c(1, 2, 3, 4), ncol = 1, nrow = 4)
-    layout(mat_layout, heights = c(.1, 1, 1, 1))
+    mat_layout <- matrix(c(1, 2, 3, 4, 5), ncol = 1, nrow = 5)
+    layout(mat_layout, heights = c(.1,.1, 1, 1, 1.2))
     par(mar = c(0, 0, 0, 0))
+    plot.new()
+    legend("center",
+           horiz = T,
+           legend = c(paste0("Station ", unique(x$df_position$station_name))),
+           bty = "n", cex=1.3
+    )
     plot.new()
     legend("center",
       horiz = T,
@@ -208,13 +215,20 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       text.width = c(.1, .3, .1),
       lty = c(NA, 1, 1), bty = "n"
     )
-    par(mar = c(4, 4.1, 2, 2.1))
+    par(mar = c(2, 4.8, 2, 2.1))
 
     # north
     plot(x$df_position$modified_julian_day,
       y = x$df_position$northings_fractional_portion, type = "l",
-      xlab = "MJD", ylab = "Northing (m)", las = 1
+      xlab = "", ylab = "", las = 1
     )
+    grid(col="grey80", lty=1)
+    lines(x$df_position$modified_julian_day,
+          y = x$df_position$northings_fractional_portion)
+    side_label_y = 3.5
+    side_label_x = 2.8
+    mtext(side=2, text = "Northing (m)", line = side_label_y)
+    # mtext(side=1, text = "Modified Julian Date", line = side_label_x)
     # add missing data
     for (i in seq_along(missing_mjd)) {
       abline(v = missing_mjd[i], col = "grey60")
@@ -235,8 +249,13 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
     # east
     plot(x$df_position$modified_julian_day,
       y = x$df_position$eastings_fractional_portion, type = "l",
-      xlab = "MJD", ylab = "Easting (m)", las = 1
+      xlab = "", ylab = "", las = 1
     )
+    grid(col="grey80", lty=1)
+
+    lines(x$df_position$modified_julian_day,
+          y = x$df_position$eastings_fractional_portion)
+    mtext(side=2, text = "Easting (m)", line = side_label_y)
 
     # missing data
     for (i in seq_along(missing_mjd)) {
@@ -254,11 +273,21 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
     }
     box()
 
+    par(mar = c(4.5, 4.8, 2, 2.1))
+
     # UP
     plot(x$df_position$modified_julian_day,
       y = x$df_position$vertical_fractional_portion,
-      type = "l", xlab = "MJD", ylab = "Vertical (m)", las = 1
+      type = "l", xlab = "", ylab = "", las = 1
     )
+    grid(col="grey80", lty=1)
+
+
+    lines(x$df_position$modified_julian_day,
+          y = x$df_position$vertical_fractional_portion)
+
+    mtext(side=2, text = "Vertical (m)", line = side_label_y)
+    mtext(side=1, text = "Modified Julian Date", line = side_label_x)
 
     # missing data
     for (i in seq_along(missing_mjd)) {
@@ -291,86 +320,70 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
     old_par <- par(no.readonly = TRUE)
 
     # set parameters for layout
-    mat_layout <- matrix(c(1, 2), ncol = 1, nrow = 2)
-    layout(mat_layout, heights = c(.1, 1, 1, 1))
+    mat_layout <- matrix(c(1, 2, 3), ncol = 1, nrow = 3)
+    layout(mat_layout, heights = c(.1,.1,1))
     par(mar = c(0, 0, 0, 0))
     plot.new()
     legend("center",
-      horiz = T,
-      legend = c("NA", "Equipment/Software change", "Earthquake"),
-      col = c("grey60", "blue", "darkorange"),
-      pch = c(15, NA, NA),
-      pt.cex = c(2, NA, NA),
-      text.width = c(.1, .4, .1),
-      lty = c(NA, 1, 1), bty = "n"
+           horiz = T,
+           legend = c(paste0("Station ", unique(x$df_position$station_name))),
+           bty = "n", cex=1.3
     )
-    par(mar = c(4, 4.1, 2, 2.1))
-    if (component == "N") {
-      # north
-      plot(x$df_position$modified_julian_day,
-        y = x$df_position$northings_fractional_portion, type = "l",
-        xlab = "MJD", ylab = "Northing (m)", las = 1
-      )
-      # add missing data
-      for (i in seq_along(missing_mjd)) {
-        abline(v = missing_mjd[i], col = "grey60")
-      }
+    plot.new()
+    legend("center",
+           horiz = T,
+           legend = c("NA", "Equipment/Software change", "Earthquake"),
+           col = c("grey60", "blue", "darkorange"),
+           pch = c(15, NA, NA),
+           pt.cex = c(2, NA, NA),
+           # x.intersp = 0.8,
+           text.width = c(.1, .3, .1),
+           lty = c(NA, 1, 1), bty = "n"
+    )
+    par(mar = c(4.5, 4.8, 2, 2.1))
 
-      # add equipment change
-      for (i in seq((dim(x$df_equipment_software_changes)[1]))) {
-        abline(v = x$df_equipment_software_changes$modified_julian_date, col = "blue")
-      }
-
-      # add earthquake
-      for (i in seq((dim(x$df_earthquakes)[1]))) {
-        abline(v = x$df_earthquakes$modified_julian_date, col = "darkorange")
-      }
-      box()
-    } else if (component == "E") {
-      # east
-      plot(x$df_position$modified_julian_day,
-        y = x$df_position$eastings_fractional_portion, type = "l",
-        xlab = "MJD", ylab = "Easting (m)", las = 1
-      )
-
-      # missing data
-      for (i in seq_along(missing_mjd)) {
-        abline(v = missing_mjd[i], col = "grey60")
-      }
-
-      # add equipment change
-      for (i in seq((dim(x$df_equipment_software_changes)[1]))) {
-        abline(v = x$df_equipment_software_changes$modified_julian_date, col = "blue")
-      }
-
-      # add earthquake
-      for (i in seq((dim(x$df_earthquakes)[1]))) {
-        abline(v = x$df_earthquakes$modified_julian_date, col = "darkorange")
-      }
-      box()
-    } else if (component == "V") {
-      # UP
-      plot(x$df_position$modified_julian_day,
-        y = x$df_position$vertical_fractional_portion,
-        type = "l", xlab = "MJD", ylab = "Vertical (m)", las = 1
-      )
-
-      # missing data
-      for (i in seq_along(missing_mjd)) {
-        abline(v = missing_mjd[i], col = "grey60")
-      }
-
-      # add equipment change
-      for (i in seq((dim(x$df_equipment_software_changes)[1]))) {
-        abline(v = x$df_equipment_software_changes$modified_julian_date, col = "blue")
-      }
-
-      # add earthquake
-      for (i in seq((dim(x$df_earthquakes)[1]))) {
-        abline(v = x$df_earthquakes$modified_julian_date, col = "darkorange")
-      }
-      box()
+    # extract component
+    if(component=="N"){
+      y = x$df_position$northings_fractional_portion
+      ylab_component = "Northing (m)"
+    }else if(component == "E"){
+      y = x$df_position$eastings_fractional_portion
+      ylab_component = "Easting (m)"
+    }else if(component == "V"){
+      y = x$df_position$vertical_fractional_portion
+      ylab_component = "Vertical (m)"
     }
+
+
+    # north
+    plot(x$df_position$modified_julian_day,
+         y = y, type = "l",
+         xlab = "", ylab = "", las = 1
+    )
+    grid(col="grey80", lty=1)
+
+    lines(x$df_position$modified_julian_day,
+          y = y)
+    side_label_y = 3.5
+    side_label_x = 2.8
+    mtext(side=2, text =ylab_component, line = side_label_y)
+    mtext(side=1, text = "Modified Julian Date", line = side_label_x)
+
+    # add missing data
+    for (i in seq_along(missing_mjd)) {
+      abline(v = missing_mjd[i], col = "grey60")
+    }
+
+    # add equipment change
+    for (i in seq((dim(x$df_equipment_software_changes)[1]))) {
+      abline(v = x$df_equipment_software_changes$modified_julian_date, col = "blue")
+    }
+
+    # add earthquake
+    for (i in seq((dim(x$df_earthquakes)[1]))) {
+      abline(v = x$df_earthquakes$modified_julian_date, col = "darkorange")
+    }
+    box()
 
     # Restore the original graphical parameters
     par(old_par)

@@ -9,8 +9,8 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  fig.width = 8, # Set default plot width (adjust as needed)
-  fig.height = 6, # Set default plot height (adjust as needed)
+  fig.width = 10, # Set default plot width (adjust as needed)
+  fig.height = 8, # Set default plot height (adjust as needed)
   fig.align = "center" # Center align all plots
 )
 ```
@@ -35,7 +35,7 @@ data_1LSU <- download_station_ngl("1LSU")
 ```
 # Extract GNSS position time series of station
 ```{r}
-str(data_1LSU)
+attributes(data_1LSU)
 head(data_1LSU$df_position)
 ```
 

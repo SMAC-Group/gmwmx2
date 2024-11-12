@@ -14,8 +14,8 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  fig.width = 8, # Set default plot width (adjust as needed)
-  fig.height = 6, # Set default plot height (adjust as needed)
+  fig.width = 10, # Set default plot width (adjust as needed)
+  fig.height = 8, # Set default plot height (adjust as needed)
   fig.align = "center" # Center align all plots
 )
 ```
