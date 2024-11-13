@@ -9,7 +9,8 @@ gmwmx2(
   n_seasonal = 2,
   vec_earthquakes_relaxation_time = NULL,
   component = "N",
-  toeplitz_approx_var_cov_wv = TRUE
+  toeplitz_approx_var_cov_wv = TRUE,
+  stochastic_model
 )
 }
 \arguments{

@@ -94,16 +94,45 @@ create_X_matrix <- function(all_mjd_index,
 }
 
 
-# define optimization function for stochastic model White noise + Flicker model
+# modified exponential function
+modified_exp_func <- function(x) {
+  return((0.9999 - (-0.9999)) * (1 / (1 + exp(-x))) - 0.9999)
+}
+
+# Inverse of the modified exponential function
+inv_modified_exp_func <- function(y) {
+  return(-log((1.9998 / (y + 0.9999)) - 1))
+}
+
+
+
+
+# define optimization function for stochastic model White noise + Flicker model or White noise + stationary powerlaw
 # In order to perform the optimization efficiently,
 # the objective function construct a fast approximation of the theoretical wavelet variance of the vector of missing and observed estimated residuals.
-objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities_D, approx_type, vec_autocov_omega, pstar_hat, no_missing = T, omega = NULL) {
-  theta_t <- vector(mode = "numeric", length = 2)
-  theta_t[1] <- exp(theta[1]) # sigma2 wn
-  theta_t[2] <- exp(theta[2]) # sigma2 fl
+objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_type, vec_autocov_omega, pstar_hat, no_missing = T, omega = NULL, stochastic_model) {
 
-  vec_mean_autocov <- vec_mean_autocov_powerlaw(kappa = -1, n) * theta_t[2]
-  vec_mean_autocov[1] <- vec_mean_autocov[1] + theta_t[1]
+
+  if(stochastic_model == "wn + fl"){
+    theta_t <- vector(mode = "numeric", length = 2)
+    theta_t[1] <- exp(theta[1]) # sigma2 wn
+    theta_t[2] <- exp(theta[2]) # sigma2 fl
+
+    vec_mean_autocov <- vec_mean_autocov_powerlaw(kappa = -1, n) * theta_t[2]
+    vec_mean_autocov[1] <- vec_mean_autocov[1] + theta_t[1]
+
+  }else if(stochastic_model == "wn + pl"){
+    theta_t <- vector(mode = "numeric", length = 3)
+    theta_t[1] <- exp(theta[1]) # sigma2 wn
+    theta_t[2] <- modified_exp_func(theta[2]) # sigma2 wn
+    theta_t[3] <- exp(theta[3]) # sigma2 pl
+
+    vec_mean_autocov <- powerlaw_autocovariance(kappa=theta_t[2], sigma2 = theta_t[3], n = n)
+    vec_mean_autocov[1] <- vec_mean_autocov[1] + theta_t[1]
+  }
+
+
+
 
   # approx with linear interpolation on errors
   vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
@@ -144,17 +173,27 @@ objective_function_wn_flicker_w_missing <- function(theta, wv_obj, n, quantities
 #' x <- download_station_ngl("CHML")
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
-gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE) {
+gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model) {
 
+  # x = download_station_ngl("0ABN")
+  # vec_earthquakes_relaxation_time <- NULL
+  # component <- "N"
+  # n_seasonal <- 2
+  # toeplitz_approx_var_cov_wv=TRUE
+  # stochastic_model = "wn + pl"
+   # all_station = download_all_stations_ngl()
+   # all_station[130]
+   # x = download_station_ngl("0ABN") # nice to show diff between pl and flicker
+   # x=download_station_ngl("0GUN")
+   # plot(x)
+   # fit1 = gmwmx2(x = x, stochastic_model = "wn + fl", component = "V")
+   # plot(fit1)
+   # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "V")
+   # plot(fit2)
 
-#
-#   x = download_station_ngl("0AMB")
-#   vec_earthquakes_relaxation_time <- NULL
-#   component <- "N"
-#   n_seasonal <- 2
-#   toeplitz_approx_var_cov_wv=TRUE
-
-
+  if(!stochastic_model %in% c("wn + pl", "wn + fl")){
+    stop("Specified stochastic_model should be either 'wn + fl' or 'wn + pl'")
+  }
 
   # check that component is either N, E or V
   if (!component %in% c("N", "E", "V")) {
@@ -275,24 +314,46 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     no_missing <- FALSE
   }
 
-  # define gamma init
-  gamma_init <- log(find_initial_values_wn_fl(wv_emp_eps_hat_filled))
+  # define gamma init based o nspecified stochastic model
+  if(stochastic_model == "wn + fl"){
+    gamma_init_not_transformed <- find_initial_values_wn_fl(wv_emp_eps_hat_filled)
+    gamma_init = log(gamma_init_not_transformed)
+
+  }else if(stochastic_model == "wn + pl"){
+    gamma_init_not_transformed = find_initial_values_wn_pl(signal = eps_hat_sub, wv_emp = wv_emp_eps_hat_filled)
+    gamma_init =c(log(gamma_init_not_transformed[1]),
+                  inv_modified_exp_func(gamma_init_not_transformed[2]),
+                  log(gamma_init_not_transformed[3])
+    )
+
+  }
+
 
   # fit gmwmx on empirical wv
   res_gmwmx <- optim(
     par = gamma_init,
-    fn = objective_function_wn_flicker_w_missing,
+    fn = objective_function_w_missing,
     wv_obj = wv_emp_eps_hat_filled,
     n = length(vec_omega),
     quantities_D = quantities_D,
     approx_type = "3",
     vec_autocov_omega = vec_autocov_omega,
     pstar_hat = pstar_hat,
-    no_missing = no_missing
+    no_missing = no_missing,
+    stochastic_model=stochastic_model
   )
 
   # extract estimated stochastic parameters
-  gamma_hat_1 <- exp(res_gmwmx$par)
+  if(stochastic_model =="wn + fl"){
+    gamma_hat_1 <- exp(res_gmwmx$par)
+  }else if(stochastic_model == "wn + pl"){
+    gamma_hat_1 <- c(
+      exp(res_gmwmx$par[1]),
+      modified_exp_func(res_gmwmx$par[2]),
+      exp(res_gmwmx$par[3])
+      )
+  }
+
 
   if (toeplitz_approx_var_cov_wv) {
     # define max J
@@ -302,8 +363,14 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     min_n_to_get_var_wv <- length(vec_omega) + sum_of_powers_of_2(1, max_J - 1) + 2
 
     # get autocov of stochastic process (true residuals)
-    vec_mean_autocov <- vec_mean_autocov_powerlaw(-1, length(vec_omega)) * gamma_hat_1[2]
-    vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_1[1]
+    if(stochastic_model == "wn + fl"){
+      vec_mean_autocov <- vec_mean_autocov_powerlaw(-1, length(vec_omega)) * gamma_hat_1[2]
+      vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_1[1]
+    }else if(stochastic_model == "wn + pl"){
+      vec_mean_autocov <- powerlaw_autocovariance(kappa=gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
+      vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_1[1]
+    }
+
 
     # get mean autocov of (I-H)Sigma
     vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
@@ -334,14 +401,27 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     inv_var_cov_nu_hat <- Matrix::solve(Sigma_wv)
 
     # Build required matrices to compute later variance covariance of beta hat
-    var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
-    var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
-    var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
+    if(stochastic_model == "wn + fl"){
+      var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
+      var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
+      var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
+    }else if(stochastic_model=="wn + pl"){
+      vec_autocov_stationary_powerlaw = powerlaw_autocovariance(kappa=gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
+      vec_autocov_stationary_powerlaw[1] <- gamma_hat_1[1] + vec_autocov_stationary_powerlaw[1]
+      var_cov_mat_epsilon <- toeplitz(as.vector(vec_autocov_stationary_powerlaw))
+    }
+
   } else {
     # construct sigma matrix of white noise + ficker
-    var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
-    var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
-    var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
+    if(stochastic_model == "wn + fl"){
+      var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
+      var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
+      var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
+    }else if(stochastic_model =="wn + pl"){
+      vec_autocov_stationary_powerlaw = powerlaw_autocovariance(kappa=gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
+      vec_autocov_stationary_powerlaw[1] <- gamma_hat_1[1] + vec_autocov_stationary_powerlaw[1]
+      var_cov_mat_epsilon <- toeplitz(as.vector(vec_autocov_stationary_powerlaw))
+    }
 
     # get var cov missingness process
     var_cov_omega <- toeplitz(as.vector(vec_autocov_omega))
@@ -360,7 +440,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   # re estimate gamma with optimal weighting matrix
   res_gmwmx_2 <- optim(
     par = res_gmwmx$par,
-    fn = objective_function_wn_flicker_w_missing,
+    fn = objective_function_w_missing,
     wv_obj = wv_emp_eps_hat_filled,
     n = length(vec_omega),
     quantities_D = quantities_D,
@@ -368,14 +448,31 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     vec_autocov_omega = vec_autocov_omega,
     omega = inv_var_cov_nu_hat,
     pstar_hat = pstar_hat,
-    no_missing = no_missing
+    no_missing = no_missing,
+    stochastic_model=stochastic_model
   )
 
-  gamma_hat_2 <- exp(res_gmwmx_2$par)
+  if(stochastic_model =="wn + fl"){
+    gamma_hat_2 <- exp(res_gmwmx_2$par)
+  }else if(stochastic_model == "wn + pl"){
+    gamma_hat_2 <- c(
+      exp(res_gmwmx_2$par[1]),
+      modified_exp_func(res_gmwmx_2$par[2]),
+      exp(res_gmwmx_2$par[3])
+    )
+  }
 
   # get theo wv with approximation obtained by last fit
-  vec_mean_autocov <- vec_mean_autocov_powerlaw(kappa = -1, length(vec_omega)) * gamma_hat_2[2]
-  vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_2[1]
+  if(stochastic_model == "wn + fl"){
+    vec_mean_autocov <- vec_mean_autocov_powerlaw(kappa = -1, length(vec_omega)) * gamma_hat_2[2]
+    vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_2[1]
+
+  }else if(stochastic_model == "wn + pl"){
+    vec_mean_autocov <- powerlaw_autocovariance(kappa=gamma_hat_2[2], sigma2 = gamma_hat_2[3], n = length(vec_omega))
+    vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_2[1]
+    vec_mean_autocov = as.vector(vec_mean_autocov)
+  }
+
 
   # approx with linear interpolation on errors
   vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
@@ -418,7 +515,8 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     "df_earthquakes" = x$df_earthquakes,
     "df_equipment_software_changes" = x$df_equipment_software_changes,
     "p_hat"= p_hat,
-    "p_star_hat" = pstar_hat
+    "p_star_hat" = pstar_hat,
+    "stochastic_model" = stochastic_model
   )
 
   class(ret) <- "fit_gnss_ts_ngl"
@@ -480,8 +578,17 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
   cat("-------------------------------------------------------------\n")
   cat("Stochastic parameters\n")
   cat("-------------------------------------------------------------\n")
-  cat(sprintf(" White Noise Variance  : %14.8f\n", object$gamma_hat[1]))
-  cat(sprintf(" Flicker Noise Variance: %14.8f\n", object$gamma_hat[2]))
+
+  if(object$stochastic_model == "wn + fl"){
+    cat(sprintf(" White Noise Variance  : %14.8f\n", object$gamma_hat[1]))
+    cat(sprintf(" Flicker Noise Variance: %14.8f\n", object$gamma_hat[2]))
+  }else if(object$stochastic_model =="wn + pl"){
+    cat(sprintf(" White Noise Variance  : %14.8f\n", object$gamma_hat[1]))
+    cat(sprintf(" Stationary powerlaw Spectral index: %14.8f\n", object$gamma_hat[2]))
+    cat(sprintf(" Stationary powerlaw Variance: %14.8f\n", object$gamma_hat[3]))
+  }
+
+
 
   cat("-------------------------------------------------------------\n")
   cat("Missingness parameters\n")

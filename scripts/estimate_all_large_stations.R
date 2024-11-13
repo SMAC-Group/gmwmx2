@@ -5,6 +5,59 @@ library(dplyr)
 library(maps)
 
 
+all_station = download_all_stations_ngl()
+
+
+# Plot the world map
+# Set map limits (for example, focusing on Europe and North America)
+xlim <- c(-190, 190)  # Longitude range
+ylim <- c(-70, 70)   # Latitude range
+
+# Plot the world map with zoomed-in limits
+map("world", fill = TRUE, col = "lightblue", bg = "lightyellow", lwd = 0.5,
+    xlim = xlim, ylim = ylim)
+range(all_station$longitude)
+range(all_station$latitude)
+
+# Fix longitudes that are less than -180 by adding 360
+all_station$longitude2 <- ifelse(all_station$longitude < -180,
+                                all_station$longitude + 360,
+                                all_station$longitude)
+range(all_station$longitude2)
+# only long
+points(all_station$longitude2, all_station$latitude, col = "red", pch = 19, cex = 1.5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+all_station_processed = data.table::fread("http://geodesy.unr.edu/NGLStationPages/GlobalStationList", fill=Inf)
+
+# Load HTML content
+html_file <- "path/to/your/large_html_file.html"
+page <- read_html(html_file)
+
+# Extract station names using CSS selector for links within the table
+station_codes <- page %>%
+  html_nodes("a") %>%               # Select all anchor tags
+  html_text() %>%                   # Get text from each anchor tag (station code)
+  str_trim() %>%                    # Trim whitespace
+  str_subset("^(00NA|01NA|02NA)")   # Keep only codes starting with the specified patterns
+
+# View the extracted station codes
+print(station_codes)
+#
+
 
 test = download_all_stations_ngl()
 x = download_station_ngl(test$station_name[56])

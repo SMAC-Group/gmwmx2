@@ -11,6 +11,19 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// powerlaw_autocovariance
+arma::vec powerlaw_autocovariance(const double kappa, const double sigma2, const int n);
+RcppExport SEXP _gmwmx2_powerlaw_autocovariance(SEXP kappaSEXP, SEXP sigma2SEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const double >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< const double >::type sigma2(sigma2SEXP);
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(powerlaw_autocovariance(kappa, sigma2, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // estimate_p1_p2_mle_cpp
 arma::vec estimate_p1_p2_mle_cpp(arma::vec omega);
 RcppExport SEXP _gmwmx2_estimate_p1_p2_mle_cpp(SEXP omegaSEXP) {
@@ -402,6 +415,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_gmwmx2_powerlaw_autocovariance", (DL_FUNC) &_gmwmx2_powerlaw_autocovariance, 3},
     {"_gmwmx2_estimate_p1_p2_mle_cpp", (DL_FUNC) &_gmwmx2_estimate_p1_p2_mle_cpp, 1},
     {"_gmwmx2_create_vec_theo_autocov_omega_cpp", (DL_FUNC) &_gmwmx2_create_vec_theo_autocov_omega_cpp, 3},
     {"_gmwmx2_gen_flicker", (DL_FUNC) &_gmwmx2_gen_flicker, 2},
