@@ -94,15 +94,21 @@ create_X_matrix <- function(all_mjd_index,
 }
 
 
-# modified exponential function
-modified_exp_func <- function(x) {
-  return((0.9999 - (-0.9999)) * (1 / (1 + exp(-x))) - 0.9999)
+trans_kappa_pl <- function(x) {
+  exp(x) - 1
 }
 
-# Inverse of the modified exponential function
-inv_modified_exp_func <- function(y) {
-  return(-log((1.9998 / (y + 0.9999)) - 1))
-}
+inv_trans_kappa_pl <- function(x) log(x + 1)
+
+# modified exponential function
+# modified_exp_func <- function(x) {
+#   return((0.9999 - (-0.9999)) * (1 / (1 + exp(-x))) - 0.9999)
+# }
+#
+# # Inverse of the modified exponential function
+# inv_modified_exp_func <- function(y) {
+#   return(-log((1.9998 / (y + 0.9999)) - 1))
+# }
 
 
 
@@ -124,7 +130,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
   }else if(stochastic_model == "wn + pl"){
     theta_t <- vector(mode = "numeric", length = 3)
     theta_t[1] <- exp(theta[1]) # sigma2 wn
-    theta_t[2] <- modified_exp_func(theta[2]) # sigma2 wn
+    theta_t[2] <- trans_kappa_pl(theta[2]) # sigma2 wn
     theta_t[3] <- exp(theta[3]) # sigma2 pl
 
     vec_mean_autocov <- powerlaw_autocovariance(kappa=theta_t[2], sigma2 = theta_t[3], n = n)
@@ -165,6 +171,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.
 #' @param component A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).
 #' @param toeplitz_approx_var_cov_wv A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.
+#' @param stochastic_model A \code{string} that specify the stochastic model considered for the residuals. Either ´wn + fl´ for white noise and flicker/pink noise or ´wn + pl´ for white noise and stationary power-law noise.
 #' @importFrom wv wvar
 #' @importFrom dplyr between
 #' @importFrom Matrix solve
@@ -173,31 +180,32 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' x <- download_station_ngl("CHML")
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
-gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model) {
+gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model="wn + fl") {
 
   # x = download_station_ngl("0ABN")
+  # plot(x)
   # vec_earthquakes_relaxation_time <- NULL
   # component <- "N"
   # n_seasonal <- 2
   # toeplitz_approx_var_cov_wv=TRUE
   # stochastic_model = "wn + pl"
    # all_station = download_all_stations_ngl()
-   # all_station[130]
-   # x = download_station_ngl("0ABN") # nice to show diff between pl and flicker
-   # x=download_station_ngl("0GUN")
+   # all_station[200]
+   # # x = download_station_ngl("0ABN") # nice to show diff between pl and flicker
+   # x=download_station_ngl("0KIS")
    # plot(x)
-   # fit1 = gmwmx2(x = x, stochastic_model = "wn + fl", component = "V")
+   # fit1 = gmwmx2(x = x, stochastic_model = "wn + fl", component = "E")
    # plot(fit1)
-   # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "V")
+   # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "E")
    # plot(fit2)
 
   if(!stochastic_model %in% c("wn + pl", "wn + fl")){
-    stop("Specified stochastic_model should be either 'wn + fl' or 'wn + pl'")
+    stop("Argument stochastic_model should be either 'wn + fl' or 'wn + pl'")
   }
 
   # check that component is either N, E or V
   if (!component %in% c("N", "E", "V")) {
-    stop("Specified component should be either 'N', 'E' or 'V'")
+    stop("Argument ?´component should be either´ 'N', 'E' or 'V'")
   }
 
   # check that n_seasonal is either 1 or 2
@@ -225,7 +233,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     jumps <- NULL
   }
 
-  # create matrix
+  # create design matrix
   X <- create_X_matrix(
     all_mjd_index = all_mjd_index,
     jumps = jumps,
@@ -265,7 +273,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
       if (length(vec_earthquakes_index_mjd) > 0) paste0("Earthquake: MJD ", vec_earthquakes_index_mjd)
     )
   }
-
+# assign names beta hat
   names(beta_hat) <- names_beta_hat
 
   # # plot signal and estimated model
@@ -304,7 +312,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   H <- X %*% inv_XtX %*% t(X)
   D <- diag(length(all_mjd_index)) - H
 
-  # pre-compute quantities on D
+  # pre-compute quantities on D to later use in optimization function
   quantities_D <- pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type = "3")
 
   # define missingness case
@@ -317,18 +325,19 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   # define gamma init based o nspecified stochastic model
   if(stochastic_model == "wn + fl"){
     gamma_init_not_transformed <- find_initial_values_wn_fl(wv_emp_eps_hat_filled)
+    # log transform variance of WN and variance of flicker noise
     gamma_init = log(gamma_init_not_transformed)
 
   }else if(stochastic_model == "wn + pl"){
+    # get initial values
     gamma_init_not_transformed = find_initial_values_wn_pl(signal = eps_hat_sub, wv_emp = wv_emp_eps_hat_filled)
+    # log transform variance of WN, transform kappa and log transform variance of powerlaw noise
     gamma_init =c(log(gamma_init_not_transformed[1]),
-                  inv_modified_exp_func(gamma_init_not_transformed[2]),
+                  inv_trans_kappa_pl(gamma_init_not_transformed[2]),
                   log(gamma_init_not_transformed[3])
     )
 
   }
-
-
   # fit gmwmx on empirical wv
   res_gmwmx <- optim(
     par = gamma_init,
@@ -349,7 +358,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   }else if(stochastic_model == "wn + pl"){
     gamma_hat_1 <- c(
       exp(res_gmwmx$par[1]),
-      modified_exp_func(res_gmwmx$par[2]),
+      trans_kappa_pl(res_gmwmx$par[2]),
       exp(res_gmwmx$par[3])
       )
   }
@@ -457,7 +466,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   }else if(stochastic_model == "wn + pl"){
     gamma_hat_2 <- c(
       exp(res_gmwmx_2$par[1]),
-      modified_exp_func(res_gmwmx_2$par[2]),
+      trans_kappa_pl(res_gmwmx_2$par[2]),
       exp(res_gmwmx_2$par[3])
     )
   }

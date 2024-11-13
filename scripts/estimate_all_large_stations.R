@@ -6,6 +6,31 @@ library(maps)
 
 
 all_station = download_all_stations_ngl()
+head(all_station, 10)
+x = download_station_ngl("0ABY")
+fit1 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+plot(fit1)
+summary(fit1)
+fit2 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+plot(fit2)
+summary(fit2)
+x=download_station_ngl("0ABI")
+fit3 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+plot(fit3)
+summary(fit3)
+fit4 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+plot(fit4)
+summary(fit4)
+x=download_station_ngl("ZWOL")
+plot(x)
+fit5 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+plot(fit5)
+summary(fit5)
+fit6 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+plot(fit6)
+summary(fit6)
+
+
 
 
 # Plot the world map

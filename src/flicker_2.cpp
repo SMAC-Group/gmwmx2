@@ -61,6 +61,7 @@ arma::vec compute_h_cpp(double kappa, int N) {
   return vec_h;
 }
 
+// compute average of the diagonal and super diagonals of the matrix of variance covariance of power law noise
 // [[Rcpp::export]]
 arma::vec vec_mean_autocov_powerlaw( double kappa, int N) {
   arma::vec vec_h = compute_h_cpp(kappa, N);

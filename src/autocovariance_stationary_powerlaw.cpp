@@ -11,6 +11,8 @@ using namespace arma;
 // @param n An integer specifying the length of the signal
 // [[Rcpp::export]]
 arma::vec powerlaw_autocovariance(const double kappa , const double sigma2, const int n) {
+  // construct vector of the autocovariance function as given in
+
   arma::vec acf(n);
 
   acf(0) = ::tgamma(1.0 + kappa) / pow(::tgamma(1.0 + kappa/2), 2) * sigma2;

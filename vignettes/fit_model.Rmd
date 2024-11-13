@@ -70,10 +70,10 @@ More precisely, we rely on the result of [Xu, H., Guerrier, S., Molinari, R., Zh
 
 While the GMWMX as described above and in more details in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160), is a general method for estimating large linear model with complex dependence structure in presence of missing data, the `gmwmx2` `R` package is currently developed specifically to estimate tectonic velocities from position times series in graticule distance coordinates system (GD) provided by the Nevada geodetic Laboratory [Blewitt, G., (2024)](https://link.springer.com/article/10.1007/s00190-023-01815-0).
 
+## Trajectory model
+
 Hence, to estimate the trajectory model (see e.g., [Bevis, M., Brown, A., (2014)](https://link.springer.com/article/10.1007/s00190-013-0685-5) for more details), we construct the design matrix $\boldsymbol{X}$ such that $i$-th component of the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows with $t_i$ representing the $i^{th}$ ordered time point (epoch) indicated in Modified Julian Date and $t_0$ representing the reference epoch located exactly in the middle of start and end point of
 the time series:
-
-
 
 \begin{split}
  \mathbb{E}[\mathbf{Y}_i] &= \mathbf{X}_i^T {{\boldsymbol{\beta}}}  \\
@@ -81,11 +81,16 @@ the time series:
 \end{split}
 
 where $a$ is the initial position at the reference epoch $t_0$, $b$ is the velocity parameter, $c_h$  and $d_h$ are the periodic motion parameters ($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms, respectively with $f_1 = \frac{1}{365.25}$ and $f_2 = \frac{2}{365.25}$). The offset terms models earthquakes, equipment changes or human intervention in which $e_j$ is the magnitude of the step at epochs $t_j$, $r$ is the total number of offsets, $H$ is the Heaviside step function defined as $H(x):= \begin{cases}1, & x \geq 0 \\ 0, & x<0\end{cases}$ and the last term allow to model post-seismic deformation ([Sobrero, F. S., Bevos, M., G\'omez, D. D., Wang, F., (2020)](https://link.springer.com/article/10.1007/s00190-020-01413-4)) where $s$ is the number of post seismic relaxation time specified, $t_k$ is the time when the relaxation $k$
-starts in Modified Julian Date (MJD), $\tau_k$ is the relaxation period in days for the post-seismic relaxation $k$ and $l_k$ is the amplitude of the transient. Note that by default the estimates of the functional parameters  are provided in unit/day.
+starts in Modified Julian Date (MJD), $\tau_k$ is the relaxation period in days for the post-seismic relaxation $k$ and $l_k$ is the amplitude of the transient. Note that by default the estimates of the functional parameters  are provided in unit/day. 
 
-More precisely, when loading data from a specific station using the function `gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory the position time series in  GD coordinates, the time steps associated with a equipment or software change and the time steps associated with an earthquake near the station. All these objects are stored in a object of class `gnss_ts_ngl`.  
+When loading data from a specific station using the function `gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory the position time series in  GD coordinates, the time steps associated with a equipment or software change and the time steps associated with an earthquake near the station. All these objects are stored in a object of class `gnss_ts_ngl`.  
 
 When applying the function `gmwmx2::gmwmx2()` to an object of class `gnss_ts_ngl`, we construct the design matrix $\boldsymbol{X}$ by considering an offset term for all equipment or software changes steps and all earthquakes indicated by the NGL. We also specify a post-seismic relaxation term for all earthquakes indicated by the NGL. If no relaxation time is specified in the argument `vec_earthquakes_relaxation_time`, we consider a default relaxation time of $365.25$ days. 
+
+## Stochastic model
+
+It is generally recognized that noise in GNSS time series is best described by a combination of colored noise plus white noise \cite{he2017review,langbein2008noise, williams2004error, bos2013fast} where the white noise generally model noise at high frequencies and the colored noise model the lower frequencies of the spectrum. In a large study on the noise properties of GNSS signals, \cite{he2019investigation} concluded that the optimal
+noise models for 80–90\% of GNSS time series signals are the power law and white noise model or flicker/pink noise with white noise model. The \texttt{gmwmx} \texttt{R} package currently support both stochastic model specification.
 
 Regarding the stochastic model, the `gmwmx2` package currently only support one stochastic model for the error term which is a combination of White noise and Flicker/pink noise which is the most common stochastic model considered for GNSS position time series ([He, X., Bos, M.S., Fernandes, R.M.S., 2019](https://link.springer.com/article/10.1007/s00190-019-01244-y)).
 

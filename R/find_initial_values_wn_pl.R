@@ -42,8 +42,8 @@ find_initial_values_wn_pl <- function(signal, wv_emp) {
   unit_wv_pl <- autocovariance_to_wv(acf = powerlaw_autocovariance(kappa = kappa_start, sigma2 = 1, n = n), tau = wv_emp$scales)
   sigma2_powerlaw_start <- tail(wv_after_removing_wn, 1) / tail(unit_wv_pl, 1)
 
-  # check for kappa if not in range, set t0 -.5
-  if(!dplyr::between(x=kappa_start, left = -1, right = 1)){
+  # check for kappa if not greater than -1
+  if(kappa_start <= -1){
     kappa_start=-0.5
   }
 
