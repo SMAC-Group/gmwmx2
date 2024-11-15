@@ -104,11 +104,30 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SMAC-Group/gmwmx2" class="external-link">gmwmx2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rnaturalearth/" class="external-link">rnaturalearth</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">geodata</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">shape</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     filter, lag</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: sp</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'raster'</span></span></code></pre>
+<pre><code><span><span class="co">## The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     select</span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># library(rnaturalearth)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">geodata</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: terra</span></span></code></pre>
+<pre><code><span><span class="co">## terra 1.7.83</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">shape</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jessecambon.github.io/tidygeocoder/" class="external-link">tidygeocoder</a></span><span class="op">)</span></span>
 <span></span>
@@ -122,7 +141,7 @@
 <span>  <span class="va">xp</span> <span class="op">&lt;-</span> <span class="va">rad</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">+</span> <span class="va">theta</span><span class="op">)</span> <span class="op">+</span> <span class="va">xc</span></span>
 <span>  <span class="va">yp</span> <span class="op">&lt;-</span> <span class="va">rad</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">+</span> <span class="va">theta</span><span class="op">)</span> <span class="op">+</span> <span class="va">yc</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">newplot</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">xp</span>, <span class="va">yp</span>, type <span class="op">=</span> <span class="st">"l"</span>, <span class="va">...</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">xp</span>, <span class="va">yp</span>, type <span class="op">=</span> <span class="st">"l"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span>  <span class="kw">else</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">xp</span>, <span class="va">yp</span>, <span class="va">...</span><span class="op">)</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">fill</span> <span class="op">==</span> <span class="cn">T</span><span class="op">)</span> <span class="op">{</span></span>
@@ -186,10 +205,17 @@
 <span><span class="co"># download selected stations</span></span>
 <span><span class="va">selected_station</span> <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BSCN"</span>,<span class="st">"CERN"</span> ,<span class="st">"SCDA"</span>, <span class="st">"GLRA"</span>, <span class="st">"VIL3"</span><span class="op">)</span></span>
 <span><span class="co"># selected_station = c("BSCN") </span></span>
-<span><span class="va">df_network</span> <span class="op">=</span> <span class="va">all_station</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">station_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">selected_station</span><span class="op">)</span></span>
-<span><span class="va">df_network</span></span>
-<span></span>
-<span><span class="co"># create data frame where</span></span>
+<span><span class="va">df_network</span> <span class="op">=</span> <span class="va">all_station</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">station_name</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">%in%</a></span> <span class="va">selected_station</span><span class="op">)</span></span>
+<span><span class="va">df_network</span></span></code></pre></div>
+<pre><code><span><span class="co">##    station_name latitude longitude    height</span></span>
+<span><span class="co">##          &lt;char&gt;    &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">## 1:         BSCN 47.24688 -354.0106  359.5549</span></span>
+<span><span class="co">## 2:         CERN 46.25695 -353.9394  525.9422</span></span>
+<span><span class="co">## 3:         GLRA 44.83926 -355.4759  813.9238</span></span>
+<span><span class="co">## 4:         SCDA 44.79452 -356.7325 1115.3433</span></span>
+<span><span class="co">## 5:         VIL3 46.66031 -356.7510  269.0148</span></span></code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create data frame where</span></span>
 <span><span class="va">df_estimated_velocities</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">df_network</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">station_index</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">df_network</span><span class="op">$</span><span class="va">station_name</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">station_name</span> <span class="op">=</span> <span class="va">df_network</span><span class="op">$</span><span class="va">station_name</span><span class="op">[</span><span class="va">station_index</span><span class="op">]</span></span>
@@ -200,9 +226,14 @@
 <span>  <span class="va">df_estimated_velocities</span><span class="op">[</span><span class="va">station_index</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="va">station_name</span></span>
 <span>  <span class="va">df_estimated_velocities</span><span class="op">[</span><span class="va">station_index</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span> <span class="op">=</span>   <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit_N</span><span class="op">$</span><span class="va">beta_hat</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">fit_N</span><span class="op">$</span><span class="va">std_beta_hat</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,<span class="va">fit_E</span><span class="op">$</span><span class="va">beta_hat</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">fit_E</span><span class="op">$</span><span class="va">std_beta_hat</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">fit_N</span><span class="op">$</span><span class="va">design_matrix_X</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">station_index</span> ,<span class="st">"/"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">df_network</span><span class="op">$</span><span class="va">station_name</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"station_name"</span>, <span class="st">"estimated_trend_N"</span>, <span class="st">"std_estimated_trend_N"</span>, <span class="st">"estimated_trend_E"</span>, <span class="st">"std_estimated_trend_E"</span>, <span class="st">"n_data"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<pre><code><span><span class="co">## 1/5</span></span>
+<span><span class="co">## 2/5</span></span>
+<span><span class="co">## 3/5</span></span>
+<span><span class="co">## 4/5</span></span>
+<span><span class="co">## 5/5</span></span></code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"station_name"</span>, <span class="st">"estimated_trend_N"</span>, <span class="st">"std_estimated_trend_N"</span>, <span class="st">"estimated_trend_E"</span>, <span class="st">"std_estimated_trend_E"</span>, <span class="st">"n_data"</span><span class="op">)</span></span>
 <span><span class="va">df_estimated_velocities</span><span class="op">$</span><span class="va">estimated_trend_N_scaled</span> <span class="op">=</span> <span class="va">df_estimated_velocities</span><span class="op">$</span><span class="va">estimated_trend_N</span> <span class="op">*</span> <span class="fl">365.25</span></span>
 <span><span class="va">df_estimated_velocities</span><span class="op">$</span><span class="va">std_estimated_trend_N_scaled</span> <span class="op">=</span> <span class="va">df_estimated_velocities</span><span class="op">$</span><span class="va">std_estimated_trend_N</span> <span class="op">*</span> <span class="fl">365.25</span></span>
 <span><span class="va">df_estimated_velocities</span><span class="op">$</span><span class="va">estimated_trend_E_scaled</span> <span class="op">=</span> <span class="va">df_estimated_velocities</span><span class="op">$</span><span class="va">estimated_trend_E</span>  <span class="op">*</span> <span class="fl">365.25</span></span>
@@ -217,9 +248,33 @@
 <span><span class="va">df_estimated_velocities_and_location</span> <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span>, <span class="va">df_network</span>, by<span class="op">=</span><span class="st">"station_name"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># print estimated North and East velocities</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load elevation data</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   station_name estimated_trend_N std_estimated_trend_N estimated_trend_E</span></span>
+<span><span class="co">## 1         BSCN      4.435408e-05          3.262683e-07      5.345211e-05</span></span>
+<span><span class="co">## 2         CERN      4.455772e-05          1.860753e-07      5.354428e-05</span></span>
+<span><span class="co">## 3         GLRA      4.380876e-05          2.866518e-07      5.466610e-05</span></span>
+<span><span class="co">## 4         SCDA      4.475967e-05          2.134131e-07      5.337310e-05</span></span>
+<span><span class="co">## 5         VIL3      4.489091e-05          3.123353e-07      5.330089e-05</span></span>
+<span><span class="co">##   std_estimated_trend_E n_data estimated_trend_N_scaled</span></span>
+<span><span class="co">## 1          2.187197e-07   8059               0.01620033</span></span>
+<span><span class="co">## 2          1.384963e-07   4968               0.01627471</span></span>
+<span><span class="co">## 3          3.368441e-07   5739               0.01600115</span></span>
+<span><span class="co">## 4          1.454117e-07   6206               0.01634847</span></span>
+<span><span class="co">## 5          4.234129e-04   4339               0.01639641</span></span>
+<span><span class="co">##   std_estimated_trend_N_scaled estimated_trend_E_scaled</span></span>
+<span><span class="co">## 1                 1.191695e-04               0.01952338</span></span>
+<span><span class="co">## 2                 6.796401e-05               0.01955705</span></span>
+<span><span class="co">## 3                 1.046996e-04               0.01996679</span></span>
+<span><span class="co">## 4                 7.794912e-05               0.01949452</span></span>
+<span><span class="co">## 5                 1.140805e-04               0.01946815</span></span>
+<span><span class="co">##   std_estimated_trend_E_scaled</span></span>
+<span><span class="co">## 1                 7.988737e-05</span></span>
+<span><span class="co">## 2                 5.058577e-05</span></span>
+<span><span class="co">## 3                 1.230323e-04</span></span>
+<span><span class="co">## 4                 5.311164e-05</span></span>
+<span><span class="co">## 5                 1.546516e-01</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load elevation data</span></span>
 <span><span class="va">tmp</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">elevation_data_swiss</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/elevation.html" class="external-link">elevation_30s</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Switzerland"</span>, path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="va">elevation_data_france</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/elevation.html" class="external-link">elevation_30s</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"France"</span>, path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
@@ -236,7 +291,7 @@
 <span><span class="co"># elevation_raster_germany &lt;- raster(elevation_data_germany)</span></span>
 <span><span class="co"># elevation_raster_austria &lt;- raster(elevation_data_austria)</span></span>
 <span><span class="co"># elevation_raster_liechtenstein &lt;- raster(elevation_data_liechtenstein)</span></span>
-<span><span class="va">combined_raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">elevation_raster_swiss</span>, <span class="va">elevation_raster_france</span>,</span>
+<span><span class="va">combined_raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">elevation_raster_swiss</span>, <span class="va">elevation_raster_france</span>,</span>
 <span>                         <span class="va">elevation_raster_italy</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># sett plot limits</span></span>
@@ -260,13 +315,13 @@
 <span><span class="va">breaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">min_val</span>, <span class="va">max_val</span>, length.out <span class="op">=</span> <span class="va">num_colors</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get the country boundaries using rnaturalearth</span></span>
-<span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">ne_countries</span><span class="op">(</span>scale <span class="op">=</span> <span class="st">"medium"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="co"># world &lt;- ne_countries(scale = "medium", returnclass = "sf")</span></span>
 <span></span>
 <span><span class="co"># Filter for the countries of interest</span></span>
-<span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="va">world</span><span class="op">[</span><span class="va">world</span><span class="op">$</span><span class="va">admin</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Switzerland"</span>, <span class="st">"France"</span>, <span class="st">"Italy"</span>, <span class="st">"Germany"</span>,<span class="st">"Austria"</span>, <span class="st">"Liechtenstein"</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="co"># countries &lt;- world[world$admin %in% c("Switzerland", "France", "Italy", "Germany","Austria", "Liechtenstein"), ]</span></span>
 <span></span>
 <span><span class="co"># plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="cn">NA</span>, xlim <span class="op">=</span> <span class="va">xlims</span>, ylim <span class="op">=</span> <span class="va">ylims</span>, las <span class="op">=</span> <span class="fl">1</span>,</span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="cn">NA</span>, xlim <span class="op">=</span> <span class="va">xlims</span>, ylim <span class="op">=</span> <span class="va">ylims</span>, las <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>     ylab <span class="op">=</span> <span class="st">""</span>,xlab<span class="op">=</span><span class="st">""</span>,</span>
 <span>     xaxt<span class="op">=</span><span class="st">"n"</span>, yaxt<span class="op">=</span><span class="st">"n"</span></span>
 <span><span class="op">)</span></span>
@@ -303,11 +358,11 @@
 <span><span class="va">my_col_trans</span> <span class="op">=</span> <span class="fu">make_transparent</span><span class="op">(</span><span class="va">my_col</span>,alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Overlay country boundaries</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">countries</span><span class="op">$</span><span class="va">geometry</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co"># plot(countries$geometry, add = TRUE, border = "black", lwd = 2)</span></span>
 <span></span>
 <span><span class="co"># df_estimated_velocities_and_location=df_estimated_velocities_and_location%&gt;%filter(station_name!="MNBL")</span></span>
 <span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df_estimated_velocities_and_location</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df_estimated_velocities_and_location</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  <span class="fu">ellipse</span><span class="op">(</span></span>
 <span>    hlaxa <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">df_estimated_velocities_and_location</span><span class="op">[</span><span class="va">i</span>,<span class="st">'std_estimated_trend_E_scaled'</span><span class="op">]</span><span class="op">)</span> <span class="op">*</span> <span class="va">scale_ellipses</span>,</span>
@@ -338,7 +393,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># add</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">df_estimated_velocities_and_location</span><span class="op">$</span><span class="va">longitude2</span>, y<span class="op">=</span><span class="va">df_estimated_velocities_and_location</span><span class="op">$</span><span class="va">latitude</span>,</span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">df_estimated_velocities_and_location</span><span class="op">$</span><span class="va">longitude2</span>, y<span class="op">=</span><span class="va">df_estimated_velocities_and_location</span><span class="op">$</span><span class="va">latitude</span>,</span>
 <span>     labels <span class="op">=</span> <span class="va">df_estimated_velocities_and_location</span><span class="op">$</span><span class="va">station_name</span>, pos <span class="op">=</span> <span class="fl">3</span>, cex <span class="op">=</span> <span class="fl">0.8</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add city</span></span>
@@ -352,22 +407,24 @@
 <span>    <span class="op">)</span>,</span>
 <span>    global_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>address <span class="op">=</span> <span class="st">'address'</span><span class="op">)</span>,</span>
 <span>    cascade <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span></span>
-<span></span>
-<span><span class="va">df_city_2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">df_city</span>, <span class="va">df_geo</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span></code></pre>
+<pre><code><span><span class="co">## Passing 3 addresses to the Nominatim single address geocoder</span></span></code></pre>
+<pre><code><span><span class="co">## Query completed in: 3 seconds</span></span></code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_city_2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">df_city</span>, <span class="va">df_geo</span><span class="op">)</span></span>
 <span><span class="va">df_city_2</span><span class="op">$</span><span class="va">City</span> <span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">address</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html" class="external-link">points</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">df_city_2</span><span class="op">$</span><span class="va">lon</span>, y<span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">lat</span>, pch<span class="op">=</span><span class="fl">15</span>, col<span class="op">=</span><span class="st">"black"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cex_size_city</span> <span class="op">=</span> <span class="fl">.7</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">df_city_2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">df_city_2</span><span class="op">$</span><span class="va">lon</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, y <span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">lat</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">df_city_2</span><span class="op">$</span><span class="va">lon</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, y <span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">lat</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
 <span>       labels <span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">City</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
 <span>       adj<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"black"</span>,</span>
 <span>       cex <span class="op">=</span> <span class="va">cex_size_city</span> <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+<p><img src="estimate_small_network_files/figure-html/unnamed-chunk-1-1.png" width="960" style="display: block; margin: auto;"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

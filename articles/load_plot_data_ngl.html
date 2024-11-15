@@ -111,41 +111,152 @@ Laboratory</h1>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_stations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_all_stations_ngl.html">download_all_stations_ngl</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_stations</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_stations</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    station_name  latitude longitude    height</span></span>
+<span><span class="co">##          &lt;char&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">## 1:         00NA -12.46664 -229.1560 104.85105</span></span>
+<span><span class="co">## 2:         01NA -12.47822 -229.0180 105.40857</span></span>
+<span><span class="co">## 3:         02NA -12.35592 -229.1183 117.65247</span></span>
+<span><span class="co">## 4:         0ABI  68.35434 -341.1836 431.38847</span></span>
+<span><span class="co">## 5:         0ABN  65.03368 -338.6671  52.76211</span></span>
+<span><span class="co">## 6:         0ABY  58.65891 -343.8204  60.54753</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="download-one-station">Download one station<a class="anchor" aria-label="anchor" href="#download-one-station"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_1LSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="extract-gnss-position-time-series-of-station">Extract GNSS position time series of station<a class="anchor" aria-label="anchor" href="#extract-gnss-position-time-series-of-station"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## $names</span></span>
+<span><span class="co">## [1] "df_position"                   "df_equipment_software_changes"</span></span>
+<span><span class="co">## [3] "df_earthquakes"               </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $class</span></span>
+<span><span class="co">## [1] "gnss_ts_ngl"</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    station_name    date decimal_year modified_julian_day gps_week</span></span>
+<span><span class="co">##          &lt;char&gt;  &lt;char&gt;        &lt;num&gt;               &lt;int&gt;    &lt;int&gt;</span></span>
+<span><span class="co">## 1:         1LSU 03APR23     2003.307               52752     1215</span></span>
+<span><span class="co">## 2:         1LSU 03APR24     2003.310               52753     1215</span></span>
+<span><span class="co">## 3:         1LSU 03APR25     2003.313               52754     1215</span></span>
+<span><span class="co">## 4:         1LSU 03APR26     2003.315               52755     1215</span></span>
+<span><span class="co">## 5:         1LSU 03APR27     2003.318               52756     1216</span></span>
+<span><span class="co">## 6:         1LSU 03APR28     2003.321               52757     1216</span></span>
+<span><span class="co">##    day_of_gps_week longitude_reference_meridian eastings_integer_portion</span></span>
+<span><span class="co">##              &lt;int&gt;                        &lt;num&gt;                    &lt;int&gt;</span></span>
+<span><span class="co">## 1:               3                        -91.2                     1896</span></span>
+<span><span class="co">## 2:               4                        -91.2                     1896</span></span>
+<span><span class="co">## 3:               5                        -91.2                     1896</span></span>
+<span><span class="co">## 4:               6                        -91.2                     1896</span></span>
+<span><span class="co">## 5:               0                        -91.2                     1896</span></span>
+<span><span class="co">## 6:               1                        -91.2                     1896</span></span>
+<span><span class="co">##    eastings_fractional_portion northings_integer_portion</span></span>
+<span><span class="co">##                          &lt;num&gt;                     &lt;int&gt;</span></span>
+<span><span class="co">## 1:                    0.711049                   3365278</span></span>
+<span><span class="co">## 2:                    0.709828                   3365278</span></span>
+<span><span class="co">## 3:                    0.709516                   3365278</span></span>
+<span><span class="co">## 4:                    0.709294                   3365278</span></span>
+<span><span class="co">## 5:                    0.708491                   3365278</span></span>
+<span><span class="co">## 6:                    0.709078                   3365278</span></span>
+<span><span class="co">##    northings_fractional_portion vertical_integer_portion</span></span>
+<span><span class="co">##                           &lt;num&gt;                    &lt;int&gt;</span></span>
+<span><span class="co">## 1:                     0.822996                       -6</span></span>
+<span><span class="co">## 2:                     0.823368                       -6</span></span>
+<span><span class="co">## 3:                     0.821628                       -6</span></span>
+<span><span class="co">## 4:                     0.822800                       -6</span></span>
+<span><span class="co">## 5:                     0.822997                       -6</span></span>
+<span><span class="co">## 6:                     0.822855                       -6</span></span>
+<span><span class="co">##    vertical_fractional_portion antenna_height east_sigma north_sigma</span></span>
+<span><span class="co">##                          &lt;num&gt;          &lt;num&gt;      &lt;num&gt;       &lt;num&gt;</span></span>
+<span><span class="co">## 1:                   -0.513319              0   0.000744    0.000770</span></span>
+<span><span class="co">## 2:                   -0.509680              0   0.000751    0.000794</span></span>
+<span><span class="co">## 3:                   -0.509723              0   0.000764    0.000805</span></span>
+<span><span class="co">## 4:                   -0.513679              0   0.000746    0.000795</span></span>
+<span><span class="co">## 5:                   -0.514945              0   0.000730    0.000779</span></span>
+<span><span class="co">## 6:                   -0.513593              0   0.000742    0.000804</span></span>
+<span><span class="co">##    vertical_sigma east_north_correlation east_vertical_correlation</span></span>
+<span><span class="co">##             &lt;num&gt;                  &lt;num&gt;                     &lt;num&gt;</span></span>
+<span><span class="co">## 1:       0.002916               0.004143                 -0.052295</span></span>
+<span><span class="co">## 2:       0.003006              -0.004771                 -0.073633</span></span>
+<span><span class="co">## 3:       0.003065              -0.033009                 -0.032816</span></span>
+<span><span class="co">## 4:       0.002970              -0.031578                 -0.034920</span></span>
+<span><span class="co">## 5:       0.002870               0.014876                 -0.046110</span></span>
+<span><span class="co">## 6:       0.002976              -0.002140                 -0.008859</span></span>
+<span><span class="co">##    north_vertical_correlation nominal_station_latitude</span></span>
+<span><span class="co">##                         &lt;num&gt;                    &lt;num&gt;</span></span>
+<span><span class="co">## 1:                  -0.108750                 30.40742</span></span>
+<span><span class="co">## 2:                  -0.084747                 30.40742</span></span>
+<span><span class="co">## 3:                  -0.099395                 30.40742</span></span>
+<span><span class="co">## 4:                  -0.066100                 30.40742</span></span>
+<span><span class="co">## 5:                  -0.072286                 30.40742</span></span>
+<span><span class="co">## 6:                  -0.082712                 30.40742</span></span>
+<span><span class="co">##    nominal_station_longitude nominal_station_height</span></span>
+<span><span class="co">##                        &lt;num&gt;                  &lt;num&gt;</span></span>
+<span><span class="co">## 1:                 -91.18026               -6.51332</span></span>
+<span><span class="co">## 2:                 -91.18026               -6.50968</span></span>
+<span><span class="co">## 3:                 -91.18026               -6.50972</span></span>
+<span><span class="co">## 4:                 -91.18026               -6.51368</span></span>
+<span><span class="co">## 5:                 -91.18026               -6.51495</span></span>
+<span><span class="co">## 6:                 -91.18026               -6.51359</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="extract-equipment-or-software-changes-steps">Extract equipment or software changes steps<a class="anchor" aria-label="anchor" href="#extract-equipment-or-software-changes-steps"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    station_name date_YYMMDD step_type_code            type_equipment_change</span></span>
+<span><span class="co">##          &lt;char&gt;      &lt;char&gt;          &lt;int&gt;                           &lt;char&gt;</span></span>
+<span><span class="co">## 1:         1LSU     03OCT08              1                  Logfile_Changed</span></span>
+<span><span class="co">## 2:         1LSU     05SEP06              1         Elevation_Cutoff_Changed</span></span>
+<span><span class="co">## 3:         1LSU     06MAY11              1  Receiver_Make_and_Model_Changed</span></span>
+<span><span class="co">## 4:         1LSU     08JUN20              1 Antenna_and_Radome_Codes_Changed</span></span>
+<span><span class="co">## 5:         1LSU     08JUN23              1         Elevation_Cutoff_Changed</span></span>
+<span><span class="co">## 6:         1LSU     10APR14              1             Antenna_Code_Changed</span></span>
+<span><span class="co">##    modified_julian_date</span></span>
+<span><span class="co">##                   &lt;num&gt;</span></span>
+<span><span class="co">## 1:                52920</span></span>
+<span><span class="co">## 2:                53619</span></span>
+<span><span class="co">## 3:                53866</span></span>
+<span><span class="co">## 4:                54637</span></span>
+<span><span class="co">## 5:                54640</span></span>
+<span><span class="co">## 6:                55300</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="extract-earthquakes-steps">Extract earthquakes steps<a class="anchor" aria-label="anchor" href="#extract-earthquakes-steps"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    station_name date_YYMMDD step_type_code treshold_distance_km</span></span>
+<span><span class="co">##          &lt;char&gt;      &lt;char&gt;          &lt;int&gt;               &lt;char&gt;</span></span>
+<span><span class="co">## 1:         1LSU     17SEP08              2             2041.738</span></span>
+<span><span class="co">##    distance_station_to_epicenter_km event_magnitude usgs_event_id</span></span>
+<span><span class="co">##                               &lt;num&gt;           &lt;num&gt;        &lt;char&gt;</span></span>
+<span><span class="co">## 1:                         1733.136             8.2    us2000ahv0</span></span>
+<span><span class="co">##    modified_julian_date</span></span>
+<span><span class="co">##                   &lt;num&gt;</span></span>
+<span><span class="co">## 1:                58004</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="plot-gnss-position-time-series">Plot GNSS position time series<a class="anchor" aria-label="anchor" href="#plot-gnss-position-time-series"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"E"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
+<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-2.png" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"E"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-3.png" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-4.png" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
 
