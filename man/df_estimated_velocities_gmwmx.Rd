@@ -25,6 +25,6 @@ A data frame with 1202 rows and 12 variables:
 df_estimated_velocities_gmwmx
 }
 \description{
-Estimated northward and eastward velocity and standard deviation for a subset of 1303 GNSS station with more than 20 years of daily data.
+Estimated northward and eastward velocity and standard deviation for a subset of 1202 GNSS station with more than 10 years of daily data.
 }
 \keyword{datasets}

@@ -26,10 +26,14 @@ The data `df_estimated_velocities_gmwmx` contains estimated northward and eastwa
 
 
 Let us first load the `gmwmx2` package.
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(dplyr)
 library(gmwmx2)
 library(sf)
+```
+
+
+```{r}
 data("df_estimated_velocities_gmwmx")
 ```
 
@@ -53,9 +57,11 @@ make_transparent <- function(colors, alpha = 0.5) {
 
   return(transparent_colors)
 }
+```
 
 
-
+# Plot estimated North/East velocities for all estimated stations 
+```{r}
 # plot all stations
 par(mar=c(2.5,3.5,1,1))
 
@@ -129,8 +135,8 @@ for (i in seq(nrow(df_estimated_velocities_gmwmx))) {
 }
 ```
 
-# Zooming in the USA
-```{r, eval=FALSE}
+# Zoom in the United States
+```{r, eval=TRUE}
 # Zoom in the US
 # set plot limits
 xlims = c(-130, -60)
