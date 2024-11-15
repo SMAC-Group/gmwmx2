@@ -400,7 +400,23 @@
 <span>       labels <span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">City</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
 <span>       adj<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>,col<span class="op">=</span><span class="st">"black"</span>,</span>
 <span>       cex <span class="op">=</span> <span class="va">cex_size_city</span> <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># add a legend</span></span>
+<span><span class="va">twenty_mm_per_year</span> <span class="op">=</span> <span class="fl">.02</span></span>
+<span><span class="va">twenty_mm_per_year_mm_per_year_scaled</span> <span class="op">=</span> <span class="va">twenty_mm_per_year</span><span class="op">*</span><span class="va">scale_arrow</span></span>
+<span><span class="va">x_start</span> <span class="op">=</span> <span class="va">xlims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">-</span><span class="fl">5</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="va">ylims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">+</span><span class="fl">.3</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html" class="external-link">segments</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="va">x_start</span>, y0 <span class="op">=</span> <span class="va">y</span>, x1 <span class="op">=</span> <span class="va">x_start</span><span class="op">+</span><span class="va">twenty_mm_per_year_mm_per_year_scaled</span>, y1 <span class="op">=</span> <span class="va">y</span><span class="op">)</span></span>
+<span><span class="va">delta_y</span><span class="op">=</span> <span class="fl">.1</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html" class="external-link">segments</a></span><span class="op">(</span>x0 <span class="op">=</span> <span class="va">x_start</span>, x1 <span class="op">=</span> <span class="va">x_start</span>, y0 <span class="op">=</span> <span class="va">y</span><span class="op">+</span><span class="va">delta_y</span>, y1 <span class="op">=</span> <span class="va">y</span><span class="op">-</span><span class="va">delta_y</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html" class="external-link">segments</a></span><span class="op">(</span>x0 <span class="op">=</span>  <span class="va">x_start</span><span class="op">+</span><span class="va">twenty_mm_per_year_mm_per_year_scaled</span>, x1 <span class="op">=</span>  <span class="va">x_start</span><span class="op">+</span><span class="va">twenty_mm_per_year_mm_per_year_scaled</span>, y0 <span class="op">=</span> <span class="va">y</span><span class="op">+</span><span class="va">delta_y</span>, y1 <span class="op">=</span> <span class="va">y</span><span class="op">-</span><span class="va">delta_y</span><span class="op">)</span></span>
+<span><span class="va">txt_size</span> <span class="op">=</span> <span class="fl">.8</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x_start</span><span class="op">+</span><span class="va">twenty_mm_per_year_mm_per_year_scaled</span><span class="op">/</span><span class="fl">2</span>,</span>
+<span>     y <span class="op">=</span> <span class="va">y</span><span class="op">+</span><span class="fl">.1</span>,</span>
+<span>     pos <span class="op">=</span> <span class="fl">3</span>,cex<span class="op">=</span><span class="va">txt_size</span>,</span>
+<span>     labels <span class="op">=</span> <span class="st">"20 mm/year"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_small_network_files/figure-html/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;"></p>
   </div>
 
