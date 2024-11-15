@@ -167,7 +167,10 @@ elevation_raster_italy <- raster(elevation_data_italy)
 # create combined raster
 combined_raster <- merge(elevation_raster_swiss, elevation_raster_france,
                          elevation_raster_italy)
+```
 
+# Plot estimated N-E velocities and associated uncertainty
+```{r}
 # sett plot limits
 xlims = c(2,7)
 ylims = c(44, 48)
@@ -193,7 +196,7 @@ breaks <- seq(min_val, max_val, length.out = num_colors + 1)
 world <- geodata::world(path = tmp)
 
 # Filter for the countries of interest
-countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany", "Austria", "Liechtenstein"), ]
+countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany"), ]
 countries_sf <- st_as_sf(countries)
 
 
