@@ -201,13 +201,19 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
    # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "E")
    # plot(fit2)
 
+  # check class
+  if(class(x) != "gnss_ts_ngl"){
+    stop("Argument `x` should be a `gnss_ts_ngl` object")
+  }
+
+  # check stochastic model
   if(!stochastic_model %in% c("wn + pl", "wn + fl")){
-    stop("Argument stochastic_model should be either 'wn + fl' or 'wn + pl'")
+    stop("Argument `stochastic_model` should be either 'wn + fl' or 'wn + pl'")
   }
 
   # check that component is either N, E or V
   if (!component %in% c("N", "E", "V")) {
-    stop("Argument `component` should take either value `N` or `E` or `V`.")
+    stop("Argument `component` should take either value `N` or `E` or `V`")
   }
 
   # check that n_seasonal is either 1 or 2
