@@ -96,7 +96,7 @@ for(station_index in seq_along(df_network$station_name)){
   fit_N = gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
   fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
   df_estimated_velocities[station_index, 1] = station_name
-  df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
+  df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2])
   df_estimated_velocities[station_index, 7] =   dim(fit_N$design_matrix_X)[1]
 
   cat(paste0(station_index ,"/", length(df_network$station_name), "\n"))

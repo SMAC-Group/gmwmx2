@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 ```
 
 
-
+# Load packages
 ```{r, warning=FALSE, message=FALSE}
 library(gmwmx2)
 library(dplyr)
@@ -36,7 +36,7 @@ library(sf)
 
 ```
 
-
+# Define some functions for plotting
 ```{r}
 # define some function for plotting
 ellipse <- function (hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = F, npoints = 100, fill = F, fillColor = "black", ...) {
@@ -104,8 +104,11 @@ make_transparent <- function(colors, alpha = 0.5) {
 
   return(transparent_colors)
 }
+```
 
 
+# Estimate a small network in France
+```{r}
 # Estimate little network in France
 all_station = download_all_stations_ngl()
 
@@ -115,7 +118,6 @@ selected_station =c("BSCN","CERN" ,"SCDA", "GLRA", "STPS")
 df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
 
-# create data frame where
 df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 6))
 for(station_index in seq_along(df_network$station_name)){
   station_name = df_network$station_name[station_index]
@@ -125,10 +127,12 @@ for(station_index in seq_along(df_network$station_name)){
   fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
   df_estimated_velocities[station_index, 1] = station_name
   df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
+
   cat(paste0("Processing station ",station_name, " ",  station_index ,"/", length(df_network$station_name), "\n"))
 }
 
-colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "n_data")
+colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "time_series_length")
+
 df_estimated_velocities$estimated_trend_N_scaled = df_estimated_velocities$estimated_trend_N * 365.25
 df_estimated_velocities$std_estimated_trend_N_scaled = df_estimated_velocities$std_estimated_trend_N * 365.25
 df_estimated_velocities$estimated_trend_E_scaled = df_estimated_velocities$estimated_trend_E  * 365.25
@@ -144,7 +148,11 @@ df_estimated_velocities_and_location = dplyr::left_join(df_estimated_velocities,
 
 # print estimated North and East velocities
 head(df_estimated_velocities)
+```
 
+
+# Load elevation data and create raster for plot
+```{r}
 # load elevation data
 tmp=tempdir()
 elevation_data_swiss <- geodata::elevation_30s(country = "Switzerland", path = tmp)
