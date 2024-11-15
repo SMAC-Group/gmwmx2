@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 library(gmwmx2)
 library(dplyr)
 library(raster)
-library(rnaturalearth)
+# library(rnaturalearth)
 library(geodata)
 library(shape)
 library(tibble)
@@ -181,10 +181,10 @@ num_colors <- length(custom_colors)
 breaks <- seq(min_val, max_val, length.out = num_colors + 1)
 
 # Get the country boundaries using rnaturalearth
-world <- ne_countries(scale = "medium", returnclass = "sf")
+# world <- ne_countries(scale = "medium", returnclass = "sf")
 
 # Filter for the countries of interest
-countries <- world[world$admin %in% c("Switzerland", "France", "Italy", "Germany","Austria", "Liechtenstein"), ]
+# countries <- world[world$admin %in% c("Switzerland", "France", "Italy", "Germany","Austria", "Liechtenstein"), ]
 
 # plot
 plot(NA, xlim = xlims, ylim = ylims, las = 1,
@@ -224,7 +224,7 @@ scale_ellipses=3500
 my_col_trans = make_transparent(my_col,alpha = .3)
 
 # Overlay country boundaries
-plot(countries$geometry, add = TRUE, border = "black", lwd = 2)
+# plot(countries$geometry, add = TRUE, border = "black", lwd = 2)
 
 # df_estimated_velocities_and_location=df_estimated_velocities_and_location%>%filter(station_name!="MNBL")
 
