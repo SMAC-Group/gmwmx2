@@ -86,7 +86,7 @@ arma::vec vec_mean_autocov_powerlaw( double kappa, int N) {
   return(vec_average_autocov2);
 }
 
-
+// Construct the variance covariance of the powerl-law process efficiently using diagonal views and summing products of hi terms with a difference being the index of the superdiagonal
 // [[Rcpp::export]]
 arma::mat var_cov_powerlaw_cpp(double sigma2, double kappa, int n) {
   arma::vec vec_h = compute_h_cpp(kappa, n);
@@ -136,7 +136,7 @@ arma::vec compute_power_of_a_base(int x, int J) {
 
 
 
-
+// Compute WV based on result from Zhang and Xu. Note that the Equation in both result is the same summation but that Zhang consider the autocovariance while Xu consider the average autocovariance per super diagonal of the covariance matrix of the process.
 // [[Rcpp::export]]
 arma::vec autocovariance_to_wv(const arma::vec& acf, const arma::vec& tau) {
   // Compute max scale
