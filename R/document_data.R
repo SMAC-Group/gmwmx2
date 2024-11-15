@@ -1,7 +1,7 @@
 #'
 #' Estimated northward and eastward velocity and their standard deviation using the GMWMX estimator
 #'
-#' @description Estimated northward and eastward velocity and standard deviation for a subset of 1303 GNSS station with more than 20 years of daily data.
+#' @description Estimated northward and eastward velocity and standard deviation for a subset of 1202 GNSS station with more than 10 years of daily data.
 #'
 #' @format A data frame with 1202 rows and 12 variables:
 #' \describe{
