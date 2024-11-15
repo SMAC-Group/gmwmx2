@@ -109,7 +109,7 @@ convert_to_mjd_2 <- function(vec_date) {
 
 
 
-#' Download all stations name and location from the Nevada Geodetic Laboratory (NGL)
+#' Download all stations name and location from the Nevada Geodetic Laboratory
 #' @export
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
 #' @examples
@@ -131,7 +131,7 @@ download_all_stations_ngl <- function() {
 
 
 
-#' Download estimated velocities provided by the Nevada Geodetic Laboratory (NGL) for all stations.
+#' Download estimated velocities provided by the Nevada Geodetic Laboratory for all stations.
 #' @export
 #' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
 #' @examples

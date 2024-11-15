@@ -2,7 +2,7 @@
 % Please edit documentation in R/ngl.R
 \name{download_estimated_velocities_ngl}
 \alias{download_estimated_velocities_ngl}
-\title{Download estimated velocities provided by the Nevada Geodetic Laboratory (NGL) for all stations.}
+\title{Download estimated velocities provided by the Nevada Geodetic Laboratory for all stations.}
 \usage{
 download_estimated_velocities_ngl()
 }
@@ -10,7 +10,7 @@ download_estimated_velocities_ngl()
 Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
 }
 \description{
-Download estimated velocities provided by the Nevada Geodetic Laboratory (NGL) for all stations.
+Download estimated velocities provided by the Nevada Geodetic Laboratory for all stations.
 }
 \examples{
 df_estimated_velocities = download_estimated_velocities_ngl()

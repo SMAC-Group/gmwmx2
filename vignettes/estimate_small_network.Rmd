@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(gmwmx2)
 library(dplyr)
 library(raster)
@@ -32,7 +32,12 @@ library(geodata)
 library(shape)
 library(tibble)
 library(tidygeocoder)
+library(sf)
 
+```
+
+
+```{r}
 # define some function for plotting
 ellipse <- function (hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = F, npoints = 100, fill = F, fillColor = "black", ...) {
   a <- seq(0, 2 * pi, length = npoints + 1)
@@ -120,7 +125,7 @@ for(station_index in seq_along(df_network$station_name)){
   fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
   df_estimated_velocities[station_index, 1] = station_name
   df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
-  cat(paste0(station_index ,"/", length(df_network$station_name), "\n"))
+  cat(paste0("Processing station ",station_name, " ",  station_index ,"/", length(df_network$station_name), "\n"))
 }
 
 colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "n_data")
@@ -146,17 +151,12 @@ elevation_data_swiss <- geodata::elevation_30s(country = "Switzerland", path = t
 elevation_data_france <- geodata::elevation_30s(country = "France", path = tmp)
 elevation_data_italy <- geodata::elevation_30s(country = "Italy", path = tmp)
 
-# elevation_data_germany <- geodata::elevation_30s(country = "Germany", path = tmp)
-# elevation_data_austria <- geodata::elevation_30s(country = "Austria", path = tmp)
-# elevation_data_liechtenstein <- geodata::elevation_30s(country = "Liechtenstein", path = tmp)
-
 # load raster
 elevation_raster_swiss <- raster(elevation_data_swiss)
 elevation_raster_france <- raster(elevation_data_france)
 elevation_raster_italy <- raster(elevation_data_italy)
-# elevation_raster_germany <- raster(elevation_data_germany)
-# elevation_raster_austria <- raster(elevation_data_austria)
-# elevation_raster_liechtenstein <- raster(elevation_data_liechtenstein)
+
+# create combined raster
 combined_raster <- merge(elevation_raster_swiss, elevation_raster_france,
                          elevation_raster_italy)
 
@@ -180,11 +180,14 @@ max_val <- max(raster_values, na.rm = TRUE)
 num_colors <- length(custom_colors)
 breaks <- seq(min_val, max_val, length.out = num_colors + 1)
 
-# Get the country boundaries using rnaturalearth
-# world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Get the country boundaries using geodata
+world <- geodata::world(path = tmp)
 
 # Filter for the countries of interest
-# countries <- world[world$admin %in% c("Switzerland", "France", "Italy", "Germany","Austria", "Liechtenstein"), ]
+countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany", "Austria", "Liechtenstein"), ]
+countries_sf <- st_as_sf(countries)
+
 
 # plot
 plot(NA, xlim = xlims, ylim = ylims, las = 1,
@@ -224,9 +227,7 @@ scale_ellipses=3500
 my_col_trans = make_transparent(my_col,alpha = .3)
 
 # Overlay country boundaries
-# plot(countries$geometry, add = TRUE, border = "black", lwd = 2)
-
-# df_estimated_velocities_and_location=df_estimated_velocities_and_location%>%filter(station_name!="MNBL")
+plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
 
 for (i in seq(nrow(df_estimated_velocities_and_location))) {
 
@@ -263,7 +264,6 @@ text(x = df_estimated_velocities_and_location$longitude2, y=df_estimated_velocit
      labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = 0.8, col = "black")
 
 # add city
-
 df_city = tibble(address=c("Genève",  "Clermont-Ferrand", "Dijon"))
 
 df_geo <- df_city %>%
@@ -274,8 +274,6 @@ df_geo <- df_city %>%
     global_params = list(address = 'address'),
     cascade = FALSE
   )
-
-
 
 df_city_2 = cbind(df_city, df_geo)
 df_city_2$City = df_city_2$address

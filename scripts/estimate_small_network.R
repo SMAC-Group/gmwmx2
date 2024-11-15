@@ -82,7 +82,7 @@ all_station = download_all_stations_ngl()
 
 # download selected stations
 # selected_station = c("BSCN")
-selected_station = c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
+# selected_station = c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
 selected_station = c("BSCN")
 df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
@@ -158,10 +158,12 @@ num_colors <- length(custom_colors)
 breaks <- seq(min_val, max_val, length.out = num_colors + 1)
 
 # Get the country boundaries using rnaturalearth
-world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- geodata::world(path = tmp)
 
 # Filter for the countries of interest
-countries <- world[world$admin %in% c("Switzerland", "France", "Italy", "Germany","Austria", "Liechtenstein"), ]
+countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany", "Austria", "Liechtenstein"), ]
+library(sf)
+countries_sf <- st_as_sf(countries)
 
 # plot
 plot(NA, xlim = xlims, ylim = ylims, las = 1,
@@ -201,7 +203,7 @@ scale_ellipses=3500
 my_col_trans = make_transparent(my_col,alpha = .3)
 
 # Overlay country boundaries
-plot(countries$geometry, add = TRUE, border = "black", lwd = 2)
+plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
 
 # df_estimated_velocities_and_location=df_estimated_velocities_and_location%>%filter(station_name!="MNBL")
 
