@@ -17,7 +17,11 @@
 Extract estimated parameters from a \code{fit_gnss_ts_ngl}
 }
 \examples{
-x <- download_station_ngl("CHML")
-fit <- gmwmx2(x, n_seasonal = 2, component = "N")
-summary(fit)
+x <- download_station_ngl("P820")
+fit1 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+summary(fit1)
+summary(fit1, scale_parameters=TRUE)
+fit2 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+summary(fit2)
+
 }
