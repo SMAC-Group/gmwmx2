@@ -169,7 +169,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.
 #' @param x A \code{gnss_ts_ngl} object.
 #' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.
-#' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.
+#' @param vec_earthquakes_relaxation_time A \code{vector} specifying the relaxation time for each earthquakes indicated for the time series.
 #' @param component A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).
 #' @param toeplitz_approx_var_cov_wv A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.
 #' @param stochastic_model A \code{string} that specify the stochastic model considered for the residuals. Either "wn + fl" for white noise and flicker/pink noise or "wn + pl" for white noise and stationary power-law noise.
@@ -208,7 +208,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 
   # check stochastic model
   if(!stochastic_model %in% c("wn + pl", "wn + fl")){
-    stop("Argument `stochastic_model` should be either 'wn + fl' or 'wn + pl'")
+    stop("Argument `stochastic_model` should be either `wn + fl` or `wn + pl`")
   }
 
   # check that component is either N, E or V

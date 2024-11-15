@@ -18,7 +18,7 @@ gmwmx2(
 
 \item{n_seasonal}{An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.}
 
-\item{vec_earthquakes_relaxation_time}{A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.}
+\item{vec_earthquakes_relaxation_time}{A \code{vector} specifying the relaxation time for each earthquakes indicated for the time series.}
 
 \item{component}{A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).}
 
