@@ -183,6 +183,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' @export
 gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model="wn + fl") {
 
+
   # x = download_station_ngl("0ABN")
   # plot(x)
   # vec_earthquakes_relaxation_time <- NULL
