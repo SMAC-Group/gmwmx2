@@ -1,5 +1,5 @@
 ---
-title: "Plot large network of GNSS data"
+title: "Plot a large network of GNSS data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Plot large network of GNSS data}
