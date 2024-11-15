@@ -7,6 +7,8 @@ The GMWMX estimator is a computationally efficient estimator to estimate large s
 The `gmwmx2` `R` package  allows to estimate (i) functional/structural parameters, (ii) stochastic parameters describing the dependence structure and (iii) nuisance parameters of the missingness process of large regression models with dependent observations and missing data.
 To illustrate the capability of the GMWMX estimator, the `gmwmx2` `R` package provides functions to download an plot Global Navigation Satellite System (GNSS) position time series from the Nevada Geodetic Laboratory and allow to estimate linear model with a specific dependence structure modeled by composite stochastic processes, allowing to estimate tectonic velocities from GNSS position time series.
 
+Find vignettes with detailed examples as well as the user's manual at the [package website](https://smac-group.github.io/gmwmx2/index.html).
+
 Below are instructions on how to install and make use of the `gmwmx2` package.
 
 ## Installation Instructions

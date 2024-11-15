@@ -137,7 +137,7 @@ $$
 & \gamma(\tau)=\frac{\frac{\alpha}{2}+\tau-1}{-\frac{\alpha}{\alpha}+\tau} \gamma(\tau-1) \text { for } \tau>0
 \end{aligned}
 $$
-When the argument `stochastic_model` is set to `"wn + pl"`, the stochastic model considered includes both white noise and colored noise with the specified above autocovariance structure. The model is therefore stationary and the parameters estimated are: $\sigma^2_{W N}$, $\kappa$ (constrained to be greater than $-1$) and $\sigma^2_{P L}$.
+When the argument `stochastic_model` is set to `"wn + pl"`, the stochastic model considered includes both white noise and power-law with the specified above stationary autocovariance structure. The parameters estimated are: $\sigma^2_{W N}$, $\kappa$ (constrained to be greater than $-1$) and $\sigma^2_{P L}$.
 
 When the argument `stochastic_model` is set to `"wn + fl"`, the stochastic model considered includes both white noise and flicker noise (not stationary power-law noise with spectral index $\kappa=-1$) where the variance covariance of the flicker noise $\omega$ is obtained as follows (see e.g., [@bos2008fast]): 
 
