@@ -61,7 +61,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory (NGL)</a>
+      <a href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory</a>
     </li>
     <li>
       <a href="../articles/fit_model.html">Estimate a model</a>
@@ -454,14 +454,14 @@ specific component (North, East or Vertical) of one station.</p>
 <h2 id="plot-station">Plot Station<a class="anchor" aria-label="anchor" href="#plot-station"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">station_data</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">station_data</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fit_model_files/figure-html/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="plot-northing-component">Plot Northing component<a class="anchor" aria-label="anchor" href="#plot-northing-component"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">station_data</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">station_data</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fit_model_files/figure-html/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -567,7 +567,7 @@ returned in m/year with the argument <code>scale_parameters</code>.</p>
 <h2 id="plot-estimated-model">Plot estimated model<a class="anchor" aria-label="anchor" href="#plot-estimated-model"></a>
 </h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fit_model_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwmx2.html">gmwmx2</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, stochastic_model <span class="op">=</span> <span class="st">"wn + fl"</span><span class="op">)</span></span></code></pre></div>
@@ -614,7 +614,7 @@ returned in m/year with the argument <code>scale_parameters</code>.</p>
 <span><span class="co">##  P(Z_{i+1} = 1 | Z_{i} = 0): 0.31578947</span></span>
 <span><span class="co">##  \hat{E[Z]}: 0.99122807</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fit_model_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -624,7 +624,6 @@ returned in m/year with the argument <code>scale_parameters</code>.</p>
 <div id="ref-bevis2014" class="csl-entry">
 Bevis, Michael, and A. Brown. 2014. <span>“<span class="nocase">Trajectory Models and Reference Frames for Crustal Motion
 Geodesy</span>.”</span> <em>Journal of Geodesy</em> 88 (283): 283--311.
-<a href="https://doi.org/10.1007/s00190-013-0685-5" class="external-link">https://doi.org/10.1007/s00190-013-0685-5</a>.
 </div>
 <div id="ref-blewitt2024improved" class="csl-entry">
 Blewitt, Geoffrey. 2024. <span>“<span class="nocase">An Improved

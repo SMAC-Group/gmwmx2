@@ -61,7 +61,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory (NGL)</a>
+      <a href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory</a>
     </li>
     <li>
       <a href="../articles/fit_model.html">Estimate a model</a>
@@ -111,7 +111,7 @@ Laboratory</h1>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_stations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_all_stations_ngl.html">download_all_stations_ngl</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_stations</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">all_stations</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    station_name  latitude longitude    height</span></span>
 <span><span class="co">##          &lt;char&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
 <span><span class="co">## 1:         00NA -12.46664 -229.1560 104.85105</span></span>
@@ -139,7 +139,7 @@ Laboratory</h1>
 <span><span class="co">## $class</span></span>
 <span><span class="co">## [1] "gnss_ts_ngl"</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    station_name    date decimal_year modified_julian_day gps_week</span></span>
 <span><span class="co">##          &lt;char&gt;  &lt;char&gt;        &lt;num&gt;               &lt;int&gt;    &lt;int&gt;</span></span>
 <span><span class="co">## 1:         1LSU 03APR23     2003.307               52752     1215</span></span>
@@ -209,7 +209,7 @@ Laboratory</h1>
 <h2 id="extract-equipment-or-software-changes-steps">Extract equipment or software changes steps<a class="anchor" aria-label="anchor" href="#extract-equipment-or-software-changes-steps"></a>
 </h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    station_name date_YYMMDD step_type_code            type_equipment_change</span></span>
 <span><span class="co">##          &lt;char&gt;      &lt;char&gt;          &lt;int&gt;                           &lt;char&gt;</span></span>
 <span><span class="co">## 1:         1LSU     03OCT08              1                  Logfile_Changed</span></span>
@@ -231,7 +231,7 @@ Laboratory</h1>
 <h2 id="extract-earthquakes-steps">Extract earthquakes steps<a class="anchor" aria-label="anchor" href="#extract-earthquakes-steps"></a>
 </h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    station_name date_YYMMDD step_type_code treshold_distance_km</span></span>
 <span><span class="co">##          &lt;char&gt;      &lt;char&gt;          &lt;int&gt;               &lt;char&gt;</span></span>
 <span><span class="co">## 1:         1LSU     17SEP08              2             2041.738</span></span>
@@ -246,16 +246,16 @@ Laboratory</h1>
 <h2 id="plot-gnss-position-time-series">Plot GNSS position time series<a class="anchor" aria-label="anchor" href="#plot-gnss-position-time-series"></a>
 </h2>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
 <p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-2.png" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"E"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"E"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-3.png" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-4.png" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
