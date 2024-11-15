@@ -1,29 +1,5 @@
----
-title: "Estimate a small network of GNSS station"
-output: rmarkdown::html_vignette
-bibliography: REFERENCES.bib
-vignette: >
-  %\VignetteIndexEntry{Estimate a small network of GNSS station}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
+rm(list=ls())
 
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  fig.width = 10, # Set default plot width (adjust as needed)
-  fig.height = 8, # Set default plot height (adjust as needed)
-  fig.align = "center" # Center align all plots
-)
-
-# knitr::opts_chunk$set(eval = FALSE)
-
-```
-
-
-# Load packages
-```{r, warning=FALSE, message=FALSE}
 library(gmwmx2)
 library(dplyr)
 library(raster)
@@ -32,12 +8,7 @@ library(geodata)
 library(shape)
 library(tibble)
 library(tidygeocoder)
-library(sf)
 
-```
-
-# Define some functions for plotting
-```{r}
 # define some function for plotting
 ellipse <- function (hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = F, npoints = 100, fill = F, fillColor = "black", ...) {
   a <- seq(0, 2 * pi, length = npoints + 1)
@@ -104,20 +75,85 @@ make_transparent <- function(colors, alpha = 0.5) {
 
   return(transparent_colors)
 }
-```
+
+# estimate all large stations
+df_estimated_velocities = download_estimated_velocities_ngl()
+
+# filter only long times series
+df_estimated_velocities_long =  df_estimated_velocities %>% filter(time_series_duration_year >20)
+
+# plot all stations with more than 20 years of daily data
+par(mar=c(2.5,3.5,1,1))
+
+# sett plot limits
+xlims = c(-180, 180)
+ylims = c(-90,90)
+
+# plot
+plot(NA, xlim = xlims, ylim = ylims, las = 1,
+     ylab = "",xlab="",
+     xaxt="n", yaxt="n"
+)
+
+# Define longitude labels (X° E/W)
+lon_labels <- sapply(seq(-180, 180, by=30), function(x) {
+  if (x < 0) paste0(abs(x), "° W")
+  else if (x > 0) paste0(x, "° E")
+  else "0°"
+})
+
+# Define latitude labels (X° N/S)
+lat_labels <- sapply(seq(-90, 90, by=20), function(y) {
+  if (y < 0) paste0(abs(y), "° S")
+  else if (y > 0) paste0(y, "° N")
+  else "0°"
+})
+
+# Plot the axes
+axis(side = 1, at = seq(-180, 180, by=30), labels = lon_labels)
+axis(side = 2, at = seq(-90, 90, by=20), labels = lat_labels, las=1)
+
+tmp=tempdir()
+world <- geodata::world(path = tmp)
+countries_sf <- st_as_sf(world)
+plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
+
+# transform longitude
+df_estimated_velocities_long$longitude2 <- ifelse(df_estimated_velocities_long$longitude < -180,
+                                                  df_estimated_velocities_long$longitude + 360,
+                                                  df_estimated_velocities_long$longitude)
+
+my_col = c("#e96bff")
+my_col_trans = make_transparent(my_col,alpha = .4)
 
 
-# Estimate a small network in France
-```{r}
+# add points for all stations
+points(x=df_estimated_velocities_long$longitude2,
+       y=df_estimated_velocities_long$latitude, col=my_col_trans, pch=16)
+
+
+vec_selected_station = df_estimated_velocities_long %>% pull(station_name)
+
+
+
+
+#-------------------------------------
+# plot all stations
+# sett plot limits
+xlims = c(2,7)
+ylims = c(44, 48)
+
 # Estimate little network in France
 all_station = download_all_stations_ngl()
 
 # download selected stations
-selected_station =c("BSCN","CERN" ,"SCDA", "GLRA", "STPS")
+# selected_station = c("BSCN")
+selected_station = c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
 # selected_station = c("BSCN")
 df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
 
+# create data frame where
 df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 6))
 for(station_index in seq_along(df_network$station_name)){
   station_name = df_network$station_name[station_index]
@@ -128,11 +164,11 @@ for(station_index in seq_along(df_network$station_name)){
   df_estimated_velocities[station_index, 1] = station_name
   df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
 
-  cat(paste0("Processing station ",station_name, " ",  station_index ,"/", length(df_network$station_name), "\n"))
+
+  cat(paste0(station_index ,"/", length(df_network$station_name), "\n"))
 }
 
-colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "time_series_length")
-
+colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E",  "time_series_length")
 df_estimated_velocities$estimated_trend_N_scaled = df_estimated_velocities$estimated_trend_N * 365.25
 df_estimated_velocities$std_estimated_trend_N_scaled = df_estimated_velocities$std_estimated_trend_N * 365.25
 df_estimated_velocities$estimated_trend_E_scaled = df_estimated_velocities$estimated_trend_E  * 365.25
@@ -149,39 +185,33 @@ df_estimated_velocities_and_location = dplyr::left_join(df_estimated_velocities,
 # print estimated North and East velocities
 head(df_estimated_velocities)
 
-knitr::kable(df_estimated_velocities)
-
-```
-
-
-
-# Load elevation data and create raster for plot
-```{r}
 # load elevation data
 tmp=tempdir()
 elevation_data_swiss <- geodata::elevation_30s(country = "Switzerland", path = tmp)
 elevation_data_france <- geodata::elevation_30s(country = "France", path = tmp)
 elevation_data_italy <- geodata::elevation_30s(country = "Italy", path = tmp)
 
+# elevation_data_germany <- geodata::elevation_30s(country = "Germany", path = tmp)
+# elevation_data_austria <- geodata::elevation_30s(country = "Austria", path = tmp)
+# elevation_data_liechtenstein <- geodata::elevation_30s(country = "Liechtenstein", path = tmp)
+
 # load raster
 elevation_raster_swiss <- raster(elevation_data_swiss)
 elevation_raster_france <- raster(elevation_data_france)
 elevation_raster_italy <- raster(elevation_data_italy)
-
-# create combined raster
+# elevation_raster_germany <- raster(elevation_data_germany)
+# elevation_raster_austria <- raster(elevation_data_austria)
+# elevation_raster_liechtenstein <- raster(elevation_data_liechtenstein)
 combined_raster <- merge(elevation_raster_swiss, elevation_raster_france,
                          elevation_raster_italy)
-```
 
-# Plot estimated N-E velocities and associated uncertainty
-```{r}
 # sett plot limits
 xlims = c(2,7)
 ylims = c(44, 48)
 
 # Custom color scale
 custom_colors <- c(
-   "#33660059", "#33CB6659", "#BAE39159", "#FEDBB859", "#F2C98859",
+  "#33660059", "#33CB6659", "#BAE39159", "#FEDBB859", "#F2C98859",
   "#E5B75859", "#D8A52759", "#A7991F59", "#A38F1959", "#A1851359", "#9E7B0D59", "#9B710759",
   "#98660059", "#A1595959", "#B1767659", "#B6929259", "#C1AFAF59", "#CBCBCB59", "#E4E4E459", "#FEFEFE59"
 )
@@ -195,15 +225,26 @@ max_val <- max(raster_values, na.rm = TRUE)
 num_colors <- length(custom_colors)
 breaks <- seq(min_val, max_val, length.out = num_colors + 1)
 
-
-# Get the country boundaries using geodata
+# Get the country boundaries using rnaturalearth
 world <- geodata::world(path = tmp)
 
 # Filter for the countries of interest
-countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany"), ]
+countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany", "Austria", "Liechtenstein"), ]
+library(sf)
+
+world <- geodata::world(path = tmp)
 countries_sf <- st_as_sf(countries)
 
 
+
+
+
+
+library(tikzDevice)
+tikz(file  = "scripts/graphs/fit_station.tex", width = 7, height = 7, standAlone = T)
+
+
+par(mar=c(2.5,2.9,1,1))
 # plot
 plot(NA, xlim = xlims, ylim = ylims, las = 1,
      ylab = "",xlab="",
@@ -228,7 +269,7 @@ for (i in seq(-90, 90, by = 2)) {
   abline(h = i, col = "grey80", lty=5)
 }
 
-# add points for station data
+# add points
 points(df_network$longitude2, df_network$latitude, pch=16)
 
 
@@ -242,7 +283,12 @@ scale_ellipses=3500
 my_col_trans = make_transparent(my_col,alpha = .3)
 
 # Overlay country boundaries
+
+world <- geodata::world(path = tmp)
+countries_sf <- st_as_sf(countries)
 plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
+
+# df_estimated_velocities_and_location=df_estimated_velocities_and_location%>%filter(station_name!="MNBL")
 
 for (i in seq(nrow(df_estimated_velocities_and_location))) {
 
@@ -275,14 +321,14 @@ for (i in seq(nrow(df_estimated_velocities_and_location))) {
 }
 
 # add
+cex_txt = 1.1
 text(x = df_estimated_velocities_and_location$longitude2, y=df_estimated_velocities_and_location$latitude,
-     labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = 0.8, col = "black")
+     labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = cex_txt, col = "black")
 
-# define cities
+# add city
+
 df_city = tibble(address=c("Genève",  "Clermont-Ferrand", "Dijon"))
 
-
-# Load geolocalisation of cities
 df_geo <- df_city %>%
   geocode_combine(
     queries = list(
@@ -292,20 +338,20 @@ df_geo <- df_city %>%
     cascade = FALSE
   )
 
+
+
 df_city_2 = cbind(df_city, df_geo)
 df_city_2$City = df_city_2$address
 
-# Add city to map
-points(x=df_city_2$lon, y= df_city_2$lat, pch=15, col="black")
+points(x=df_city_2$lon, y= df_city_2$lat, pch=15, col="black", cex=1.2)
 
-cex_size_city = .7
+cex_size_city = 1.1
 for(i in seq(dim(df_city_2)[1])){
   text(x=df_city_2$lon[i], y = df_city_2$lat[i],
        labels = df_city_2$City[i],
        adj=c(0,2),col="black",
        cex = cex_size_city )
 }
-
 
 # add a legend
 twenty_mm_per_year = .02
@@ -322,5 +368,9 @@ text(x = x_start+twenty_mm_per_year_mm_per_year_scaled/2,
      pos = 3,cex=txt_size,
      labels = "20 mm/year")
 
-```
+
+dev.off()
+# df_estimated_velocities_and_location$estimated_trend_N_scaled * 1000
+system("pdflatex -output-directory='scripts/graphs' scripts/graphs/fit_station.tex")
+
 

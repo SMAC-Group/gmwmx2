@@ -167,6 +167,16 @@ countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "German
 library(sf)
 countries_sf <- st_as_sf(countries)
 
+
+
+
+
+
+library(tikzDevice)
+tikz(file  = "scripts/graphs/fit_station.tex", width = 7, height = 7, standAlone = T)
+
+
+par(mar=c(2.5,2.9,1,1))
 # plot
 plot(NA, xlim = xlims, ylim = ylims, las = 1,
      ylab = "",xlab="",
@@ -240,8 +250,9 @@ for (i in seq(nrow(df_estimated_velocities_and_location))) {
 }
 
 # add
+cex_txt = 1.1
 text(x = df_estimated_velocities_and_location$longitude2, y=df_estimated_velocities_and_location$latitude,
-     labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = 0.8, col = "black")
+     labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = cex_txt, col = "black")
 
 # add city
 
@@ -261,9 +272,9 @@ df_geo <- df_city %>%
 df_city_2 = cbind(df_city, df_geo)
 df_city_2$City = df_city_2$address
 
-points(x=df_city_2$lon, y= df_city_2$lat, pch=15, col="black")
+points(x=df_city_2$lon, y= df_city_2$lat, pch=15, col="black", cex=1.2)
 
-cex_size_city = .7
+cex_size_city = 1.1
 for(i in seq(dim(df_city_2)[1])){
   text(x=df_city_2$lon[i], y = df_city_2$lat[i],
        labels = df_city_2$City[i],
@@ -285,6 +296,10 @@ text(x = x_start+twenty_mm_per_year_mm_per_year_scaled/2,
      y = y+.1,
      pos = 3,cex=txt_size,
      labels = "20 mm/year")
+
+
+dev.off()
 # df_estimated_velocities_and_location$estimated_trend_N_scaled * 1000
+system("pdflatex -output-directory='scripts/graphs' scripts/graphs/fit_station.tex")
 
 
