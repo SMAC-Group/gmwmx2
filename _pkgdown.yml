@@ -16,6 +16,9 @@ reference:
     - gmwmx2
     - summary.fit_gnss_ts_ngl
     - plot.fit_gnss_ts_ngl
+  - title: Data
+    contents:
+    - df_estimated_velocities_gmwmx
 
 
 
@@ -33,6 +36,8 @@ navbar:
       href: articles/fit_model.html
     - text: "Estimate a small network of GNSS station"
       href: articles/estimate_small_network.html
+    - text: "Plot a large network of GNSS station"
+      href: articles/plot_large_network.html
   right:
   - icon: fa-github
     href: https://github.com/SMAC-Group/gmwmx2
