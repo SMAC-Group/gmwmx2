@@ -105,7 +105,7 @@ make_transparent <- function(colors, alpha = 0.5) {
 all_station = download_all_stations_ngl()
 
 # download selected stations
-selected_station =c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
+selected_station =c("BSCN","CERN" ,"SCDA", "GLRA", "STPS")
 # selected_station = c("BSCN") 
 df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
