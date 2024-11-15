@@ -527,7 +527,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   end_time_gmwmx <- Sys.time()
 
   # get time gmwmx 1
-  time_gmwmx <- difftime(end_time_gmwmx, start_time_gmwmx, units = "secs")
+  time_gmwmx <- as.numeric(difftime(end_time_gmwmx, start_time_gmwmx, units = "secs"))
 
   ret <- list(
     "beta_hat" = beta_hat,
@@ -560,18 +560,21 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 #' @param scale_parameters A \code{boolean} indicating whether or not to scale estimated parameters so that the returned estimated trend is provided in m/year instead of m/day. Default is FALSE.
 #' @param ... Additional parameters.
 #' @examples
-#' x <- download_station_ngl("CHML")
+#' x <- download_station_ngl("P820")
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' summary(fit)
+#' summary(fit, scale_parameters=TRUE)
 #' @export
 summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
+
+
   # Print header
   cat("Summary of Estimated Model\n")
   cat("-------------------------------------------------------------\n")
   cat("Functional parameters\n")
   cat("-------------------------------------------------------------\n")
 
-  cat("Parameter             Estimate  Std_Deviation  95% CI Lower  95% CI Upper\n")
+  cat("Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper\n")
   cat("-------------------------------------------------------------\n")
 
 
@@ -589,14 +592,14 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
     # Print values with 8 decimal places, left-align the names, and align other columns
     if (scale_parameters) {
       cat(sprintf(
-        "%-20s %12.8f %12.8f %12.8f %12.8f\n",
+        "%-22s %12.8f %12.8f %12.8f %12.8f\n",
         names(object$beta_hat)[i],
         object$beta_hat[i] * 365.25, object$std_beta_hat[i] * 365.25,
         lower_ci, upper_ci
       ))
     } else {
       cat(sprintf(
-        "%-20s %12.8f %12.8f %12.8f %12.8f\n",
+        "%-22s %12.8f %12.8f %12.8f %12.8f\n",
         names(object$beta_hat)[i],
         object$beta_hat[i], object$std_beta_hat[i],
         lower_ci, upper_ci
@@ -625,7 +628,10 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
   cat(sprintf(" P(Z_{i+1} = 0 | Z_{i} = 1): %.8f\n", object$p_hat[1]))
   cat(sprintf(" P(Z_{i+1} = 1 | Z_{i} = 0): %.8f\n", object$p_hat[2]))
   cat(sprintf(" \\hat{E[Z]}: %.8f\n", object$p_star_hat))
-  cat("\n") # Adds a space between output blocks for clarity
+  cat("-------------------------------------------------------------\n")
+  cat(paste0("Running time: ", round(object$running_time, 2), " seconds" ,"\n"))
+  cat("-------------------------------------------------------------\n")
+
 
 }
 

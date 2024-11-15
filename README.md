@@ -4,7 +4,7 @@
 The `gmwmx2` `R` package implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160).
 The GMWMX estimator is a computationally efficient estimator to estimate large scale regression problems with complex dependence structure in presence of missing data.
 The `gmwmx2` `R` package  allows to estimate (i) functional/structural parameters, (ii) stochastic parameters describing the dependence structure and (iii) nuisance parameters of the missingness process of large regression models with dependent observations and missing data.
-To illustrate the capability of the GMWMX estimator, the `gmwmx2` `R` package provides functions to download an plot Global Navigation Satellite System (GNSS) position time series from the [Nevada Geodetic Laboratory](http://geodesy.unr.edu/) and allow to estimate linear model with a specific dependence structure modeled by composite stochastic processes, allowing to estimate tectonic velocities from GNSS position time series.
+To illustrate the capability of the GMWMX estimator, the `gmwmx2` `R` package provides functions to download an plot Global Navigation Satellite System (GNSS) position time series from the [Nevada Geodetic Laboratory](http://geodesy.unr.edu/) and allow to estimate linear model with a specific dependence structure modeled by composite stochastic processes, allowing to estimate tectonic velocities and crustal uplift from GNSS position time series.
 
 Find vignettes with detailed examples as well as the user's manual at the [package website](https://smac-group.github.io/gmwmx2/index.html).
 
