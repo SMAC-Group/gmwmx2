@@ -3,7 +3,7 @@ rm(list=ls())
 library(gmwmx2)
 library(dplyr)
 library(raster)
-library(rnaturalearth)
+# library(rnaturalearth)
 library(geodata)
 library(shape)
 library(tibble)
@@ -83,6 +83,7 @@ all_station = download_all_stations_ngl()
 # download selected stations
 # selected_station = c("BSCN")
 selected_station = c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
+selected_station = c("BSCN")
 df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
 
