@@ -1,3 +1,4 @@
+
 create_X_matrix <- function(all_mjd_index,
                             jumps,
                             n_seasonal,
@@ -165,7 +166,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 
 
 
-#' Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.
+#' Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.
 #' @param x A \code{gnss_ts_ngl} object.
 #' @param n_seasonal An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.
 #' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.
@@ -640,9 +641,28 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
   layout(mat_layout, heights = c(.1,.1, 1, 1))
   par(mar = c(0, 0, 0, 0))
   plot.new()
+  if(x$component=="N"){
+    axis_name = "Northing (m)"
+  }else if(x$component == "E"){
+    axis_name = "Easting (m)"
+  }else if(x$component=="V"){
+    axis_name = "Vertical (m)"
+  }
+
+
+  if(x$stochastic_model=="wn + pl"){
+    name_stoch ="White noise and Powerlaw"
+  }else if(x$stochastic_model=="wn + fl"){
+    name_stoch ="White noise and Flicker"
+  }
+  text_station = c(paste0("Station ", unique(x$df_position$station_name),
+                          ": ",
+                          axis_name," | ",
+                          name_stoch
+                          ))
   legend("center",
          horiz = T,
-         legend = c(paste0("Station ", unique(x$df_position$station_name))),
+         legend = text_station,
          bty = "n", cex=1.3
   )
   plot.new()

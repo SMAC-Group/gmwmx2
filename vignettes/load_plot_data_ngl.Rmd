@@ -1,8 +1,8 @@
 ---
-title: "Load and plot data from Nevada Geodetic Laboratory (NGL)"
+title: "Load and plot data from Nevada Geodetic Laboratory"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Load and plot data from Nevada Geodetic Laboratory (NGL)}
+  %\VignetteIndexEntry{Load and plot data from Nevada Geodetic Laboratory}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

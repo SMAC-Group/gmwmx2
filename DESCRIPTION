@@ -28,6 +28,13 @@ Imports:
     wv,
     Matrix
 Suggests: knitr,
-          rmarkdown
+          rmarkdown,
+          knitcitations,
+          raster,
+          rnaturalearth,
+          geodata,
+          shape,
+          tibble,
+          tidygeocoder
 URL: https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues

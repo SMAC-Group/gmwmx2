@@ -31,6 +31,8 @@ navbar:
       href: articles/load_plot_data_ngl.html
     - text: "Estimate a model"
       href: articles/fit_model.html
+    - text: "Estimate a small network of GNSS station"
+      href: articles/estimate_small_network.html
   right:
   - icon: fa-github
     href: https://github.com/SMAC-Group/gmwmx2

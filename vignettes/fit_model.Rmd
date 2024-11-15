@@ -1,8 +1,9 @@
 ---
-title: "Estimate a model, extract estimated parameters and plot estimated model"
+title: "Estimate a model"
 output: rmarkdown::html_vignette
+bibliography: REFERENCES.bib
 vignette: >
-  %\VignetteIndexEntry{Estimate a model, extract estimated parameters and plot estimated model}
+  %\VignetteIndexEntry{Estimate a model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +21,7 @@ knitr::opts_chunk$set(
 
 ```
 
-
+# Model and estimator
 The `gmwmx2` `R` package allows to estimate linear model with correlated residuals in presence of missing data.
 
 More precisely, we assume the following model:
@@ -57,22 +58,23 @@ We then estimate with the Maximum Likelihood Estimator the parameters $\boldsymb
 \end{aligned}
 \end{equation}
 
-We then estimate the parameters $\boldsymbol{\gamma}$ using a Generalized method of Wavelet Moments approach ([Guerrier, S., Skaloud, J., Stebler, Y., Victoria-Feser, M.-P., 2013](https://www.tandfonline.com/doi/full/10.1080/01621459.2013.799920)) and using the fact that the variance-covariance matrix of $\hat{\boldsymbol{\varepsilon}}$ is given by:
+We then estimate the parameters $\boldsymbol{\gamma}$ using a Generalized method of Wavelet Moments approach [@guerrier2013wavelet] and using the fact that the variance-covariance matrix of $\hat{\boldsymbol{\varepsilon}}$ is given by:
 
 
 $$\boldsymbol{\Sigma}_{\hat{\boldsymbol{\varepsilon}}}(\boldsymbol{\gamma}) = [\boldsymbol{\Lambda}(\hat{\boldsymbol{\vartheta}}) + \mu(\hat{\boldsymbol{\vartheta}})^2 \mathbf{1} \mathbf{1}^T ] \odot ( \boldsymbol{I} - \boldsymbol{P})\boldsymbol{\Sigma}(\boldsymbol{\gamma}) (\boldsymbol{I} - \boldsymbol{P})$$
 
 where $\boldsymbol{P} = \boldsymbol{X}(\boldsymbol{X}^T\boldsymbol{X})^{-1}\boldsymbol{X}^T$ and $\boldsymbol{I}$ is the identity matrix of dimension $n\times n$.
 
-More precisely, we rely on the result of [Xu, H., Guerrier, S., Molinari, R., Zhang, Y., (2017)](https://ieeexplore.ieee.org/abstract/document/7964734) that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in [Xu, H., Guerrier, S., Molinari, R., Zhang, Y., (2017)](https://ieeexplore.ieee.org/abstract/document/7964734) they generalize the results in [Zhang, N., F., (2008)](https://iopscience.iop.org/article/10.1088/0026-1394/45/5/009/meta) to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWM, which uses this form, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector (these elements being averages of the diagonal and super-diagonals of the covariance matrix).
+More precisely, we rely on the result of @xu2017study that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWM, which uses this form, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector (these elements being averages of the diagonal and super-diagonals of the covariance matrix).
 
 
+# Estimating tectonic velocities and crustal uplift
 
-While the GMWMX as described above and in more details in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160), is a general method for estimating large linear model with complex dependence structure in presence of missing data, the `gmwmx2` `R` package is currently developed specifically to estimate tectonic velocities from position times series in graticule distance coordinates system (GD) provided by the Nevada geodetic Laboratory [Blewitt, G., (2024)](https://link.springer.com/article/10.1007/s00190-023-01815-0).
+While the GMWMX as described above and in more details in @voirol2024inference, is a general method for estimating large linear model with complex dependence structure in presence of missing data, the `gmwmx2` `R` package is currently developed specifically to estimate tectonic velocities from position times series in graticule distance coordinates system (GD) provided by the Nevada geodetic Laboratory [@blewitt2024improved; @blewitt2018harnessing].
 
 ## Trajectory model
 
-Hence, to estimate the trajectory model (see e.g., [Bevis, M., Brown, A., (2014)](https://link.springer.com/article/10.1007/s00190-013-0685-5) for more details), we construct the design matrix $\boldsymbol{X}$ such that $i$-th component of the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows with $t_i$ representing the $i^{th}$ ordered time point (epoch) indicated in Modified Julian Date and $t_0$ representing the reference epoch located exactly in the middle of start and end point of
+To estimate the trajectory model (see e.g., @bevis2014 for more details), we construct the design matrix $\boldsymbol{X}$ such that $i$-th component of the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows with $t_i$ representing the $i^{th}$ ordered time point (epoch) indicated in Modified Julian Date and $t_0$ representing the reference epoch located exactly in the middle of start and end point of
 the time series:
 
 \begin{split}
@@ -80,7 +82,7 @@ the time series:
 &= a + b \left(t_{i} - t_0\right) +  \sum_{h=1}^{m}\left[c_{h} \sin \left(2 \pi f_{h} t_{i}\right)  + d_h \cos \left(2 \pi f_h t_i\right)\right] + \\& \sum_{j=1}^{r}e_j H\left(t_i - t_j\right) + \sum_{k = 1 }^{s} l_k \left[1- \exp\left(\frac{-(t_i-t_k)}{\tau_k}\right)\right]H\left(t_{i}-\tau_k\right) 
 \end{split}
 
-where $a$ is the initial position at the reference epoch $t_0$, $b$ is the velocity parameter, $c_h$  and $d_h$ are the periodic motion parameters ($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms, respectively with $f_1 = \frac{1}{365.25}$ and $f_2 = \frac{2}{365.25}$). The offset terms models earthquakes, equipment changes or human intervention in which $e_j$ is the magnitude of the step at epochs $t_j$, $r$ is the total number of offsets, $H$ is the Heaviside step function defined as $H(x):= \begin{cases}1, & x \geq 0 \\ 0, & x<0\end{cases}$ and the last term allow to model post-seismic deformation ([Sobrero, F. S., Bevos, M., G\'omez, D. D., Wang, F., (2020)](https://link.springer.com/article/10.1007/s00190-020-01413-4)) where $s$ is the number of post seismic relaxation time specified, $t_k$ is the time when the relaxation $k$
+where $a$ is the initial position at the reference epoch $t_0$, $b$ is the velocity parameter, $c_h$  and $d_h$ are the periodic motion parameters ($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms, respectively with $f_1 = \frac{1}{365.25}$ and $f_2 = \frac{2}{365.25}$). The offset terms models earthquakes, equipment changes or human intervention in which $e_j$ is the magnitude of the step at epochs $t_j$, $r$ is the total number of offsets, $H$ is the Heaviside step function defined as $H(x):= \begin{cases}1, & x \geq 0 \\ 0, & x<0\end{cases}$ and the last term allow to model post-seismic deformation (see e.g., @sobrero2020logarithmic) where $s$ is the number of post seismic relaxation time specified, $t_k$ is the time when the relaxation $k$
 starts in Modified Julian Date (MJD), $\tau_k$ is the relaxation period in days for the post-seismic relaxation $k$ and $l_k$ is the amplitude of the transient. Note that by default the estimates of the functional parameters  are provided in unit/day. 
 
 When loading data from a specific station using the function `gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory the position time series in  GD coordinates, the time steps associated with a equipment or software change and the time steps associated with an earthquake near the station. All these objects are stored in a object of class `gnss_ts_ngl`.  
@@ -89,11 +91,75 @@ When applying the function `gmwmx2::gmwmx2()` to an object of class `gnss_ts_ngl
 
 ## Stochastic model
 
-It is generally recognized that noise in GNSS time series is best described by a combination of colored noise plus white noise \cite{he2017review,langbein2008noise, williams2004error, bos2013fast} where the white noise generally model noise at high frequencies and the colored noise model the lower frequencies of the spectrum. In a large study on the noise properties of GNSS signals, \cite{he2019investigation} concluded that the optimal
-noise models for 80–90\% of GNSS time series signals are the power law and white noise model or flicker/pink noise with white noise model. The \texttt{gmwmx} \texttt{R} package currently support both stochastic model specification.
+It is generally recognized that noise in GNSS time series is best described by a combination of colored noise plus white noise [@he2017review; @langbein2008noise; @williams2004error; @bos2013fast] where the white noise generally model noise at high frequencies and the colored noise model the lower frequencies of the spectrum. In a large study on the noise properties of GNSS signals, \cite{he2019investigation} concluded that the optimal
+noise models for 80–90\% of GNSS time series signals are the power law and white noise model or  white noise and flicker/pink noise with model. The \texttt{gmwmx} \texttt{R} package currently support both stochastic model specification.
 
-Regarding the stochastic model, the `gmwmx2` package currently only support one stochastic model for the error term which is a combination of White noise and Flicker/pink noise which is the most common stochastic model considered for GNSS position time series ([He, X., Bos, M.S., Fernandes, R.M.S., 2019](https://link.springer.com/article/10.1007/s00190-019-01244-y)).
 
+More precisely, the power spectrum of a power-law noise has the following form:
+$$
+P(f)=P_0\left(f / f_s\right)^\kappa
+$$
+where $f$ is the frequency, $P_0$ is a constant, $f_s$ the sampling frequency and the exponent $\kappa$ is called the spectral index.
+
+Many stochastic noise can be expressed as such, for example, a spectral index $\kappa=0$ produces a white noise, a spectral index $\kappa=-2$ produces a red noise or random walk and a spectral index $\kappa=-1$ produce a flicker noise, also called pink noise. 
+
+@granger1980long and @hosking1981fractional showed that power-law noise with a spectral index between $-1$ and $1$ can be obtained by using fractional differencing of Gaussian noise:
+
+$$
+(1-B)^{-\kappa / 2} \mathbf{v}
+$$
+
+where $B$ is the backward-shift operator $\left(B v_i=v_{i-1}\right)$ and $\mathbf{v}$ a vector with independent and identically distributed (IID) Gaussian noise. 
+
+Following from Hosking's definition of the fractional differencing, we obtain
+
+$$
+\begin{aligned}
+(1-B)^{-\kappa / 2} & =\sum_{i=0}^{\infty}\binom{-\kappa / 2}{i}(-B)^i \\
+& =1-\frac{\kappa}{2} B-\frac{1}{2} \frac{\kappa}{2}\left(1-\frac{\kappa}{2}\right) B^2+\ldots \\
+& =\sum_{i=0}^{\infty} h_i
+\end{aligned}
+$$
+with the coefficient $h_i$ that can be computed using the following recurrence relation [@kasdin1992discrete]:
+
+$$
+\begin{aligned}
+h_0 & =1 \\
+h_i & =\left(i-\frac{\kappa}{2}-1\right) \frac{h_{i-1}}{i} \quad \text { for } i>0
+\end{aligned}
+$$
+
+Assuming an infinite sequence of zero-mean white noise $\mathbf{v}$, with variance $\sigma_{P L}^2$, and a spectral index $kappa > -1$ then the autocovariance $\gamma(\tau)=\operatorname{Cov}\left(X_t, X_{t+\tau}\right)=\mathbb{E}\left[\left(X_t-\mu\right)\left(X_{t+\tau}-\mu\right)\right]$ is [@bos2008fast]:
+
+$$
+\begin{aligned}
+& \gamma(0)=\sigma_{p l}^2 \frac{\Gamma(1-\alpha)}{\left(\Gamma\left(1-\frac{\alpha}{2}\right)\right)^2} \\
+& \gamma(\tau)=\frac{\frac{\alpha}{2}+\tau-1}{-\frac{\alpha}{\alpha}+\tau} \gamma(\tau-1) \text { for } \tau>0
+\end{aligned}
+$$
+When the argument `stochastic_model` is set to `"wn + pl"`, the stochastic model considered includes both white noise and colored noise with the specified above autocovariance structure. The model is therefore stationary and the parameters estimated are: $\sigma^2_{W N}$, $\kappa$ (constrained to be greater than $-1$) and $\sigma^2_{P L}$.
+
+When the argument `stochastic_model` is set to `"wn + fl"`, the stochastic model considered includes both white noise and flicker noise (not stationary power-law noise with spectral index $\kappa=-1$) where the variance covariance of the flicker noise $\omega$ is obtained as follows (see e.g., [@bos2008fast]):
+
+$$
+\operatorname{Cov}(\omega) = \sigma^2_{F L}\mathbf{U}^T \mathbf{U}
+$$
+
+where 
+$$
+\mathbf{U}=\left(\begin{array}{cccc}
+h_0 & h_1 & \ldots & h_n \\
+0 & h_0 & & h_{n-1} \\
+\vdots & & \ddots & \vdots \\
+0 & 0 & \ldots & h_0
+\end{array}\right)
+$$
+with the coefficients $h_i$ computed considering a spectral index $\kappa=-1$.
+
+The stochastic parameters estimated are: $\sigma^2_{W N}$, $\sigma^2_{F L}$ and $\kappa$ is fixed to $-1$.
+
+
+# Example of estimation
 Let us showcase how to estimate the tectonic velocity in for one specific component (North, East or Vertical) of one station.
 
 Let us first load the `gmwmx2` package.
@@ -108,7 +174,6 @@ station_data <- download_station_ngl("CHML")
 
 # Plot Station
 ```{r}
-# station_data$df_earthquakes
 plot(station_data)
 
 ```
@@ -122,16 +187,38 @@ plot(station_data, component = "N")
 
 # Estimate model on station data
 ```{r}
-fit <- gmwmx2(station_data, n_seasonal = 2, component = "N")
+fit1 <- gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
 ```
 
 # Extract estimated parameters
 ```{r}
-summary(fit)
+summary(fit1)
 ```
+
+By default, the estimated parameters are provided in m/day, we can optionally scale the estimated functional parameters so that they are returned in m/year with the argument `scale_parameters`.
+```{r}
+summary(fit1, scale_parameters = TRUE)
+```
+
+
 
 # Plot estimated model
 ```{r}
-plot(fit)
+plot(fit1)
+```
+```{r}
+fit2 <- gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
 ```
 
+```{r}
+summary(fit2)
+```
+
+```{r}
+plot(fit2)
+```
+
+
+
+
+# References

@@ -4,10 +4,96 @@ library(gmwmx2)
 library(dplyr)
 library(maps)
 
-
+# Estimate little network in Switzerland
 all_station = download_all_stations_ngl()
 head(all_station, 10)
-x = download_station_ngl("0ABY")
+
+# download all 4 stations
+# create matrix
+df_network = all_station%>% filter(station_name %in% c("CERN", "JUVI", "AUBO", "SATI"))
+
+
+df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 6))
+for(station_index in seq_along(df_network$station_name)){
+
+  station_name = df_network$station_name[station_index]
+  # extract station
+  station_data = download_station_ngl(station_name = station_name)
+  fit_N = gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+  fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
+  df_estimated_velocities[station_index, 1] = station_name
+  df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
+  cat(paste0(station_index ,"/", length(df_network$station_name), "\n"))
+}
+
+colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "n_data")
+df_estimated_velocities$estimated_trend_N_scaled = df_estimated_velocities$estimated_trend_N * 365.25
+df_estimated_velocities$std_estimated_trend_N_scaled = df_estimated_velocities$std_estimated_trend_N * 365.25
+df_estimated_velocities$estimated_trend_E_scaled = df_estimated_velocities$estimated_trend_E  * 365.25
+df_estimated_velocities$std_estimated_trend_E_scaled =  df_estimated_velocities$std_estimated_trend_E * 365.25
+
+# plot
+# library(leaflet)
+install.packages("elevatr")
+library(elevatr)
+library(raster)
+
+# Define the extent (longitude/latitude range) you want for the relief map
+xlims <- c(44, 48)
+ylims <- c(25, 52)
+locs <- df_network%>%dplyr::select(latitude, longitude)
+locs <- data.frame(x = c(xlims[1], xlims[2]), y = c(ylims[1], ylims[2]))
+
+# Fetch elevation data
+relief <- get_elev_raster(locs, prj = "EPSG:4326", z = 6)
+
+
+df_estimated_velocities_2 = dfplyr::ful
+library(leaflet)
+# install.packages("leaflet")
+leaflet(data = df_estimated_velocities) %>%
+  addTiles() %>%
+  setView(lng = 6.1432, lat = 46.2044, zoom = 12) %>% # Center on Geneva
+
+  # Add markers for each location
+  addMarkers(~lon, ~latit, popup = ~name) %>%
+
+  # Add a circle around Geneva to show the surrounding region
+  addCircles(lng = 6.1432, lat = 46.2044, radius = 10000, # 10 km radius
+             color = "blue", fillOpacity = 0.2, weight = 1,
+             popup = "Geneva Surrounding Region")
+library(rnaturalearth)
+
+# Load Switzerland map
+# Load Europe map data
+europe <- ne_countries(scale = "medium", returnclass = "sf") %>%
+  dplyr::filter(admin %in% c("France", "Switzerland", "Germany", "Italy"))
+
+# Specify Geneva's coordinates
+geneva <- data.frame(long = 6.1423, lat = 46.2044)
+
+# Arrow length and direction (adjust end longitude and latitude)
+arrow_start <- c(6.1423, 46.2044)  # Geneva coordinates
+arrow_end <- c(6.2423, 46.2044)
+library("rnaturalearth")
+library("rnaturalearthdata")
+world <- ne_countries(scale = "medium", returnclass = "sf")
+ggplot(data = world) +
+  geom_sf() +
+  xlab("Longitude") + ylab("Latitude") +
+  ggtitle("World map", subtitle = paste0("(", length(unique(world$NAME)), " countries)"))
+
+library(ggplot2)
+ggplot(data = europe) +
+  geom_sf() +
+  coord_sf(xlim = c(5, 10), ylim = c(45, 48), expand = FALSE) +
+  geom_point(aes(x = arrow_start[1], y = arrow_start[2]), color = "red", size = 2) +
+  geom_segment(aes(x = arrow_start[1], y = arrow_start[2], xend = arrow_end[1], yend = arrow_end[2]),
+               arrow = arrow(length = unit(0.3, "cm")), color = "blue", size = 1) +
+  theme_minimal() +
+  ggtitle("Map of Geneva and Surrounding Region with Arrow")
+
+
 fit1 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
 plot(fit1)
 summary(fit1)
@@ -92,6 +178,9 @@ unique(x$df_position$station_name)
 
 
 
+
+
+# identify station of interest
 all_velocities = download_estimated_velocities_ngl()
 name_tmp_dir = tempdir()
 name_tmp_file = paste0(name_tmp_dir,"/", "steps.txt")
@@ -131,9 +220,10 @@ df1 = dplyr::full_join(df_count_earthquake, df_count_equipment_software_changes)
 df2 = dplyr::full_join(df1,df_station_time )
 
 # select only long stations
-n_year_min = 5
-df3 = df2 %>% filter(time_series_duration_year == n_year_min, n_earthquake==1,
-                     n_equipment_change==3)
+n_year_max = 10
+df3 = df2 %>% filter(time_series_duration_year < n_year_max, n_earthquake==1,
+                     n_equipment_change==1)
+
 
 
 df3$station_name

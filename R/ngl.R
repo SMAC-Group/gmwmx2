@@ -1,4 +1,4 @@
-#' Download GNSS position time series and steps reference from Nevada Geodetic Laboratory with IGS14 reference frame.
+#' Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 reference frame.
 #'
 #' @importFrom data.table fread
 #' @importFrom utils read.table
@@ -109,7 +109,7 @@ convert_to_mjd_2 <- function(vec_date) {
 
 
 
-#' Download all stations name and location from Nevada Geodetic Laboratory (NGL)
+#' Download all stations name and location from the Nevada Geodetic Laboratory (NGL)
 #' @export
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
 #' @examples

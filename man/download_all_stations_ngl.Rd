@@ -2,7 +2,7 @@
 % Please edit documentation in R/ngl.R
 \name{download_all_stations_ngl}
 \alias{download_all_stations_ngl}
-\title{Download all stations name and location from Nevada Geodetic Laboratory (NGL)}
+\title{Download all stations name and location from the Nevada Geodetic Laboratory (NGL)}
 \usage{
 download_all_stations_ngl()
 }
@@ -10,7 +10,7 @@ download_all_stations_ngl()
 Return a \code{data.frame} with all stations name, latitude, longitude and heights.
 }
 \description{
-Download all stations name and location from Nevada Geodetic Laboratory (NGL)
+Download all stations name and location from the Nevada Geodetic Laboratory (NGL)
 }
 \examples{
 df_all_stations = download_all_stations_ngl()

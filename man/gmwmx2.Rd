@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwmx2.R
 \name{gmwmx2}
 \alias{gmwmx2}
-\title{Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.}
+\title{Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.}
 \usage{
 gmwmx2(
   x,
@@ -27,7 +27,7 @@ gmwmx2(
 \item{stochastic_model}{A \code{string} that specify the stochastic model considered for the residuals. Either ´wn + fl´ for white noise and flicker/pink noise or ´wn + pl´ for white noise and stationary power-law noise.}
 }
 \description{
-Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a White noise and Flicker noise as the stochastic model for the residuals and modelling missingness with a Markov process using the GMWMX estimator.
+Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.
 }
 \examples{
 x <- download_station_ngl("CHML")
