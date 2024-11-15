@@ -79,8 +79,8 @@ download_station_ngl <- function(station_name) {
   colnames(df_earthquakes) = c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
 
   # subset
-  df_equipment_software_changes_sub <- df_equipment_software_changes |> dplyr::filter(station_name == !!station_name)
-  df_earthquakes_sub <- df_earthquakes |> dplyr::filter(station_name == !!station_name)
+  df_equipment_software_changes_sub <- df_equipment_software_changes %>% dplyr::filter(station_name == !!station_name)
+  df_earthquakes_sub <- df_earthquakes %>%  dplyr::filter(station_name == !!station_name)
 
   # convert to MJD
   df_equipment_software_changes_sub$modified_julian_date <- convert_to_mjd_2(df_equipment_software_changes_sub$date_YYMMDD)
