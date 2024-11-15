@@ -221,6 +221,10 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     stop("Argument `n_seasonal` should take either value `1` or `2`")
   }
 
+
+  # Record start time
+  start_time_gmwmx <- Sys.time()
+
   # create full index
   all_mjd_index <- seq(head(x$df_position$modified_julian_day, 1), tail(x$df_position$modified_julian_day, 1), by = 1)
 
@@ -281,7 +285,8 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
       if (length(vec_earthquakes_index_mjd) > 0) paste0("Earthquake: MJD ", vec_earthquakes_index_mjd)
     )
   }
-# assign names beta hat
+
+  # assign names beta hat
   names(beta_hat) <- names_beta_hat
 
   # # plot signal and estimated model
@@ -518,6 +523,12 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 
   std_beta_hat_gmwmx_3 <- sqrt(diag(var_cov_beta_hat))
 
+  # Record end time
+  end_time_gmwmx <- Sys.time()
+
+  # get time gmwmx 1
+  time_gmwmx <- difftime(end_time_gmwmx, start_time_gmwmx, units = "secs")
+
   ret <- list(
     "beta_hat" = beta_hat,
     "std_beta_hat" = std_beta_hat_gmwmx_3,
@@ -533,7 +544,8 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     "df_equipment_software_changes" = x$df_equipment_software_changes,
     "p_hat"= p_hat,
     "p_star_hat" = pstar_hat,
-    "stochastic_model" = stochastic_model
+    "stochastic_model" = stochastic_model,
+    "running_time" = time_gmwmx
   )
 
   class(ret) <- "fit_gnss_ts_ngl"
