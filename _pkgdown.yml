@@ -27,7 +27,7 @@ navbar:
     href: reference/index.html
   - text: "Examples"
     menu:
-    - text: "Load and plot data from the Nevada Geodetic Laboratory (NGL)"
+    - text: "Load and plot data from the Nevada Geodetic Laboratory"
       href: articles/load_plot_data_ngl.html
     - text: "Estimate a model"
       href: articles/fit_model.html

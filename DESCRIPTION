@@ -34,6 +34,7 @@ Suggests: knitr,
           geodata,
           shape,
           tibble,
-          tidygeocoder
+          tidygeocoder,
+          sf
 URL: https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues
