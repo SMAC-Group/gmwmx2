@@ -289,6 +289,20 @@ for(i in seq(dim(df_city_2)[1])){
 }
 
 
+# add a legend
+twenty_mm_per_year = .02
+twenty_mm_per_year_mm_per_year_scaled = twenty_mm_per_year*scale_arrow
+x_start = xlims[2]-5
+y = ylims[1]+.3
+segments(x0 = x_start, y0 = y, x1 = x_start+twenty_mm_per_year_mm_per_year_scaled, y1 = y)
+delta_y= .1
+segments(x0 = x_start, x1 = x_start, y0 = y+delta_y, y1 = y-delta_y)
+segments(x0 =  x_start+twenty_mm_per_year_mm_per_year_scaled, x1 =  x_start+twenty_mm_per_year_mm_per_year_scaled, y0 = y+delta_y, y1 = y-delta_y)
+txt_size = .8
+text(x = x_start+twenty_mm_per_year_mm_per_year_scaled/2,
+     y = y+.1,
+     pos = 3,cex=txt_size,
+     labels = "20 mm/year")
 
 ```
 

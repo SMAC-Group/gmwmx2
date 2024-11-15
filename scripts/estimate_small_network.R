@@ -88,7 +88,7 @@ df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
 
 # create data frame where
-df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 6))
+df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 7))
 for(station_index in seq_along(df_network$station_name)){
   station_name = df_network$station_name[station_index]
   # extract station
@@ -97,10 +97,12 @@ for(station_index in seq_along(df_network$station_name)){
   fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
   df_estimated_velocities[station_index, 1] = station_name
   df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
+  df_estimated_velocities[station_index, 7] =   dim(fit_N$design_matrix_X)[1]
+
   cat(paste0(station_index ,"/", length(df_network$station_name), "\n"))
 }
 
-colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "n_data")
+colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "n_data", "time_series_length")
 df_estimated_velocities$estimated_trend_N_scaled = df_estimated_velocities$estimated_trend_N * 365.25
 df_estimated_velocities$std_estimated_trend_N_scaled = df_estimated_velocities$std_estimated_trend_N * 365.25
 df_estimated_velocities$estimated_trend_E_scaled = df_estimated_velocities$estimated_trend_E  * 365.25
@@ -269,5 +271,20 @@ for(i in seq(dim(df_city_2)[1])){
        cex = cex_size_city )
 }
 
+# add a legend
+twenty_mm_per_year = .02
+twenty_mm_per_year_mm_per_year_scaled = twenty_mm_per_year*scale_arrow
+x_start = xlims[2]-5
+y = ylims[1]+.3
+segments(x0 = x_start, y0 = y, x1 = x_start+twenty_mm_per_year_mm_per_year_scaled, y1 = y)
+delta_y= .1
+segments(x0 = x_start, x1 = x_start, y0 = y+delta_y, y1 = y-delta_y)
+segments(x0 =  x_start+twenty_mm_per_year_mm_per_year_scaled, x1 =  x_start+twenty_mm_per_year_mm_per_year_scaled, y0 = y+delta_y, y1 = y-delta_y)
+txt_size = .8
+text(x = x_start+twenty_mm_per_year_mm_per_year_scaled/2,
+     y = y+.1,
+     pos = 3,cex=txt_size,
+     labels = "20 mm/year")
+# df_estimated_velocities_and_location$estimated_trend_N_scaled * 1000
 
 
