@@ -561,9 +561,12 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 #' @param ... Additional parameters.
 #' @examples
 #' x <- download_station_ngl("P820")
-#' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
-#' summary(fit)
-#' summary(fit, scale_parameters=TRUE)
+#'fit1 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+#'summary(fit1)
+#'summary(fit1, scale_parameters=TRUE)
+#'fit2 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+#'summary(fit2)
+#'
 #' @export
 summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
 
