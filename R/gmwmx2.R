@@ -172,7 +172,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' @param vec_earthquakes_relaxation_time A \code{vectsor} specifying the relaxation time for each earthquakes indicated for the time series.
 #' @param component A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).
 #' @param toeplitz_approx_var_cov_wv A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.
-#' @param stochastic_model A \code{string} that specify the stochastic model considered for the residuals. Either ´wn + fl´ for white noise and flicker/pink noise or ´wn + pl´ for white noise and stationary power-law noise.
+#' @param stochastic_model A \code{string} that specify the stochastic model considered for the residuals. Either "wn + fl" for white noise and flicker/pink noise or "wn + pl" for white noise and stationary power-law noise.
 #' @importFrom wv wvar
 #' @importFrom dplyr between
 #' @importFrom Matrix solve
@@ -206,7 +206,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 
   # check that component is either N, E or V
   if (!component %in% c("N", "E", "V")) {
-    stop("Argument ?´component should be either´ 'N', 'E' or 'V'")
+    stop("Argument `component` should take either value `N` or `E` or `V`.")
   }
 
   # check that n_seasonal is either 1 or 2

@@ -24,7 +24,7 @@ gmwmx2(
 
 \item{toeplitz_approx_var_cov_wv}{A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.}
 
-\item{stochastic_model}{A \code{string} that specify the stochastic model considered for the residuals. Either ´wn + fl´ for white noise and flicker/pink noise or ´wn + pl´ for white noise and stationary power-law noise.}
+\item{stochastic_model}{A \code{string} that specify the stochastic model considered for the residuals. Either "wn + fl" for white noise and flicker/pink noise or "wn + pl" for white noise and stationary power-law noise.}
 }
 \description{
 Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.

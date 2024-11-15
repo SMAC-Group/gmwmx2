@@ -1,4 +1,5 @@
 #' @importFrom wv wn_to_wv
+#' @importFrom stats coef fft lm
 find_initial_values_wn_pl <- function(signal, wv_emp) {
 
   # n=5000
