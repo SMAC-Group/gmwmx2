@@ -1,0 +1,18 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/estimate_small_network.html</loc></url>
+<url><loc>/articles/fit_model.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/load_plot_data_ngl.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/download_all_stations_ngl.html</loc></url>
+<url><loc>/reference/download_estimated_velocities_ngl.html</loc></url>
+<url><loc>/reference/download_station_ngl.html</loc></url>
+<url><loc>/reference/gmwmx2.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/plot.fit_gnss_ts_ngl.html</loc></url>
+<url><loc>/reference/plot.gnss_ts_ngl.html</loc></url>
+<url><loc>/reference/summary.fit_gnss_ts_ngl.html</loc></url>
+</urlset>
+
