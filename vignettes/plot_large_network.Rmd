@@ -142,6 +142,7 @@ for (i in seq(nrow(df_estimated_velocities_gmwmx))) {
 xlims = c(-130, -60)
 ylims = c(30,55)
 
+
 # plot
 plot(NA, xlim = xlims, ylim = ylims, las = 1,
      ylab = "",xlab="",
