@@ -1,4 +1,6 @@
-# `gmwmx2` Overview <img src="man/figures/logo.png" align="right" style="width: 20%; height: 20%"/>
+# `gmwmx2` Overview <img src="man/figures/logo.png" align="right" style="width: 15%; height: 15%"/>
+
+
 
 The `gmwmx2` `R` package implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160).
 The GMWMX estimator is a computationally efficient estimator to estimate large scale regression problems with complex dependence structure in presence of missing data.
