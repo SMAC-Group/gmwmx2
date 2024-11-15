@@ -195,17 +195,13 @@
 <span><span class="va">all_station</span> <span class="op">=</span> <span class="fu"><a href="../reference/download_all_stations_ngl.html">download_all_stations_ngl</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># download selected stations</span></span>
-<span><span class="va">selected_station</span> <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BSCN"</span>,<span class="st">"CERN"</span> ,<span class="st">"SCDA"</span>, <span class="st">"GLRA"</span>, <span class="st">"STPS"</span><span class="op">)</span></span>
-<span><span class="co"># selected_station = c("BSCN") </span></span>
+<span><span class="co"># selected_station =c("BSCN","CERN" ,"SCDA", "GLRA", "STPS")</span></span>
+<span><span class="va">selected_station</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BSCN"</span><span class="op">)</span></span>
 <span><span class="va">df_network</span> <span class="op">=</span> <span class="va">all_station</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">station_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">selected_station</span><span class="op">)</span></span>
 <span><span class="va">df_network</span></span></code></pre></div>
-<pre><code><span><span class="co">##    station_name latitude longitude    height</span></span>
-<span><span class="co">##          &lt;char&gt;    &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">## 1:         BSCN 47.24688 -354.0106  359.5549</span></span>
-<span><span class="co">## 2:         CERN 46.25695 -353.9394  525.9422</span></span>
-<span><span class="co">## 3:         GLRA 44.83926 -355.4759  813.9238</span></span>
-<span><span class="co">## 4:         SCDA 44.79452 -356.7325 1115.3433</span></span>
-<span><span class="co">## 5:         STPS 46.30844 -356.7060  299.6851</span></span></code></pre>
+<pre><code><span><span class="co">##    station_name latitude longitude   height</span></span>
+<span><span class="co">##          &lt;char&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">## 1:         BSCN 47.24688 -354.0106 359.5549</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_estimated_velocities</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">df_network</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">station_index</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">df_network</span><span class="op">$</span><span class="va">station_name</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
@@ -219,11 +215,7 @@
 <span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Processing station "</span>,<span class="va">station_name</span>, <span class="st">" "</span>,  <span class="va">station_index</span> ,<span class="st">"/"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">df_network</span><span class="op">$</span><span class="va">station_name</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<pre><code><span><span class="co">## Processing station BSCN 1/5</span></span>
-<span><span class="co">## Processing station CERN 2/5</span></span>
-<span><span class="co">## Processing station GLRA 3/5</span></span>
-<span><span class="co">## Processing station SCDA 4/5</span></span>
-<span><span class="co">## Processing station STPS 5/5</span></span></code></pre>
+<pre><code><span><span class="co">## Processing station BSCN 1/1</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"station_name"</span>, <span class="st">"estimated_trend_N"</span>, <span class="st">"std_estimated_trend_N"</span>, <span class="st">"estimated_trend_E"</span>, <span class="st">"std_estimated_trend_E"</span>, <span class="st">"time_series_length"</span><span class="op">)</span></span>
 <span></span>
@@ -244,123 +236,17 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   station_name estimated_trend_N std_estimated_trend_N estimated_trend_E</span></span>
 <span><span class="co">## 1         BSCN      4.435408e-05          3.262683e-07      5.345211e-05</span></span>
-<span><span class="co">## 2         CERN      4.455772e-05          1.860753e-07      5.354428e-05</span></span>
-<span><span class="co">## 3         GLRA      4.380876e-05          2.866518e-07      5.466610e-05</span></span>
-<span><span class="co">## 4         SCDA      4.475967e-05          2.134131e-07      5.337310e-05</span></span>
-<span><span class="co">## 5         STPS      4.481839e-05          2.197019e-07      5.248970e-05</span></span>
 <span><span class="co">##   std_estimated_trend_E time_series_length estimated_trend_N_scaled</span></span>
 <span><span class="co">## 1          2.187197e-07               8059               0.01620033</span></span>
-<span><span class="co">## 2          1.384963e-07               4968               0.01627471</span></span>
-<span><span class="co">## 3          3.368441e-07               5739               0.01600115</span></span>
-<span><span class="co">## 4          1.454117e-07               6206               0.01634847</span></span>
-<span><span class="co">## 5          1.217579e-07               6269               0.01636992</span></span>
 <span><span class="co">##   std_estimated_trend_N_scaled estimated_trend_E_scaled</span></span>
-<span><span class="co">## 1                 1.191695e-04               0.01952338</span></span>
-<span><span class="co">## 2                 6.796401e-05               0.01955705</span></span>
-<span><span class="co">## 3                 1.046996e-04               0.01996679</span></span>
-<span><span class="co">## 4                 7.794912e-05               0.01949452</span></span>
-<span><span class="co">## 5                 8.024612e-05               0.01917186</span></span>
+<span><span class="co">## 1                 0.0001191695               0.01952338</span></span>
 <span><span class="co">##   std_estimated_trend_E_scaled</span></span>
-<span><span class="co">## 1                 7.988737e-05</span></span>
-<span><span class="co">## 2                 5.058577e-05</span></span>
-<span><span class="co">## 3                 1.230323e-04</span></span>
-<span><span class="co">## 4                 5.311164e-05</span></span>
-<span><span class="co">## 5                 4.447209e-05</span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="5%">
-<col width="8%">
-<col width="10%">
-<col width="8%">
-<col width="10%">
-<col width="8%">
-<col width="11%">
-<col width="13%">
-<col width="11%">
-<col width="13%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">station_name</th>
-<th align="right">estimated_trend_N</th>
-<th align="right">std_estimated_trend_N</th>
-<th align="right">estimated_trend_E</th>
-<th align="right">std_estimated_trend_E</th>
-<th align="right">time_series_length</th>
-<th align="right">estimated_trend_N_scaled</th>
-<th align="right">std_estimated_trend_N_scaled</th>
-<th align="right">estimated_trend_E_scaled</th>
-<th align="right">std_estimated_trend_E_scaled</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">BSCN</td>
-<td align="right">4.44e-05</td>
-<td align="right">3e-07</td>
-<td align="right">5.35e-05</td>
-<td align="right">2e-07</td>
-<td align="right">8059</td>
-<td align="right">0.0162003</td>
-<td align="right">0.0001192</td>
-<td align="right">0.0195234</td>
-<td align="right">7.99e-05</td>
-</tr>
-<tr class="even">
-<td align="left">CERN</td>
-<td align="right">4.46e-05</td>
-<td align="right">2e-07</td>
-<td align="right">5.35e-05</td>
-<td align="right">1e-07</td>
-<td align="right">4968</td>
-<td align="right">0.0162747</td>
-<td align="right">0.0000680</td>
-<td align="right">0.0195570</td>
-<td align="right">5.06e-05</td>
-</tr>
-<tr class="odd">
-<td align="left">GLRA</td>
-<td align="right">4.38e-05</td>
-<td align="right">3e-07</td>
-<td align="right">5.47e-05</td>
-<td align="right">3e-07</td>
-<td align="right">5739</td>
-<td align="right">0.0160011</td>
-<td align="right">0.0001047</td>
-<td align="right">0.0199668</td>
-<td align="right">1.23e-04</td>
-</tr>
-<tr class="even">
-<td align="left">SCDA</td>
-<td align="right">4.48e-05</td>
-<td align="right">2e-07</td>
-<td align="right">5.34e-05</td>
-<td align="right">1e-07</td>
-<td align="right">6206</td>
-<td align="right">0.0163485</td>
-<td align="right">0.0000779</td>
-<td align="right">0.0194945</td>
-<td align="right">5.31e-05</td>
-</tr>
-<tr class="odd">
-<td align="left">STPS</td>
-<td align="right">4.48e-05</td>
-<td align="right">2e-07</td>
-<td align="right">5.25e-05</td>
-<td align="right">1e-07</td>
-<td align="right">6269</td>
-<td align="right">0.0163699</td>
-<td align="right">0.0000802</td>
-<td align="right">0.0191719</td>
-<td align="right">4.45e-05</td>
-</tr>
-</tbody>
-</table>
+<span><span class="co">## 1                 7.988737e-05</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="load-elevation-data-and-create-raster-for-plot">Load elevation data and create raster for plot<a class="anchor" aria-label="anchor" href="#load-elevation-data-and-create-raster-for-plot"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load elevation data</span></span>
 <span><span class="va">tmp</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">elevation_data_swiss</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/elevation.html" class="external-link">elevation_30s</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Switzerland"</span>, path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
@@ -379,7 +265,7 @@
 <div class="section level2">
 <h2 id="plot-estimated-n-e-velocities-and-associated-uncertainty">Plot estimated N-E velocities and associated uncertainty<a class="anchor" aria-label="anchor" href="#plot-estimated-n-e-velocities-and-associated-uncertainty"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># sett plot limits</span></span>
 <span><span class="va">xlims</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">7</span><span class="op">)</span></span>
 <span><span class="va">ylims</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">44</span>, <span class="fl">48</span><span class="op">)</span></span>
@@ -499,7 +385,7 @@
 <pre><code><span><span class="co">## </span></span></code></pre>
 <pre><code><span><span class="co">## Passing 3 addresses to the Nominatim single address geocoder</span></span></code></pre>
 <pre><code><span><span class="co">## Query completed in: 3 seconds</span></span></code></pre>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_city_2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">df_city</span>, <span class="va">df_geo</span><span class="op">)</span></span>
 <span><span class="va">df_city_2</span><span class="op">$</span><span class="va">City</span> <span class="op">=</span> <span class="va">df_city_2</span><span class="op">$</span><span class="va">address</span></span>
 <span></span>
@@ -529,7 +415,7 @@
 <span>     y <span class="op">=</span> <span class="va">y</span><span class="op">+</span><span class="fl">.1</span>,</span>
 <span>     pos <span class="op">=</span> <span class="fl">3</span>,cex<span class="op">=</span><span class="va">txt_size</span>,</span>
 <span>     labels <span class="op">=</span> <span class="st">"20 mm/year"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_small_network_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="estimate_small_network_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
 
