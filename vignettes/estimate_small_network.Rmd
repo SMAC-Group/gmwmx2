@@ -151,6 +151,11 @@ head(df_estimated_velocities)
 ```
 
 
+```{r}
+knitr::kable(df_estimated_velocities)
+```
+
+
 # Load elevation data and create raster for plot
 ```{r}
 # load elevation data
@@ -224,7 +229,7 @@ for (i in seq(-90, 90, by = 2)) {
   abline(h = i, col = "grey80", lty=5)
 }
 
-# add points
+# add points for station data
 points(df_network$longitude2, df_network$latitude, pch=16)
 
 
@@ -274,9 +279,11 @@ for (i in seq(nrow(df_estimated_velocities_and_location))) {
 text(x = df_estimated_velocities_and_location$longitude2, y=df_estimated_velocities_and_location$latitude,
      labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = 0.8, col = "black")
 
-# add city
+# define cities
 df_city = tibble(address=c("Genève",  "Clermont-Ferrand", "Dijon"))
 
+
+# Load geolocalisation of cities
 df_geo <- df_city %>%
   geocode_combine(
     queries = list(
@@ -289,6 +296,7 @@ df_geo <- df_city %>%
 df_city_2 = cbind(df_city, df_geo)
 df_city_2$City = df_city_2$address
 
+# Add city to map
 points(x=df_city_2$lon, y= df_city_2$lat, pch=15, col="black")
 
 cex_size_city = .7

@@ -82,13 +82,13 @@ all_station = download_all_stations_ngl()
 
 # download selected stations
 # selected_station = c("BSCN")
-# selected_station = c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
-selected_station = c("BSCN")
+selected_station = c("BSCN","CERN" ,"SCDA", "GLRA", "VIL3")
+# selected_station = c("BSCN")
 df_network = all_station%>% filter(station_name %in% selected_station)
 df_network
 
 # create data frame where
-df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 7))
+df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 6))
 for(station_index in seq_along(df_network$station_name)){
   station_name = df_network$station_name[station_index]
   # extract station
@@ -96,8 +96,8 @@ for(station_index in seq_along(df_network$station_name)){
   fit_N = gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
   fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
   df_estimated_velocities[station_index, 1] = station_name
-  df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2])
-  df_estimated_velocities[station_index, 7] =   dim(fit_N$design_matrix_X)[1]
+  df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
+
 
   cat(paste0(station_index ,"/", length(df_network$station_name), "\n"))
 }
