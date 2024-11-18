@@ -176,7 +176,9 @@ double f_jk_approx_cpp(int h, arma::mat cov_Wj_Wjk, int Mjk, int Mj, std::string
     arma::vec myseq = arma::round(arma::linspace(0, Mjk-1, num_points_on_which_to_compute));
     arma::uvec indices_l_values = arma::conv_to<arma::uvec>::from(myseq);
 
-    for (int l_index = 0; l_index < indices_l_values.n_elem; l_index++) {
+    int num_elements = static_cast<int>(indices_l_values.n_elem);
+
+    for (int l_index = 0; l_index < num_elements; l_index++) {
       int l = indices_l_values(l_index);
       out += (1.0 / num_points_on_which_to_compute) * std::pow(cov_Wj_Wjk(l, l - h), 2);
     }
@@ -193,10 +195,10 @@ double f_jk_approx_cpp(int h, arma::mat cov_Wj_Wjk, int Mjk, int Mj, std::string
     // Create a sequence from 0 to Mjk-1 with length `num_points_on_which_to_compute`
     arma::vec myseq = arma::round(arma::linspace(h, Mjk-1, num_points_on_which_to_compute));
     arma::uvec indices_l_values = arma::conv_to<arma::uvec>::from(myseq);
+    int num_elements = static_cast<int>(indices_l_values.n_elem);
 
 
-
-    for (int l_index = 0; l_index < indices_l_values.n_elem; l_index++) {
+    for (int l_index = 0; l_index < num_elements; l_index++) {
       int l =  indices_l_values(l_index);
       out += (1.0 / num_points_on_which_to_compute) * std::pow(cov_Wj_Wjk(l, l - h), 2);
     }
@@ -214,8 +216,8 @@ double f_jk_approx_cpp(int h, arma::mat cov_Wj_Wjk, int Mjk, int Mj, std::string
     // Create a sequence from 0 to Mjk-1 with length `num_points_on_which_to_compute`
     arma::vec myseq = arma::round(arma::linspace(0, limit-1, num_points_on_which_to_compute));
     arma::uvec indices_l_values = arma::conv_to<arma::uvec>::from(myseq);
-
-    for (int l_index = 0; l_index < indices_l_values.n_elem; l_index++) {
+    int num_elements = static_cast<int>(indices_l_values.n_elem);
+    for (int l_index = 0; l_index < num_elements; l_index++) {
       int l = indices_l_values(l_index);
       out += (1.0 / num_points_on_which_to_compute) * std::pow(cov_Wj_Wjk(l, l - h), 2);
     }

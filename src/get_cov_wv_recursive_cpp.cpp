@@ -60,8 +60,8 @@ arma::mat compute_all_cov_wv_recursive_2_cpp_with_mat(int n, const arma::vec aut
   arma::mat mat_cov_W(n+1, max_j, arma::fill::zeros);
   int j = 1;
   int L_j = pow(2, j);
-  int M_j = n - L_j + 1;
-  int M_j1 = n - pow(2, (j + 1)) + 1;
+  // int M_j = n - L_j + 1;
+  // int M_j1 = n - pow(2, (j + 1)) + 1;
   arma::vec cov_W_vec_lag(max_h_to_compute_scale_1 + 1, arma::fill::zeros);
   for (int t = 0; t <= max_h_to_compute_scale_1; ++t) {
     cov_W_vec_lag(t) = get_cov_W_scale_1_from_autocov_cpp_with_treshold(t,autocov_vec, lag_treshold);
@@ -71,8 +71,8 @@ arma::mat compute_all_cov_wv_recursive_2_cpp_with_mat(int n, const arma::vec aut
   // compute for all other scales
   for (int j = 2; j <= max_j; ++j) {
     int L_j = pow(2, j);
-    int M_j = n - L_j + 1;
-    int M_j1 = n - pow(2, (j + 1)) + 1;
+    // int M_j = n - L_j + 1;
+    // int M_j1 = n - pow(2, (j + 1)) + 1;
     int max_h_to_compute = max_h_to_compute_scale_1 - sum_of_powers_of_2(1, (j-1));
     int L_j_previous_scale =  pow(2, (j-1));
     // save cov_W at previous scale
@@ -102,8 +102,8 @@ arma::vec compute_autocov_W_j_equal_1_from_autocov_X(const arma::vec autocov_vec
   arma::mat mat_cov_W(n+1, max_j, arma::fill::zeros);
   int j = 1;
   int L_j = pow(2, j);
-  int M_j = n - L_j + 1;
-  int M_j1 = n - pow(2, (j + 1)) + 1;
+  // int M_j = n - L_j + 1;
+  // int M_j1 = n - pow(2, (j + 1)) + 1;
   arma::vec cov_W_vec_lag(max_h_to_compute_scale_1 + 1, arma::fill::zeros);
   for (int t = 0; t <= max_h_to_compute_scale_1; ++t) {
     cov_W_vec_lag(t) = get_cov_W_scale_1_from_autocov_cpp_with_treshold(t,autocov_vec, lag_treshold);
@@ -119,7 +119,7 @@ arma::mat compute_all_cov_W_recursive_from_j_2(int n, arma::vec autocov_W_j_equa
   double sum_power_2_max_j_minus_1 = sum_of_powers_of_2(1, max_j - 1);
   // max h to compute for scale 1
   int max_h_to_compute_scale_1 = n + sum_power_2_max_j_minus_1;
-  if (autocov_W_j_equal_1.n_elem < max_h_to_compute_scale_1) {
+  if (static_cast<int>(autocov_W_j_equal_1.n_elem) < max_h_to_compute_scale_1) {
     stop("autocov vector of the wavelet coefficient is not large enough, it should be at least of length " + std::to_string(max_h_to_compute_scale_1));
   }
   // create arma mat, save by column the autocovariance of the wavelet coefficient from 0 to n for each scale j
@@ -131,8 +131,8 @@ arma::mat compute_all_cov_W_recursive_from_j_2(int n, arma::vec autocov_W_j_equa
   // compute for all other scales
   for (int j = 2; j <= max_j; ++j) {
     int L_j = pow(2, j);
-    int M_j = n - L_j + 1;
-    int M_j1 = n - pow(2, (j + 1)) + 1;
+    // int M_j = n - L_j + 1;
+    // int M_j1 = n - pow(2, (j + 1)) + 1;
     int max_h_to_compute = max_h_to_compute_scale_1 - sum_of_powers_of_2(1, (j-1));
     int L_j_previous_scale =  pow(2, (j-1));
     // save cov_W at previous scale
