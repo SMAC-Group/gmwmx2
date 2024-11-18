@@ -99,7 +99,7 @@ Rcpp::List pre_compute_quantities_on_D_only_required_smarter_cpp(const arma::mat
         mat_D_q_term_2_new(l_index, l_value - j) = cumsum_diag_j(n - l_value - 1);
       }
 
-      if (l_value < diag_j.n_elem && (j > 0)) {
+      if (l_value < static_cast<int>(diag_j.n_elem) && (j > 0)) {
         mat_D_q_term_1_new(l_index, j-1) = cumsum_diag_j(diag_j.n_elem - l_value - 1);
       }
     }

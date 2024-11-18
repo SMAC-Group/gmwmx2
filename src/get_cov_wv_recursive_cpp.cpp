@@ -228,7 +228,7 @@ arma::mat get_theo_cov_matrix_wvar_cpp(int n, Rcpp::Nullable<arma::vec> autocov_
   // check length of autocovariance vector of X and use it directly if not null to compute the autocvariance of the Wavelet coefficents
   if(autocov_vec_X.isNotNull()){
     arma::vec autocov_vec_X2 = Rcpp::as<arma::vec>(autocov_vec_X);
-    if (autocov_vec_X2.n_elem < n + sum_of_powers_of_2(1, max_j - 1) + 1) {
+    if (static_cast<int>(autocov_vec_X2.n_elem) < n + sum_of_powers_of_2(1, max_j - 1) + 1) {
       stop("autocov vec is not large enough, it should be at least of length " + std::to_string(n + sum_of_powers_of_2(1, max_j - 1) + 1));
     }
     mat_autocov_W = compute_all_cov_wv_recursive_2_cpp_with_mat(n, autocov_vec_X2, lag_treshold);
@@ -237,7 +237,7 @@ arma::mat get_theo_cov_matrix_wvar_cpp(int n, Rcpp::Nullable<arma::vec> autocov_
   if(autocov_vec_W.isNotNull()){
     arma::vec autocov_vec_W2 = Rcpp::as<arma::vec>(autocov_vec_W);
     // check length of autocovariance vector of W
-    if (autocov_vec_W2.n_elem < n + sum_of_powers_of_2(1, max_j - 1) + 1) {
+    if (static_cast<int>(autocov_vec_W2.n_elem) < n + sum_of_powers_of_2(1, max_j - 1) + 1) {
       stop("autocov vec of the Wavelet coefficient is not large enough, it should be at least of length " + std::to_string(n + sum_of_powers_of_2(1, max_j - 1)+ 1));
     }
     //  compute autocovariance of W
