@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 )
 
 # knitr::opts_chunk$set(eval = FALSE)
-
 ```
 
 # Model and estimator
@@ -175,7 +174,6 @@ station_data <- download_station_ngl("CHML")
 # Plot Station
 ```{r}
 plot(station_data)
-
 ```
 
 

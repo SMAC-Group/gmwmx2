@@ -13,6 +13,6 @@ Return a \code{data.frame} with all stations name, information about the time se
 Download estimated velocities provided by the Nevada Geodetic Laboratory for all stations.
 }
 \examples{
-df_estimated_velocities = download_estimated_velocities_ngl()
+df_estimated_velocities <- download_estimated_velocities_ngl()
 head(df_estimated_velocities)
 }

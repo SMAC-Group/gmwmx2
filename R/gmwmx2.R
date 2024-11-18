@@ -1,4 +1,3 @@
-
 create_X_matrix <- function(all_mjd_index,
                             jumps,
                             n_seasonal,
@@ -118,23 +117,20 @@ inv_trans_kappa_pl <- function(x) log(x + 1)
 # In order to perform the optimization efficiently,
 # the objective function construct a fast approximation of the theoretical wavelet variance of the vector of missing and observed estimated residuals.
 objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_type, vec_autocov_omega, pstar_hat, no_missing = T, omega = NULL, stochastic_model) {
-
-
-  if(stochastic_model == "wn + fl"){
+  if (stochastic_model == "wn + fl") {
     theta_t <- vector(mode = "numeric", length = 2)
     theta_t[1] <- exp(theta[1]) # sigma2 wn
     theta_t[2] <- exp(theta[2]) # sigma2 fl
 
     vec_mean_autocov <- vec_mean_autocov_powerlaw(kappa = -1, n) * theta_t[2]
     vec_mean_autocov[1] <- vec_mean_autocov[1] + theta_t[1]
-
-  }else if(stochastic_model == "wn + pl"){
+  } else if (stochastic_model == "wn + pl") {
     theta_t <- vector(mode = "numeric", length = 3)
     theta_t[1] <- exp(theta[1]) # sigma2 wn
     theta_t[2] <- trans_kappa_pl(theta[2]) # sigma2 wn
     theta_t[3] <- exp(theta[3]) # sigma2 pl
 
-    vec_mean_autocov <- powerlaw_autocovariance(kappa=theta_t[2], sigma2 = theta_t[3], n = n)
+    vec_mean_autocov <- powerlaw_autocovariance(kappa = theta_t[2], sigma2 = theta_t[3], n = n)
     vec_mean_autocov[1] <- vec_mean_autocov[1] + theta_t[1]
   }
 
@@ -181,9 +177,7 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' x <- download_station_ngl("CHML")
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
-gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model="wn + fl") {
-
-
+gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model = "wn + fl") {
   # x = download_station_ngl("0ABN")
   # plot(x)
   # vec_earthquakes_relaxation_time <- NULL
@@ -191,23 +185,23 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   # n_seasonal <- 2
   # toeplitz_approx_var_cov_wv=TRUE
   # stochastic_model = "wn + pl"
-   # all_station = download_all_stations_ngl()
-   # all_station[200]
-   # # x = download_station_ngl("0ABN") # nice to show diff between pl and flicker
-   # x=download_station_ngl("0KIS")
-   # plot(x)
-   # fit1 = gmwmx2(x = x, stochastic_model = "wn + fl", component = "E")
-   # plot(fit1)
-   # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "E")
-   # plot(fit2)
+  # all_station = download_all_stations_ngl()
+  # all_station[200]
+  # # x = download_station_ngl("0ABN") # nice to show diff between pl and flicker
+  # x=download_station_ngl("0KIS")
+  # plot(x)
+  # fit1 = gmwmx2(x = x, stochastic_model = "wn + fl", component = "E")
+  # plot(fit1)
+  # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "E")
+  # plot(fit2)
 
-  # check class
-  if(class(x) != "gnss_ts_ngl"){
+  # Check class
+  if (!inherits(x, "gnss_ts_ngl")) {
     stop("Argument `x` should be a `gnss_ts_ngl` object")
   }
 
   # check stochastic model
-  if(!stochastic_model %in% c("wn + pl", "wn + fl")){
+  if (!stochastic_model %in% c("wn + pl", "wn + fl")) {
     stop("Argument `stochastic_model` should be either `wn + fl` or `wn + pl`")
   }
 
@@ -325,7 +319,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   H <- X %*% inv_XtX %*% t(X)
   D <- diag(length(all_mjd_index)) - H
 
-  # pre-compute quantities on D to later use in optimization function
+  # pre-compute quantities on D=(I-H), with H = X(X^TX)^{-1}X^T to later use in optimization function
   quantities_D <- pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type = "3")
 
   # define missingness case
@@ -336,20 +330,19 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   }
 
   # define gamma init based o nspecified stochastic model
-  if(stochastic_model == "wn + fl"){
+  if (stochastic_model == "wn + fl") {
     gamma_init_not_transformed <- find_initial_values_wn_fl(wv_emp_eps_hat_filled)
     # log transform variance of WN and variance of flicker noise
-    gamma_init = log(gamma_init_not_transformed)
-
-  }else if(stochastic_model == "wn + pl"){
+    gamma_init <- log(gamma_init_not_transformed)
+  } else if (stochastic_model == "wn + pl") {
     # get initial values
-    gamma_init_not_transformed = find_initial_values_wn_pl(signal = eps_hat_sub, wv_emp = wv_emp_eps_hat_filled)
+    gamma_init_not_transformed <- find_initial_values_wn_pl(signal = eps_hat_sub, wv_emp = wv_emp_eps_hat_filled)
     # log transform variance of WN, transform kappa and log transform variance of powerlaw noise
-    gamma_init =c(log(gamma_init_not_transformed[1]),
-                  inv_trans_kappa_pl(gamma_init_not_transformed[2]),
-                  log(gamma_init_not_transformed[3])
+    gamma_init <- c(
+      log(gamma_init_not_transformed[1]),
+      inv_trans_kappa_pl(gamma_init_not_transformed[2]),
+      log(gamma_init_not_transformed[3])
     )
-
   }
   # fit gmwmx on empirical wv
   res_gmwmx <- optim(
@@ -362,20 +355,19 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     vec_autocov_omega = vec_autocov_omega,
     pstar_hat = pstar_hat,
     no_missing = no_missing,
-    stochastic_model=stochastic_model
+    stochastic_model = stochastic_model
   )
 
   # extract estimated stochastic parameters
-  if(stochastic_model =="wn + fl"){
+  if (stochastic_model == "wn + fl") {
     gamma_hat_1 <- exp(res_gmwmx$par)
-  }else if(stochastic_model == "wn + pl"){
+  } else if (stochastic_model == "wn + pl") {
     gamma_hat_1 <- c(
       exp(res_gmwmx$par[1]),
       trans_kappa_pl(res_gmwmx$par[2]),
       exp(res_gmwmx$par[3])
-      )
+    )
   }
-
 
   if (toeplitz_approx_var_cov_wv) {
     # define max J
@@ -385,11 +377,11 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     min_n_to_get_var_wv <- length(vec_omega) + sum_of_powers_of_2(1, max_J - 1) + 2
 
     # get autocov of stochastic process (true residuals)
-    if(stochastic_model == "wn + fl"){
+    if (stochastic_model == "wn + fl") {
       vec_mean_autocov <- vec_mean_autocov_powerlaw(-1, length(vec_omega)) * gamma_hat_1[2]
       vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_1[1]
-    }else if(stochastic_model == "wn + pl"){
-      vec_mean_autocov <- powerlaw_autocovariance(kappa=gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
+    } else if (stochastic_model == "wn + pl") {
+      vec_mean_autocov <- powerlaw_autocovariance(kappa = gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
       vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_1[1]
     }
 
@@ -423,24 +415,26 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     inv_var_cov_nu_hat <- Matrix::solve(Sigma_wv)
 
     # Build required matrices to compute later variance covariance of beta hat
-    if(stochastic_model == "wn + fl"){
+    if (stochastic_model == "wn + fl") {
       var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
       var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
       var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
-    }else if(stochastic_model=="wn + pl"){
-      vec_autocov_stationary_powerlaw = powerlaw_autocovariance(kappa=gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
+    } else if (stochastic_model == "wn + pl") {
+      vec_autocov_stationary_powerlaw <- powerlaw_autocovariance(kappa = gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
       vec_autocov_stationary_powerlaw[1] <- gamma_hat_1[1] + vec_autocov_stationary_powerlaw[1]
       var_cov_mat_epsilon <- toeplitz(as.vector(vec_autocov_stationary_powerlaw))
     }
-
   } else {
+    # Compute the variance covariance of the Wavelet variance when the process is not stationary and therefore using the whole variance covariance matrix of the process on which it is computed
     # construct sigma matrix of white noise + ficker
-    if(stochastic_model == "wn + fl"){
+
+    # Obtain variance covariance of epsilon
+    if (stochastic_model == "wn + fl") {
       var_cov_mat_wn <- gamma_hat_1[1] * diag(length(vec_omega))
       var_cov_mat_flicker <- var_cov_powerlaw_cpp(sigma2 = gamma_hat_1[2], kappa = -1, n = length(vec_omega))
       var_cov_mat_epsilon <- var_cov_mat_wn + var_cov_mat_flicker
-    }else if(stochastic_model =="wn + pl"){
-      vec_autocov_stationary_powerlaw = powerlaw_autocovariance(kappa=gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
+    } else if (stochastic_model == "wn + pl") {
+      vec_autocov_stationary_powerlaw <- powerlaw_autocovariance(kappa = gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
       vec_autocov_stationary_powerlaw[1] <- gamma_hat_1[1] + vec_autocov_stationary_powerlaw[1]
       var_cov_mat_epsilon <- toeplitz(as.vector(vec_autocov_stationary_powerlaw))
     }
@@ -471,12 +465,12 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     omega = inv_var_cov_nu_hat,
     pstar_hat = pstar_hat,
     no_missing = no_missing,
-    stochastic_model=stochastic_model
+    stochastic_model = stochastic_model
   )
 
-  if(stochastic_model =="wn + fl"){
+  if (stochastic_model == "wn + fl") {
     gamma_hat_2 <- exp(res_gmwmx_2$par)
-  }else if(stochastic_model == "wn + pl"){
+  } else if (stochastic_model == "wn + pl") {
     gamma_hat_2 <- c(
       exp(res_gmwmx_2$par[1]),
       trans_kappa_pl(res_gmwmx_2$par[2]),
@@ -485,14 +479,13 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   }
 
   # get theo wv with approximation obtained by last fit
-  if(stochastic_model == "wn + fl"){
+  if (stochastic_model == "wn + fl") {
     vec_mean_autocov <- vec_mean_autocov_powerlaw(kappa = -1, length(vec_omega)) * gamma_hat_2[2]
     vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_2[1]
-
-  }else if(stochastic_model == "wn + pl"){
-    vec_mean_autocov <- powerlaw_autocovariance(kappa=gamma_hat_2[2], sigma2 = gamma_hat_2[3], n = length(vec_omega))
+  } else if (stochastic_model == "wn + pl") {
+    vec_mean_autocov <- powerlaw_autocovariance(kappa = gamma_hat_2[2], sigma2 = gamma_hat_2[3], n = length(vec_omega))
     vec_mean_autocov[1] <- vec_mean_autocov[1] + gamma_hat_2[1]
-    vec_mean_autocov = as.vector(vec_mean_autocov)
+    vec_mean_autocov <- as.vector(vec_mean_autocov)
   }
 
 
@@ -514,10 +507,8 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 
   # Compute variance covariance of beta hat
   if (no_missing) {
-
     var_cov_beta_hat <- inv_XtX %*% t(X) %*% var_cov_mat_epsilon %*% X %*% inv_XtX
   } else {
-
     var_cov_beta_hat <- pstar_hat^(-2) * inv_XtX %*% t(X) %*% ((var_cov_omega + pstar_hat^2) * var_cov_mat_epsilon) %*% X %*% inv_XtX
   }
 
@@ -542,7 +533,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     "df_position" = x$df_position,
     "df_earthquakes" = x$df_earthquakes,
     "df_equipment_software_changes" = x$df_equipment_software_changes,
-    "p_hat"= p_hat,
+    "p_hat" = p_hat,
     "p_star_hat" = pstar_hat,
     "stochastic_model" = stochastic_model,
     "running_time" = time_gmwmx
@@ -561,16 +552,14 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 #' @param ... Additional parameters.
 #' @examples
 #' x <- download_station_ngl("P820")
-#'fit1 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
-#'summary(fit1)
-#'summary(fit1, scale_parameters=TRUE)
-#'fit2 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
-#'summary(fit2)
+#' fit1 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+#' summary(fit1)
+#' summary(fit1, scale_parameters = TRUE)
+#' fit2 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+#' summary(fit2)
 #'
 #' @export
 summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
-
-
   # Print header
   cat("Summary of Estimated Model\n")
   cat("-------------------------------------------------------------\n")
@@ -614,10 +603,10 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
   cat("Stochastic parameters\n")
   cat("-------------------------------------------------------------\n")
 
-  if(object$stochastic_model == "wn + fl"){
+  if (object$stochastic_model == "wn + fl") {
     cat(sprintf(" White Noise Variance  : %14.8f\n", object$gamma_hat[1]))
     cat(sprintf(" Flicker Noise Variance: %14.8f\n", object$gamma_hat[2]))
-  }else if(object$stochastic_model =="wn + pl"){
+  } else if (object$stochastic_model == "wn + pl") {
     cat(sprintf(" White Noise Variance  : %14.8f\n", object$gamma_hat[1]))
     cat(sprintf(" Stationary powerlaw Spectral index: %14.8f\n", object$gamma_hat[2]))
     cat(sprintf(" Stationary powerlaw Variance: %14.8f\n", object$gamma_hat[3]))
@@ -632,10 +621,8 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
   cat(sprintf(" P(Z_{i+1} = 1 | Z_{i} = 0): %.8f\n", object$p_hat[2]))
   cat(sprintf(" \\hat{E[Z]}: %.8f\n", object$p_star_hat))
   cat("-------------------------------------------------------------\n")
-  cat(paste0("Running time: ", round(object$running_time, 2), " seconds" ,"\n"))
+  cat(paste0("Running time: ", round(object$running_time, 2), " seconds", "\n"))
   cat("-------------------------------------------------------------\n")
-
-
 }
 
 
@@ -665,33 +652,34 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
   old_par <- par(no.readonly = TRUE)
 
   # set parameters for layout
-  mat_layout <- matrix(c(1, 2, 3,4), ncol = 1, nrow = 4)
-  layout(mat_layout, heights = c(.1,.1, 1, 1))
+  mat_layout <- matrix(c(1, 2, 3, 4), ncol = 1, nrow = 4)
+  layout(mat_layout, heights = c(.1, .1, 1, 1))
   par(mar = c(0, 0, 0, 0))
   plot.new()
-  if(x$component=="N"){
-    axis_name = "Northing (m)"
-  }else if(x$component == "E"){
-    axis_name = "Easting (m)"
-  }else if(x$component=="V"){
-    axis_name = "Vertical (m)"
+  if (x$component == "N") {
+    axis_name <- "Northing (m)"
+  } else if (x$component == "E") {
+    axis_name <- "Easting (m)"
+  } else if (x$component == "V") {
+    axis_name <- "Vertical (m)"
   }
 
 
-  if(x$stochastic_model=="wn + pl"){
-    name_stoch ="White noise and Powerlaw"
-  }else if(x$stochastic_model=="wn + fl"){
-    name_stoch ="White noise and Flicker"
+  if (x$stochastic_model == "wn + pl") {
+    name_stoch <- "White noise and Powerlaw"
+  } else if (x$stochastic_model == "wn + fl") {
+    name_stoch <- "White noise and Flicker"
   }
-  text_station = c(paste0("Station ", unique(x$df_position$station_name),
-                          ": ",
-                          axis_name," | ",
-                          name_stoch
-                          ))
+  text_station <- c(paste0(
+    "Station ", unique(x$df_position$station_name),
+    ": ",
+    axis_name, " | ",
+    name_stoch
+  ))
   legend("center",
-         horiz = T,
-         legend = text_station,
-         bty = "n", cex=1.3
+    horiz = T,
+    legend = text_station,
+    bty = "n", cex = 1.3
   )
   plot.new()
   legend("center",
@@ -718,10 +706,10 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
 
   # plot data
   plot(x = rownames(x$design_matrix_X), y = x$y, type = "l", las = 1, ylab = "", xlab = "")
-  mtext(side=1, "Modified Julian Date", line=3)
-  mtext(side=2, axis_name, line=3.2)
+  mtext(side = 1, "Modified Julian Date", line = 3)
+  mtext(side = 2, axis_name, line = 3.2)
 
-  grid(col="grey90", lty=2)
+  grid(col = "grey90", lty = 2)
   # add signal
   lines(x = rownames(x$design_matrix_X), y = x$y)
 
@@ -753,53 +741,56 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
 
 
   # plot empirical WV and theorical implied wv
-  yl = c(min(x$empirical_wvar$ci_low), max(x$empirical_wvar$ci_high ))
+  yl <- c(min(x$empirical_wvar$ci_low), max(x$empirical_wvar$ci_high))
 
   plot(NA,
-       ylim = yl,
-       xlim = c(min((x$empirical_wvar$scales)), max(x$empirical_wvar$scales)),
-       main ="",
-       ylab = "",
-       xlab = "",
-       log = "xy",
-       xaxt = "n",
-       yaxt = "n")
-  mtext(side=1, text = "Scales", line=2.3)
-  mtext(side=2, text = "Wavelet Variance", line=3.2)
+    ylim = yl,
+    xlim = c(min((x$empirical_wvar$scales)), max(x$empirical_wvar$scales)),
+    main = "",
+    ylab = "",
+    xlab = "",
+    log = "xy",
+    xaxt = "n",
+    yaxt = "n"
+  )
+  mtext(side = 1, text = "Scales", line = 2.3)
+  mtext(side = 2, text = "Wavelet Variance", line = 3.2)
 
   # Create a vector of labels in the desired format
-  exponents = log2(x$empirical_wvar$scales)
-  labels <- sapply(exponents, function(x) as.expression( bquote(2^.(x))))
+  exponents <- log2(x$empirical_wvar$scales)
+  labels <- sapply(exponents, function(x) as.expression(bquote(2^.(x))))
 
-  axis(1, at=x$empirical_wvar$scales, labels=labels)
+  axis(1, at = x$empirical_wvar$scales, labels = labels)
 
-  polygon(x = c(x$empirical_wvar$scales, rev(x$empirical_wvar$scales)),
-          y = c(x$empirical_wvar$ci_low, rev(x$empirical_wvar$ci_high)),
-          col = "#ccf1f8",
-          border = NA)
+  polygon(
+    x = c(x$empirical_wvar$scales, rev(x$empirical_wvar$scales)),
+    y = c(x$empirical_wvar$ci_low, rev(x$empirical_wvar$ci_high)),
+    col = "#ccf1f8",
+    border = NA
+  )
 
-  ylab = floor(log10(yl[1])):ceiling(log10(yl[2]))
-  axis(2, at=10^ylab, labels=parse(text=sprintf("10^%.0f",ylab)), las=1)
+  ylab <- floor(log10(yl[1])):ceiling(log10(yl[2]))
+  axis(2, at = 10^ylab, labels = parse(text = sprintf("10^%.0f", ylab)), las = 1)
 
   # add grid
-  abline(h=10^ylab, col="grey90", lt=2)
-  for(i in seq_along(exponents)){
-    abline(v=2^exponents[i], col="grey90", lt=2)
+  abline(h = 10^ylab, col = "grey90", lt = 2)
+  for (i in seq_along(exponents)) {
+    abline(v = 2^exponents[i], col = "grey90", lt = 2)
   }
 
-  lines(x$empirical_wvar$scales, x$empirical_wvar$variance, type="b", col = "black", pch=16)
-  lines(x = x$empirical_wvar$scales, y = x$theoretical_wvar, type="b", col = "red", pch=21, cex=1.4)
+  lines(x$empirical_wvar$scales, x$empirical_wvar$variance, type = "b", col = "black", pch = 16)
+  lines(x = x$empirical_wvar$scales, y = x$theoretical_wvar, type = "b", col = "red", pch = 21, cex = 1.4)
   # add empirical WV
 
   legend(
     "bottomleft",
-    legend=c("Empirical WV", "Estimated Theoretical WV"),
+    legend = c("Empirical WV", "Estimated Theoretical WV"),
     col = c("black", "red"),
-    pch = c(16,21),
-    pt.cex=c(1,1.4),
-    lty=c(1),
+    pch = c(16, 21),
+    pt.cex = c(1, 1.4),
+    lty = c(1),
     horiz = FALSE,
-    bty="n", bg="transparent"
+    bty = "n", bg = "transparent"
   )
 
   box()

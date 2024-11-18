@@ -13,7 +13,7 @@ Return a \code{data.frame} with all stations name, latitude, longitude and heigh
 Download all stations name and location from the Nevada Geodetic Laboratory
 }
 \examples{
-df_all_stations = download_all_stations_ngl()
+df_all_stations <- download_all_stations_ngl()
 head(df_all_stations)
 
 }

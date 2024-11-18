@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 )
 
 # knitr::opts_chunk$set(eval = FALSE)
-
 ```
 
 
@@ -33,13 +32,12 @@ library(shape)
 library(tibble)
 library(tidygeocoder)
 library(sf)
-
 ```
 
 # Define some functions for plotting
 ```{r}
 # define some function for plotting
-ellipse <- function (hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = F, npoints = 100, fill = F, fillColor = "black", ...) {
+ellipse <- function(hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = F, npoints = 100, fill = F, fillColor = "black", ...) {
   a <- seq(0, 2 * pi, length = npoints + 1)
   x <- hlaxa * cos(a)
   y <- hlaxb * sin(a)
@@ -47,9 +45,9 @@ ellipse <- function (hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = 
   rad <- sqrt(x^2 + y^2)
   xp <- rad * cos(alpha + theta) + xc
   yp <- rad * sin(alpha + theta) + yc
-  if (newplot)
+  if (newplot) {
     plot(xp, yp, type = "l", ...)
-  else {
+  } else {
     lines(xp, yp, ...)
     if (fill == T) {
       polygon(xp, yp, border = F, col = fillColor)
@@ -60,26 +58,22 @@ ellipse <- function (hlaxa = 1, hlaxb = 1, theta = 0, xc = 0, yc = 0, newplot = 
 }
 
 
-angle <- function (x, y) {
+angle <- function(x, y) {
   angle2 <- function(xy) {
     x <- xy[1]
     y <- xy[2]
     if (x > 0) {
-      atan(y/x)
-    }
-    else {
+      atan(y / x)
+    } else {
       if (x < 0 & y != 0) {
-        atan(y/x) + sign(y) * pi
-      }
-      else {
+        atan(y / x) + sign(y) * pi
+      } else {
         if (x < 0 & y == 0) {
           pi
-        }
-        else {
+        } else {
           if (y != 0) {
-            (sign(y) * pi)/2
-          }
-          else {
+            (sign(y) * pi) / 2
+          } else {
             NA
           }
         }
@@ -92,7 +86,7 @@ angle <- function (x, y) {
 # define function to make color transparent
 make_transparent <- function(colors, alpha = 0.5) {
   # Ensure alpha is between 0 and 1
-  if(alpha < 0 || alpha > 1) {
+  if (alpha < 0 || alpha > 1) {
     stop("Alpha value must be between 0 and 1")
   }
 
@@ -110,47 +104,47 @@ make_transparent <- function(colors, alpha = 0.5) {
 # Estimate a small network in France
 ```{r}
 # Estimate little network in France
-all_station = download_all_stations_ngl()
+all_station <- download_all_stations_ngl()
 
 # download selected stations
-selected_station =c("BSCN","CERN" ,"SCDA", "GLRA", "STPS")
+selected_station <- c("BSCN", "CERN", "SCDA", "GLRA", "STPS")
 # selected_station = c("BSCN")
-df_network = all_station%>% filter(station_name %in% selected_station)
+df_network <- all_station %>% filter(station_name %in% selected_station)
 df_network
 
-df_estimated_velocities = data.frame(matrix(NA, nrow=dim(df_network)[1], ncol = 6))
-for(station_index in seq_along(df_network$station_name)){
-  station_name = df_network$station_name[station_index]
+df_estimated_velocities <- data.frame(matrix(NA, nrow = dim(df_network)[1], ncol = 6))
+for (station_index in seq_along(df_network$station_name)) {
+  station_name <- df_network$station_name[station_index]
   # extract station
-  station_data = download_station_ngl(station_name = station_name)
-  fit_N = gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
-  fit_E = gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
-  df_estimated_velocities[station_index, 1] = station_name
-  df_estimated_velocities[station_index, 2:6] =   c(fit_N$beta_hat[2], fit_N$std_beta_hat[2],fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
+  station_data <- download_station_ngl(station_name = station_name)
+  fit_N <- gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+  fit_E <- gmwmx2(station_data, n_seasonal = 2, component = "E", stochastic_model = "wn + pl")
+  df_estimated_velocities[station_index, 1] <- station_name
+  df_estimated_velocities[station_index, 2:6] <- c(fit_N$beta_hat[2], fit_N$std_beta_hat[2], fit_E$beta_hat[2], fit_E$std_beta_hat[2], dim(fit_N$design_matrix_X)[1])
 
-  cat(paste0("Processing station ",station_name, " ",  station_index ,"/", length(df_network$station_name), "\n"))
+  cat(paste0("Processing station ", station_name, " ", station_index, "/", length(df_network$station_name), "\n"))
 }
 
-colnames(df_estimated_velocities) = c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "time_series_length")
+colnames(df_estimated_velocities) <- c("station_name", "estimated_trend_N", "std_estimated_trend_N", "estimated_trend_E", "std_estimated_trend_E", "time_series_length")
 
-df_estimated_velocities$estimated_trend_N_scaled = df_estimated_velocities$estimated_trend_N * 365.25
-df_estimated_velocities$std_estimated_trend_N_scaled = df_estimated_velocities$std_estimated_trend_N * 365.25
-df_estimated_velocities$estimated_trend_E_scaled = df_estimated_velocities$estimated_trend_E  * 365.25
-df_estimated_velocities$std_estimated_trend_E_scaled =  df_estimated_velocities$std_estimated_trend_E * 365.25
+df_estimated_velocities$estimated_trend_N_scaled <- df_estimated_velocities$estimated_trend_N * 365.25
+df_estimated_velocities$std_estimated_trend_N_scaled <- df_estimated_velocities$std_estimated_trend_N * 365.25
+df_estimated_velocities$estimated_trend_E_scaled <- df_estimated_velocities$estimated_trend_E * 365.25
+df_estimated_velocities$std_estimated_trend_E_scaled <- df_estimated_velocities$std_estimated_trend_E * 365.25
 
 # transform longitude
 df_network$longitude2 <- ifelse(df_network$longitude < -180,
-                                df_network$longitude + 360,
-                                df_network$longitude)
+  df_network$longitude + 360,
+  df_network$longitude
+)
 
 # merge with location
-df_estimated_velocities_and_location = dplyr::left_join(df_estimated_velocities, df_network, by="station_name")
+df_estimated_velocities_and_location <- dplyr::left_join(df_estimated_velocities, df_network, by = "station_name")
 
 # print estimated North and East velocities
 head(df_estimated_velocities)
 
 knitr::kable(df_estimated_velocities)
-
 ```
 
 
@@ -158,7 +152,7 @@ knitr::kable(df_estimated_velocities)
 # Load elevation data and create raster for plot
 ```{r}
 # load elevation data
-tmp=tempdir()
+tmp <- tempdir()
 elevation_data_swiss <- geodata::elevation_30s(country = "Switzerland", path = tmp)
 elevation_data_france <- geodata::elevation_30s(country = "France", path = tmp)
 elevation_data_italy <- geodata::elevation_30s(country = "Italy", path = tmp)
@@ -169,19 +163,21 @@ elevation_raster_france <- raster(elevation_data_france)
 elevation_raster_italy <- raster(elevation_data_italy)
 
 # create combined raster
-combined_raster <- merge(elevation_raster_swiss, elevation_raster_france,
-                         elevation_raster_italy)
+combined_raster <- merge(
+  elevation_raster_swiss, elevation_raster_france,
+  elevation_raster_italy
+)
 ```
 
 # Plot estimated N-E velocities and associated uncertainty
 ```{r}
 # sett plot limits
-xlims = c(2,7)
-ylims = c(44, 48)
+xlims <- c(2, 7)
+ylims <- c(44, 48)
 
 # Custom color scale
 custom_colors <- c(
-   "#33660059", "#33CB6659", "#BAE39159", "#FEDBB859", "#F2C98859",
+  "#33660059", "#33CB6659", "#BAE39159", "#FEDBB859", "#F2C98859",
   "#E5B75859", "#D8A52759", "#A7991F59", "#A38F1959", "#A1851359", "#9E7B0D59", "#9B710759",
   "#98660059", "#A1595959", "#B1767659", "#B6929259", "#C1AFAF59", "#CBCBCB59", "#E4E4E459", "#FEFEFE59"
 )
@@ -205,53 +201,54 @@ countries_sf <- st_as_sf(countries)
 
 
 # plot
-plot(NA, xlim = xlims, ylim = ylims, las = 1,
-     ylab = "",xlab="",
-     xaxt="n", yaxt="n"
+plot(NA,
+  xlim = xlims, ylim = ylims, las = 1,
+  ylab = "", xlab = "",
+  xaxt = "n", yaxt = "n"
 )
 
-axis(side = 1, at = seq(0,12, by=2), labels = (paste0( seq(0,12, by=2), " E")))
-axis(side = 2, at = seq(40,50, by=2), labels = (paste0(seq(40,50, by=2), " N")), las=1)
+axis(side = 1, at = seq(0, 12, by = 2), labels = (paste0(seq(0, 12, by = 2), " E")))
+axis(side = 2, at = seq(40, 50, by = 2), labels = (paste0(seq(40, 50, by = 2), " N")), las = 1)
 
 # Plot the elevation data
 raster::plot(combined_raster,
-             col = custom_colors,
-             # breaks=breaks,
-             add = TRUE,            # Add to the existing plot
-             legend = FALSE)        # Disable default legend
+  col = custom_colors,
+  # breaks=breaks,
+  add = TRUE, # Add to the existing plot
+  legend = FALSE
+) # Disable default legend
 
 # add axis
 for (i in seq(-150, 150, by = 2)) {
-  abline(v = i, col = "grey80", lty=5)
+  abline(v = i, col = "grey80", lty = 5)
 }
 for (i in seq(-90, 90, by = 2)) {
-  abline(h = i, col = "grey80", lty=5)
+  abline(h = i, col = "grey80", lty = 5)
 }
 
 # add points for station data
-points(df_network$longitude2, df_network$latitude, pch=16)
+points(df_network$longitude2, df_network$latitude, pch = 16)
 
 
 # set param for graph
 shift <- 0
 scale_arrow <- 20
-arrow_width = .1
-arrow_lwd = 2
-my_col = c("#e96bff")
-scale_ellipses=3500
-my_col_trans = make_transparent(my_col,alpha = .3)
+arrow_width <- .1
+arrow_lwd <- 2
+my_col <- c("#e96bff")
+scale_ellipses <- 3500
+my_col_trans <- make_transparent(my_col, alpha = .3)
 
 # Overlay country boundaries
 plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
 
 for (i in seq(nrow(df_estimated_velocities_and_location))) {
-
   ellipse(
-    hlaxa = as.numeric(df_estimated_velocities_and_location[i,'std_estimated_trend_E_scaled']) * scale_ellipses,
-    hlaxb =as.numeric( df_estimated_velocities_and_location[i,'std_estimated_trend_N_scaled']) * scale_ellipses,
+    hlaxa = as.numeric(df_estimated_velocities_and_location[i, "std_estimated_trend_E_scaled"]) * scale_ellipses,
+    hlaxb = as.numeric(df_estimated_velocities_and_location[i, "std_estimated_trend_N_scaled"]) * scale_ellipses,
     theta = 0,
-    xc = as.numeric(df_estimated_velocities_and_location[i,'longitude2'])+as.numeric(df_estimated_velocities_and_location[i,'estimated_trend_E_scaled'])*scale_arrow,
-    yc = as.numeric(df_estimated_velocities_and_location[i,'latitude'])+as.numeric(df_estimated_velocities_and_location[i,'estimated_trend_N_scaled'])*scale_arrow,
+    xc = as.numeric(df_estimated_velocities_and_location[i, "longitude2"]) + as.numeric(df_estimated_velocities_and_location[i, "estimated_trend_E_scaled"]) * scale_arrow,
+    yc = as.numeric(df_estimated_velocities_and_location[i, "latitude"]) + as.numeric(df_estimated_velocities_and_location[i, "estimated_trend_N_scaled"]) * scale_arrow,
     fill = T,
     fillColor = my_col_trans[1],
     lw = 1,
@@ -268,59 +265,63 @@ for (i in seq(nrow(df_estimated_velocities_and_location))) {
     col = my_col,
     arr.type = "triangle",
     arr.length = .10,
-
     arr.width = arrow_width,
-    lwd=arrow_lwd
+    lwd = arrow_lwd
   )
 }
 
 # add
-text(x = df_estimated_velocities_and_location$longitude2, y=df_estimated_velocities_and_location$latitude,
-     labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = 0.8, col = "black")
+text(
+  x = df_estimated_velocities_and_location$longitude2, y = df_estimated_velocities_and_location$latitude,
+  labels = df_estimated_velocities_and_location$station_name, pos = 3, cex = 0.8, col = "black"
+)
 
 # define cities
-df_city = tibble(address=c("Genève",  "Clermont-Ferrand", "Dijon"))
+df_city <- tibble(address = c("Genève", "Clermont-Ferrand", "Dijon"))
 
 
 # Load geolocalisation of cities
 df_geo <- df_city %>%
   geocode_combine(
     queries = list(
-      list(method = 'osm')
+      list(method = "osm")
     ),
-    global_params = list(address = 'address'),
+    global_params = list(address = "address"),
     cascade = FALSE
   )
 
-df_city_2 = cbind(df_city, df_geo)
-df_city_2$City = df_city_2$address
+df_city_2 <- cbind(df_city, df_geo)
+df_city_2$City <- df_city_2$address
 
 # Add city to map
-points(x=df_city_2$lon, y= df_city_2$lat, pch=15, col="black")
+points(x = df_city_2$lon, y = df_city_2$lat, pch = 15, col = "black")
 
-cex_size_city = .7
-for(i in seq(dim(df_city_2)[1])){
-  text(x=df_city_2$lon[i], y = df_city_2$lat[i],
-       labels = df_city_2$City[i],
-       adj=c(0,2),col="black",
-       cex = cex_size_city )
+cex_size_city <- .7
+for (i in seq(dim(df_city_2)[1])) {
+  text(
+    x = df_city_2$lon[i], y = df_city_2$lat[i],
+    labels = df_city_2$City[i],
+    adj = c(0, 2), col = "black",
+    cex = cex_size_city
+  )
 }
 
 
 # add a legend
-twenty_mm_per_year = .02
-twenty_mm_per_year_mm_per_year_scaled = twenty_mm_per_year*scale_arrow
-x_start = xlims[2]-5
-y = ylims[1]+.3
-segments(x0 = x_start, y0 = y, x1 = x_start+twenty_mm_per_year_mm_per_year_scaled, y1 = y)
-delta_y= .1
-segments(x0 = x_start, x1 = x_start, y0 = y+delta_y, y1 = y-delta_y)
-segments(x0 =  x_start+twenty_mm_per_year_mm_per_year_scaled, x1 =  x_start+twenty_mm_per_year_mm_per_year_scaled, y0 = y+delta_y, y1 = y-delta_y)
-txt_size = .8
-text(x = x_start+twenty_mm_per_year_mm_per_year_scaled/2,
-     y = y+.1,
-     pos = 3,cex=txt_size,
-     labels = "20 mm/year")
-
+twenty_mm_per_year <- .02
+twenty_mm_per_year_mm_per_year_scaled <- twenty_mm_per_year * scale_arrow
+x_start <- xlims[2] - 5
+y <- ylims[1] + .3
+segments(x0 = x_start, y0 = y, x1 = x_start + twenty_mm_per_year_mm_per_year_scaled, y1 = y)
+delta_y <- .1
+segments(x0 = x_start, x1 = x_start, y0 = y + delta_y, y1 = y - delta_y)
+segments(x0 = x_start + twenty_mm_per_year_mm_per_year_scaled, x1 = x_start + twenty_mm_per_year_mm_per_year_scaled, y0 = y + delta_y, y1 = y - delta_y)
+txt_size <- .8
+text(
+  x = x_start + twenty_mm_per_year_mm_per_year_scaled / 2,
+  y = y + .1,
+  pos = 3, cex = txt_size,
+  labels = "20 mm/year"
+)
 ```
 

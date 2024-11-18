@@ -13,8 +13,6 @@
 #' @return A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
 #' \code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
 download_station_ngl <- function(station_name) {
-
-
   # station_name="1LSU"
 
   # download file from  string formatted as "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
@@ -28,7 +26,7 @@ download_station_ngl <- function(station_name) {
 
 
   # -------------- load .tenv3 file using data.table fread
-  df_position = data.table::fread(
+  df_position <- data.table::fread(
     paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"),
     header = TRUE, showProgress = FALSE
   )
@@ -65,22 +63,26 @@ download_station_ngl <- function(station_name) {
 
   # # Using fread for fast reading
   dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
-              fill = 7,  # Handle varying number of columns
-              showProgress = FALSE,
-              header = FALSE,  # Assuming no header
-              na.strings = "") # Empty fields become NA
-  # Ensure column names are correctly set
-  colnames(dt) = c("V1", "V2", "V3", "V4", "V5", "V6", "V7")
+    fill = 7, # Handle varying number of columns
+    showProgress = FALSE,
+    header = FALSE, # Assuming no header
+    na.strings = ""
+  ) # Empty fields become NA
+
+  # Set column names
+  colnames(dt) <- c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change", "V5", "V6", "V7")
 
   # filter earthquakes from equipment / software changes
-  df_equipment_software_changes = dt %>% dplyr::filter(V3 == 1 | V3 == 3) %>% dplyr::select(c("V1", "V2", "V3", "V4"))
-  colnames(df_equipment_software_changes)= c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change")
-  df_earthquakes = dt %>% dplyr::filter(V3 == 2)
-  colnames(df_earthquakes) = c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
+  df_equipment_software_changes <- dt %>%
+    dplyr::filter(step_type_code == 1 | step_type_code == 3) %>%
+    dplyr::select(c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change"))
+
+  df_earthquakes <- dt %>% dplyr::filter(step_type_code == 2)
+  colnames(df_earthquakes) <- c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
 
   # subset
   df_equipment_software_changes_sub <- df_equipment_software_changes %>% dplyr::filter(station_name == !!station_name)
-  df_earthquakes_sub <- df_earthquakes %>%  dplyr::filter(station_name == !!station_name)
+  df_earthquakes_sub <- df_earthquakes %>% dplyr::filter(station_name == !!station_name)
 
   # convert to MJD
   df_equipment_software_changes_sub$modified_julian_date <- convert_to_mjd_2(df_equipment_software_changes_sub$date_YYMMDD)
@@ -113,14 +115,14 @@ convert_to_mjd_2 <- function(vec_date) {
 #' @export
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
 #' @examples
-#' df_all_stations = download_all_stations_ngl()
+#' df_all_stations <- download_all_stations_ngl()
 #' head(df_all_stations)
 #'
 download_all_stations_ngl <- function() {
   # load file from http://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
 
   # load all stations
-  df_all_stations = data.table::fread(
+  df_all_stations <- data.table::fread(
     "http://geodesy.unr.edu/NGLStationPages/llh.out",
     header = FALSE,
     showProgress = FALSE
@@ -135,15 +137,14 @@ download_all_stations_ngl <- function() {
 #' @export
 #' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
 #' @examples
-#' df_estimated_velocities = download_estimated_velocities_ngl()
+#' df_estimated_velocities <- download_estimated_velocities_ngl()
 #' head(df_estimated_velocities)
 download_estimated_velocities_ngl <- function() {
-
   # # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
   # README for file available at NGL website: http://geodesy.unr.edu/velocities/midas.readme.txt
 
 
-  df_estimated_velocities_midas = data.table::fread(
+  df_estimated_velocities_midas <- data.table::fread(
     "http://geodesy.unr.edu/velocities/midas.IGS14.txt",
     header = FALSE,
     showProgress = FALSE
@@ -205,13 +206,13 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
 
     # set parameters for layout
     mat_layout <- matrix(c(1, 2, 3, 4, 5), ncol = 1, nrow = 5)
-    layout(mat_layout, heights = c(.1,.1, 1, 1, 1.2))
+    layout(mat_layout, heights = c(.1, .1, 1, 1, 1.2))
     par(mar = c(0, 0, 0, 0))
     plot.new()
     legend("center",
-           horiz = T,
-           legend = c(paste0("Station ", unique(x$df_position$station_name))),
-           bty = "n", cex=1.3
+      horiz = T,
+      legend = c(paste0("Station ", unique(x$df_position$station_name))),
+      bty = "n", cex = 1.3
     )
     plot.new()
     legend("center",
@@ -231,12 +232,13 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$northings_fractional_portion, type = "l",
       xlab = "", ylab = "", las = 1
     )
-    grid(col="grey90", lty=2)
+    grid(col = "grey90", lty = 2)
     lines(x$df_position$modified_julian_day,
-          y = x$df_position$northings_fractional_portion)
-    side_label_y = 3.5
-    side_label_x = 2.8
-    mtext(side=2, text = "Northing (m)", line = side_label_y)
+      y = x$df_position$northings_fractional_portion
+    )
+    side_label_y <- 3.5
+    side_label_x <- 2.8
+    mtext(side = 2, text = "Northing (m)", line = side_label_y)
     # mtext(side=1, text = "Modified Julian Date", line = side_label_x)
     # add missing data
     for (i in seq_along(missing_mjd)) {
@@ -260,11 +262,12 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$eastings_fractional_portion, type = "l",
       xlab = "", ylab = "", las = 1
     )
-    grid(col="grey90", lty=2)
+    grid(col = "grey90", lty = 2)
 
     lines(x$df_position$modified_julian_day,
-          y = x$df_position$eastings_fractional_portion)
-    mtext(side=2, text = "Easting (m)", line = side_label_y)
+      y = x$df_position$eastings_fractional_portion
+    )
+    mtext(side = 2, text = "Easting (m)", line = side_label_y)
 
     # missing data
     for (i in seq_along(missing_mjd)) {
@@ -289,14 +292,15 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$vertical_fractional_portion,
       type = "l", xlab = "", ylab = "", las = 1
     )
-    grid(col="grey90", lty=2)
+    grid(col = "grey90", lty = 2)
 
 
     lines(x$df_position$modified_julian_day,
-          y = x$df_position$vertical_fractional_portion)
+      y = x$df_position$vertical_fractional_portion
+    )
 
-    mtext(side=2, text = "Vertical (m)", line = side_label_y)
-    mtext(side=1, text = "Modified Julian Date", line = side_label_x)
+    mtext(side = 2, text = "Vertical (m)", line = side_label_y)
+    mtext(side = 1, text = "Modified Julian Date", line = side_label_x)
 
     # missing data
     for (i in seq_along(missing_mjd)) {
@@ -330,53 +334,54 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
 
     # set parameters for layout
     mat_layout <- matrix(c(1, 2, 3), ncol = 1, nrow = 3)
-    layout(mat_layout, heights = c(.1,.1,1))
+    layout(mat_layout, heights = c(.1, .1, 1))
     par(mar = c(0, 0, 0, 0))
     plot.new()
     legend("center",
-           horiz = T,
-           legend = c(paste0("Station ", unique(x$df_position$station_name))),
-           bty = "n", cex=1.3
+      horiz = T,
+      legend = c(paste0("Station ", unique(x$df_position$station_name))),
+      bty = "n", cex = 1.3
     )
     plot.new()
     legend("center",
-           horiz = T,
-           legend = c("NA", "Equipment/Software change", "Earthquake"),
-           col = c("grey60", "blue", "darkorange"),
-           pch = c(15, NA, NA),
-           pt.cex = c(2, NA, NA),
-           # x.intersp = 0.8,
-           text.width = c(.1, .3, .1),
-           lty = c(NA, 1, 1), bty = "n"
+      horiz = T,
+      legend = c("NA", "Equipment/Software change", "Earthquake"),
+      col = c("grey60", "blue", "darkorange"),
+      pch = c(15, NA, NA),
+      pt.cex = c(2, NA, NA),
+      # x.intersp = 0.8,
+      text.width = c(.1, .3, .1),
+      lty = c(NA, 1, 1), bty = "n"
     )
     par(mar = c(4.5, 4.8, 2, 2.1))
 
     # extract component
-    if(component=="N"){
-      y = x$df_position$northings_fractional_portion
-      ylab_component = "Northing (m)"
-    }else if(component == "E"){
-      y = x$df_position$eastings_fractional_portion
-      ylab_component = "Easting (m)"
-    }else if(component == "V"){
-      y = x$df_position$vertical_fractional_portion
-      ylab_component = "Vertical (m)"
+    if (component == "N") {
+      y <- x$df_position$northings_fractional_portion
+      ylab_component <- "Northing (m)"
+    } else if (component == "E") {
+      y <- x$df_position$eastings_fractional_portion
+      ylab_component <- "Easting (m)"
+    } else if (component == "V") {
+      y <- x$df_position$vertical_fractional_portion
+      ylab_component <- "Vertical (m)"
     }
 
 
     # north
     plot(x$df_position$modified_julian_day,
-         y = y, type = "l",
-         xlab = "", ylab = "", las = 1
+      y = y, type = "l",
+      xlab = "", ylab = "", las = 1
     )
-    grid(col="grey90", lty=2)
+    grid(col = "grey90", lty = 2)
 
     lines(x$df_position$modified_julian_day,
-          y = y)
-    side_label_y = 3.5
-    side_label_x = 2.8
-    mtext(side=2, text =ylab_component, line = side_label_y)
-    mtext(side=1, text = "Modified Julian Date", line = side_label_x)
+      y = y
+    )
+    side_label_y <- 3.5
+    side_label_x <- 2.8
+    mtext(side = 2, text = ylab_component, line = side_label_y)
+    mtext(side = 1, text = "Modified Julian Date", line = side_label_x)
 
     # add missing data
     for (i in seq_along(missing_mjd)) {
