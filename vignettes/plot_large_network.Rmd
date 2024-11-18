@@ -59,6 +59,13 @@ make_transparent <- function(colors, alpha = 0.5) {
 ```
 
 
+```{r}
+tmp <- tempdir()
+world <- geodata::world(path = tmp)
+countries_sf <- st_as_sf(world)
+```
+
+
 # Plot estimated North/East velocities for all estimated stations 
 ```{r}
 # plot all stations
@@ -100,18 +107,9 @@ lat_labels <- sapply(seq(-90, 90, by = 20), function(y) {
 # Plot the axes
 axis(side = 1, at = seq(-180, 180, by = 30), labels = lon_labels)
 axis(side = 2, at = seq(-90, 90, by = 20), labels = lat_labels, las = 1)
-```
 
-
-```{r}
-tmp <- tempdir()
-world <- geodata::world(path = tmp)
-countries_sf <- st_as_sf(world)
 plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
-```
 
-
-```{r}
 # # add axis
 for (i in seq(-180, 180, by = 30)) {
   abline(v = i, col = "grey80", lty = 5)
