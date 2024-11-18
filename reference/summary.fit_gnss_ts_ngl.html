@@ -99,94 +99,19 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"P820"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>downloaded length 295336 != reported length 5520644</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>URL 'http://geodesy.unr.edu/NGLStationPages/steps.txt': Timeout of 60 seconds was reached</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in download.file(file, tmpFile, method = method, mode = "wb", quiet = !showProgress):</span> download from 'http://geodesy.unr.edu/NGLStationPages/steps.txt' failed</span>
 <span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="gmwmx2.html">gmwmx2</a></span><span class="op">(</span><span class="va">x</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, stochastic_model <span class="op">=</span> <span class="st">"wn + pl"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'x' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of Estimated Model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Functional parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept                0.75007627   0.00405363   0.74213130   0.75802125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00000700   0.00000060  -0.00000818  -0.00000582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)             0.00065832   0.00019794   0.00027035   0.00104628</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.00050112   0.00020731  -0.00090744  -0.00009480</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.00044663   0.00014636   0.00015977   0.00073349</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)        0.00012070   0.00014257  -0.00015874   0.00040014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 60547          0.00229644   0.00118728  -0.00003059   0.00462347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Spectral index:    -0.95555862</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Variance:     0.00000099</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00076834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99923225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.51 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span>, scale_parameters<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of Estimated Model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Functional parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              273.96535795   1.48058958 271.06345569 276.86726021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00255669   0.00022017  -0.00298822  -0.00212517</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)             0.24045103   0.07229927   0.09874706   0.38215501</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.18303481   0.07572044  -0.33144414  -0.03462547</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.16313051   0.05345811   0.05835454   0.26790647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)        0.04408635   0.05207533  -0.05797942   0.14615212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 60547          0.83877580   0.43365496  -0.01117230   1.68872389</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Spectral index:    -0.95555862</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Variance:     0.00000099</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00076834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99923225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.51 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit1' not found</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span>, scale_parameters <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit1' not found</span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gmwmx2.html">gmwmx2</a></span><span class="op">(</span><span class="va">x</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, stochastic_model <span class="op">=</span> <span class="st">"wn + fl"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'x' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of Estimated Model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Functional parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept                0.75007627   0.00075821   0.74859022   0.75156233</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00000700   0.00000059  -0.00000816  -0.00000584</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)             0.00065832   0.00020072   0.00026491   0.00105173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.00050112   0.00021071  -0.00091410  -0.00008814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.00044663   0.00014791   0.00015672   0.00073653</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)        0.00012070   0.00014389  -0.00016132   0.00040273</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 60547          0.00229644   0.00121168  -0.00007841   0.00467129</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Flicker Noise Variance:     0.00000091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00076834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99923225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.74 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit2' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
