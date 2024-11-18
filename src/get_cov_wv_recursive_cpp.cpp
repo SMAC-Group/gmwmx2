@@ -59,7 +59,7 @@ arma::mat compute_all_cov_wv_recursive_2_cpp_with_mat(int n, const arma::vec aut
   // create arma mat, save by column the autocovariance of the wavelet coefficient from 0 to n for each scale j
   arma::mat mat_cov_W(n+1, max_j, arma::fill::zeros);
   int j = 1;
-  int L_j = pow(2, j);
+  // int L_j = pow(2, j);
   // int M_j = n - L_j + 1;
   // int M_j1 = n - pow(2, (j + 1)) + 1;
   arma::vec cov_W_vec_lag(max_h_to_compute_scale_1 + 1, arma::fill::zeros);
@@ -70,7 +70,7 @@ arma::mat compute_all_cov_wv_recursive_2_cpp_with_mat(int n, const arma::vec aut
   mat_cov_W.col(0) = cov_W_vec_lag.subvec(0, n);
   // compute for all other scales
   for (int j = 2; j <= max_j; ++j) {
-    int L_j = pow(2, j);
+    // int L_j = pow(2, j);
     // int M_j = n - L_j + 1;
     // int M_j1 = n - pow(2, (j + 1)) + 1;
     int max_h_to_compute = max_h_to_compute_scale_1 - sum_of_powers_of_2(1, (j-1));
@@ -101,7 +101,7 @@ arma::vec compute_autocov_W_j_equal_1_from_autocov_X(const arma::vec autocov_vec
   // create arma mat, save by column the autocovariance of the wavelet coefficient from 0 to n for each scale j
   arma::mat mat_cov_W(n+1, max_j, arma::fill::zeros);
   int j = 1;
-  int L_j = pow(2, j);
+  // int L_j = pow(2, j);
   // int M_j = n - L_j + 1;
   // int M_j1 = n - pow(2, (j + 1)) + 1;
   arma::vec cov_W_vec_lag(max_h_to_compute_scale_1 + 1, arma::fill::zeros);
@@ -130,7 +130,7 @@ arma::mat compute_all_cov_W_recursive_from_j_2(int n, arma::vec autocov_W_j_equa
   arma::vec cov_W_vec_lag = autocov_W_j_equal_1;
   // compute for all other scales
   for (int j = 2; j <= max_j; ++j) {
-    int L_j = pow(2, j);
+    // int L_j = pow(2, j);
     // int M_j = n - L_j + 1;
     // int M_j1 = n - pow(2, (j + 1)) + 1;
     int max_h_to_compute = max_h_to_compute_scale_1 - sum_of_powers_of_2(1, (j-1));
@@ -165,9 +165,9 @@ double get_cov_wvar_cpp(int j, int k, int n, arma::mat mat_autocov_W){
   double pow2jk_minus_1 = std::pow(2, j + k - 1);
   double pow2j_minus_1 = std::pow(2, j - 1);
 
-  int index_max = std::max(M_jk - 1 + (pow2k - 2) * pow2j_minus_1 + pow2jk_minus_1,
-                           M_jk - 1 + pow2jk_minus_1 - pow2j_minus_1);
-  int index_min = std::min(-M_j + 1, -M_j + 1 + pow2jk_minus_1 - pow2j_minus_1);
+  // int index_max = std::max(M_jk - 1 + (pow2k - 2) * pow2j_minus_1 + pow2jk_minus_1,
+  //                          M_jk - 1 + pow2jk_minus_1 - pow2j_minus_1);
+  // int index_min = std::min(-M_j + 1, -M_j + 1 + pow2jk_minus_1 - pow2j_minus_1);
 
   // Extract the vector of autocov of the wavelet coefficients from the Rcpp list
   arma::vec cov_W_vec = mat_autocov_W.col(j-1);
