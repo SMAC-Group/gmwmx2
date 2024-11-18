@@ -2,7 +2,7 @@
 title: "Plot a large network of GNSS data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Plot large network of GNSS data}
+  %\VignetteIndexEntry{Plot a large network of GNSS data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -100,12 +100,18 @@ lat_labels <- sapply(seq(-90, 90, by = 20), function(y) {
 # Plot the axes
 axis(side = 1, at = seq(-180, 180, by = 30), labels = lon_labels)
 axis(side = 2, at = seq(-90, 90, by = 20), labels = lat_labels, las = 1)
+```
 
+
+```{r}
 tmp <- tempdir()
 world <- geodata::world(path = tmp)
 countries_sf <- st_as_sf(world)
 plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
+```
 
+
+```{r}
 # # add axis
 for (i in seq(-180, 180, by = 30)) {
   abline(v = i, col = "grey80", lty = 5)

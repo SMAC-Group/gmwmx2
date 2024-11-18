@@ -61,6 +61,8 @@ download_station_ngl <- function(station_name) {
   # load steps from file steps and extract all steps associated with the station
   # see README for step file: http://geodesy.unr.edu/NGLStationPages/steps_readme.txt
 
+  # Increase the global timeout to 120 seconds
+  options(timeout = 120)
   # # Using fread for fast reading
   dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
     fill = 7, # Handle varying number of columns
@@ -68,6 +70,8 @@ download_station_ngl <- function(station_name) {
     header = FALSE, # Assuming no header
     na.strings = ""
   ) # Empty fields become NA
+  # set original global timeout
+  options(timeout = 60)
 
   # Set column names
   colnames(dt) <- c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change", "V5", "V6", "V7")

@@ -1,7 +1,8 @@
 # `gmwmx2` Overview <img src="man/figures/logo.png" align="right" style="width: 15%; height: 15%"/>
 
-<!-- badges: start -->
+<!-- badges: start 
 ![R-CMD-check](https://github.com/SMAC-Group/gmwmx2/actions/workflows/R-CMD-check.yaml/badge.svg)
+-->
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-4.0.0-6666ff.svg)](https://cran.r-project.org/)
 <!-- badges: end -->
 
