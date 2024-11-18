@@ -58,7 +58,7 @@ arma::mat compute_all_cov_wv_recursive_2_cpp_with_mat(int n, const arma::vec aut
   int max_h_to_compute_scale_1 = n + sum_power_2_max_j_minus_1;
   // create arma mat, save by column the autocovariance of the wavelet coefficient from 0 to n for each scale j
   arma::mat mat_cov_W(n+1, max_j, arma::fill::zeros);
-  int j = 1;
+  // int j = 1;
   // int L_j = pow(2, j);
   // int M_j = n - L_j + 1;
   // int M_j1 = n - pow(2, (j + 1)) + 1;
@@ -100,7 +100,7 @@ arma::vec compute_autocov_W_j_equal_1_from_autocov_X(const arma::vec autocov_vec
   int max_h_to_compute_scale_1 = n + sum_power_2_max_j_minus_1;
   // create arma mat, save by column the autocovariance of the wavelet coefficient from 0 to n for each scale j
   arma::mat mat_cov_W(n+1, max_j, arma::fill::zeros);
-  int j = 1;
+  // int j = 1;
   // int L_j = pow(2, j);
   // int M_j = n - L_j + 1;
   // int M_j1 = n - pow(2, (j + 1)) + 1;
