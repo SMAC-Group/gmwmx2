@@ -3,6 +3,8 @@ rm(list=ls())
 library(gmwmx2)
 library(dplyr)
 library(maps)
+library("rnaturalearth")
+library("rnaturalearthdata")
 
 # Estimate little network in Switzerland
 all_station = download_all_stations_ngl()
@@ -32,89 +34,73 @@ df_estimated_velocities$std_estimated_trend_N_scaled = df_estimated_velocities$s
 df_estimated_velocities$estimated_trend_E_scaled = df_estimated_velocities$estimated_trend_E  * 365.25
 df_estimated_velocities$std_estimated_trend_E_scaled =  df_estimated_velocities$std_estimated_trend_E * 365.25
 
-# plot
+# # plot
+# # library(leaflet)
+# install.packages("elevatr")
+# library(elevatr)
+# library(raster)
+#
+# # Define the extent (longitude/latitude range) you want for the relief map
+# xlims <- c(44, 48)
+# ylims <- c(25, 52)
+# locs <- df_network%>%dplyr::select(latitude, longitude)
+# locs <- data.frame(x = c(xlims[1], xlims[2]), y = c(ylims[1], ylims[2]))
+#
+# # Fetch elevation data
+# relief <- get_elev_raster(locs, prj = "EPSG:4326", z = 6)
+
+#
+# df_estimated_velocities_2 = dfplyr::ful
 # library(leaflet)
-install.packages("elevatr")
-library(elevatr)
-library(raster)
-
-# Define the extent (longitude/latitude range) you want for the relief map
-xlims <- c(44, 48)
-ylims <- c(25, 52)
-locs <- df_network%>%dplyr::select(latitude, longitude)
-locs <- data.frame(x = c(xlims[1], xlims[2]), y = c(ylims[1], ylims[2]))
-
-# Fetch elevation data
-relief <- get_elev_raster(locs, prj = "EPSG:4326", z = 6)
-
-
-df_estimated_velocities_2 = dfplyr::ful
-library(leaflet)
-# install.packages("leaflet")
-leaflet(data = df_estimated_velocities) %>%
-  addTiles() %>%
-  setView(lng = 6.1432, lat = 46.2044, zoom = 12) %>% # Center on Geneva
-
-  # Add markers for each location
-  addMarkers(~lon, ~latit, popup = ~name) %>%
-
-  # Add a circle around Geneva to show the surrounding region
-  addCircles(lng = 6.1432, lat = 46.2044, radius = 10000, # 10 km radius
-             color = "blue", fillOpacity = 0.2, weight = 1,
-             popup = "Geneva Surrounding Region")
-library(rnaturalearth)
-
-# Load Switzerland map
-# Load Europe map data
-europe <- ne_countries(scale = "medium", returnclass = "sf") %>%
-  dplyr::filter(admin %in% c("France", "Switzerland", "Germany", "Italy"))
-
-# Specify Geneva's coordinates
-geneva <- data.frame(long = 6.1423, lat = 46.2044)
-
-# Arrow length and direction (adjust end longitude and latitude)
-arrow_start <- c(6.1423, 46.2044)  # Geneva coordinates
-arrow_end <- c(6.2423, 46.2044)
-library("rnaturalearth")
-library("rnaturalearthdata")
-world <- ne_countries(scale = "medium", returnclass = "sf")
-ggplot(data = world) +
-  geom_sf() +
-  xlab("Longitude") + ylab("Latitude") +
-  ggtitle("World map", subtitle = paste0("(", length(unique(world$NAME)), " countries)"))
-
-library(ggplot2)
-ggplot(data = europe) +
-  geom_sf() +
-  coord_sf(xlim = c(5, 10), ylim = c(45, 48), expand = FALSE) +
-  geom_point(aes(x = arrow_start[1], y = arrow_start[2]), color = "red", size = 2) +
-  geom_segment(aes(x = arrow_start[1], y = arrow_start[2], xend = arrow_end[1], yend = arrow_end[2]),
-               arrow = arrow(length = unit(0.3, "cm")), color = "blue", size = 1) +
-  theme_minimal() +
-  ggtitle("Map of Geneva and Surrounding Region with Arrow")
-
-
-fit1 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
-plot(fit1)
-summary(fit1)
-fit2 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
-plot(fit2)
-summary(fit2)
-x=download_station_ngl("0ABI")
-fit3 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
-plot(fit3)
-summary(fit3)
-fit4 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
-plot(fit4)
-summary(fit4)
-x=download_station_ngl("ZWOL")
-plot(x)
-fit5 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
-plot(fit5)
-summary(fit5)
-fit6 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
-plot(fit6)
-summary(fit6)
+# # install.packages("leaflet")
+# leaflet(data = df_estimated_velocities) %>%
+#   addTiles() %>%
+#   setView(lng = 6.1432, lat = 46.2044, zoom = 12) %>% # Center on Geneva
+#
+#   # Add markers for each location
+#   addMarkers(~lon, ~latit, popup = ~name) %>%
+#
+#   # Add a circle around Geneva to show the surrounding region
+#   addCircles(lng = 6.1432, lat = 46.2044, radius = 10000, # 10 km radius
+#              color = "blue", fillOpacity = 0.2, weight = 1,
+#              popup = "Geneva Surrounding Region")
+# library(rnaturalearth)
+#
+# # Load Switzerland map
+# # Load Europe map data
+# europe <- ne_countries(scale = "medium", returnclass = "sf") %>%
+#   dplyr::filter(admin %in% c("France", "Switzerland", "Germany", "Italy"))
+#
+# # Specify Geneva's coordinates
+# geneva <- data.frame(long = 6.1423, lat = 46.2044)
+#
+# # Arrow length and direction (adjust end longitude and latitude)
+# arrow_start <- c(6.1423, 46.2044)  # Geneva coordinates
+# arrow_end <- c(6.2423, 46.2044)
+#
+#
+#
+# fit1 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+# plot(fit1)
+# summary(fit1)
+# fit2 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+# plot(fit2)
+# summary(fit2)
+# x=download_station_ngl("0ABI")
+# fit3 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+# plot(fit3)
+# summary(fit3)
+# fit4 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+# plot(fit4)
+# summary(fit4)
+# x=download_station_ngl("ZWOL")
+# plot(x)
+# fit5 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + pl")
+# plot(fit5)
+# summary(fit5)
+# fit6 = gmwmx2(x = x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
+# plot(fit6)
+# summary(fit6)
 
 
 

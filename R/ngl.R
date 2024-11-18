@@ -74,10 +74,10 @@ download_station_ngl <- function(station_name) {
 
   # filter earthquakes from equipment / software changes
   df_equipment_software_changes <- dt %>%
-    dplyr::filter(step_type_code == 1 | step_type_code == 3) %>%
+    dplyr::filter(.data$step_type_code == 1 | .data$step_type_code == 3) %>%
     dplyr::select(c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change"))
 
-  df_earthquakes <- dt %>% dplyr::filter(step_type_code == 2)
+  df_earthquakes <- dt %>% dplyr::filter(.data$step_type_code == 2)
   colnames(df_earthquakes) <- c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
 
   # subset
