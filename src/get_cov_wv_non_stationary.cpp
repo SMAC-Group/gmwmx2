@@ -631,7 +631,7 @@ arma::mat compute_cov_wv_cpp_approx_faster(arma::mat Sigma_X, std::string approx
     //
     double val_2_pow_j_1 = std::pow(2, (j-1));
     //  fill matrix
-    for (int l_index = 0; l_index < l_index_to_compute.size() ; l_index++) {
+    for (int l_index = 0; l_index < static_cast<int>(l_index_to_compute.size()) ; l_index++) {
       int l = l_index_to_compute[l_index]-1;
       for(int m = 0; m <= (Mj-1); m++){
         for (int p = 0; p <= (std::pow(2, (k+1)) -2); p++) {
@@ -708,7 +708,7 @@ arma::mat compute_cov_wv_cpp_approx_faster(arma::mat Sigma_X, std::string approx
         // arma::uvec id_l_values_present = arma::find(arma::any(all_l_values == index_l_at_this_index.t() , 1));
         double inv_l_size = (1.0 / l_values_present.n_elem);
         double out_fjk = 0.0;
-        for (int l_index = 0; l_index < l_values_present.size(); ++l_index) {
+        for (int l_index = 0; l_index < static_cast<int>(l_values_present.size()); ++l_index) {
           int l = l_values_present[l_index];
           arma::uvec l_index_in_mat = arma::find(index_l_at_this_index == l);
           out_fjk += inv_l_size * std::pow(cov_W_j_k_my_index(l_index_in_mat(0), l-h-1), 2);
