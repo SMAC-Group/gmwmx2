@@ -2,8 +2,8 @@
 #include <numeric>
 using namespace Rcpp;
 using namespace arma;
-
 // [[Rcpp::depends(RcppArmadillo)]]
+
 
 // Compute the stationary power law autocovariance vector
 // @param kappa The spectral index kappa that needs to be > -1 so that the autocovariance of the stationary powerlaw process is defined.
