@@ -78,13 +78,13 @@ download_station_ngl <- function(station_name, verbose=FALSE) {
   )
 
   # load steps from file steps and extract all steps associated with the station
-  # see README for step file: http://geodesy.unr.edu/NGLStationPages/steps_readme.txt
+  # see README for step file: https://geodesy.unr.edu/NGLStationPages/steps_readme.txt
 
 
 
 
   # # # Using fread for fast reading
-  # dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
+  # dt <- data.table::fread("https://geodesy.unr.edu/NGLStationPages/steps.txt",
   #   fill = 7, # Handle varying number of columns
   #   showProgress = FALSE,
   #   header = FALSE, # Assuming no header
