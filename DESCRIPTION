@@ -26,7 +26,8 @@ Imports:
     dplyr,
     magrittr,
     wv,
-    Matrix
+    Matrix,
+    httr2
 Suggests: knitr,
           rmarkdown,
           knitcitations,
