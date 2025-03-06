@@ -125,6 +125,22 @@
 </h3>
 <p>The <code>gmwmx2</code> package relies on a limited number of external libraries, but notably on <code>Rcpp</code> and <code>RcppArmadillo</code> which require a <code>C++</code> compiler for installation, such as for example <code>gcc</code>.</p>
 </div>
+<div class="section level3">
+<h3 id="note-on-gmwmx2-vs-gmwmx">Note on <code>gmwmx2</code> vs <code>gmwmx</code>
+<a class="anchor" aria-label="anchor" href="#note-on-gmwmx2-vs-gmwmx"></a>
+</h3>
+<p>The original <a href="https://github.com/SMAC-Group/gmwmx" class="external-link"><code>gmwmx</code> package</a> was designed to compare estimates from various sources with the Maximum Likelihood Estimator (MLE) implemented in <a href="https://teromovigo.com/product/hector/" class="external-link">Hector</a>. This allowed for the replication of examples and simulations discussed in <a href="https://doi.org/10.1007/s00190-023-01702-8" class="external-link">Cucci, D. A., Voirol, L., Kermarrec, G., Montillet, J. P., and Guerrier, S. (2022)</a>. However, as we advanced in the methodological and computational development of the <code>gmwmx</code> method, we sought a standalone implementation that did not require integration with <a href="https://teromovigo.com/hector/" class="external-link">Hector</a>. Additionally, many of the new computational techniques and structural improvements would have been challenging to incorporate into the previous <code>gmwmx</code> package. Therefore, we will now exclusively support and develop the <code>gmwmx2</code> package.</p>
+</div>
+<div class="section level3">
+<h3 id="upcoming-enhancements">Upcoming Enhancements<a class="anchor" aria-label="anchor" href="#upcoming-enhancements"></a>
+</h3>
+<p>The <code>gmwmx2</code> package is currently in the early stages of development. While the supported features are stable, we have numerous additional methods and computational enhancements planned for gradual integration. These include:</p>
+<ul>
+<li>Computational optimization to improve speed</li>
+<li>Support for a wider range of stochastic models</li>
+<li>A computationally efficient model selection criterion for stochastic models</li>
+</ul>
+</div>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
