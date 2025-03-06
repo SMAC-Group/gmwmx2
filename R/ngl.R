@@ -13,7 +13,7 @@
 #' attributes(station_1LSU)
 #' @return A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
 #' \code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
-download_station_ngl <- function(station_name, verbose=FALSE) {
+download_station_ngl <- function(station_name, verbose = FALSE) {
   # station_name="AB21"
 
   # download file from  string formatted as "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
@@ -35,8 +35,8 @@ download_station_ngl <- function(station_name, verbose=FALSE) {
 
   # after discussing with Prof. Hammond, the SSL certificate is for for now invalid, this is a temporary workaround
 
-  file_name = tempfile()
-  address = paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+  file_name <- tempfile()
+  address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
 
   # Create request and disable SSL verification
   req <- request(address) |>
@@ -99,8 +99,8 @@ download_station_ngl <- function(station_name, verbose=FALSE) {
   #   na.strings = ""
   # ) # Empty fields become NA
 
-  file_name = tempfile()
-  address = "https://geodesy.unr.edu/NGLStationPages/steps.txt"
+  file_name <- tempfile()
+  address <- "https://geodesy.unr.edu/NGLStationPages/steps.txt"
 
 
   # Create request and disable SSL verification
@@ -135,8 +135,11 @@ download_station_ngl <- function(station_name, verbose=FALSE) {
     dplyr::filter(step_type_code == 1 | step_type_code == 3) %>%
     dplyr::select(station_name, date_YYMMDD, step_type_code, type_equipment_change)
 
-  df_earthquakes <- dt %>% dplyr::filter(.data$step_type_code == 2)
-  colnames(df_earthquakes) <- c("station_name", "date_YYMMDD", "step_type_code", "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id")
+  df_earthquakes <- dt %>% dplyr::filter(step_type_code == 2)
+  colnames(df_earthquakes) <- c(
+    "station_name", "date_YYMMDD", "step_type_code",
+    "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id"
+  )
 
   # subset
   df_equipment_software_changes_sub <- df_equipment_software_changes %>% dplyr::filter(station_name == !!station_name)
@@ -182,7 +185,7 @@ download_all_stations_ngl <- function(verbose = FALSE) {
   # )
 
   # after discussing with Prof. Hammond, the SSL certificate is for now invalid, this is a temporary workaround
-  file_name = tempfile()
+  file_name <- tempfile()
   address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
 
   # Create request and disable SSL verification
@@ -217,7 +220,7 @@ download_all_stations_ngl <- function(verbose = FALSE) {
 #' @examples
 #' df_estimated_velocities <- download_estimated_velocities_ngl()
 #' head(df_estimated_velocities)
-download_estimated_velocities_ngl <- function(verbose=FALSE) {
+download_estimated_velocities_ngl <- function(verbose = FALSE) {
   # # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
   # README for file available at NGL website: http://geodesy.unr.edu/velocities/midas.readme.txt
 
@@ -229,7 +232,7 @@ download_estimated_velocities_ngl <- function(verbose=FALSE) {
   # )
 
 
-  file_name = tempfile()
+  file_name <- tempfile()
   address <- "https://geodesy.unr.edu/velocities/midas.IGS14.txt"
 
   # Create request and disable SSL verification
