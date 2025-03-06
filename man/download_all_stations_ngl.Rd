@@ -4,7 +4,10 @@
 \alias{download_all_stations_ngl}
 \title{Download all stations name and location from the Nevada Geodetic Laboratory}
 \usage{
-download_all_stations_ngl()
+download_all_stations_ngl(verbose = FALSE)
+}
+\arguments{
+\item{verbose}{A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.}
 }
 \value{
 Return a \code{data.frame} with all stations name, latitude, longitude and heights.

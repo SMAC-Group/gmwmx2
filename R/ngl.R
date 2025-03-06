@@ -6,14 +6,15 @@
 #' @importFrom  utils download.file
 #' @importFrom magrittr %>%
 #' @param  station_name A \code{string} specifying the station name.
+#' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
 #' @export
 #' @examples
 #' station_1LSU <- download_station_ngl("1LSU")
 #' attributes(station_1LSU)
 #' @return A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
 #' \code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
-download_station_ngl <- function(station_name) {
-  # station_name="1LSU"
+download_station_ngl <- function(station_name, verbose=FALSE) {
+  # station_name="AB21"
 
   # download file from  string formatted as "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
   # see help file for .tenv3 file here : http://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
@@ -26,10 +27,28 @@ download_station_ngl <- function(station_name) {
 
 
   # -------------- load .tenv3 file using data.table fread
-  df_position <- data.table::fread(
-    paste0("http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"),
-    header = TRUE, showProgress = FALSE
-  )
+  # df_position <- data.table::fread(
+  #   paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"),
+  #   header = TRUE, showProgress = FALSE
+  # )
+
+
+  # after discussing with Prof. Hammond, the SSL certificate is for for now invalid, this is a temporary workaround
+
+  file_name = tempfile()
+  address = paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+  if(verbose){
+    cmd = sprintf('wget "%s" --no-check-certificate -O %s',address, file_name)
+  }else{
+    cmd = sprintf('wget "%s" --no-check-certificate -q -O %s',address, file_name)
+  }
+
+  # run command
+  system(cmd)
+
+  # Read the downloaded file into a data table
+  df_position <- data.table::fread(file_name, header = TRUE)
+
 
   # rewrite colnames
   colnames(df_position) <- c(
@@ -61,17 +80,30 @@ download_station_ngl <- function(station_name) {
   # load steps from file steps and extract all steps associated with the station
   # see README for step file: http://geodesy.unr.edu/NGLStationPages/steps_readme.txt
 
-  # Increase the global timeout to 120 seconds
-  options(timeout = 120)
-  # # Using fread for fast reading
-  dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
-    fill = 7, # Handle varying number of columns
-    showProgress = FALSE,
-    header = FALSE, # Assuming no header
-    na.strings = ""
-  ) # Empty fields become NA
-  # set original global timeout
-  options(timeout = 60)
+
+
+
+  # # # Using fread for fast reading
+  # dt <- data.table::fread("http://geodesy.unr.edu/NGLStationPages/steps.txt",
+  #   fill = 7, # Handle varying number of columns
+  #   showProgress = FALSE,
+  #   header = FALSE, # Assuming no header
+  #   na.strings = ""
+  # ) # Empty fields become NA
+
+  file_name = tempfile()
+  address = "https://geodesy.unr.edu/NGLStationPages/steps.txt"
+  if(verbose){
+    cmd = sprintf('wget "%s" --no-check-certificate -O %s', address, file_name)
+  }else{
+    cmd = sprintf('wget "%s" --no-check-certificate -q -O %s', address, file_name)
+  }
+
+  # run command
+  system(cmd)
+
+  # Read the downloaded file into a data table
+  dt <- data.table::fread(file_name, header = FALSE, fill = 7)
 
   # Set column names
   colnames(dt) <- c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change", "V5", "V6", "V7")
@@ -90,6 +122,7 @@ download_station_ngl <- function(station_name) {
 
   # convert to MJD
   df_equipment_software_changes_sub$modified_julian_date <- convert_to_mjd_2(df_equipment_software_changes_sub$date_YYMMDD)
+
   # convert to MJD
   df_earthquakes_sub$modified_julian_date <- convert_to_mjd_2(df_earthquakes_sub$date_YYMMDD)
 
@@ -103,34 +136,46 @@ download_station_ngl <- function(station_name) {
   return(ret)
 }
 
-convert_to_mjd_2 <- function(vec_date) {
-  dt <- as.POSIXct(vec_date, format = "%y%b%d", tz = "UTC")
-  # Calculate Julian Date
-  jd <- as.numeric(dt) / 86400 + 2440587.5
-
-  # Calculate Modified Julian Date
-  mjd <- jd - 2400000.5
-  return(mjd)
-}
 
 
 
 #' Download all stations name and location from the Nevada Geodetic Laboratory
 #' @export
+#' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
 #' @examples
 #' df_all_stations <- download_all_stations_ngl()
 #' head(df_all_stations)
 #'
-download_all_stations_ngl <- function() {
+download_all_stations_ngl <- function(verbose = FALSE) {
   # load file from http://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
 
   # load all stations
-  df_all_stations <- data.table::fread(
-    "http://geodesy.unr.edu/NGLStationPages/llh.out",
-    header = FALSE,
-    showProgress = FALSE
-  )
+  # df_all_stations <- data.table::fread(
+  #   "http://geodesy.unr.edu/NGLStationPages/llh.out",
+  #   header = FALSE,
+  #   showProgress = FALSE
+  # )
+
+
+
+  # after discussing with Prof. Hammond, the SSL certificate is for now invalid, this is a temporary workaround
+  file_name = tempfile()
+  if(verbose){
+    cmd = sprintf('wget "https://geodesy.unr.edu/NGLStationPages/llh.out" --no-check-certificate -O %s', file_name)
+
+  }else{
+    cmd = sprintf('wget "https://geodesy.unr.edu/NGLStationPages/llh.out" -q --no-check-certificate -O %s', file_name)
+
+  }
+
+  # run command
+  system(cmd)
+
+  # Read the downloaded file into a data table
+  df_all_stations <- data.table::fread(file_name, header = FALSE)
+
+  # set column names on loaded data
   colnames(df_all_stations) <- c("station_name", "latitude", "longitude", "height")
   return(df_all_stations)
 }
@@ -139,20 +184,37 @@ download_all_stations_ngl <- function() {
 
 #' Download estimated velocities provided by the Nevada Geodetic Laboratory for all stations.
 #' @export
+#' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
 #' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.
 #' @examples
 #' df_estimated_velocities <- download_estimated_velocities_ngl()
 #' head(df_estimated_velocities)
-download_estimated_velocities_ngl <- function() {
+download_estimated_velocities_ngl <- function(verbose=FALSE) {
   # # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
   # README for file available at NGL website: http://geodesy.unr.edu/velocities/midas.readme.txt
 
+  # after discussing with Prof. Hammond, the SSL certificate is for now invalid, this is a temporary workaround
+  # df_estimated_velocities_midas <- data.table::fread(
+  #   "https://geodesy.unr.edu/velocities/midas.IGS14.txt",
+  #   header = FALSE,
+  #   showProgress = FALSE
+  # )
 
-  df_estimated_velocities_midas <- data.table::fread(
-    "http://geodesy.unr.edu/velocities/midas.IGS14.txt",
-    header = FALSE,
-    showProgress = FALSE
-  )
+
+
+  # Use system command to download the file with wget, bypassing SSL verification
+  file_name = tempfile()
+  if(verbose){
+    cmd = sprintf('wget "https://geodesy.unr.edu/velocities/midas.IGS14.txt" --no-check-certificate -O %s', file_name)
+
+  }else{
+    cmd = sprintf('wget "https://geodesy.unr.edu/velocities/midas.IGS14.txt" -q --no-check-certificate -O %s', file_name)
+
+  }
+  system(cmd)
+
+  # Read the downloaded file into a data table
+  df_estimated_velocities_midas <- data.table::fread(file_name, header = FALSE)
 
   # subset columns
   df_estimated_velocities_midas <- df_estimated_velocities_midas[, c(1, 2, 5, 9, 10, 11, 12, 13, 14, 25, 26, 27)]

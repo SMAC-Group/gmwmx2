@@ -4,10 +4,12 @@
 \alias{download_station_ngl}
 \title{Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 reference frame.}
 \usage{
-download_station_ngl(station_name)
+download_station_ngl(station_name, verbose = FALSE)
 }
 \arguments{
 \item{station_name}{A \code{string} specifying the station name.}
+
+\item{verbose}{A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.}
 }
 \value{
 A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
