@@ -3,6 +3,11 @@ create_X_matrix <- function(all_mjd_index,
                             n_seasonal,
                             vec_earthquakes_index_mjd,
                             vec_earthquakes_relaxation_time) {
+
+
+
+
+
   # x = download_station_ngl("CHML")
   # # create all jumps by combining jumps due to equipment change and jumps due to earthquakes
   # jumps = c(x$df_equipment_software_changes$modified_julian_date,
@@ -178,9 +183,9 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
 gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model = "wn + fl") {
-  # x = download_station_ngl("0ABN")
+  # x = download_station_ngl("STPS")
   # plot(x)
-  # vec_earthquakes_relaxation_time <- NULL
+  # # vec_earthquakes_relaxation_time <- NULL
   # component <- "N"
   # n_seasonal <- 2
   # toeplitz_approx_var_cov_wv=TRUE
@@ -239,6 +244,20 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     jumps <- NULL
   }
 
+  # ensure that no jumps or earthquake mjd are specified after the last date of recorded signal
+  last_mjd_signal = tail(all_mjd_index,1)
+  id_jumps_to_remove = which(jumps > last_mjd_signal)
+  id_earthquake_index_to_remove = which(vec_earthquakes_index_mjd > last_mjd_signal)
+
+  # Remove the identified indices if they exist
+  if (length(id_jumps_to_remove) > 0) {
+    jumps <- jumps[-id_jumps_to_remove]
+  }
+
+  if (length(id_earthquake_index_to_remove) > 0) {
+    vec_earthquakes_index_mjd <- vec_earthquakes_index_mjd[-id_earthquake_index_to_remove]
+  }
+
   # create design matrix
   X <- create_X_matrix(
     all_mjd_index = all_mjd_index,
@@ -286,6 +305,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   # # plot signal and estimated model
   # plot(x=rownames(X_sub), y=y, type="l")
   # lines(x=rownames(X_sub), y= X_sub%*% beta_hat, col="red")
+
   # # obtain observed residuals
   eps_hat_sub <- y - X_sub %*% beta_hat
 
