@@ -43,7 +43,7 @@ However, as we advanced in the methodological and computational development of t
 Additionally, many of the new computational techniques and structural improvements would have been challenging to incorporate into the previous `gmwmx` package. 
 Therefore, we will now exclusively support and develop the `gmwmx2` package.
 
-### Upcoming Enhancements
+### Upcoming features
 
 The `gmwmx2` package is currently in the early stages of development. While the supported features are stable, we have numerous additional methods and computational enhancements planned for gradual integration. These include:
 
