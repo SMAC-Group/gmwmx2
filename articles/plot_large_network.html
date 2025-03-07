@@ -141,7 +141,7 @@ years of daily data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/world.html" class="external-link">world</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
-<span><span class="va">countries_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">countries_sf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plot-estimated-northeast-velocities-for-all-estimated-stations">Plot estimated North/East velocities for all estimated stations<a class="anchor" aria-label="anchor" href="#plot-estimated-northeast-velocities-for-all-estimated-stations"></a>
@@ -221,7 +221,7 @@ years of daily data.</p>
 <span>    lwd <span class="op">=</span> <span class="va">arrow_lwd</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><img src="plot_large_network_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="plot_large_network_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="zoom-in-the-united-states">Zoom in the United States<a class="anchor" aria-label="anchor" href="#zoom-in-the-united-states"></a>
@@ -306,7 +306,7 @@ years of daily data.</p>
 <span></span>
 <span><span class="va">my_col_trans2</span> <span class="op">&lt;-</span> <span class="fu">make_transparent</span><span class="op">(</span><span class="va">my_col</span>, alpha <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="va">df_estimated_velocities_gmwmx</span><span class="op">$</span><span class="va">longitude</span>, <span class="va">df_estimated_velocities_gmwmx</span><span class="op">$</span><span class="va">latitude</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">my_col_trans2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_large_network_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="plot_large_network_files/figure-html/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
 
