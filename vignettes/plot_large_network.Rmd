@@ -59,10 +59,10 @@ make_transparent <- function(colors, alpha = 0.5) {
 ```
 
 
-```{r}
+```{r, loaddata}
 tmp <- tempdir()
 world <- geodata::world(path = tmp)
-countries_sf <- st_as_sf(world)
+countries_sf <- sf::st_as_sf(world)
 ```
 
 

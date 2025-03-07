@@ -138,7 +138,8 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
   df_earthquakes <- dt %>% dplyr::filter(step_type_code == 2)
   colnames(df_earthquakes) <- c(
     "station_name", "date_YYMMDD", "step_type_code",
-    "treshold_distance_km", "distance_station_to_epicenter_km", "event_magnitude", "usgs_event_id"
+    "treshold_distance_km", "distance_station_to_epicenter_km",
+    "event_magnitude", "usgs_event_id"
   )
 
   # subset
