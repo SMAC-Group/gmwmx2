@@ -99,21 +99,16 @@ create_X_matrix <- function(all_mjd_index,
 }
 
 
+
+# transformation function for spectral index of power law noise
 trans_kappa_pl <- function(x) {
   exp(x) - 1
 }
 
+
+# inverse of transformation function for spectral index of power law noise
 inv_trans_kappa_pl <- function(x) log(x + 1)
 
-# modified exponential function
-# modified_exp_func <- function(x) {
-#   return((0.9999 - (-0.9999)) * (1 / (1 + exp(-x))) - 0.9999)
-# }
-#
-# # Inverse of the modified exponential function
-# inv_modified_exp_func <- function(y) {
-#   return(-log((1.9998 / (y + 0.9999)) - 1))
-# }
 
 
 
@@ -331,9 +326,15 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   # get vec autocovariance theo omega
   vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], length(all_mjd_index))
 
-  # compute (X^TX)^{-1}
+  # compute (X^TX)^{-1} using QR decomposition for numerical stability
   XtX <- t(X) %*% X
-  inv_XtX <- Matrix::solve(XtX)
+  qr_decomp <- qr(X)
+  R <- qr.R(qr_decomp)
+  R_inv <- Matrix::solve(R)
+  inv_XtX <- R_inv %*% t(R_inv)
+
+
+  # inv_XtX <- Matrix::solve(XtX)
 
   # compute hat matrix
   H <- X %*% inv_XtX %*% t(X)
@@ -509,13 +510,15 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   }
 
 
-  # approx with linear interpolation on errors
+  # compute vector of average of autocovariance of Sigma matrix of epsilon hat using approximation
   vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
     mat_D_q_term_1 = quantities_D$mat_D_q_term_1,
     mat_D_q_term_2 = quantities_D$mat_D_q_term_2,
     sum_on_sub_diag_of_D = quantities_D$sum_on_sub_diag_of_D,
     vec_autocov = vec_mean_autocov, approx_type = "3"
   )
+
+  # compute implied theoretical wavelet variance at estimated parameters
   if (!no_missing) {
     vec_mean_per_diag_w_missing <- vec_mean_autocov_eps_hat * (vec_autocov_omega + pstar_hat^2)
     theo_wv <- autocovariance_to_wv(vec_mean_per_diag_w_missing, tau = wv_emp_eps_hat_filled$scales)
@@ -532,7 +535,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     var_cov_beta_hat <- pstar_hat^(-2) * inv_XtX %*% t(X) %*% ((var_cov_omega + pstar_hat^2) * var_cov_mat_epsilon) %*% X %*% inv_XtX
   }
 
-  std_beta_hat_gmwmx_3 <- sqrt(diag(var_cov_beta_hat))
+  std_beta_hat_gmwmx <- sqrt(diag(var_cov_beta_hat))
 
   # Record end time
   end_time_gmwmx <- Sys.time()
@@ -542,7 +545,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
 
   ret <- list(
     "beta_hat" = beta_hat,
-    "std_beta_hat" = std_beta_hat_gmwmx_3,
+    "std_beta_hat" = std_beta_hat_gmwmx,
     "gamma_hat" = gamma_hat_2,
     "vartheta_hat" = p_hat,
     "component" = component,

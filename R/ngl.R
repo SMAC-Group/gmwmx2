@@ -39,12 +39,12 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
   address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
 
   # Create request and disable SSL verification
-  req <- request(address) |>
+  req <- request(address) %>%
     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
 
   # Conditionally enable verbosity
   if (verbose) {
-    req <- req |> req_verbose()
+    req <- req %>% req_verbose()
   }
 
   # Perform request
@@ -104,12 +104,12 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
 
   # Create request and disable SSL verification
-  req <- request(address) |>
+  req <- request(address) %>%
     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
 
   # Conditionally enable verbosity
   if (verbose) {
-    req <- req |> req_verbose()
+    req <- req %>% req_verbose()
   }
 
   # Perform request
@@ -190,12 +190,12 @@ download_all_stations_ngl <- function(verbose = FALSE) {
   address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
 
   # Create request and disable SSL verification
-  req <- request(address) |>
+  req <- request(address) %>%
     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
 
   # Conditionally enable verbosity
   if (verbose) {
-    req <- req |> req_verbose()
+    req <- req %>% req_verbose()
   }
 
   # Perform request
@@ -237,12 +237,12 @@ download_estimated_velocities_ngl <- function(verbose = FALSE) {
   address <- "https://geodesy.unr.edu/velocities/midas.IGS14.txt"
 
   # Create request and disable SSL verification
-  req <- request(address) |>
+  req <- request(address) %>%
     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
 
   # Conditionally enable verbosity
   if (verbose) {
-    req <- req |> req_verbose()
+    req <- req %>% req_verbose()
   }
 
   # Perform request
