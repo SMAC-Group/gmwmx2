@@ -5,6 +5,10 @@ powerlaw_autocovariance <- function(kappa, sigma2, n) {
     .Call(`_gmwmx2_powerlaw_autocovariance`, kappa, sigma2, n)
 }
 
+fast_toeplitz_matrix_from_vector_cpp <- function(v) {
+    .Call(`_gmwmx2_fast_toeplitz_matrix_from_vector_cpp`, v)
+}
+
 estimate_p1_p2_mle_cpp <- function(omega) {
     .Call(`_gmwmx2_estimate_p1_p2_mle_cpp`, omega)
 }

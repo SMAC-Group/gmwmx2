@@ -24,6 +24,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fast_toeplitz_matrix_from_vector_cpp
+arma::mat fast_toeplitz_matrix_from_vector_cpp(const arma::vec& v);
+RcppExport SEXP _gmwmx2_fast_toeplitz_matrix_from_vector_cpp(SEXP vSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP);
+    rcpp_result_gen = Rcpp::wrap(fast_toeplitz_matrix_from_vector_cpp(v));
+    return rcpp_result_gen;
+END_RCPP
+}
 // estimate_p1_p2_mle_cpp
 arma::vec estimate_p1_p2_mle_cpp(arma::vec omega);
 RcppExport SEXP _gmwmx2_estimate_p1_p2_mle_cpp(SEXP omegaSEXP) {
@@ -416,6 +427,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_gmwmx2_powerlaw_autocovariance", (DL_FUNC) &_gmwmx2_powerlaw_autocovariance, 3},
+    {"_gmwmx2_fast_toeplitz_matrix_from_vector_cpp", (DL_FUNC) &_gmwmx2_fast_toeplitz_matrix_from_vector_cpp, 1},
     {"_gmwmx2_estimate_p1_p2_mle_cpp", (DL_FUNC) &_gmwmx2_estimate_p1_p2_mle_cpp, 1},
     {"_gmwmx2_create_vec_theo_autocov_omega_cpp", (DL_FUNC) &_gmwmx2_create_vec_theo_autocov_omega_cpp, 3},
     {"_gmwmx2_gen_flicker", (DL_FUNC) &_gmwmx2_gen_flicker, 2},
