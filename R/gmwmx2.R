@@ -110,9 +110,6 @@ trans_kappa_pl <- function(x) {
 inv_trans_kappa_pl <- function(x) log(x + 1)
 
 
-
-
-
 # define optimization function for stochastic model White noise + Flicker model or White noise + stationary powerlaw
 # In order to perform the optimization efficiently,
 # the objective function construct a fast approximation of the theoretical wavelet variance of the vector of missing and observed estimated residuals.
@@ -429,7 +426,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     autocov_wn_fl_times_omega_w_zeroes[1:(length(vec_omega))] <- autocov_wn_fl_times_omega
 
     # get var cov missingness process
-    var_cov_omega <- toeplitz(as.vector(vec_autocov_omega))
+    var_cov_omega <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_omega))
 
     # get variance of wv based on this process
     Sigma_wv <- get_theo_cov_matrix_wvar_cpp(n = length(vec_omega), autocov_vec_X = autocov_wn_fl_times_omega_w_zeroes)
@@ -443,7 +440,7 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     } else if (stochastic_model == "wn + pl") {
       vec_autocov_stationary_powerlaw <- powerlaw_autocovariance(kappa = gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
       vec_autocov_stationary_powerlaw[1] <- gamma_hat_1[1] + vec_autocov_stationary_powerlaw[1]
-      var_cov_mat_epsilon <- toeplitz(as.vector(vec_autocov_stationary_powerlaw))
+      var_cov_mat_epsilon <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_stationary_powerlaw))
     }
   } else {
     # Compute the variance covariance of the Wavelet variance when the process is not stationary and therefore using the whole variance covariance matrix of the process on which it is computed
@@ -457,11 +454,11 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
     } else if (stochastic_model == "wn + pl") {
       vec_autocov_stationary_powerlaw <- powerlaw_autocovariance(kappa = gamma_hat_1[2], sigma2 = gamma_hat_1[3], n = length(vec_omega))
       vec_autocov_stationary_powerlaw[1] <- gamma_hat_1[1] + vec_autocov_stationary_powerlaw[1]
-      var_cov_mat_epsilon <- toeplitz(as.vector(vec_autocov_stationary_powerlaw))
+      var_cov_mat_epsilon <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_stationary_powerlaw))
     }
 
     # get var cov missingness process
-    var_cov_omega <- toeplitz(as.vector(vec_autocov_omega))
+    var_cov_omega <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_omega))
 
     # define variance covariance of residuals with missing
     var_cov_eps_hat_w_missing <- var_cov_mat_epsilon * (var_cov_omega + pstar_hat^2)
