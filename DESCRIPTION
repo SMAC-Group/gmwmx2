@@ -36,7 +36,8 @@ Suggests: knitr,
           shape,
           tibble,
           tidygeocoder,
-          sf
+          sf,
+          geodata
 URL: https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues
 LazyData: true
