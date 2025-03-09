@@ -294,6 +294,9 @@
 <span><span class="va">elevation_data_france</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/elevation.html" class="external-link">elevation_30s</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"France"</span>, path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="va">elevation_data_italy</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/elevation.html" class="external-link">elevation_30s</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Italy"</span>, path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
 <span></span>
+<span></span>
+<span></span>
+<span></span>
 <span><span class="co"># load raster</span></span>
 <span><span class="va">elevation_raster_swiss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="va">elevation_data_swiss</span><span class="op">)</span></span>
 <span><span class="va">elevation_raster_france</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="va">elevation_data_france</span><span class="op">)</span></span>
@@ -328,14 +331,6 @@
 <span><span class="co"># Generate breaks based on the range of the raster data</span></span>
 <span><span class="va">num_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">custom_colors</span><span class="op">)</span></span>
 <span><span class="va">breaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">min_val</span>, <span class="va">max_val</span>, length.out <span class="op">=</span> <span class="va">num_colors</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># Get the country boundaries using geodata</span></span>
-<span><span class="va">world</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodata/man/world.html" class="external-link">world</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Filter for the countries of interest</span></span>
-<span><span class="va">countries</span> <span class="op">&lt;-</span> <span class="va">world</span><span class="op">[</span><span class="va">world</span><span class="op">$</span><span class="va">NAME_0</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Switzerland"</span>, <span class="st">"France"</span>, <span class="st">"Italy"</span>, <span class="st">"Germany"</span><span class="op">)</span>, <span class="op">]</span></span>
-<span><span class="va">countries_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">countries</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># plot</span></span>
@@ -376,9 +371,6 @@
 <span><span class="va">my_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#e96bff"</span><span class="op">)</span></span>
 <span><span class="va">scale_ellipses</span> <span class="op">&lt;-</span> <span class="fl">3500</span></span>
 <span><span class="va">my_col_trans</span> <span class="op">&lt;-</span> <span class="fu">make_transparent</span><span class="op">(</span><span class="va">my_col</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Overlay country boundaries</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">countries_sf</span><span class="op">$</span><span class="va">geometry</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df_estimated_velocities_and_location</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">ellipse</span><span class="op">(</span></span>
