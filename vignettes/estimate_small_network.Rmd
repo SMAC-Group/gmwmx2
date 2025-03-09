@@ -158,6 +158,9 @@ elevation_data_swiss <- geodata::elevation_30s(country = "Switzerland", path = t
 elevation_data_france <- geodata::elevation_30s(country = "France", path = tmp)
 elevation_data_italy <- geodata::elevation_30s(country = "Italy", path = tmp)
 
+
+
+
 # load raster
 elevation_raster_swiss <- raster(elevation_data_swiss)
 elevation_raster_france <- raster(elevation_data_france)
@@ -191,14 +194,6 @@ max_val <- max(raster_values, na.rm = TRUE)
 # Generate breaks based on the range of the raster data
 num_colors <- length(custom_colors)
 breaks <- seq(min_val, max_val, length.out = num_colors + 1)
-
-
-# Get the country boundaries using geodata
-world <- geodata::world(path = tmp)
-
-# Filter for the countries of interest
-countries <- world[world$NAME_0 %in% c("Switzerland", "France", "Italy", "Germany"), ]
-countries_sf <- st_as_sf(countries)
 
 
 # plot
@@ -239,9 +234,6 @@ arrow_lwd <- 2
 my_col <- c("#e96bff")
 scale_ellipses <- 3500
 my_col_trans <- make_transparent(my_col, alpha = .3)
-
-# Overlay country boundaries
-plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
 
 for (i in seq(nrow(df_estimated_velocities_and_location))) {
   ellipse(
