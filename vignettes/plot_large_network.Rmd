@@ -60,9 +60,7 @@ make_transparent <- function(colors, alpha = 0.5) {
 
 
 ```{r, loaddata}
-tmp <- tempdir()
-world <- geodata::world(path = tmp)
-countries_sf <- sf::st_as_sf(world)
+countries_sf <- rnaturalearth::ne_countries()
 ```
 
 
@@ -185,9 +183,7 @@ lat_labels <- sapply(seq(-90, 90, by = 10), function(y) {
 axis(side = 1, at = seq(-180, 180, by = 10), labels = lon_labels)
 axis(side = 2, at = seq(-90, 90, by = 10), labels = lat_labels, las = 1)
 
-tmp <- tempdir()
-world <- geodata::world(path = tmp)
-countries_sf <- st_as_sf(world)
+
 plot(countries_sf$geometry, add = TRUE, border = "black", lwd = 2)
 
 # # add axis
