@@ -4,6 +4,10 @@
 
 -->
 ![](https://img.shields.io/github/last-commit/SMAC-Group/gmwmx2) 
+[![CRAN status](https://www.r-pkg.org/badges/version/gmwmx2)](https://CRAN.R-project.org/package=gmwmx2)
+[![CRAN RStudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/gmwmx2)](https://www.r-pkg.org/pkg/gmwmx2)
+[![metacran downloads](https://cranlogs.r-pkg.org/badges/last-week/gmwmx2)](https://cran.r-project.org/package=gmwmx2)
 [<img src="https://s-a.github.io/license/img/agpl-3.0.svg" />](https://s-a.github.io/license/?license=agpl-3.0&fullname=Stephan%20Ahlf&year=2015&profile=https://github.com/s-a&projectUrl=https://github.com/s-a/license&projectName=License%20Demo "")
 ![R-CMD-check](https://github.com/SMAC-Group/gmwmx2/actions/workflows/R-CMD-check.yaml/badge.svg)
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-4.0.0-6666ff.svg)](https://cran.r-project.org/)
