@@ -4,6 +4,7 @@
 #' @importFrom utils read.table
 #' @importFrom dplyr filter select
 #' @importFrom  utils download.file
+#' @importFrom rlang .data
 #' @importFrom magrittr %>%
 #' @param  station_name A \code{string} specifying the station name.
 #' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
@@ -132,10 +133,10 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
   # Filter earthquakes from equipment/software changes
   df_equipment_software_changes <- dt %>%
-    dplyr::filter(step_type_code == 1 | step_type_code == 3) %>%
-    dplyr::select(station_name, date_YYMMDD, step_type_code, type_equipment_change)
+    dplyr::filter(.data$step_type_code == 1 | .data$step_type_code == 3) %>%
+    dplyr::select(.data$station_name, .data$date_YYMMDD, .data$step_type_code, .data$type_equipment_change)
 
-  df_earthquakes <- dt %>% dplyr::filter(step_type_code == 2)
+  df_earthquakes <- dt %>% dplyr::filter(.data$step_type_code == 2)
   colnames(df_earthquakes) <- c(
     "station_name", "date_YYMMDD", "step_type_code",
     "treshold_distance_km", "distance_station_to_epicenter_km",
@@ -143,8 +144,8 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
   )
 
   # subset
-  df_equipment_software_changes_sub <- df_equipment_software_changes %>% dplyr::filter(station_name == !!station_name)
-  df_earthquakes_sub <- df_earthquakes %>% dplyr::filter(station_name == !!station_name)
+  df_equipment_software_changes_sub <- df_equipment_software_changes %>% dplyr::filter(.data$station_name == !!station_name)
+  df_earthquakes_sub <- df_earthquakes %>% dplyr::filter(.data$station_name == !!station_name)
 
   # convert to MJD
   df_equipment_software_changes_sub$modified_julian_date <- convert_to_mjd_2(df_equipment_software_changes_sub$date_YYMMDD)

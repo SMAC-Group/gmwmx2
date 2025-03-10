@@ -38,7 +38,8 @@ Suggests: knitr,
           tibble,
           tidygeocoder,
           sf,
-          geodata
+          geodata,
+          rlang
 URL: https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues
 LazyData: true
