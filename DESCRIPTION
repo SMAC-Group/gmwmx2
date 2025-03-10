@@ -28,7 +28,8 @@ Imports:
     magrittr,
     wv,
     Matrix,
-    httr2
+    httr2,
+    rlang
 Suggests: knitr,
           rmarkdown,
           knitcitations,
@@ -38,8 +39,7 @@ Suggests: knitr,
           tibble,
           tidygeocoder,
           sf,
-          geodata,
-          rlang
+          geodata
 URL: https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues
 LazyData: true
