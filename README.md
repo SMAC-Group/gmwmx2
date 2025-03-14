@@ -62,7 +62,7 @@ The `gmwmx2` package relies on a limited number of external libraries, but notab
 
 The original [`gmwmx`](https://github.com/SMAC-Group/gmwmx) package was designed to compare estimated parameters obtained from the GMWMX with the ones obtained with the Maximum Likelihood Estimator (MLE) implemented in [Hector](https://teromovigo.com/product/hector/). 
 This allowed for the replication of examples and simulations discussed in [Cucci, D. A., Voirol, L., Kermarrec, G., Montillet, J. P., and Guerrier, S. (2022)](https://doi.org/10.1007/s00190-023-01702-8).
-However, as we advanced in the methodological and computational development of the GMWMX method, we sought a standalone implementation that did not include [Hector](https://teromovigo.com/hector/).
+However, as we advanced in the methodological and computational development of the GMWMX method, we sought a standalone implementation that did not include [Hector](https://teromovigo.com/product/hector/).
 Additionally, many of the new computational techniques and structural improvements would have been challenging to incorporate into the previous `gmwmx` package. 
 Therefore, we will now exclusively support and develop the `gmwmx2` package.
 
@@ -71,7 +71,8 @@ Therefore, we will now exclusively support and develop the `gmwmx2` package.
 The `gmwmx2` package is currently in the early stages of development. While the supported features are stable, we have numerous additional methods and computational enhancements planned for gradual integration. These include:
 
 - Computational optimization to improve speed
-- Support for a wider range of stochastic models
+- Support for a wider range of stochastic models to describe the error term
+- Support for a wider range of stochastic models to describe the missingness process 
 - A computationally efficient model selection criterion for stochastic models
 
 
