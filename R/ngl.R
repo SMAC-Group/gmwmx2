@@ -172,7 +172,7 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
 #' Download all stations name and location from the Nevada Geodetic Laboratory
 #' @export
-#' @importFrom httr2 request req_options req_verbose req_perform resp_body_raw
+#' @importFrom httr2 request req_options req_verbose req_perform resp_body_raw req_timeout
 #' @importFrom data.table fread
 #' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
 #' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
