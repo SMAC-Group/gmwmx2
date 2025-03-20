@@ -184,6 +184,7 @@ download_all_stations_ngl <- function(verbose = FALSE) {
   # load file from https://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
 
   # load all stations
+
   df_all_stations <- data.table::fread(
     "https://geodesy.unr.edu/NGLStationPages/llh.out",
     header = FALSE,
@@ -197,8 +198,7 @@ download_all_stations_ngl <- function(verbose = FALSE) {
   # address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
   #
   # # Create request and disable SSL verification
-  # req <- request(address)    %>%
-  #  req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
+  # req <- request(address)   # %>%    req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
   #
   # # Conditionally enable verbosity
   # if (verbose) {
