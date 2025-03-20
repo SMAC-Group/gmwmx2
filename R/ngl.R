@@ -17,8 +17,8 @@
 download_station_ngl <- function(station_name, verbose = FALSE) {
   # station_name="AB21"
 
-  # download file from  string formatted as "http://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
-  # see help file for .tenv3 file here : http://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
+  # download file from  string formatted as "https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
+  # see help file for .tenv3 file here : https://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
 
   # check that station is available
   df_all_stations <- download_all_stations_ngl()
@@ -28,35 +28,37 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
 
   # -------------- load .tenv3 file using data.table fread
-  # df_position <- data.table::fread(
-  #   paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"),
-  #   header = TRUE, showProgress = FALSE
-  # )
+  address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+  df_position <- data.table::fread(
+    address,
+    header = TRUE,
+    showProgress = verbose
+  )
 
 
   # after discussing with Prof. Hammond, the SSL certificate is for for now invalid, this is a temporary workaround
-
-  file_name <- tempfile()
-  address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
-
-  # Create request and disable SSL verification
-  req <- request(address) %>%
-    req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
-
-  # Conditionally enable verbosity
-  if (verbose) {
-    req <- req %>% req_verbose()
-  }
-
-  # Perform request
-  resp <- req_perform(req)
-
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
-
-
-  # Read the downloaded file into a data table
-  df_position <- data.table::fread(file_name, header = TRUE)
+#
+#   file_name <- tempfile()
+#   address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+#
+#   # Create request and disable SSL verification
+#   req <- request(address) %>%
+#     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
+#
+#   # Conditionally enable verbosity
+#   if (verbose) {
+#     req <- req %>% req_verbose()
+#   }
+#
+#   # Perform request
+#   resp <- req_perform(req)
+#
+#   # Write the content to a file
+#   writeBin(resp_body_raw(resp), file_name)
+#
+#
+#   # Read the downloaded file into a data table
+#   df_position <- data.table::fread(file_name, header = TRUE)
 
 
   # rewrite colnames
@@ -93,35 +95,37 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
 
   # # # Using fread for fast reading
-  # dt <- data.table::fread("https://geodesy.unr.edu/NGLStationPages/steps.txt",
-  #   fill = 7, # Handle varying number of columns
-  #   showProgress = FALSE,
-  #   header = FALSE, # Assuming no header
-  #   na.strings = ""
-  # ) # Empty fields become NA
-
-  file_name <- tempfile()
-  address <- "https://geodesy.unr.edu/NGLStationPages/steps.txt"
+  dt <- data.table::fread("https://geodesy.unr.edu/NGLStationPages/steps.txt",
+    fill = 7, # Handle varying number of columns
+    showProgress = verbose,
+    header = FALSE, # Assuming no header
+    na.strings = "" # Empty fields become NA
+  )
 
 
-  # Create request and disable SSL verification
-  req <- request(address) %>%
-    req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
-
-  # Conditionally enable verbosity
-  if (verbose) {
-    req <- req %>% req_verbose()
-  }
-
-  # Perform request
-  resp <- req_perform(req)
-
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
-
-
-  # Read the downloaded file into a data table
-  dt <- data.table::fread(file_name, header = FALSE, fill = 7)
+  # previous approach not checking SSL certificate
+  # file_name <- tempfile()
+  # address <- "https://geodesy.unr.edu/NGLStationPages/steps.txt"
+  #
+  #
+  # # Create request and disable SSL verification
+  # req <- request(address) %>%
+  #   req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
+  #
+  # # Conditionally enable verbosity
+  # if (verbose) {
+  #   req <- req %>% req_verbose()
+  # }
+  #
+  # # Perform request
+  # resp <- req_perform(req)
+  #
+  # # Write the content to a file
+  # writeBin(resp_body_raw(resp), file_name)
+  #
+  #
+  # # Read the downloaded file into a data table
+  # dt <- data.table::fread(file_name, header = FALSE, fill = 7)
 
   # Set column names
   colnames(dt) <- c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change", "V5", "V6", "V7")
@@ -177,36 +181,38 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 #' head(df_all_stations)
 #'
 download_all_stations_ngl <- function(verbose = FALSE) {
-  # load file from http://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
+  # load file from https://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
 
   # load all stations
-  # df_all_stations <- data.table::fread(
-  #   "http://geodesy.unr.edu/NGLStationPages/llh.out",
-  #   header = FALSE,
-  #   showProgress = FALSE
-  # )
+  df_all_stations <- data.table::fread(
+    "https://geodesy.unr.edu/NGLStationPages/llh.out",
+    header = FALSE,
+    showProgress = verbose
+  )
 
-  # after discussing with Prof. Hammond, the SSL certificate is for now invalid, this is a temporary workaround
-  file_name <- tempfile()
-  address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
 
-  # Create request and disable SSL verification
-  req <- request(address) %>%
-    req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
-
-  # Conditionally enable verbosity
-  if (verbose) {
-    req <- req %>% req_verbose()
-  }
-
-  # Perform request
-  resp <- req_perform(req)
-
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
-
-  # Read the downloaded file into a data table
-  df_all_stations <- data.table::fread(file_name, header = FALSE)
+  # previous data loading that was not checking SSL certificate:
+  # # after discussing with Prof. Hammond, the SSL certificate is for now invalid, this is a temporary workaround
+  # file_name <- tempfile()
+  # address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
+  #
+  # # Create request and disable SSL verification
+  # req <- request(address)    %>%
+  #  req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
+  #
+  # # Conditionally enable verbosity
+  # if (verbose) {
+  #   req <- req %>% req_verbose()
+  # }
+  #
+  # # Perform request
+  # resp <- req_perform(req)
+  #
+  # # Write the content to a file
+  # writeBin(resp_body_raw(resp), file_name)
+  #
+  # # Read the downloaded file into a data table
+  # df_all_stations <- data.table::fread(file_name, header = FALSE)
 
   # set column names on loaded data
   colnames(df_all_stations) <- c("station_name", "latitude", "longitude", "height")
@@ -223,37 +229,36 @@ download_all_stations_ngl <- function(verbose = FALSE) {
 #' df_estimated_velocities <- download_estimated_velocities_ngl()
 #' head(df_estimated_velocities)
 download_estimated_velocities_ngl <- function(verbose = FALSE) {
-  # # load file from http://geodesy.unr.edu/velocities/midas.IGS14.txt
-  # README for file available at NGL website: http://geodesy.unr.edu/velocities/midas.readme.txt
+  # # load file from https://geodesy.unr.edu/velocities/midas.IGS14.txt
+  # README for file available at NGL website: https://geodesy.unr.edu/velocities/midas.readme.txt
 
-  # after discussing with Prof. Hammond, the SSL certificate is for now invalid, this is a temporary workaround
-  # df_estimated_velocities_midas <- data.table::fread(
-  #   "https://geodesy.unr.edu/velocities/midas.IGS14.txt",
-  #   header = FALSE,
-  #   showProgress = FALSE
-  # )
+  df_estimated_velocities_midas <- data.table::fread(
+    "https://geodesy.unr.edu/velocities/midas.IGS14.txt",
+    header = FALSE,
+    showProgress = verbose
+  )
 
-
-  file_name <- tempfile()
-  address <- "https://geodesy.unr.edu/velocities/midas.IGS14.txt"
-
-  # Create request and disable SSL verification
-  req <- request(address) %>%
-    req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
-
-  # Conditionally enable verbosity
-  if (verbose) {
-    req <- req %>% req_verbose()
-  }
-
-  # Perform request
-  resp <- req_perform(req)
-
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
-
-  # Read the downloaded file into a data table
-  df_estimated_velocities_midas <- data.table::fread(file_name, header = FALSE)
+  # # previous data loading bypassing SSL certificate check
+  # file_name <- tempfile()
+  # address <- "https://geodesy.unr.edu/velocities/midas.IGS14.txt"
+  #
+  # # Create request and disable SSL verification
+  # req <- request(address) %>%
+  #   req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
+  #
+  # # Conditionally enable verbosity
+  # if (verbose) {
+  #   req <- req %>% req_verbose()
+  # }
+  #
+  # # Perform request
+  # resp <- req_perform(req)
+  #
+  # # Write the content to a file
+  # writeBin(resp_body_raw(resp), file_name)
+  #
+  # # Read the downloaded file into a data table
+  # df_estimated_velocities_midas <- data.table::fread(file_name, header = FALSE)
 
   # subset columns
   df_estimated_velocities_midas <- df_estimated_velocities_midas[, c(1, 2, 5, 9, 10, 11, 12, 13, 14, 25, 26, 27)]
