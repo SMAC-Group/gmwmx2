@@ -238,6 +238,7 @@ download_estimated_velocities_ngl <- function(verbose = FALSE) {
     showProgress = verbose
   )
 
+
   # # previous data loading bypassing SSL certificate check
   # file_name <- tempfile()
   # address <- "https://geodesy.unr.edu/velocities/midas.IGS14.txt"
