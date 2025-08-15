@@ -175,22 +175,13 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
 gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model = "wn + fl") {
-  # x = download_station_ngl("STPS")
+  # x = download_station_ngl("P820")
   # plot(x)
-  # # vec_earthquakes_relaxation_time <- NULL
-  # component <- "N"
-  # n_seasonal <- 2
-  # toeplitz_approx_var_cov_wv=TRUE
-  # stochastic_model = "wn + pl"
-  # all_station = download_all_stations_ngl()
-  # all_station[200]
-  # # x = download_station_ngl("0ABN") # nice to show diff between pl and flicker
-  # x=download_station_ngl("0KIS")
-  # plot(x)
-  # fit1 = gmwmx2(x = x, stochastic_model = "wn + fl", component = "E")
-  # plot(fit1)
-  # fit2 = gmwmx2(x = x, stochastic_model = "wn + pl", component = "E")
-  # plot(fit2)
+  # n_seasonal = 2
+  # vec_earthquakes_relaxation_time = NULL
+  # component = "N"
+  # toeplitz_approx_var_cov_wv = TRUE
+  # stochastic_model = "wn + fl"
 
   # Check class
   if (!inherits(x, "gnss_ts_ngl")) {
@@ -249,6 +240,15 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   if (length(id_earthquake_index_to_remove) > 0) {
     vec_earthquakes_index_mjd <- vec_earthquakes_index_mjd[-id_earthquake_index_to_remove]
   }
+
+  # if after removing jumps or earthquake that are indicated after the last date, set to NULL
+  if(length(vec_earthquakes_index_mjd) == 0){
+    vec_earthquakes_index_mjd = NULL
+  }
+  if(length(jumps) == 0){
+    jumps = NULL
+  }
+
 
   # create design matrix
   X <- create_X_matrix(
@@ -329,9 +329,6 @@ gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, co
   R <- qr.R(qr_decomp)
   R_inv <- Matrix::solve(R)
   inv_XtX <- R_inv %*% t(R_inv)
-
-
-  # inv_XtX <- Matrix::solve(XtX)
 
   # compute hat matrix
   H <- X %*% inv_XtX %*% t(X)
@@ -821,3 +818,11 @@ plot.fit_gnss_ts_ngl <- function(x, ...) {
   # Reset to a single plot layout
   layout(1)
 }
+
+
+
+
+
+
+
+
