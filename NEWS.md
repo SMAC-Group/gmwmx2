@@ -1,6 +1,6 @@
 # gmwmx2 version 0.0.3
 
-- Solve minor bug when creating design matrix if jumps or earthquakes are indicated after last observation
+- Solve minor bug when creating design matrix if jumps or earthquakes are indicated after the last observation.
 
 # gmwmx2 version 0.0.2
 
