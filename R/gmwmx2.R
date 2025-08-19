@@ -655,8 +655,6 @@ summary.fit_gnss_ts_ngl <- function(object, scale_parameters = FALSE, ...) {
 #' x <- download_station_ngl("0AMB")
 #' fit_N <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' plot(fit_N)
-#' fit_E <- gmwmx2(x, n_seasonal = 2, component = "E")
-#' plot(fit_E)
 #' @return No return value. Plot a \code{fit_gnss_ts_ngl} object.
 plot.fit_gnss_ts_ngl <- function(x, ...) {
   #
