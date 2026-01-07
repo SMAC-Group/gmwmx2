@@ -241,29 +241,29 @@
 <span><span class="co"># print estimated North and East velocities</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   station_name estimated_trend_N std_estimated_trend_N estimated_trend_E</span></span>
-<span><span class="co">## 1         BSCN      4.433564e-05          3.393977e-07      5.344486e-05</span></span>
-<span><span class="co">## 2         CERN      4.455153e-05          1.827894e-07      5.354054e-05</span></span>
-<span><span class="co">## 3         GLRA      4.380341e-05          2.867278e-07      5.466129e-05</span></span>
-<span><span class="co">## 4         SCDA      4.474030e-05          2.107388e-07      5.336750e-05</span></span>
-<span><span class="co">## 5         STPS      4.480467e-05          2.179160e-07      5.248551e-05</span></span>
+<span><span class="co">## 1         BSCN      4.400688e-05          2.017016e-07      5.363591e-05</span></span>
+<span><span class="co">## 2         CERN      4.419513e-05          8.103492e-06      5.367073e-05</span></span>
+<span><span class="co">## 3         GLRA      4.379306e-05          2.629993e-07      5.446698e-05</span></span>
+<span><span class="co">## 4         SCDA      4.418308e-05          1.932255e-07      5.352215e-05</span></span>
+<span><span class="co">## 5         STPS      4.448089e-05          1.881704e-07      5.273016e-05</span></span>
 <span><span class="co">##   std_estimated_trend_E time_series_length estimated_trend_N_scaled</span></span>
-<span><span class="co">## 1          2.163953e-07               8060               0.01619359</span></span>
-<span><span class="co">## 2          1.309053e-07               4968               0.01627245</span></span>
-<span><span class="co">## 3          3.365704e-07               5739               0.01599919</span></span>
-<span><span class="co">## 4          1.440230e-07               6206               0.01634140</span></span>
-<span><span class="co">## 5          1.193416e-07               6269               0.01636490</span></span>
+<span><span class="co">## 1          1.882301e-06               8499               0.01607351</span></span>
+<span><span class="co">## 2          1.067880e-07               5400               0.01614227</span></span>
+<span><span class="co">## 3          3.286023e-07               6167               0.01599541</span></span>
+<span><span class="co">## 4          1.550908e-08               6631               0.01613787</span></span>
+<span><span class="co">## 5          1.047581e-07               6679               0.01624665</span></span>
 <span><span class="co">##   std_estimated_trend_N_scaled estimated_trend_E_scaled</span></span>
-<span><span class="co">## 1                 1.239650e-04               0.01952073</span></span>
-<span><span class="co">## 2                 6.676384e-05               0.01955568</span></span>
-<span><span class="co">## 3                 1.047273e-04               0.01996504</span></span>
-<span><span class="co">## 4                 7.697236e-05               0.01949248</span></span>
-<span><span class="co">## 5                 7.959381e-05               0.01917033</span></span>
+<span><span class="co">## 1                 7.367151e-05               0.01959052</span></span>
+<span><span class="co">## 2                 2.959800e-03               0.01960324</span></span>
+<span><span class="co">## 3                 9.606048e-05               0.01989407</span></span>
+<span><span class="co">## 4                 7.057563e-05               0.01954897</span></span>
+<span><span class="co">## 5                 6.872925e-05               0.01925969</span></span>
 <span><span class="co">##   std_estimated_trend_E_scaled</span></span>
-<span><span class="co">## 1                 7.903838e-05</span></span>
-<span><span class="co">## 2                 4.781315e-05</span></span>
-<span><span class="co">## 3                 1.229323e-04</span></span>
-<span><span class="co">## 4                 5.260439e-05</span></span>
-<span><span class="co">## 5                 4.358953e-05</span></span></code></pre>
+<span><span class="co">## 1                 6.875104e-04</span></span>
+<span><span class="co">## 2                 3.900431e-05</span></span>
+<span><span class="co">## 3                 1.200220e-04</span></span>
+<span><span class="co">## 4                 5.664691e-06</span></span>
+<span><span class="co">## 5                 3.826291e-05</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df_estimated_velocities</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -294,63 +294,63 @@
 <tbody>
 <tr class="odd">
 <td align="left">BSCN</td>
-<td align="right">4.43e-05</td>
-<td align="right">3e-07</td>
-<td align="right">5.34e-05</td>
-<td align="right">2e-07</td>
-<td align="right">8060</td>
-<td align="right">0.0161936</td>
-<td align="right">0.0001240</td>
-<td align="right">0.0195207</td>
-<td align="right">0.0000790</td>
+<td align="right">4.40e-05</td>
+<td align="right">2.0e-07</td>
+<td align="right">5.36e-05</td>
+<td align="right">1.9e-06</td>
+<td align="right">8499</td>
+<td align="right">0.0160735</td>
+<td align="right">0.0000737</td>
+<td align="right">0.0195905</td>
+<td align="right">0.0006875</td>
 </tr>
 <tr class="even">
 <td align="left">CERN</td>
-<td align="right">4.46e-05</td>
-<td align="right">2e-07</td>
-<td align="right">5.35e-05</td>
-<td align="right">1e-07</td>
-<td align="right">4968</td>
-<td align="right">0.0162724</td>
-<td align="right">0.0000668</td>
-<td align="right">0.0195557</td>
-<td align="right">0.0000478</td>
+<td align="right">4.42e-05</td>
+<td align="right">8.1e-06</td>
+<td align="right">5.37e-05</td>
+<td align="right">1.0e-07</td>
+<td align="right">5400</td>
+<td align="right">0.0161423</td>
+<td align="right">0.0029598</td>
+<td align="right">0.0196032</td>
+<td align="right">0.0000390</td>
 </tr>
 <tr class="odd">
 <td align="left">GLRA</td>
 <td align="right">4.38e-05</td>
-<td align="right">3e-07</td>
-<td align="right">5.47e-05</td>
-<td align="right">3e-07</td>
-<td align="right">5739</td>
-<td align="right">0.0159992</td>
-<td align="right">0.0001047</td>
-<td align="right">0.0199650</td>
-<td align="right">0.0001229</td>
+<td align="right">3.0e-07</td>
+<td align="right">5.45e-05</td>
+<td align="right">3.0e-07</td>
+<td align="right">6167</td>
+<td align="right">0.0159954</td>
+<td align="right">0.0000961</td>
+<td align="right">0.0198941</td>
+<td align="right">0.0001200</td>
 </tr>
 <tr class="even">
 <td align="left">SCDA</td>
-<td align="right">4.47e-05</td>
-<td align="right">2e-07</td>
-<td align="right">5.34e-05</td>
-<td align="right">1e-07</td>
-<td align="right">6206</td>
-<td align="right">0.0163414</td>
-<td align="right">0.0000770</td>
-<td align="right">0.0194925</td>
-<td align="right">0.0000526</td>
+<td align="right">4.42e-05</td>
+<td align="right">2.0e-07</td>
+<td align="right">5.35e-05</td>
+<td align="right">0.0e+00</td>
+<td align="right">6631</td>
+<td align="right">0.0161379</td>
+<td align="right">0.0000706</td>
+<td align="right">0.0195490</td>
+<td align="right">0.0000057</td>
 </tr>
 <tr class="odd">
 <td align="left">STPS</td>
-<td align="right">4.48e-05</td>
-<td align="right">2e-07</td>
-<td align="right">5.25e-05</td>
-<td align="right">1e-07</td>
-<td align="right">6269</td>
-<td align="right">0.0163649</td>
-<td align="right">0.0000796</td>
-<td align="right">0.0191703</td>
-<td align="right">0.0000436</td>
+<td align="right">4.45e-05</td>
+<td align="right">2.0e-07</td>
+<td align="right">5.27e-05</td>
+<td align="right">1.0e-07</td>
+<td align="right">6679</td>
+<td align="right">0.0162466</td>
+<td align="right">0.0000687</td>
+<td align="right">0.0192597</td>
+<td align="right">0.0000383</td>
 </tr>
 </tbody>
 </table>
@@ -527,7 +527,7 @@
 <span>  pos <span class="op">=</span> <span class="fl">3</span>, cex <span class="op">=</span> <span class="va">txt_size</span>,</span>
 <span>  labels <span class="op">=</span> <span class="st">"20 mm/year"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_small_network_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="estimate_small_network_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
 
@@ -546,7 +546,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>

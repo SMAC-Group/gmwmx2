@@ -107,26 +107,28 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept                0.75010524   0.00560599   0.73911770   0.76109277</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00000693   0.00000062  -0.00000814  -0.00000572</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)             0.00060825   0.00020361   0.00020919   0.00100732</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.00047066   0.00021055  -0.00088333  -0.00005800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.00040375   0.00014749   0.00011468   0.00069283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)        0.00008541   0.00014720  -0.00020311   0.00037393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept                0.74690707 389.79832189 -763.24376507 764.73757921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00000721   0.00342891  -0.00672775   0.00671333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)            -0.00273991   3.56321214  -6.98650737   6.98102756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.00277131   3.46650769  -6.79700154   6.79145892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.00087464   3.35377338  -6.57240040   6.57414968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)       -0.00059571   3.34624511  -6.55911560   6.55792418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 60649         -0.00010784  16.51627880 -32.37141944  32.37120376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 60649    0.00072044  37.03198435 -72.58063516  72.58207605</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Spectral index:    -0.95767473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Variance:     0.00000103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Spectral index:    -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Variance:     0.00000078</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Missingness parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00076834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99923225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00065789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99346405</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.34 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.46 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span>, scale_parameters <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of Estimated Model</span>
@@ -135,26 +137,28 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              273.97593721   2.04758744 269.96273957 277.98913484</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00253039   0.00022526  -0.00297188  -0.00208890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)             0.22216452   0.07436781   0.07640630   0.36792275</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.17190992   0.07690285  -0.32263674  -0.02118310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.14747050   0.05387064   0.04188598   0.25305502</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)        0.03119569   0.05376653  -0.07418477   0.13657615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              272.80780701 142373.83706985 -278774.78519067 279320.40080468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00263347   1.25240917  -2.45731034   2.45204340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)            -1.00075049 1301.46323398 -2551.82181629 2549.82031532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -1.01222083 1266.14193492 -2482.60481258 2480.58037092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.31946249 1224.96572695 -2400.56924463 2401.20816961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)       -0.21758349 1222.21602545 -2395.71697469 2395.28180772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 60649         -0.03938892 6032.57083058 -11823.66095104 11823.58217319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 60649    0.26314229 13525.93228495 -26510.07699354 26510.60327811</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Spectral index:    -0.95767473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Variance:     0.00000103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Spectral index:    -1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Stationary powerlaw Variance:     0.00000078</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Missingness parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00076834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99923225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00065789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99346405</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.34 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.46 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gmwmx2.html">gmwmx2</a></span><span class="op">(</span><span class="va">x</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, stochastic_model <span class="op">=</span> <span class="st">"wn + fl"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
@@ -164,25 +168,27 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter                  Estimate  Std_Deviation  95% CI Lower  95% CI Upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept                0.75010524   0.00077387   0.74858849   0.75162198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00000693   0.00000060  -0.00000810  -0.00000576</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)             0.00060825   0.00020543   0.00020561   0.00101089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.00047066   0.00021283  -0.00088780  -0.00005353</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.00040375   0.00014855   0.00011260   0.00069490</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)        0.00008541   0.00014818  -0.00020502   0.00037584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept                0.74690707   0.00073637   0.74546382   0.74835032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                   -0.00000721   0.00000052  -0.00000823  -0.00000619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)            -0.00273991   0.00017680  -0.00308643  -0.00239338</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)            -0.00277131   0.00017409  -0.00311252  -0.00243010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)        0.00087464   0.00012456   0.00063051   0.00111878</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)       -0.00059571   0.00012330  -0.00083738  -0.00035404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 60649         -0.00010784   0.00117394  -0.00240872   0.00219304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 60649    0.00072044   0.00238875  -0.00396142   0.00540231</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000095</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Flicker Noise Variance:     0.00000095</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  White Noise Variance  :     0.00000058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Flicker Noise Variance:     0.00000078</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Missingness parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00076834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 1.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99923225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 0 | Z_{i} = 1): 0.00065789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  \hat{E[Z]}: 0.99346405</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.68 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Running time: 0.91 seconds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -199,7 +205,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
