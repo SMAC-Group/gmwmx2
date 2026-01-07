@@ -1,4 +1,76 @@
-#' Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 reference frame.
+#' Download all stations name and location from the Nevada Geodetic Laboratory
+#' @export
+#' @importFrom httr2 request req_options req_verbose req_perform resp_body_raw req_timeout resp_check_status
+#' @importFrom data.table fread
+#' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
+#' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
+#' @examples
+#' df_all_stations <- download_all_stations_ngl()
+#' head(df_all_stations)
+#'
+download_all_stations_ngl <- function(verbose = FALSE) {
+
+  file_name <- tempfile()
+  address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
+
+  # # Create request
+  req <- request(address) %>% req_timeout(60)
+
+  # Conditionally enable verbosity
+  if (verbose) {
+    req <- req %>% req_verbose()
+  }
+
+
+  out <- tryCatch({
+
+    # Perform request
+    resp <- req_perform(req)
+
+    ### check status of request
+    resp <- resp_check_status(resp)
+
+    # Write the content to a file
+    writeBin(resp_body_raw(resp), file_name)
+
+    # Read the downloaded file into a data table
+    df_all_stations <- data.table::fread(file_name, header = FALSE)
+
+    # set column names on loaded data
+    colnames(df_all_stations) <- c("station_name", "latitude", "longitude", "height")
+
+    df_all_stations
+
+  }, error = function(e) {
+
+    ### fail gracefully with informative message
+    warning(
+      paste0(
+        "Could not download NGL station list from ", address, ". ",
+        "Reason: ", conditionMessage(e),
+        ". Returning an empty table."
+      ),
+      call. = FALSE
+    )
+
+    ### return empty table if can not reach NGL server
+    data.table::data.table(
+      station_name = character(),
+      latitude = numeric(),
+      longitude = numeric(),
+      height = numeric()
+    )
+  })
+
+  return(out)
+
+
+
+}
+
+
+
+#' Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 or IGS20 reference frame.
 #'
 #' @importFrom data.table fread
 #' @importFrom utils read.table
@@ -8,16 +80,19 @@
 #' @importFrom magrittr %>%
 #' @param  station_name A \code{string} specifying the station name.
 #' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
+#' @param reference_frame A \code{string} with value either "IGS14" or "IGS20" that specify which reference frame to use. Default is "IGS20".
 #' @export
 #' @examples
 #' station_1LSU <- download_station_ngl("1LSU")
 #' attributes(station_1LSU)
 #' @return A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
 #' \code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
-download_station_ngl <- function(station_name, verbose = FALSE) {
+download_station_ngl <- function(station_name, verbose = FALSE, reference_frame = "IGS20") {
   # station_name="AB21"
+  # reference_frame = "IGS20"
 
-  # download file from  string formatted as "https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3"
+
+  # download file from  string formatted as paste0("https://geodesy.unr.edu/gps_timeseries/IGS14/tenv3/IGS14/", station_name, ".tenv3") or paste0("https://geodesy.unr.edu/gps_timeseries/IGS20/tenv3/IGS20/", station_name, ".tenv3")
   # see help file for .tenv3 file here : https://geodesy.unr.edu/gps_timeseries/README_tenv3.txt
 
 
@@ -28,80 +103,122 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
     stop("Invalid station name")
   }
 
-
-  # -------------- load .tenv3 file using data.table fread
-  # address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
-  # df_position <- data.table::fread(
-  #   address,
-  #   header = TRUE,
-  #   showProgress = verbose
-  # )
-
   # ------------------------------------------------------------------------------- Load position time series
   file_name <- tempfile()
-  address <- paste0("https://geodesy.unr.edu/gps_timeseries/tenv3/IGS14/", station_name, ".tenv3")
+
+  # check that the reference frame is either IGS14 or IGS20
+  if (!(reference_frame %in% c("IGS14", "IGS20"))) {
+    stop("Reference frame should be either 'IGS14' or 'IGS20'")
+  }
+
+  # create address of tenv3 file based on reference frame
+  if(reference_frame == "IGS14"){
+    address <- paste0("https://geodesy.unr.edu/gps_timeseries/IGS14/tenv3/IGS14/", station_name, ".tenv3")
+  } else if(reference_frame == "IGS20"){
+    address <- paste0("https://geodesy.unr.edu/gps_timeseries/IGS20/tenv3/IGS20/", station_name, ".tenv3")
+  }
 
   # Create request
   req <- request(address) %>% req_timeout(60)
-  # disable SSL verification
-  # %>%     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
 
   # Conditionally enable verbosity
   if (verbose) {
     req <- req %>% req_verbose()
   }
 
-  # Perform request
-  resp <- req_perform(req)
 
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
+  df_position <- tryCatch({
 
 
-  # Read the downloaded file into a data table
-  df_position <- data.table::fread(file_name, header = TRUE)
+    # Perform request
+    resp <- req_perform(req)
+
+    ### check status of request
+    resp <- resp_check_status(resp)
+
+    # Write the content to a file
+    writeBin(resp_body_raw(resp), file_name)
 
 
-  # rewrite colnames
-  colnames(df_position) <- c(
-    "station_name",
-    "date",
-    "decimal_year",
-    "modified_julian_day",
-    "gps_week",
-    "day_of_gps_week",
-    "longitude_reference_meridian",
-    "eastings_integer_portion",
-    "eastings_fractional_portion",
-    "northings_integer_portion",
-    "northings_fractional_portion",
-    "vertical_integer_portion",
-    "vertical_fractional_portion",
-    "antenna_height",
-    "east_sigma",
-    "north_sigma",
-    "vertical_sigma",
-    "east_north_correlation",
-    "east_vertical_correlation",
-    "north_vertical_correlation",
-    "nominal_station_latitude",
-    "nominal_station_longitude",
-    "nominal_station_height"
-  )
+    # Read the downloaded file into a data table
+    df_position <- data.table::fread(file_name, header = TRUE)
+
+
+    # rewrite colnames
+    colnames(df_position) <- c(
+      "station_name",
+      "date",
+      "decimal_year",
+      "modified_julian_day",
+      "gps_week",
+      "day_of_gps_week",
+      "longitude_reference_meridian",
+      "eastings_integer_portion",
+      "eastings_fractional_portion",
+      "northings_integer_portion",
+      "northings_fractional_portion",
+      "vertical_integer_portion",
+      "vertical_fractional_portion",
+      "antenna_height",
+      "east_sigma",
+      "north_sigma",
+      "vertical_sigma",
+      "east_north_correlation",
+      "east_vertical_correlation",
+      "north_vertical_correlation",
+      "nominal_station_latitude",
+      "nominal_station_longitude",
+      "nominal_station_height"
+    )
+
+    df_position
+
+
+
+  }, error = function(e) {
+
+    ### fail gracefully with informative message
+    warning(
+      paste0(
+        "Could not download station ", station_name," from ", address, ". ",
+        "Reason: ", conditionMessage(e),
+        ". Returning an empty table."
+      ),
+      call. = FALSE
+    )
+
+    ### return empty table if can not reach NGL server
+    data.table::data.table(
+      station_name                 = character(),
+      date                         = character(),
+      decimal_year                 = numeric(),
+      modified_julian_day          = integer(),
+      gps_week                     = integer(),
+      day_of_gps_week              = integer(),
+      longitude_reference_meridian = numeric(),
+      eastings_integer_portion     = integer(),
+      eastings_fractional_portion  = numeric(),
+      northings_integer_portion    = integer(),
+      northings_fractional_portion = numeric(),
+      vertical_integer_portion     = integer(),
+      vertical_fractional_portion  = numeric(),
+      antenna_height               = numeric(),
+      east_sigma                   = numeric(),
+      north_sigma                  = numeric(),
+      vertical_sigma               = numeric(),
+      east_north_correlation       = numeric(),
+      east_vertical_correlation    = numeric(),
+      north_vertical_correlation   = numeric(),
+      nominal_station_latitude     = numeric(),
+      nominal_station_longitude    = numeric(),
+      nominal_station_height       = numeric()
+    )
+
+  })
+
 
   # load steps from file steps and extract all steps associated with the station
   # see README for step file: https://geodesy.unr.edu/NGLStationPages/steps_readme.txt
-
-  # # # Using fread for fast reading
-  # dt <- data.table::fread("https://geodesy.unr.edu/NGLStationPages/steps.txt",
-  #   fill = 7, # Handle varying number of columns
-  #   showProgress = verbose,
-  #   header = FALSE, # Assuming no header
-  #   na.strings = "" # Empty fields become NA
-  # )
-
-
-
   # ------------------------------------------------------------------------------- Load steps file
 
   file_name <- tempfile()
@@ -109,31 +226,60 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
   # Create request
   req <- request(address) %>% req_timeout(60)
-  # and disable SSL verification
-  # %>%     req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
 
   # Conditionally enable verbosity
   if (verbose) {
     req <- req %>% req_verbose()
   }
 
-  # Perform request
-  resp <- req_perform(req)
-
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
+  # load step file
+  dt <- tryCatch({
 
 
-  # Read the downloaded file into a data table
-  dt <- data.table::fread(file_name, header = FALSE, fill = 7)
+    # Perform request
+    resp <- req_perform(req)
 
-  # Set column names
-  colnames(dt) <- c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change", "V5", "V6", "V7")
+    ### check status of request
+    resp <- resp_check_status(resp)
 
-  # # filter earthquakes from equipment / software changes
-  # df_equipment_software_changes <- dt %>%
-  #   dplyr::filter(.data$step_type_code == 1 | .data$step_type_code == 3) %>%
-  #   dplyr::select(c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change"))
+    # Write the content to a file
+    writeBin(resp_body_raw(resp), file_name)
+
+    # Read the downloaded file into a data table
+    dt <- data.table::fread(file_name, header = FALSE, fill = 7)
+
+    # Set column names
+    colnames(dt) <- c("station_name", "date_YYMMDD", "step_type_code", "type_equipment_change", "V5", "V6", "V7")
+
+    dt
+
+
+
+  }, error = function(e) {
+
+    ### fail gracefully with informative message
+    warning(
+      paste0(
+        "Could not download steps file from ", address, ". ",
+        "Reason: ", conditionMessage(e),
+        ". Returning an empty table."
+      ),
+      call. = FALSE
+    )
+
+    ### return empty table if can not reach NGL server
+    data.table::data.table(
+      station_name          = character(),
+      date_YYMMDD           = character(),
+      step_type_code        = integer(),
+      type_equipment_change = character(),
+      V5                    = numeric(),
+      V6                    = numeric(),
+      V7                    = character()
+    )
+
+  })
+
 
   # Filter earthquakes from equipment/software changes
   df_equipment_software_changes <- dt %>%
@@ -170,53 +316,6 @@ download_station_ngl <- function(station_name, verbose = FALSE) {
 
 
 
-#' Download all stations name and location from the Nevada Geodetic Laboratory
-#' @export
-#' @importFrom httr2 request req_options req_verbose req_perform resp_body_raw req_timeout
-#' @importFrom data.table fread
-#' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
-#' @return Return a \code{data.frame} with all stations name, latitude, longitude and heights.
-#' @examples
-#' df_all_stations <- download_all_stations_ngl()
-#' head(df_all_stations)
-#'
-download_all_stations_ngl <- function(verbose = FALSE) {
-  # load file from https://geodesy.unr.edu/NGLStationPages/llh.out using data.table fread
-
-  # load all stations
-  # df_all_stations <- data.table::fread(
-  #   "https://geodesy.unr.edu/NGLStationPages/llh.out",
-  #   header = FALSE,
-  #   showProgress = verbose
-  # )
-
-  file_name <- tempfile()
-  address <- "https://geodesy.unr.edu/NGLStationPages/llh.out"
-
-  # # Create request
-  req <- request(address) %>% req_timeout(60)
-
-  # and disable SSL verification
-  # %>%    req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
-
-  # Conditionally enable verbosity
-  if (verbose) {
-    req <- req %>% req_verbose()
-  }
-
-  # Perform request
-  resp <- req_perform(req)
-
-  # # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
-  #
-  # # Read the downloaded file into a data table
-  df_all_stations <- data.table::fread(file_name, header = FALSE)
-
-  # set column names on loaded data
-  colnames(df_all_stations) <- c("station_name", "latitude", "longitude", "height")
-  return(df_all_stations)
-}
 
 
 
@@ -231,51 +330,89 @@ download_estimated_velocities_ngl <- function(verbose = FALSE) {
   # # load file from https://geodesy.unr.edu/velocities/midas.IGS14.txt
   # README for file available at NGL website: https://geodesy.unr.edu/velocities/midas.readme.txt
 
-  # df_estimated_velocities_midas <- data.table::fread(
-  #   "https://geodesy.unr.edu/velocities/midas.IGS14.txt",
-  #   header = FALSE,
-  #   showProgress = verbose
-  # )
-
-
   file_name <- tempfile()
   address <- "https://geodesy.unr.edu/velocities/midas.IGS14.txt"
 
   # Create request and disable SSL verification
   req <- request(address) %>% req_timeout(60)
-  # %>% req_options(ssl_verifypeer = 0, ssl_verifyhost = 0)
+
 
   # Conditionally enable verbosity
   if (verbose) {
     req <- req %>% req_verbose()
   }
 
-  # Perform request
-  resp <- req_perform(req)
 
-  # Write the content to a file
-  writeBin(resp_body_raw(resp), file_name)
 
-  # Read the downloaded file into a data table
-  df_estimated_velocities_midas <- data.table::fread(file_name, header = FALSE)
+  # load step file
+  df_estimated_velocities_midas <- tryCatch({
+    # Perform request
+    resp <- req_perform(req)
 
-  # subset columns
-  df_estimated_velocities_midas <- df_estimated_velocities_midas[, c(1, 2, 5, 9, 10, 11, 12, 13, 14, 25, 26, 27)]
+    ### check status of request
+    resp <- resp_check_status(resp)
 
-  colnames(df_estimated_velocities_midas) <- c(
-    "station_name", # Column 1: 4 character station ID
-    "midas_version_label", # Column 2: MIDAS version label
-    "time_series_duration_year", # Column 5: Time series duration (years)
-    "east_velocity_m_yr", # Column 9: East  velocity (m/yr)
-    "north_velocity_m_yr", # Column 10: North  velocity (m/yr)
-    "up_velocity_m_yr", # Column 11: Up  velocity (m/yr)
-    "east_velocity_unc_m_yr", # Column 12: East mode velocity uncertainty (m/yr)
-    "north_velocity_unc_m_yr", # Column 13: North mode velocity uncertainty (m/yr)
-    "up_velocity_unc_m_yr", # Column 14: Up mode velocity uncertainty (m/yr)
-    "latitude", # Column 25: Latitude (degrees)
-    "longitude", # Column 26: Longitude (degrees)
-    "height" # Column 27: Height (m) of station
-  )
+    # Write the content to a file
+    writeBin(resp_body_raw(resp), file_name)
+
+    # Read the downloaded file into a data table
+    df_estimated_velocities_midas <- data.table::fread(file_name, header = FALSE)
+
+    # subset columns
+    df_estimated_velocities_midas <- df_estimated_velocities_midas[, c(1, 2, 5, 9, 10, 11, 12, 13, 14, 25, 26, 27)]
+
+    colnames(df_estimated_velocities_midas) <- c(
+      "station_name", # Column 1: 4 character station ID
+      "midas_version_label", # Column 2: MIDAS version label
+      "time_series_duration_year", # Column 5: Time series duration (years)
+      "east_velocity_m_yr", # Column 9: East  velocity (m/yr)
+      "north_velocity_m_yr", # Column 10: North  velocity (m/yr)
+      "up_velocity_m_yr", # Column 11: Up  velocity (m/yr)
+      "east_velocity_unc_m_yr", # Column 12: East mode velocity uncertainty (m/yr)
+      "north_velocity_unc_m_yr", # Column 13: North mode velocity uncertainty (m/yr)
+      "up_velocity_unc_m_yr", # Column 14: Up mode velocity uncertainty (m/yr)
+      "latitude", # Column 25: Latitude (degrees)
+      "longitude", # Column 26: Longitude (degrees)
+      "height" # Column 27: Height (m) of station
+    )
+
+
+    df_estimated_velocities_midas
+
+
+  }, error = function(e) {
+
+    ### fail gracefully with informative message
+    warning(
+      paste0(
+        "Could not download estimated velocities from ", address, ". ",
+        "Reason: ", conditionMessage(e),
+        ". Returning an empty table."
+      ),
+      call. = FALSE
+    )
+
+    ### return empty table if can not reach NGL server
+    data.table::data.table(
+      station_name              = character(),
+      midas_version_label       = character(),
+      time_series_duration_year = numeric(),
+      east_velocity_m_yr        = numeric(),
+      north_velocity_m_yr       = numeric(),
+      up_velocity_m_yr          = numeric(),
+      east_velocity_unc_m_yr    = numeric(),
+      north_velocity_unc_m_yr   = numeric(),
+      up_velocity_unc_m_yr      = numeric(),
+      latitude                  = numeric(),
+      longitude                 = numeric(),
+      height                    = numeric()
+    )
+
+  })
+
+  ##############################
+
+
   return(df_estimated_velocities_midas)
 }
 

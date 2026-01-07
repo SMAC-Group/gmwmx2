@@ -2,21 +2,23 @@
 % Please edit documentation in R/ngl.R
 \name{download_station_ngl}
 \alias{download_station_ngl}
-\title{Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 reference frame.}
+\title{Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 or IGS20 reference frame.}
 \usage{
-download_station_ngl(station_name, verbose = FALSE)
+download_station_ngl(station_name, verbose = FALSE, reference_frame = "IGS20")
 }
 \arguments{
 \item{station_name}{A \code{string} specifying the station name.}
 
 \item{verbose}{A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.}
+
+\item{reference_frame}{A \code{string} with value either "IGS14" or "IGS20" that specify which reference frame to use. Default is "IGS20".}
 }
 \value{
 A \code{list} of class \code{gnss_ts_ngl} that contains three \code{data.frame}: The \code{data.frame} \code{df_position} which contains the position time series extracted from the .tenv3 file available from the Nevada Geodetic Laboratory, the
 \code{data.frame} \code{df_equipment_software_changes} which specify the equipment or software changes for that stations and the \code{data.frame} \code{df_earthquakes} that specify the earthquakes associated with that station.
 }
 \description{
-Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 reference frame.
+Download GNSS position time series and steps reference from the Nevada Geodetic Laboratory with IGS14 or IGS20 reference frame.
 }
 \examples{
 station_1LSU <- download_station_ngl("1LSU")
