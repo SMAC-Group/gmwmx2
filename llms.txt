@@ -1,0 +1,184 @@
+# `gmwmx2` Overview
+
+The `gmwmx2` `R` package implements the Generalized Method of Wavelet
+Moments with Exogenous Inputs estimator (GMWMX) presented in [Voirol,
+L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S.
+(2024)](https://arxiv.org/abs/2409.05160). The GMWMX estimator is a
+computationally efficient estimator to estimate large scale regression
+problems with complex dependence structure in presence of missing data.
+The `gmwmx2` `R` package allows to estimate (i) functional/structural
+parameters, (ii) stochastic parameters describing the dependence
+structure and (iii) nuisance parameters of the missingness process of
+large regression models with dependent observations and missing data. To
+illustrate the capability of the GMWMX estimator, the `gmwmx2` `R`
+package provides functions to download an plot Global Navigation
+Satellite System (GNSS) position time series from the [Nevada Geodetic
+Laboratory](https://geodesy.unr.edu/) and allow to estimate linear model
+with a specific dependence structure modeled by composite stochastic
+processes, allowing to estimate tectonic velocities and crustal uplift
+from GNSS position time series.
+
+Find vignettes with detailed examples as well as the user’s manual at
+the [package website](https://smac-group.github.io/gmwmx2/index.html).
+
+Below are instructions on how to install and make use of the `gmwmx2`
+package.
+
+## Installation Instructions
+
+The `gmwmx2` package is available on both CRAN and GitHub. The CRAN
+version is considered stable while the GitHub version is subject to
+modifications/updates which may lead to installation problems or broken
+functions. You can install the stable version of the `gmwmx2` package
+with:
+
+``` r
+install.packages("gmwmx2")
+```
+
+For users who are interested in having the latest developments, the
+GitHub version is ideal although more dependencies are required to run a
+stable version of the package. Most importantly, users **must** have a
+(`C++`) compiler installed on their machine that is compatible with `R`
+(e.g. `Clang`).
+
+``` r
+# Install dependencies
+install.packages(c("devtools"))
+
+# Install/Update the package from GitHub
+devtools::install_github("SMAC-Group/gmwmx2")
+
+# Install the package with Vignettes/User Guides 
+devtools::install_github("SMAC-Group/gmwmx2", build_vignettes = TRUE)
+```
+
+### External `R` libraries
+
+The `gmwmx2` package relies on a limited number of external libraries,
+but notably on `Rcpp` and `RcppArmadillo` which require a `C++` compiler
+for installation, such as for example `gcc`.
+
+## Note on `gmwmx2` vs `gmwmx`
+
+The original [`gmwmx`](https://github.com/SMAC-Group/gmwmx) package was
+designed to compare estimated parameters obtained from the GMWMX with
+the ones obtained with the Maximum Likelihood Estimator (MLE)
+implemented in [Hector](https://teromovigo.com/product/hector/). This
+allowed for the replication of examples and simulations discussed in
+[Cucci, D. A., Voirol, L., Kermarrec, G., Montillet, J. P., and
+Guerrier, S. (2022)](https://doi.org/10.1007/s00190-023-01702-8).
+However, as we advanced in the methodological and computational
+development of the GMWMX method, we sought a standalone implementation
+that did not include [Hector](https://teromovigo.com/product/hector/).
+Additionally, many of the new computational techniques and structural
+improvements would have been challenging to incorporate into the
+previous `gmwmx` package. Therefore, we will now exclusively support and
+develop the `gmwmx2` package.
+
+## Upcoming features
+
+The `gmwmx2` package is currently in the early stages of development.
+While the supported features are stable, we have numerous additional
+methods and computational enhancements planned for gradual integration.
+These include:
+
+- Computational optimization to improve speed
+- Support for a wider range of stochastic models to describe the error
+  term
+- Support for a wider range of stochastic models to describe the
+  missingness process
+- A computationally efficient model selection criterion for stochastic
+  models
+
+## License
+
+This source code is released under is the GNU AFFERO GENERAL PUBLIC
+LICENSE (AGPL) v3.0.
+
+## References
+
+Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R., and Guerrier,
+S. (2024). Inference for Large Scale Regression Models with Dependent
+Errors.
+[doi:10.48550/arXiv.2409.05160](https://doi.org/10.48550/arXiv.2409.05160).
+
+Guerrier, S., Skaloud, J., Stebler, Y. and Victoria-Feser, M.P., 2013.
+Wavelet-variance-based estimation for composite stochastic processes.
+Journal of the American Statistical Association, 108(503), pp.1021-1030.
+[doi:10.1080/01621459.2013.799920](https://doi.org/10.1080/01621459.2013.799920)
+
+# Package index
+
+## Stochastic models and simulation
+
+- [`wn()`](wn.md) : White noise process
+- [`ar1()`](ar1.md) : AR(1) process
+- [`pl()`](pl.md) : Stationary Power-Law process
+- [`matern()`](matern.md) : Matérn process
+- [`rw()`](rw.md) : Random walk process
+- [`flicker()`](flicker.md) : Flicker noise process
+- [`` `+`( ``*`<time_series_model>`*`)`](plus-.time_series_model.md) :
+  Add two model objects
+- [`` `+`( ``*`<sum_model>`*`)`](plus-.sum_model.md) : Add to a
+  sum_model
+- [`generate()`](generate.md) : Generate a time series from a model
+- [`plot(`*`<generated_time_series>`*`)`](plot.generated_time_series.md)
+  : Plot a generated time series
+- [`plot(`*`<generated_composite_model_time_series>`*`)`](plot.generated_composite_model_time_series.md)
+  : Plot a generated composite time series
+
+## Load and plot NGL data
+
+- [`download_station_ngl()`](download_station_ngl.md) : Download GNSS
+  position time series and steps reference from the Nevada Geodetic
+  Laboratory with IGS14 or IGS20 reference frame.
+
+- [`download_all_stations_ngl()`](download_all_stations_ngl.md) :
+  Download all stations name and location from the Nevada Geodetic
+  Laboratory
+
+- [`download_estimated_velocities_ngl()`](download_estimated_velocities_ngl.md)
+  : Download estimated velocities provided by the Nevada Geodetic
+  Laboratory for all stations.
+
+- [`plot(`*`<gnss_ts_ngl>`*`)`](plot.gnss_ts_ngl.md) :
+
+  Plot a `gnss_ts_ngl` object
+
+## Estimate a model
+
+- [`gmwmx2()`](gmwmx2.md) :
+
+  Estimate a trajectory model for a `gnss_ts_ngl` object considering a
+  white noise plus colored noise as the stochastic model for the
+  residuals and model missingness with a Markov process using the GMWMX
+  estimator.
+
+- [`gmwm2()`](gmwm2.md) : Estimate stochastic model parameters by
+  matching wavelet variance
+
+- [`summary(`*`<fit_gnss_ts_ngl>`*`)`](summary.fit_gnss_ts_ngl.md) :
+
+  Extract estimated parameters from a `fit_gnss_ts_ngl`
+
+- [`plot(`*`<fit_gnss_ts_ngl>`*`)`](plot.fit_gnss_ts_ngl.md) :
+
+  Plot a `fit_gnss_ts_ngl` object
+
+## Data
+
+- [`df_estimated_velocities_gmwmx`](df_estimated_velocities_gmwmx.md) :
+  Estimated northward and eastward velocity and their standard deviation
+  using the GMWMX estimator
+
+# Articles
+
+### All vignettes
+
+- [Data generation](data_generation.md):
+- [Estimate a small network of GNSS station](estimate_small_network.md):
+- [Estimate a model](fit_model.md):
+- [Load and plot data from Nevada Geodetic
+  Laboratory](load_plot_data_ngl.md):
+- [Plot a large network of GNSS data](plot_large_network.md):
