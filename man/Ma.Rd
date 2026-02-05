@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{Ma}
 \alias{Ma}
-\title{Matérn autocovariance}
+\title{Matern autocovariance}
 \usage{
 Ma(x, alpha)
 }
@@ -15,7 +15,7 @@ Ma(x, alpha)
 Numeric vector of correlations for each lag in \code{x}.
 }
 \description{
-Computes the Matérn correlation at lags \code{x} for smoothness \code{alpha}.
+Computes the Matern correlation at lags \code{x} for smoothness \code{alpha}.
 This is used internally to build the full autocovariance vector.
 }
 \keyword{internal}

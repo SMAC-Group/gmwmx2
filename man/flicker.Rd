@@ -46,5 +46,5 @@ mod
 }
 \references{
 Bos MS, Fernandes RMS, Williams SDP, Bastos L (2008). "Fast error analysis
-of continuous GPS observations." \emph{Journal of Geodesy}, 82, 157–166.
+of continuous GPS observations." \emph{Journal of Geodesy}, 82, 157-166.
 }

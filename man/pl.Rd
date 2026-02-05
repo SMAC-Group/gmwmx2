@@ -35,7 +35,7 @@ mod
 }
 \references{
 Bos MS, Fernandes RMS, Williams SDP, Bastos L (2008). "Fast error analysis
-of continuous GPS observations." \emph{Journal of Geodesy}, 82, 157–166.
+of continuous GPS observations." \emph{Journal of Geodesy}, 82, 157-166.
 
-Hosking JRM (1981). "Fractional differencing." \emph{Biometrika}, 68(1), 165–176.
+Hosking JRM (1981). "Fractional differencing." \emph{Biometrika}, 68(1), 165-176.
 }

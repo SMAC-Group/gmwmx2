@@ -16,10 +16,6 @@ Character vector of hex colors.
 Returns a vector of plot colors of length \code{n}. If \code{n} exceeds the size of
 \code{gmwmx2_plot_colors}, a larger palette is created via interpolation.
 }
-\examples{
-.gmwmx2_get_plot_colors(3)
-.gmwmx2_get_plot_colors(20)
-}
 \seealso{
 gmwmx2_plot_colors
 }

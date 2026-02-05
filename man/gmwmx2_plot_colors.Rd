@@ -15,9 +15,6 @@ Editable default palette used by the plotting methods for generated time
 series. When more colors are needed, the palette is expanded with
 interpolation.
 }
-\examples{
-gmwmx2_plot_colors
-}
 \seealso{
 .gmwmx2_get_plot_colors
 }

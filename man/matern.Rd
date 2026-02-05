@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{matern}
 \alias{matern}
-\title{Matérn process}
+\title{Matern process}
 \usage{
 matern(sigma2 = NULL, lambda = NULL, alpha = NULL)
 }
@@ -17,7 +17,7 @@ matern(sigma2 = NULL, lambda = NULL, alpha = NULL)
 A \code{time_series_model} object.
 }
 \description{
-Constructs a \code{time_series_model} for a Matérn covariance process with
+Constructs a \code{time_series_model} for a Matern covariance process with
 variance \code{sigma2}, range \code{lambda}, and smoothness \code{alpha}.
 The autocovariance is
 \eqn{ \gamma(h) = \mathrm{cov}(X_t, X_{t+h}) = \frac{2 \sigma^2}{\Gamma(\alpha-1 / 2) 2^{\alpha-1 / 2}}|\lambda h|^{\alpha-1 / 2} \mathcal{K}_{|\alpha-1 / 2|}(| \lambda h|)}

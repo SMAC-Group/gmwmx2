@@ -1,9 +1,9 @@
 
 
 # function for matern autocovariance
-#' Matérn autocovariance
+#' Matern autocovariance
 #'
-#' Computes the Matérn correlation at lags `x` for smoothness `alpha`.
+#' Computes the Matern correlation at lags `x` for smoothness `alpha`.
 #' This is used internally to build the full autocovariance vector.
 #'
 #' @param x Numeric vector of lags (non-negative).
@@ -42,9 +42,9 @@ Ma <- function(x, alpha){
 #' @export
 #' @references
 #' Bos MS, Fernandes RMS, Williams SDP, Bastos L (2008). "Fast error analysis
-#' of continuous GPS observations." *Journal of Geodesy*, 82, 157–166.
+#' of continuous GPS observations." *Journal of Geodesy*, 82, 157-166.
 #'
-#' Hosking JRM (1981). "Fractional differencing." *Biometrika*, 68(1), 165–176.
+#' Hosking JRM (1981). "Fractional differencing." *Biometrika*, 68(1), 165-176.
 pl = function(kappa = NULL, sigma2 = NULL){
   res = list(
     "parameters" = c("kappa" = kappa, "sigma2" = sigma2),
@@ -119,9 +119,9 @@ wn = function(sigma2 = NULL){
 
 
 # define matern model
-#' Matérn process
+#' Matern process
 #'
-#' Constructs a `time_series_model` for a Matérn covariance process with
+#' Constructs a `time_series_model` for a Matern covariance process with
 #' variance `sigma2`, range `lambda`, and smoothness `alpha`.
 #' The autocovariance is
 #' \eqn{ \gamma(h) = \mathrm{cov}(X_t, X_{t+h}) = \frac{2 \sigma^2}{\Gamma(\alpha-1 / 2) 2^{\alpha-1 / 2}}|\lambda h|^{\alpha-1 / 2} \mathcal{K}_{|\alpha-1 / 2|}(| \lambda h|)}
@@ -138,7 +138,7 @@ wn = function(sigma2 = NULL){
 matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
   res = list(
     "parameters" = c("sigma2" = sigma2, "lambda" = lambda, "alpha" = alpha),
-    "model" = "Matérn",
+  "model" = "Matern",
     "transformation_function" = function(sigma2, lambda, alpha){
       return(c(exp(sigma2), exp(lambda), trans_alpha_matern(alpha) ) )
     },
@@ -304,7 +304,7 @@ rw = function(sigma2 =NULL){
 #' @export
 #' @references
 #' Bos MS, Fernandes RMS, Williams SDP, Bastos L (2008). "Fast error analysis
-#' of continuous GPS observations." *Journal of Geodesy*, 82, 157–166.
+#' of continuous GPS observations." *Journal of Geodesy*, 82, 157-166.
 flicker = function(sigma2 = NULL){
   res = list(
     "parameters" = c("sigma2" = sigma2),
@@ -581,8 +581,6 @@ generate.sum_model <- function(object, n, seed = NULL, ...) {
 #' @format A character vector of hex colors.
 #' @keywords internal
 #' @seealso .gmwmx2_get_plot_colors
-#' @examples
-#' gmwmx2_plot_colors
 gmwmx2_plot_colors <- c(
   "#8DA0CB",  # muted lavender-blue
   "#FC8D62",  # soft coral
@@ -601,9 +599,6 @@ gmwmx2_plot_colors <- c(
 #' @return Character vector of hex colors.
 #' @keywords internal
 #' @seealso gmwmx2_plot_colors
-#' @examples
-#' .gmwmx2_get_plot_colors(3)
-#' .gmwmx2_get_plot_colors(20)
 .gmwmx2_get_plot_colors <- function(n) {
   if (n <= 0L) return(character())
   if (n <= length(gmwmx2_plot_colors)) {
