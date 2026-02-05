@@ -1,10 +1,25 @@
 url: ~
 template:
-  params:
+  bootstrap: 5
+  math-rendering: mathjax
+  bslib:
     bootswatch: flatly
 
 
 reference:
+  - title: Stochastic models and simulation
+    contents:
+    - wn
+    - ar1
+    - pl
+    - matern
+    - rw
+    - flicker
+    - "+.time_series_model"
+    - "+.sum_model"
+    - generate
+    - plot.generated_time_series
+    - plot.generated_composite_model_time_series
   - title: Load and plot NGL data
     contents:
     - download_station_ngl
@@ -14,6 +29,7 @@ reference:
   - title: Estimate a model
     contents:
     - gmwmx2
+    - gmwm2
     - summary.fit_gnss_ts_ngl
     - plot.fit_gnss_ts_ngl
   - title: Data
@@ -30,6 +46,8 @@ navbar:
     href: reference/index.html
   - text: "Examples"
     menu:
+    - text: "Data generation"
+      href: articles/data_generation.html
     - text: "Load and plot data from the Nevada Geodetic Laboratory"
       href: articles/load_plot_data_ngl.html
     - text: "Estimate a model"
@@ -41,5 +59,3 @@ navbar:
   right:
   - icon: fa-github
     href: https://github.com/SMAC-Group/gmwmx2
-
-

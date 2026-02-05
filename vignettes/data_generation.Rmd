@@ -1,0 +1,81 @@
+---
+title: "Data generation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data generation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.width = 10,
+  fig.height = 6,
+  fig.align = "center"
+)
+```
+
+This vignette shows how to build stochastic models, combine them with `+`,
+generate data, and plot the results.
+
+```{r}
+library(gmwmx2)
+set.seed(123)
+```
+
+# Available models
+
+You can build a single stochastic process with any of the following model
+constructors:
+
+- `wn()` (white noise)
+- `ar1()` (AR(1))
+- `pl()` (power-law)
+- `matern()` (Matérn)
+- `rw()` (random walk)
+- `flicker()` (flicker / 1/f)
+
+Each constructor returns a `time_series_model` object that can be plotted or
+combined with others using `+`.
+
+# Single model generation and plotting
+
+```{r single-model-plot, fig.alt = "Simulated AR(1) time series."}
+model_single <- ar1(phi = 0.9, sigma2 = 1)
+series_single <- generate(model_single, n = 500)
+plot(series_single)
+```
+
+The generated object is a `generated_time_series` with a numeric series in
+`$series`:
+
+```{r}
+head(series_single$series)
+```
+
+# Composite models (sum of processes)
+
+Use `+` to build a composite model from multiple stochastic processes. The
+result is a `sum_model` that can be passed to `generate()`.
+
+```{r composite-model-plot, fig.alt = "Simulated composite time series with white noise, AR(1), and power-law components."}
+model_comp <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5) + pl(kappa = 0.3, sigma2 = 2)
+series_comp <- generate(model_comp, n = 500)
+plot(series_comp)
+```
+
+The composite output is a `generated_composite_model_time_series` with:
+
+- `series` (the total sum)
+- `components` (a list of each component series)
+- `model` (names of each component)
+
+```{r}
+names(series_comp)
+```
+
+# Combining and plotting
+
+The `plot()` method for a composite model stacks each component vertically and
+adds the sum at the top. For single models, `plot()` draws the time series with
+the model name in the title.

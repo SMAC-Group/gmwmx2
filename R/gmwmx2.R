@@ -100,14 +100,14 @@ create_X_matrix <- function(all_mjd_index,
 
 
 
-# transformation function for spectral index of power law noise
-trans_kappa_pl <- function(x) {
-  exp(x) - 1
-}
-
-
-# inverse of transformation function for spectral index of power law noise
-inv_trans_kappa_pl <- function(x) log(x + 1)
+# # transformation function for spectral index of power law noise
+# trans_kappa_pl <- function(x) {
+#   exp(x) - 1
+# }
+#
+#
+# # inverse of transformation function for spectral index of power law noise
+# inv_trans_kappa_pl <- function(x) log(x + 1)
 
 
 # define optimization function for stochastic model White noise + Flicker model or White noise + stationary powerlaw

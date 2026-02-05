@@ -133,3 +133,11 @@ compute_all_mean_diag_fast_w_linear_interp_only_required_cpp <- function(mat_D_q
     .Call(`_gmwmx2_compute_all_mean_diag_fast_w_linear_interp_only_required_cpp`, mat_D_q_term_1, mat_D_q_term_2, sum_on_sub_diag_of_D, vec_autocov, approx_type)
 }
 
+get_sigma_mat_rw <- function(n, gamma2) {
+    .Call(`_gmwmx2_get_sigma_mat_rw`, n, gamma2)
+}
+
+get_mean_diagonal_super_diagonals_cov_mat_rw_cpp <- function(n, sigma_2_rw) {
+    .Call(`_gmwmx2_get_mean_diagonal_super_diagonals_cov_mat_rw_cpp`, n, sigma_2_rw)
+}
+

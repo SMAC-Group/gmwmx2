@@ -424,6 +424,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_sigma_mat_rw
+arma::mat get_sigma_mat_rw(int n, double gamma2);
+RcppExport SEXP _gmwmx2_get_sigma_mat_rw(SEXP nSEXP, SEXP gamma2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type gamma2(gamma2SEXP);
+    rcpp_result_gen = Rcpp::wrap(get_sigma_mat_rw(n, gamma2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_mean_diagonal_super_diagonals_cov_mat_rw_cpp
+arma::vec get_mean_diagonal_super_diagonals_cov_mat_rw_cpp(int n, double sigma_2_rw);
+RcppExport SEXP _gmwmx2_get_mean_diagonal_super_diagonals_cov_mat_rw_cpp(SEXP nSEXP, SEXP sigma_2_rwSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma_2_rw(sigma_2_rwSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_mean_diagonal_super_diagonals_cov_mat_rw_cpp(n, sigma_2_rw));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_gmwmx2_powerlaw_autocovariance", (DL_FUNC) &_gmwmx2_powerlaw_autocovariance, 3},
@@ -459,6 +483,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gmwmx2_linear_interp_cpp", (DL_FUNC) &_gmwmx2_linear_interp_cpp, 3},
     {"_gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp", (DL_FUNC) &_gmwmx2_pre_compute_quantities_on_D_only_required_smarter_cpp, 2},
     {"_gmwmx2_compute_all_mean_diag_fast_w_linear_interp_only_required_cpp", (DL_FUNC) &_gmwmx2_compute_all_mean_diag_fast_w_linear_interp_only_required_cpp, 5},
+    {"_gmwmx2_get_sigma_mat_rw", (DL_FUNC) &_gmwmx2_get_sigma_mat_rw, 2},
+    {"_gmwmx2_get_mean_diagonal_super_diagonals_cov_mat_rw_cpp", (DL_FUNC) &_gmwmx2_get_mean_diagonal_super_diagonals_cov_mat_rw_cpp, 2},
     {NULL, NULL, 0}
 };
 

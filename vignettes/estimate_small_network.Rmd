@@ -17,7 +17,9 @@ knitr::opts_chunk$set(
   fig.align = "center" # Center align all plots
 )
 
-# knitr::opts_chunk$set(eval = FALSE)
+
+# so not to executate this vignette during pckg devlopment
+knitr::opts_chunk$set(eval = FALSE)
 ```
 
 

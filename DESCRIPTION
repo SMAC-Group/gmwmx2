@@ -29,7 +29,8 @@ Imports:
     wv,
     Matrix,
     httr2,
-    rlang
+    rlang,
+    longmemo
 Suggests: knitr,
           rmarkdown,
           knitcitations,
