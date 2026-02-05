@@ -17,10 +17,3 @@ A character vector of hex colors.
 ## See also
 
 .gmwmx2_get_plot_colors
-
-## Examples
-
-``` r
-gmwmx2_plot_colors
-#> Error: object 'gmwmx2_plot_colors' not found
-```

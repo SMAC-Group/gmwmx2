@@ -1,6 +1,6 @@
-# Matérn autocovariance
+# Matern autocovariance
 
-Computes the Matérn correlation at lags `x` for smoothness `alpha`. This
+Computes the Matern correlation at lags `x` for smoothness `alpha`. This
 is used internally to build the full autocovariance vector.
 
 ## Usage

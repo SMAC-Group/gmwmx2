@@ -1,6 +1,6 @@
-# Matérn process
+# Matern process
 
-Constructs a `time_series_model` for a Matérn covariance process with
+Constructs a `time_series_model` for a Matern covariance process with
 variance `sigma2`, range `lambda`, and smoothness `alpha`. The
 autocovariance is \\ \gamma(h) = \mathrm{cov}(X_t, X\_{t+h}) = \frac{2
 \sigma^2}{\Gamma(\alpha-1 / 2) 2^{\alpha-1 / 2}}\|\lambda h\|^{\alpha-1
@@ -38,6 +38,6 @@ A `time_series_model` object.
 mod <- matern(sigma2 = 1, lambda = 0.2, alpha = 1.0)
 mod
 #> Stochastic process
-#>   Model      : Matérn 
+#>   Model      : Matern 
 #>   Parameters : sigma2 =     1, lambda =   0.2, alpha =     1 
 ```

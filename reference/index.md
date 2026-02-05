@@ -5,7 +5,7 @@
 - [`wn()`](wn.md) : White noise process
 - [`ar1()`](ar1.md) : AR(1) process
 - [`pl()`](pl.md) : Stationary Power-Law process
-- [`matern()`](matern.md) : Matérn process
+- [`matern()`](matern.md) : Matern process
 - [`rw()`](rw.md) : Random walk process
 - [`flicker()`](flicker.md) : Flicker noise process
 - [`` `+`( ``*`<time_series_model>`*`)`](plus-.time_series_model.md) :

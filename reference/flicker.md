@@ -32,7 +32,7 @@ A `time_series_model` object.
 
 Bos MS, Fernandes RMS, Williams SDP, Bastos L (2008). "Fast error
 analysis of continuous GPS observations." *Journal of Geodesy*, 82,
-157–166.
+157-166.
 
 ## Examples
 

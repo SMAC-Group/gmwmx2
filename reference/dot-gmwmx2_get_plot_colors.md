@@ -22,12 +22,3 @@ Character vector of hex colors.
 ## See also
 
 gmwmx2_plot_colors
-
-## Examples
-
-``` r
-.gmwmx2_get_plot_colors(3)
-#> Error in .gmwmx2_get_plot_colors(3): could not find function ".gmwmx2_get_plot_colors"
-.gmwmx2_get_plot_colors(20)
-#> Error in .gmwmx2_get_plot_colors(20): could not find function ".gmwmx2_get_plot_colors"
-```
