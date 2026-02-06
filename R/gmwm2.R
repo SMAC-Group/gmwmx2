@@ -482,8 +482,8 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' @importFrom wv wvar
 #' @importFrom stats optim
 #' @examples
-#' m <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
-#' x <- generate(m, n = 1000, seed = 123)
+#' model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
+#' x <- generate(model, n = 1000, seed = 123)
 #' plot(x)
 #' fit <- gmwm2(x, model = wn()+ar1())
 #' fit
@@ -544,6 +544,12 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
 #' @param x A `gmwm2_fit` object.
 #' @param digits Significant digits for printing.
 #' @param ... Unused.
+#' @examples
+#' model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
+#' x <- generate(model, n = 1000, seed = 123)
+#' plot(x)
+#' fit <- gmwm2(x, model = wn()+ar1())
+#' fit
 #' @return The input object, invisibly.
 #' @export
 print.gmwm2_fit <- function(x, digits = 4, ...) {
@@ -558,7 +564,7 @@ print.gmwm2_fit <- function(x, digits = 4, ...) {
     )
   }
 
-  cat("GMWM2 fit\n\n")
+  cat("GMWM fit\n\n")
 
   if (inherits(model, "sum_model")) {
     cat("Stochastic model\n")

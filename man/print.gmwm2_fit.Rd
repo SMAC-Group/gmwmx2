@@ -19,3 +19,10 @@ The input object, invisibly.
 \description{
 Print method for gmwm2_fit
 }
+\examples{
+model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
+x <- generate(model, n = 1000, seed = 123)
+plot(x)
+fit <- gmwm2(x, model = wn()+ar1())
+fit
+}

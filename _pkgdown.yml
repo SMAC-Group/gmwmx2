@@ -7,7 +7,7 @@ template:
 
 
 reference:
-  - title: Stochastic models and simulation
+  - title: Composite stochastic models and simulation
     contents:
     - wn
     - ar1
@@ -20,6 +20,10 @@ reference:
     - generate
     - plot.generated_time_series
     - plot.generated_composite_model_time_series
+  - title: Composite stochastic models estimation
+    contents:
+    - gmwm2
+    - print.gmwm2_fit
   - title: Load and plot NGL data
     contents:
     - download_station_ngl
