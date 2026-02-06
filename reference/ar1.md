@@ -10,7 +10,7 @@ parameter `phi` and innovation variance `sigma2`. The model is \\X_t =
 ## Usage
 
 ``` r
-ar1(phi = NULL, sigma2 = NULL, burnin = 200L)
+ar1(phi = NULL, sigma2 = NULL)
 ```
 
 ## Arguments
@@ -22,10 +22,6 @@ ar1(phi = NULL, sigma2 = NULL, burnin = 200L)
 - sigma2:
 
   Innovation variance (\> 0).
-
-- burnin:
-
-  Integer number of burn-in samples for simulation.
 
 ## Value
 

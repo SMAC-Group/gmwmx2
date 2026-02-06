@@ -52,9 +52,6 @@
   residuals and model missingness with a Markov process using the GMWMX
   estimator.
 
-- [`gmwm2()`](gmwm2.md) : Estimate stochastic model parameters by
-  matching wavelet variance
-
 - [`summary(`*`<fit_gnss_ts_ngl>`*`)`](summary.fit_gnss_ts_ngl.md) :
 
   Extract estimated parameters from a `fit_gnss_ts_ngl`

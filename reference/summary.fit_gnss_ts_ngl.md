@@ -58,7 +58,7 @@ summary(fit1)
 #>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000
 #>  \hat{E[Z]}: 0.99350860
 #> -------------------------------------------------------------
-#> Running time: 0.27 seconds
+#> Running time: 0.26 seconds
 #> -------------------------------------------------------------
 summary(fit1, scale_parameters = TRUE)
 #> Summary of Estimated Model
@@ -88,7 +88,7 @@ summary(fit1, scale_parameters = TRUE)
 #>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000
 #>  \hat{E[Z]}: 0.99350860
 #> -------------------------------------------------------------
-#> Running time: 0.27 seconds
+#> Running time: 0.26 seconds
 #> -------------------------------------------------------------
 fit2 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
 summary(fit2)
