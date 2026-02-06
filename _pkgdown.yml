@@ -33,7 +33,6 @@ reference:
   - title: Estimate a model
     contents:
     - gmwmx2
-    - gmwm2
     - summary.fit_gnss_ts_ngl
     - plot.fit_gnss_ts_ngl
   - title: Data

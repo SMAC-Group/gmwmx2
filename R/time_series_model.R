@@ -194,13 +194,12 @@ matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
 #' }.
 #' @param phi AR(1) coefficient in (-1, 1).
 #' @param sigma2 Innovation variance (> 0).
-#' @param burnin Integer number of burn-in samples for simulation.
 #' @return A `time_series_model` object.
 #' @examples
 #' mod <- ar1(phi = 0.8, sigma2 = 1)
 #' mod
 #' @export
-ar1 <- function(phi = NULL, sigma2 = NULL, burnin = 200L) {
+ar1 <- function(phi = NULL, sigma2 = NULL) {
   res <- list(
     "parameters" = c("phi" = phi, "sigma2" = sigma2),
     "model" = "AR(1)",
@@ -223,7 +222,7 @@ ar1 <- function(phi = NULL, sigma2 = NULL, burnin = 200L) {
       if (!is.finite(sigma2) || sigma2 <= 0) stop("sigma2 must be > 0 (innovation variance).")
       n <- as.integer(n)
       if (length(n) != 1L || is.na(n) || n <= 0L) stop("`n` must be a positive integer.")
-
+      burnin = 200L
       x <- stats::arima.sim(
         model = list(ar = phi),
         n = n,
@@ -389,17 +388,16 @@ sum_model <- function(models) {
   if (!all(vapply(models, inherits, logical(1), "time_series_model"))) {
     stop("All elements in `models` must have class 'time_series_model'.", call. = FALSE)
   }
-  # check for duplicate model names
+
   model_names <- vapply(models, function(m) m$model, character(1))
   if (anyNA(model_names) || any(model_names == "")) {
     stop("Each time_series_model must have a non-empty `$model` name.", call. = FALSE)
   }
-
+  # check for duplicate model names
   counts <- table(model_names)
   dups <- counts[counts > 1]
-
+  # stop if more than one model of each class provided
   if (length(dups) > 0) {
-
     stop(
       "You cannot include the same process more than once.",
       call. = FALSE

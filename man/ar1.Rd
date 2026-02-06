@@ -4,14 +4,12 @@
 \alias{ar1}
 \title{AR(1) process}
 \usage{
-ar1(phi = NULL, sigma2 = NULL, burnin = 200L)
+ar1(phi = NULL, sigma2 = NULL)
 }
 \arguments{
 \item{phi}{AR(1) coefficient in (-1, 1).}
 
 \item{sigma2}{Innovation variance (> 0).}
-
-\item{burnin}{Integer number of burn-in samples for simulation.}
 }
 \value{
 A \code{time_series_model} object.
