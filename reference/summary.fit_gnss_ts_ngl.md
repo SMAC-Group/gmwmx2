@@ -49,7 +49,7 @@ summary(fit1)
 #> Stochastic parameters
 #> -------------------------------------------------------------
 #>  White Noise Variance  :     0.00000241
-#>  Stationary powerlaw Spectral index:     0.99998941
+#>  Stationary powerlaw Spectral index:     0.99998940
 #>  Stationary powerlaw Variance:     0.00000000
 #> -------------------------------------------------------------
 #> Missingness parameters
@@ -58,7 +58,7 @@ summary(fit1)
 #>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000
 #>  \hat{E[Z]}: 0.99350860
 #> -------------------------------------------------------------
-#> Running time: 0.26 seconds
+#> Running time: 0.34 seconds
 #> -------------------------------------------------------------
 summary(fit1, scale_parameters = TRUE)
 #> Summary of Estimated Model
@@ -79,7 +79,7 @@ summary(fit1, scale_parameters = TRUE)
 #> Stochastic parameters
 #> -------------------------------------------------------------
 #>  White Noise Variance  :     0.00000241
-#>  Stationary powerlaw Spectral index:     0.99998941
+#>  Stationary powerlaw Spectral index:     0.99998940
 #>  Stationary powerlaw Variance:     0.00000000
 #> -------------------------------------------------------------
 #> Missingness parameters
@@ -88,7 +88,7 @@ summary(fit1, scale_parameters = TRUE)
 #>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000
 #>  \hat{E[Z]}: 0.99350860
 #> -------------------------------------------------------------
-#> Running time: 0.26 seconds
+#> Running time: 0.34 seconds
 #> -------------------------------------------------------------
 fit2 <- gmwmx2(x, n_seasonal = 2, component = "N", stochastic_model = "wn + fl")
 summary(fit2)
@@ -118,6 +118,6 @@ summary(fit2)
 #>  P(Z_{i+1} = 1 | Z_{i} = 0): 0.10000000
 #>  \hat{E[Z]}: 0.99350860
 #> -------------------------------------------------------------
-#> Running time: 0.95 seconds
+#> Running time: 1.23 seconds
 #> -------------------------------------------------------------
 ```
