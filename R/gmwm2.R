@@ -56,6 +56,88 @@ prepare_optim_layout <- function(model) {
   stop("model must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
 }
 
+## -------------------------- fill missing parameters --------------------------
+#' Fill missing model parameters using initial-parameter functions
+#'
+#' Ensures any NULL / missing parameters are populated from the model's
+#' `get_initial_parameters_function(signal)` while preserving any user-provided
+#' parameters (assumed to be in the domain).
+#'
+#' @param model A `time_series_model` or `sum_model`.
+#' @param signal Numeric vector used to derive initial parameters.
+#' @return Model with all parameters populated.
+#' @keywords internal
+fill_missing_parameters <- function(model, signal) {
+  get_param_names <- function(m) {
+    pnames <- names(formals(m$transformation_function))
+    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
+    pnames <- names(formals(m$inv_transformation_function))
+    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
+    pnames <- names(m$parameters)
+    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
+    NULL
+  }
+
+  fill_one <- function(m) {
+    pnames <- get_param_names(m)
+    if (is.null(pnames) || length(pnames) == 0L) {
+      stop("Model parameters must be named.", call. = FALSE)
+    }
+
+    current <- rep(NA_real_, length(pnames))
+    names(current) <- pnames
+
+    pars <- m$parameters
+    if (!is.null(pars) && length(pars) > 0L) {
+      if (is.null(names(pars)) || any(names(pars) == "")) {
+        stop("Model parameters must be named.", call. = FALSE)
+      }
+      extra <- setdiff(names(pars), pnames)
+      if (length(extra) > 0L) {
+        stop("Unknown parameter(s): ", paste(extra, collapse = ", "), call. = FALSE)
+      }
+      shared <- intersect(names(pars), pnames)
+      current[shared] <- pars[shared]
+    }
+
+    missing <- is.na(current)
+    if (any(missing)) {
+      init_fn <- m$get_initial_parameters_function
+      if (is.null(init_fn) || !is.function(init_fn)) {
+        stop("Missing parameters but no `get_initial_parameters_function` available.", call. = FALSE)
+      }
+      init <- init_fn(signal)
+      if (is.null(init) || length(init) == 0L) {
+        stop("Initial parameters function returned nothing.", call. = FALSE)
+      }
+      if (is.null(names(init)) || any(names(init) == "")) {
+        stop("Initial parameters must be named.", call. = FALSE)
+      }
+      needed <- pnames[missing]
+      if (!all(needed %in% names(init))) {
+        stop("Initial parameters missing: ",
+             paste(setdiff(needed, names(init)), collapse = ", "),
+             call. = FALSE)
+      }
+      current[needed] <- init[needed]
+    }
+
+    m$parameters <- current
+    m
+  }
+
+  if (inherits(model, "time_series_model")) {
+    return(fill_one(model))
+  }
+
+  if (inherits(model, "sum_model")) {
+    model$models <- lapply(model$models, fill_one)
+    return(model)
+  }
+
+  stop("model must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
+}
+
 
 # -------------------------- get_autocovariance with optional theta --------------------------
 #
@@ -401,11 +483,10 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' @importFrom stats optim
 #' @examples
 #' m <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
-#' x <- generate(m, n = 500, seed = 123)
+#' x <- generate(m, n = 1000, seed = 123)
 #' plot(x)
-#' plot(wv::wvar(x$series))
-#' fit <- gmwm2(x, m)
-#' fit$theta_domain
+#' fit <- gmwm2(x, model = wn()+ar1())
+#' fit
 #' @export
 gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
   # unwrap generated_* objects
@@ -420,6 +501,8 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
   if (!inherits(model, "time_series_model") && !inherits(model, "sum_model")) {
     stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
   }
+
+  model <- fill_missing_parameters(model, signal = x)
 
   n <- length(x)
   prep <- prepare_optim_layout(model)
@@ -439,10 +522,12 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
   )
 
   theta_domain <- theta_to_domain(model, res$par, prep = prep)
+  theta_init_domain <- theta_to_domain(model, prep$theta0, prep = prep)
   wv_theo <- get_theoretical_wv(res$par, model = model, n = n, wv_obj = wv_emp, prep = prep)
 
   out <- list(
     theta_hat = res$par,
+    theta_init_domain = theta_init_domain,
     theta_domain = theta_domain,
     model = model,
     empirical_wvar = wv_emp,
@@ -452,6 +537,78 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
   )
   class(out) <- "gmwm2_fit"
   out
+}
+
+#' Print method for gmwm2_fit
+#'
+#' @param x A `gmwm2_fit` object.
+#' @param digits Significant digits for printing.
+#' @param ... Unused.
+#' @return The input object, invisibly.
+#' @export
+print.gmwm2_fit <- function(x, digits = 4, ...) {
+  model <- x$model
+
+  format_params_est <- function(pars) {
+    if (is.null(pars) || length(pars) == 0L) return("(no parameters)")
+    paste0(
+      names(pars), " = ",
+      formatC(as.numeric(pars), digits = digits, format = "g"),
+      collapse = ", "
+    )
+  }
+
+  cat("GMWM2 fit\n\n")
+
+  if (inherits(model, "sum_model")) {
+    cat("Stochastic model\n")
+    cat("  Sum of", length(model$models), "processes\n\n")
+    for (i in seq_along(model$models)) {
+      m <- model$models[[i]]
+      pnames <- names(m$parameters)
+      cat(sprintf("  [%d] %s\n", i, m$model))
+      cat("      Parameters : ", paste(pnames, collapse = ", "), "\n\n", sep = "")
+    }
+  } else {
+    cat("Stochastic model\n")
+    cat("  Model      :", model$model, "\n")
+    cat("  Parameters :", paste(names(model$parameters), collapse = ", "), "\n\n")
+  }
+
+  cat("Initial parameters\n")
+  if (inherits(model, "sum_model")) {
+    init_list <- x$theta_init_domain
+    for (i in seq_along(model$models)) {
+      m <- model$models[[i]]
+      pars <- init_list[[i]]
+      cat(sprintf("  %d) %s: %s\n", i, m$model, format_params_est(pars)))
+    }
+  } else {
+    cat(sprintf("  1) %s: %s\n", model$model, format_params_est(x$theta_init_domain)))
+  }
+
+  cat("\nEstimated parameters\n")
+  if (inherits(model, "sum_model")) {
+    dom_list <- x$theta_domain
+    for (i in seq_along(model$models)) {
+      m <- model$models[[i]]
+      pars <- dom_list[[i]]
+      cat(sprintf("  %d) %s: %s\n", i, m$model, format_params_est(pars)))
+    }
+  } else {
+    cat(sprintf("  1) %s: %s\n", model$model, format_params_est(x$theta_domain)))
+  }
+
+  conv <- x$optim$convergence
+  status <- if (is.numeric(conv) && length(conv) == 1L && conv == 0L) "converged" else "not converged"
+  loss <- x$optim$value
+  loss <- if (is.null(loss)) NA_real_ else as.numeric(loss)
+
+  cat("\nOptimization\n")
+  cat("  Convergence : ", status, " (code ", conv, ")\n", sep = "")
+  cat("  Loss        : ", formatC(loss, digits = digits, format = "g"), "\n", sep = "")
+
+  invisible(x)
 }
 
 
