@@ -458,4 +458,3 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
 
 
 
-

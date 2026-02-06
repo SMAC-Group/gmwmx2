@@ -65,6 +65,11 @@ pl = function(kappa = NULL, sigma2 = NULL){
       autocov_vec = powerlaw_autocovariance(kappa, sigma2, n)
       x = longmemo::simGauss(autocov_vec)
       return(x)
+    },
+    "get_initial_parameters_function" = function(signal){
+      kappa = runif(n = 1, min = -1,max =  1)
+      sigma2 = var(signal)
+      return(c("kappa" = kappa, "sigma2"=sigma2))
     }
 
   )
@@ -109,6 +114,10 @@ wn = function(sigma2 = NULL){
     "generation_function" =  function(sigma2, n){
       x <- rnorm(n = n, mean = 0, sd = sqrt(sigma2))
       return(x)
+    },
+    "get_initial_parameters_function" = function(signal){
+      sigma2 = var(signal)
+      return(c("sigma2"=sigma2))
     }
 
   )
@@ -154,7 +163,13 @@ matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
       autocov_vec = c(sigma2, sigma2*Ma(lambda* (1:(n-1)), alpha = alpha))
       x = longmemo::simGauss(autocov_vec)
       return(x)
-    }
+    },
+  "get_initial_parameters_function" = function(signal){
+    sigma2 = var(signal)
+    lambda = 1
+    alpha = 1
+    return(c("sigma2"=sigma2, "lambda"=lambda, "alpha"=alpha))
+  }
 
   )
 
@@ -216,6 +231,11 @@ ar1 <- function(phi = NULL, sigma2 = NULL, burnin = 200L) {
         n.start = as.integer(burnin)
       )
       as.numeric(x)
+    },
+    "get_initial_parameters_function" = function(signal){
+      phi = runif(n = 1, min = -1, max = 1)
+      sigma2 = var(signal)
+      return(c("phi"=phi, "sigma2"=sigma2))
     }
   )
 
@@ -257,6 +277,10 @@ rw = function(sigma2 =NULL){
     "generation_function" =  function(sigma2, n) {
       x = cumsum(rnorm(n, mean=0, sd=sqrt(sigma2)))
       return(x)
+    },
+    "get_initial_parameters_function" = function(signal){
+      sigma2 = var(signal)
+      return(c("sigma2"=sigma2))
     }
 
   )
@@ -325,6 +349,10 @@ flicker = function(sigma2 = NULL){
     "generation_function" =  function(sigma2, n){
       x = gen_flicker(n, sqrt(sigma2))
       return(x)
+    },
+    "get_initial_parameters_function" = function(signal){
+      sigma2 = var(signal)
+      return(c("sigma2"=sigma2))
     }
 
   )
