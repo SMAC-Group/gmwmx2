@@ -1,6 +1,6 @@
 # Package index
 
-## Stochastic models and simulation
+## Composite stochastic models and simulation
 
 - [`wn()`](wn.md) : White noise process
 - [`ar1()`](ar1.md) : AR(1) process
@@ -17,6 +17,13 @@
   : Plot a generated time series
 - [`plot(`*`<generated_composite_model_time_series>`*`)`](plot.generated_composite_model_time_series.md)
   : Plot a generated composite time series
+
+## Composite stochastic models estimation
+
+- [`gmwm2()`](gmwm2.md) : Estimate stochastic model parameters by
+  matching wavelet variance
+- [`print(`*`<gmwm2_fit>`*`)`](print.gmwm2_fit.md) : Print method for
+  gmwm2_fit
 
 ## Load and plot NGL data
 

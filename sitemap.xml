@@ -18,6 +18,7 @@
 <url><loc>/reference/download_all_stations_ngl.html</loc></url>
 <url><loc>/reference/download_estimated_velocities_ngl.html</loc></url>
 <url><loc>/reference/download_station_ngl.html</loc></url>
+<url><loc>/reference/fill_missing_parameters.html</loc></url>
 <url><loc>/reference/flicker.html</loc></url>
 <url><loc>/reference/format_params.html</loc></url>
 <url><loc>/reference/generate.html</loc></url>
@@ -39,6 +40,7 @@
 <url><loc>/reference/plus-.sum_model.html</loc></url>
 <url><loc>/reference/plus-.time_series_model.html</loc></url>
 <url><loc>/reference/prepare_optim_layout.html</loc></url>
+<url><loc>/reference/print.gmwm2_fit.html</loc></url>
 <url><loc>/reference/rw.html</loc></url>
 <url><loc>/reference/sum_model.html</loc></url>
 <url><loc>/reference/summary.fit_gnss_ts_ngl.html</loc></url>

@@ -58,20 +58,32 @@ covariance).
 ## Examples
 
 ``` r
-m <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
-x <- generate(m, n = 500, seed = 123)
+model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
+x <- generate(model, n = 1000, seed = 123)
 plot(x)
 
-plot(wv::wvar(x$series))
-
-fit <- gmwm2(x, m)
-fit$theta_domain
-#> $`White Noise_1`
-#>   sigma2 
-#> 1.082831 
+fit <- gmwm2(x, model = wn()+ar1())
+fit
+#> GMWM fit
 #> 
-#> $`AR(1)_2`
-#>       phi    sigma2 
-#> 0.7764063 0.5182533 
+#> Stochastic model
+#>   Sum of 2 processes
 #> 
+#>   [1] White Noise
+#>       Parameters : sigma2
+#> 
+#>   [2] AR(1)
+#>       Parameters : phi, sigma2
+#> 
+#> Initial parameters
+#>   1) White Noise: sigma2 = 2.424
+#>   2) AR(1): phi = -0.1953, sigma2 = 2.424
+#> 
+#> Estimated parameters
+#>   1) White Noise: sigma2 = 0.9147
+#>   2) AR(1): phi = 0.7744, sigma2 = 0.5982
+#> 
+#> Optimization
+#>   Convergence : converged (code 0)
+#>   Loss        : 0.03692
 ```
