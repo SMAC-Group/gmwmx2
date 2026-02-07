@@ -134,6 +134,8 @@ Journal of the American Statistical Association, 108(503), pp.1021-1030.
   matching wavelet variance
 - [`print(`*`<gmwm2_fit>`*`)`](print.gmwm2_fit.md) : Print method for
   gmwm2_fit
+- [`plot(`*`<gmwm2_fit>`*`)`](plot.gmwm2_fit.md) : Plot method for
+  gmwm2_fit
 
 ## Load and plot NGL data
 
@@ -181,6 +183,8 @@ Journal of the American Statistical Association, 108(503), pp.1021-1030.
 ### All vignettes
 
 - [Data generation](data_generation.md):
+- [Estimate composite stochastic
+  processes](estimate_composite_stochastic_models.md):
 - [Estimate a small network of GNSS station](estimate_small_network.md):
 - [Estimate a model](fit_model.md):
 - [Load and plot data from Nevada Geodetic

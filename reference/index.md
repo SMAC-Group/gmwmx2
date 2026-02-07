@@ -24,6 +24,8 @@
   matching wavelet variance
 - [`print(`*`<gmwm2_fit>`*`)`](print.gmwm2_fit.md) : Print method for
   gmwm2_fit
+- [`plot(`*`<gmwm2_fit>`*`)`](plot.gmwm2_fit.md) : Plot method for
+  gmwm2_fit
 
 ## Load and plot NGL data
 

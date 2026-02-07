@@ -1,6 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>/404.html</loc></url>
 <url><loc>/articles/data_generation.html</loc></url>
+<url><loc>/articles/estimate_composite_stochastic_models.html</loc></url>
 <url><loc>/articles/estimate_small_network.html</loc></url>
 <url><loc>/articles/fit_model.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
@@ -36,6 +37,7 @@
 <url><loc>/reference/plot.fit_gnss_ts_ngl.html</loc></url>
 <url><loc>/reference/plot.generated_composite_model_time_series.html</loc></url>
 <url><loc>/reference/plot.generated_time_series.html</loc></url>
+<url><loc>/reference/plot.gmwm2_fit.html</loc></url>
 <url><loc>/reference/plot.gnss_ts_ngl.html</loc></url>
 <url><loc>/reference/plus-.sum_model.html</loc></url>
 <url><loc>/reference/plus-.time_series_model.html</loc></url>

@@ -85,5 +85,6 @@ fit
 #> 
 #> Optimization
 #>   Convergence : converged (code 0)
+#>   Iterations  : 38
 #>   Loss        : 0.03692
 ```

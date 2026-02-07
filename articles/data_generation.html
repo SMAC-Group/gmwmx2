@@ -48,6 +48,7 @@
 <li><a class="dropdown-item" href="../articles/data_generation.html">Data generation</a></li>
     <li><a class="dropdown-item" href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory</a></li>
     <li><a class="dropdown-item" href="../articles/fit_model.html">Estimate a model</a></li>
+    <li><a class="dropdown-item" href="../articles/estimate_composite_stochastic_models.html">Estimate composite stochastic processes</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_small_network.html">Estimate a small network of GNSS station</a></li>
     <li><a class="dropdown-item" href="../articles/plot_large_network.html">Plot a large network of GNSS station</a></li>
   </ul>
@@ -118,16 +119,57 @@ numeric series in <code>$series</code>:</p>
 <pre><code><span><span class="co">## [1] 0.3362423 1.6150311 1.1883829 1.6127387 1.0371249 0.4571655</span></span></code></pre>
 </div>
 <div class="section level2">
+<h2 id="generate-and-plot-each-base-model">Generate and plot each base model<a class="anchor" aria-label="anchor" href="#generate-and-plot-each-base-model"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base_models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.7</span>, sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="fl">0.3</span>, sigma2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/matern.html">matern</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span>, lambda <span class="op">=</span> <span class="fl">0.5</span>, alpha <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">m</span> <span class="kw">in</span> <span class="va">base_models</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">m</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="data_generation_files/figure-html/all-base-models-1.png" class="r-plt" alt="Simulated time series from each base stochastic model." width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="composite-models-sum-of-processes">Composite models (sum of processes)<a class="anchor" aria-label="anchor" href="#composite-models-sum-of-processes"></a>
 </h2>
 <p>Use <code>+</code> to build a composite model from multiple
 stochastic processes. The result is a <code>sum_model</code> that can be
 passed to <code><a href="../reference/generate.html">generate()</a></code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.8</span>, sigma2 <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="fl">0.3</span>, sigma2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">series_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_comp</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">series_comp</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_generation_files/figure-html/composite-model-plot-1.png" class="r-plt" alt="Simulated composite time series with white noise, AR(1), and power-law components." width="960" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level2">
+<h2 id="more-composite-model-examples">More composite model examples<a class="anchor" aria-label="anchor" href="#more-composite-model-examples"></a>
+</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">comp_models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.95</span>, sigma2 <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="fl">0.4</span>, sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/matern.html">matern</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">0.8</span>, lambda <span class="op">=</span> <span class="fl">0.6</span>, alpha <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">m</span> <span class="kw">in</span> <span class="va">comp_models</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">m</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="data_generation_files/figure-html/composite-models-plot-1.png" class="r-plt" alt="Simulated time series from multiple composite stochastic models." width="960" style="display: block; margin: auto;"><img src="data_generation_files/figure-html/composite-models-plot-2.png" class="r-plt" alt="Simulated time series from multiple composite stochastic models." width="960" style="display: block; margin: auto;"><img src="data_generation_files/figure-html/composite-models-plot-3.png" class="r-plt" alt="Simulated time series from multiple composite stochastic models." width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The composite output is a
 <code>generated_composite_model_time_series</code> with:</p>
 <ul>
@@ -138,7 +180,7 @@ passed to <code><a href="../reference/generate.html">generate()</a></code>.</p>
 <li>
 <code>model</code> (names of each component)</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">series_comp</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "series"     "components" "n"          "model"      "parameters"</span></span></code></pre>
 </div>

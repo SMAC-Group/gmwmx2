@@ -3,6 +3,8 @@
 ### All vignettes
 
 - [Data generation](data_generation.md):
+- [Estimate composite stochastic
+  processes](estimate_composite_stochastic_models.md):
 - [Estimate a small network of GNSS station](estimate_small_network.md):
 - [Estimate a model](fit_model.md):
 - [Load and plot data from Nevada Geodetic
