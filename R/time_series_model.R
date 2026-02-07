@@ -5,7 +5,7 @@
 #'
 #' Computes the Matern correlation at lags `x` for smoothness `alpha`.
 #' This is used internally to build the full autocovariance vector.
-#'
+#' @importFrom stats runif var
 #' @param x Numeric vector of lags (non-negative).
 #' @param alpha Smoothness parameter (> 1/2).
 #' @return Numeric vector of correlations for each lag in `x`.

@@ -53,6 +53,26 @@ The generated object is a `generated_time_series` with a numeric series in
 head(series_single$series)
 ```
 
+# Generate and plot each base model
+
+```{r all-base-models, fig.alt = "Simulated time series from each base stochastic model."}
+base_models <- list(
+  wn(sigma2 = 1),
+  ar1(phi = 0.7, sigma2 = 1),
+  pl(kappa = 0.3, sigma2 = 2),
+  matern(sigma2 = 1, lambda = 0.5, alpha = 1.0),
+  rw(sigma2 = 0.2),
+  flicker(sigma2 = 1)
+)
+
+par(mfrow = c(3, 2), mar = c(3, 4, 2, 1))
+for (m in base_models) {
+  s <- generate(m, n = 500)
+  plot(s)
+}
+par(mfrow = c(1, 1))
+```
+
 # Composite models (sum of processes)
 
 Use `+` to build a composite model from multiple stochastic processes. The
@@ -62,6 +82,23 @@ result is a `sum_model` that can be passed to `generate()`.
 model_comp <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5) + pl(kappa = 0.3, sigma2 = 2)
 series_comp <- generate(model_comp, n = 500)
 plot(series_comp)
+```
+
+# More composite model examples
+
+```{r composite-models-plot, fig.alt = "Simulated time series from multiple composite stochastic models."}
+comp_models <- list(
+  wn(sigma2 = 2) + rw(sigma2 = 0.1),
+  wn(sigma2 = 1) + ar1(phi = 0.95, sigma2 = 0.3) + flicker(sigma2 = 0.5),
+  pl(kappa = 0.4, sigma2 = 1) + matern(sigma2 = 0.8, lambda = 0.6, alpha = 1.2)
+)
+
+par(mfrow = c(3, 1), mar = c(3, 4, 2, 1))
+for (m in comp_models) {
+  s <- generate(m, n = 500)
+  plot(s)
+}
+par(mfrow = c(1, 1))
 ```
 
 The composite output is a `generated_composite_model_time_series` with:
