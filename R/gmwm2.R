@@ -16,7 +16,6 @@
 #' @keywords internal
 #' @examples
 #' mod <- wn(1) + pl(kappa = 0.5, sigma2 = 2)
-#' prepare_optim_layout(mod)
 prepare_optim_layout <- function(model) {
 
   if (inherits(model, "time_series_model")) {
