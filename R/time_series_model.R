@@ -70,6 +70,11 @@ pl = function(kappa = NULL, sigma2 = NULL){
       kappa = runif(n = 1, min = -1,max =  1)
       sigma2 = var(signal)
       return(c("kappa" = kappa, "sigma2"=sigma2))
+    },
+    "get_variance_covariance_matrix_signal" = function(kappa, sigma2, n){
+      autocov_vec = powerlaw_autocovariance(kappa, sigma2, n)
+      cov_mat = fast_toeplitz_matrix_from_vector_cpp(autocov_vec)
+      return(cov_mat)
     }
 
   )
@@ -118,6 +123,11 @@ wn = function(sigma2 = NULL){
     "get_initial_parameters_function" = function(signal){
       sigma2 = var(signal)
       return(c("sigma2"=sigma2))
+    },
+    "get_variance_covariance_matrix_signal" = function(sigma2, n){
+
+      cov_mat = diag(n) * sigma2
+      return(cov_mat)
     }
 
   )
@@ -169,6 +179,11 @@ matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
     lambda = 1
     alpha = 1
     return(c("sigma2"=sigma2, "lambda"=lambda, "alpha"=alpha))
+  },
+  "get_variance_covariance_matrix_signal" = function(sigma2, lambda, alpha, n){
+    autocov_vec = c(sigma2, sigma2*Ma(lambda* (1:(n-1)), alpha = alpha))
+    cov_mat = fast_toeplitz_matrix_from_vector_cpp(autocov_vec)
+    return(cov_mat)
   }
 
   )
@@ -235,6 +250,11 @@ ar1 <- function(phi = NULL, sigma2 = NULL) {
       phi = runif(n = 1, min = -1, max = 1)
       sigma2 = var(signal)
       return(c("phi"=phi, "sigma2"=sigma2))
+    },
+    "get_variance_covariance_matrix_signal" = function(phi, sigma2, n){
+      autocov_vec = sigma2 * (phi^(0:(n - 1))) / (1 - phi^2)
+      cov_mat = fast_toeplitz_matrix_from_vector_cpp(autocov_vec)
+      return(cov_mat)
     }
   )
 
@@ -280,6 +300,10 @@ rw = function(sigma2 =NULL){
     "get_initial_parameters_function" = function(signal){
       sigma2 = var(signal)
       return(c("sigma2"=sigma2))
+    },
+    "get_variance_covariance_matrix_signal" = function(sigma2, n){
+      cov_mat = get_sigma_mat_rw(n, sigma2)
+      return(cov_mat)
     }
 
   )
@@ -352,6 +376,10 @@ flicker = function(sigma2 = NULL){
     "get_initial_parameters_function" = function(signal){
       sigma2 = var(signal)
       return(c("sigma2"=sigma2))
+    },
+    "get_variance_covariance_matrix_signal" = function(sigma2, n){
+      cov_mat = var_cov_powerlaw_cpp(sigma2, -1, n)
+      return(cov_mat)
     }
 
   )

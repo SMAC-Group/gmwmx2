@@ -871,3 +871,5 @@ plot.gmwm2_fit <- function(x,
   invisible(x)
 }
 
+
+
