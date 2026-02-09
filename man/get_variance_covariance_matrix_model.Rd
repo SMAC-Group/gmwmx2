@@ -11,11 +11,9 @@ get_variance_covariance_matrix_model(model, n, theta = NULL, prep = NULL)
 
 \item{n}{Length of the signal.}
 
-\item{theta}{Optional parameter vector in the domain (constrained space).
-If provided, it is used directly without transformation.}
+\item{theta}{Optional parameter vector (not supported yet).}
 
-\item{prep}{Optional output from \code{prepare_optim_layout(model)}; required for
-\code{sum_model} when \code{theta} is provided.}
+\item{prep}{Optional output from \code{prepare_optim_layout(model)} (unused for now).}
 }
 \value{
 Variance-covariance matrix of dimension \verb{n x n}.

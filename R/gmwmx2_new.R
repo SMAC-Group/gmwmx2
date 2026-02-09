@@ -52,10 +52,12 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
 #' \code{gnss_ts_ngl} object (current workflow) or with a generic design matrix
 #' and response vector.
 #'
-#' @param x A \code{gnss_ts_ngl} object (GNSS workflow).
 #' @param X Optional design matrix for a generic regression interface.
 #' @param y Optional response vector for a generic regression interface.
 #' @param model Optional stochastic model specification.
+#' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
+#' @param method Optimization method passed to `stats::optim`.
+#' @param control Control list passed to `stats::optim`.
 #' @param ... Reserved for future extensions.
 #' @return A fitted model object (to be defined).
 #' @export

@@ -21,9 +21,13 @@ gmwmx2_new_no_missing(
 
 \item{model}{Optional stochastic model specification.}
 
-\item{...}{Reserved for future extensions.}
+\item{omega}{Optional weighting matrix. If \code{NULL}, uses inverse CI width.}
 
-\item{x}{A \code{gnss_ts_ngl} object (GNSS workflow).}
+\item{method}{Optimization method passed to \code{stats::optim}.}
+
+\item{control}{Control list passed to \code{stats::optim}.}
+
+\item{...}{Reserved for future extensions.}
 }
 \value{
 A fitted model object (to be defined).
