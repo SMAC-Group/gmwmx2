@@ -33,72 +33,71 @@ constructors:
 - `pl()` (power-law)
 - `matern()` (Matérn)
 - `rw()` (random walk)
-- `flicker()` (flicker / 1/f)
+- `flicker()` (flicker)
 
 Each constructor returns a `time_series_model` object that can be plotted or
 combined with others using `+`.
 
-# Single model generation and plotting
 
-```{r single-model-plot, fig.alt = "Simulated AR(1) time series."}
-model_single <- ar1(phi = 0.9, sigma2 = 1)
-series_single <- generate(model_single, n = 500)
-plot(series_single)
+# Stochastic models
+
+## White noise
+```{r}
+model_wn <- wn(sigma2 = 1)
+series_wn <- generate(model_wn, n = 500)
+plot(series_wn)
 ```
-
 The generated object is a `generated_time_series` with a numeric series in
 `$series`:
 
 ```{r}
-head(series_single$series)
+head(series_wn$series)
 ```
 
-# Generate and plot each base model
-
-```{r all-base-models, fig.alt = "Simulated time series from each base stochastic model."}
-base_models <- list(
-  wn(sigma2 = 1),
-  ar1(phi = 0.7, sigma2 = 1),
-  pl(kappa = 0.3, sigma2 = 2),
-  matern(sigma2 = 1, lambda = 0.5, alpha = 1.0),
-  rw(sigma2 = 0.2),
-  flicker(sigma2 = 1)
-)
-
-par(mfrow = c(3, 2), mar = c(3, 4, 2, 1))
-for (m in base_models) {
-  s <- generate(m, n = 500)
-  plot(s)
-}
-par(mfrow = c(1, 1))
+## AR(1)
+```{r}
+model_ar1 <- ar1(phi = 0.8, sigma2 = 1)
+series_ar1 <- generate(model_ar1, n = 500)
+plot(series_ar1)
 ```
+
+## Power-law
+```{r}
+model_pl <- pl(kappa = 0.3, sigma2 = 1)
+series_pl <- generate(model_pl, n = 500)
+plot(series_pl)
+```
+
+## Matérn
+```{r}
+model_matern <- matern(sigma2 = 1, lambda = 1, alpha=1)
+series_matern <- generate(model_matern, n = 500)
+plot(series_matern)
+```
+
+## Random walk
+```{r}
+model_rw <- rw(sigma2 = 0.1)
+series_rw <- generate(model_rw, n = 500)
+plot(series_rw)
+```
+
+
+# Composite model
+
+
 
 # Composite models (sum of processes)
 
 Use `+` to build a composite model from multiple stochastic processes. The
 result is a `sum_model` that can be passed to `generate()`.
 
-```{r composite-model-plot, fig.alt = "Simulated composite time series with white noise, AR(1), and power-law components."}
-model_comp <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5) + pl(kappa = 0.3, sigma2 = 2)
-series_comp <- generate(model_comp, n = 500)
-plot(series_comp)
-```
+```{r}
+model_wn_ar1 <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
+class(model_wn_ar1)
+series_wn_ar1 <- generate(model_wn_ar1, n = 500)
+plot(series_wn_ar1)
 
-# More composite model examples
-
-```{r composite-models-plot, fig.alt = "Simulated time series from multiple composite stochastic models."}
-comp_models <- list(
-  wn(sigma2 = 2) + rw(sigma2 = 0.1),
-  wn(sigma2 = 1) + ar1(phi = 0.95, sigma2 = 0.3) + flicker(sigma2 = 0.5),
-  pl(kappa = 0.4, sigma2 = 1) + matern(sigma2 = 0.8, lambda = 0.6, alpha = 1.2)
-)
-
-par(mfrow = c(3, 1), mar = c(3, 4, 2, 1))
-for (m in comp_models) {
-  s <- generate(m, n = 500)
-  plot(s)
-}
-par(mfrow = c(1, 1))
 ```
 
 The composite output is a `generated_composite_model_time_series` with:
@@ -106,13 +105,9 @@ The composite output is a `generated_composite_model_time_series` with:
 - `series` (the total sum)
 - `components` (a list of each component series)
 - `model` (names of each component)
+- `parameters` (parameters of each component)
 
 ```{r}
-names(series_comp)
+names(series_wn_ar1)
 ```
 
-# Combining and plotting
-
-The `plot()` method for a composite model stacks each component vertically and
-adds the sum at the top. For single models, `plot()` draws the time series with
-the model name in the title.

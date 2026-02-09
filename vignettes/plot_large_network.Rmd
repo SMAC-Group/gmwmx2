@@ -14,8 +14,9 @@ knitr::opts_chunk$set(
   fig.align = "center" # Center align all plots
 )
 
+# so not to executate this vignette during pckg devlopment
+knitr::opts_chunk$set(eval = FALSE)
 
-# knitr::opts_chunk$set(eval = FALSE)
 ```
 
 
@@ -143,7 +144,7 @@ for (i in seq(nrow(df_estimated_velocities_gmwmx))) {
 ```
 
 # Zoom in the United States
-```{r, eval=TRUE}
+```{r}
 # Zoom in the US
 # set plot limits
 xlims <- c(-130, -60)

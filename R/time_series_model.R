@@ -393,13 +393,14 @@ sum_model <- function(models) {
   if (anyNA(model_names) || any(model_names == "")) {
     stop("Each time_series_model must have a non-empty `$model` name.", call. = FALSE)
   }
-  # check for duplicate model names
-  counts <- table(model_names)
+  # check for duplicate model names (allow multiple AR(1))
+  allow_multiple <- c("AR(1)")
+  counts <- table(model_names[!model_names %in% allow_multiple])
   dups <- counts[counts > 1]
-  # stop if more than one model of each class provided
+  # stop if more than one model of each class provided (except AR(1))
   if (length(dups) > 0) {
     stop(
-      "You cannot include the same process more than once.",
+      "You cannot include the same process more than once (except AR(1)).",
       call. = FALSE
     )
   }

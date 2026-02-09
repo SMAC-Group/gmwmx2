@@ -2,14 +2,16 @@
 % Please edit documentation in R/gmwm2.R
 \name{print.gmwm2_fit}
 \alias{print.gmwm2_fit}
-\title{Print method for gmwm2_fit}
+\title{Print method for a \code{gmwm2_fit} object}
 \usage{
-\method{print}{gmwm2_fit}(x, digits = 4, ...)
+\method{print}{gmwm2_fit}(x, digits = 4, show_initial_parameters = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{gmwm2_fit} object.}
 
 \item{digits}{Significant digits for printing.}
+
+\item{show_initial_parameters}{Logical; if TRUE, also show the initial parameters used for optimization.}
 
 \item{...}{Unused.}
 }
@@ -17,7 +19,7 @@
 The input object, invisibly.
 }
 \description{
-Print method for gmwm2_fit
+Print method for a \code{gmwm2_fit} object
 }
 \examples{
 model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)

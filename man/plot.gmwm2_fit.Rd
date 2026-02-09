@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwm2.R
 \name{plot.gmwm2_fit}
 \alias{plot.gmwm2_fit}
-\title{Plot method for gmwm2_fit}
+\title{Plot method for a \code{gmwm2_fit} object}
 \usage{
 \method{plot}{gmwm2_fit}(
   x,
@@ -38,4 +38,13 @@ The input object, invisibly.
 }
 \description{
 Plots empirical wavelet variance with the fitted theoretical curve.
+}
+\examples{
+n = 1000
+mod4 = wn(20) + rw(.1)
+y4 = generate(mod4, n = n)
+plot(y4)
+fit4 = gmwm2(y4, model = wn() + rw())
+fit4
+plot(fit4)
 }

@@ -23,3 +23,43 @@ and visualize the fits.
 library(gmwmx2)
 set.seed(123)
 ```
+
+
+```{r}
+n=10000
+mod1 = wn(sigma2 = 25) + ar1(phi = 0.99, sigma2 = 1)
+y1 = generate(mod1, n = n)
+plot(y1)
+fit1 = gmwm2(y1, model = wn() + ar1())
+fit1
+plot(fit1)
+```
+
+```{r}
+mod2 = wn(5) + pl(kappa = -.9,sigma2 =  1)
+y2 = generate(mod2, n = n)
+plot(y2)
+fit2 = gmwm2(y2, model = wn() + pl())
+fit2
+plot(fit2)
+```
+
+```{r}
+mod3 = wn(5) + ar1(phi = 0.98, sigma2 = 1) + rw(.1)
+y3 = generate(mod3, n = n)
+plot(y3)
+fit3 = gmwm2(y3, model = wn() + ar1() + rw())
+fit3        
+plot(fit3)
+```
+
+
+```{r}
+mod4 = wn(20) + rw(.1)
+y4 = generate(mod4, n = n)
+plot(y4)
+fit4 = gmwm2(y4, model = wn() + rw())
+fit4
+plot(fit4)
+```
+

@@ -41,6 +41,6 @@ Suggests: knitr,
           tidygeocoder,
           sf,
           geodata
-URL: https://github.com/SMAC-Group/gmwmx2
+URL: https://smac-group.github.io/gmwmx2/, https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues
 LazyData: true

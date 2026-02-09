@@ -27,13 +27,23 @@ An object of class \code{gmwm2_fit} with elements:
 \code{model}, \code{empirical_wvar}, \code{theoretical_wvar}, \code{optim}, and \code{n}.
 }
 \description{
-Fits a \code{time_series_model} or \code{sum_model} to data by minimizing the
-weighted distance between empirical and theoretical wavelet variance.
-Optimization is performed in real (unconstrained) space and transformed
-to the model's parameter domain internally.
+Implements the Generalized Method of Wavelet Moments (GMWM) estimator
+to fit a \code{time_series_model} or \code{sum_model} to data. The estimator
+minimizes a weighted distance between empirical wavelet variance (WV)
+and the model-implied WV across scales.
 }
 \details{
-The default weighting matrix is diagonal with entries proportional to the
+The GMWM estimator solves a weighted least-squares criterion of the form
+\deqn{
+  (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))^\top
+  \boldsymbol{\Omega}
+  (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))
+}
+where \eqn{\hat{\boldsymbol{\nu}}} denotes the \strong{empirical wavelet
+variance (WV)} vector and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
+the corresponding \strong{theoretical WV} vector implied by the model
+parameters \eqn{\boldsymbol{\theta}}. The weighting matrix
+\eqn{\boldsymbol{\Omega}} defaults to a diagonal matrix with entries proportional to the
 inverse squared width of the empirical WV confidence intervals. Provide
 \code{omega} to use a custom weighting (e.g., from a theoretical covariance).
 }
@@ -43,4 +53,10 @@ x <- generate(model, n = 1000, seed = 123)
 plot(x)
 fit <- gmwm2(x, model = wn()+ar1())
 fit
+}
+\references{
+Guerrier, S., Skaloud, J., Stebler, Y., and Victoria-Feser, M.-P. (2013).
+Wavelet-variance-based estimation for composite stochastic processes.
+\emph{Journal of the American Statistical Association}, 108(503), 1021-1030.
+doi:10.1080/01621459.2013.799920.
 }

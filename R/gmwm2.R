@@ -459,10 +459,10 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 
 #' Estimate stochastic model parameters by matching wavelet variance
 #'
-#' Fits a `time_series_model` or `sum_model` to data by minimizing the
-#' weighted distance between empirical and theoretical wavelet variance.
-#' Optimization is performed in real (unconstrained) space and transformed
-#' to the model's parameter domain internally.
+#' Implements the Generalized Method of Wavelet Moments (GMWM) estimator
+#' to fit a `time_series_model` or `sum_model` to data. The estimator
+#' minimizes a weighted distance between empirical wavelet variance (WV)
+#' and the model-implied WV across scales.
 #'
 #' @param x Numeric vector, or a `generated_time_series` /
 #'   `generated_composite_model_time_series` object (its `series` is used).
@@ -476,9 +476,24 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #'   `theta_hat` (real space), `theta_domain` (constrained space),
 #'   `model`, `empirical_wvar`, `theoretical_wvar`, `optim`, and `n`.
 #' @details
-#' The default weighting matrix is diagonal with entries proportional to the
+#' The GMWM estimator solves a weighted least-squares criterion of the form
+#' \deqn{
+#'   (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))^\top
+#'   \boldsymbol{\Omega}
+#'   (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))
+#' }
+#' where \eqn{\hat{\boldsymbol{\nu}}} denotes the \strong{empirical wavelet
+#' variance (WV)} vector and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
+#' the corresponding \strong{theoretical WV} vector implied by the model
+#' parameters \eqn{\boldsymbol{\theta}}. The weighting matrix
+#' \eqn{\boldsymbol{\Omega}} defaults to a diagonal matrix with entries proportional to the
 #' inverse squared width of the empirical WV confidence intervals. Provide
 #' `omega` to use a custom weighting (e.g., from a theoretical covariance).
+#' @references
+#' Guerrier, S., Skaloud, J., Stebler, Y., and Victoria-Feser, M.-P. (2013).
+#' Wavelet-variance-based estimation for composite stochastic processes.
+#' *Journal of the American Statistical Association*, 108(503), 1021-1030.
+#' doi:10.1080/01621459.2013.799920.
 #' @importFrom wv wvar
 #' @importFrom stats optim
 #' @examples
@@ -539,10 +554,11 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
   out
 }
 
-#' Print method for gmwm2_fit
+#' Print method for a \code{gmwm2_fit} object
 #'
-#' @param x A `gmwm2_fit` object.
+#' @param x A \code{gmwm2_fit} object.
 #' @param digits Significant digits for printing.
+#' @param show_initial_parameters Logical; if TRUE, also show the initial parameters used for optimization.
 #' @param ... Unused.
 #' @examples
 #' model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
@@ -552,7 +568,7 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
 #' fit
 #' @return The input object, invisibly.
 #' @export
-print.gmwm2_fit <- function(x, digits = 4, ...) {
+print.gmwm2_fit <- function(x, digits = 4,show_initial_parameters = FALSE, ...) {
   model <- x$model
 
   format_params_est <- function(pars) {
@@ -580,18 +596,20 @@ print.gmwm2_fit <- function(x, digits = 4, ...) {
     cat("  Model      :", model$model, "\n")
     cat("  Parameters :", paste(names(model$parameters), collapse = ", "), "\n\n")
   }
-
-  cat("Initial parameters\n")
-  if (inherits(model, "sum_model")) {
-    init_list <- x$theta_init_domain
-    for (i in seq_along(model$models)) {
-      m <- model$models[[i]]
-      pars <- init_list[[i]]
-      cat(sprintf("  %d) %s: %s\n", i, m$model, format_params_est(pars)))
+  if(show_initial_parameters){
+    cat("Initial parameters\n")
+    if (inherits(model, "sum_model")) {
+      init_list <- x$theta_init_domain
+      for (i in seq_along(model$models)) {
+        m <- model$models[[i]]
+        pars <- init_list[[i]]
+        cat(sprintf("  %d) %s: %s\n", i, m$model, format_params_est(pars)))
+      }
+    } else {
+      cat(sprintf("  1) %s: %s\n", model$model, format_params_est(x$theta_init_domain)))
     }
-  } else {
-    cat(sprintf("  1) %s: %s\n", model$model, format_params_est(x$theta_init_domain)))
   }
+
 
   cat("\nEstimated parameters\n")
   if (inherits(model, "sum_model")) {
@@ -620,11 +638,11 @@ print.gmwm2_fit <- function(x, digits = 4, ...) {
   invisible(x)
 }
 
-#' Plot method for gmwm2_fit
+#' Plot method for a \code{gmwm2_fit} object
 #'
 #' Plots empirical wavelet variance with the fitted theoretical curve.
 #'
-#' @param x A `gmwm2_fit` object.
+#' @param x A \code{gmwm2_fit} object.
 #' @param show_ci Logical; if TRUE and available, show empirical CI bars.
 #' @param col_emp Color for empirical WV points/line.
 #' @param col_theo Color for theoretical WV line.
@@ -632,6 +650,14 @@ print.gmwm2_fit <- function(x, digits = 4, ...) {
 #' @param pch Plotting character for empirical points.
 #' @param ... Additional arguments passed to `plot()`.
 #' @return The input object, invisibly.
+#' @examples
+#' n = 1000
+#' mod4 = wn(20) + rw(.1)
+#' y4 = generate(mod4, n = n)
+#' plot(y4)
+#' fit4 = gmwm2(y4, model = wn() + rw())
+#' fit4
+#' plot(fit4)
 #' @export
 plot.gmwm2_fit <- function(x,
                            show_ci = TRUE,
@@ -750,7 +776,7 @@ plot.gmwm2_fit <- function(x,
   }
   legend(
     legend_pos,
-    legend = c("Empirical WV", "Estimated Theoretical WV", "Empirical WV CI"),
+    legend = c("Empirical WV", "Theoretical WV", "Empirical WV CI"),
     col = c(col_emp, col_theo, col_ci),
     pch = c(pch_emp, pch_theo, 15),
     pt.cex = c(1, cex_theo, 3),
@@ -766,9 +792,10 @@ plot.gmwm2_fit <- function(x,
 }
 
 
-# # # # # dotesst
-# model = wn(sigma2 = 10000)+rw(1)
-# x = generate(model, n = 10000, seed=123)
-# fit = gmwm2(x, model = wn()+rw())
-# fit
-# plot(fit)
+
+
+
+
+
+
+
