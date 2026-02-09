@@ -478,7 +478,7 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 # ----------- define gmwm2 function
 # estimate parameters of a stochastic model by matching wavelet variance
 
-#' Estimate stochastic model parameters by matching wavelet variance
+#' Estimate composite stochastic model
 #'
 #' Implements the Generalized Method of Wavelet Moments (GMWM) estimator
 #' to fit a `time_series_model` or `sum_model` to data. The estimator

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwm2.R
 \name{gmwm2}
 \alias{gmwm2}
-\title{Estimate stochastic model parameters by matching wavelet variance}
+\title{Estimate composite stochastic model}
 \usage{
 gmwm2(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...)
 }
