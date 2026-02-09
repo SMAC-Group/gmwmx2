@@ -16,6 +16,7 @@
 #' @keywords internal
 #' @examples
 #' mod <- wn(1) + pl(kappa = 0.5, sigma2 = 2)
+#' prepare_optim_layout(mod)
 prepare_optim_layout <- function(model) {
 
   if (inherits(model, "time_series_model")) {
@@ -238,7 +239,7 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
 
 # -------------------------- SUM MODEL CASE --------------------------
 #' @keywords internal
-get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, ...) {
+get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, return_components = FALSE, ...) {
   # Basic input checks
   n <- as.integer(n)
   if (length(n) != 1L || is.na(n) || n <= 0L) {
@@ -253,7 +254,11 @@ get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, .
     # Compute each component autocovariance using its stored DOMAIN params
     acs <- lapply(object$models, get_autocovariance, n = n, theta = NULL, prep = NULL, ...)
     # Sum them elementwise
-    return(Reduce(`+`, acs))
+    out <- Reduce(`+`, acs)
+    if (isTRUE(return_components)) {
+      return(list(sum = out, components = acs))
+    }
+    return(out)
   }
 
   # ---------------------------------------------------------------------
@@ -275,6 +280,9 @@ get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, .
 
   # Initialize summed autocovariance vector
   out <- numeric(n)
+  if (isTRUE(return_components)) {
+    acs <- vector("list", length(prep$layout))
+  }
 
   # Loop over components and add their autocovariances
   for (info in prep$layout) {
@@ -295,8 +303,14 @@ get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, .
 
     # Add it to the sum
     out <- out + ac_i
+    if (isTRUE(return_components)) {
+      acs[[info$i]] <- ac_i
+    }
   }
 
+  if (isTRUE(return_components)) {
+    return(list(sum = out, components = acs))
+  }
   out
 }
 
@@ -431,7 +445,7 @@ theta_to_domain <- function(model, theta, prep = NULL) {
 #' @param prep Optional output from `prepare_optim_layout` for sum models.
 #' @return Numeric vector of theoretical wavelet variances.
 #' @keywords internal
-get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep = NULL) {
+get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep = NULL, return_components = FALSE) {
   # note that theta should be in the real domain as get autocovariance expects real parameters and does the transformation internally
   # Determine the tau/scales where we want the theoretical WV
   # - Either pass tau directly
@@ -439,6 +453,13 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
   if (is.null(tau)) {
     if (is.null(wv_obj)) stop("Provide either `tau` or `wv_obj` (with $scales).", call. = FALSE)
     tau <- wv_obj$scales
+  }
+
+  if (isTRUE(return_components) && inherits(model, "sum_model")) {
+    acov <- get_autocovariance(object = model, n = n, theta = theta, prep = prep, return_components = TRUE)
+    wv_sum <- autocovariance_to_wv(acov$sum, tau = tau)
+    wv_components <- lapply(acov$components, autocovariance_to_wv, tau = tau)
+    return(list(sum = wv_sum, components = wv_components))
   }
 
   # Compute autocovariance for these REAL parameters
@@ -497,11 +518,11 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' @importFrom wv wvar
 #' @importFrom stats optim
 #' @examples
-#' model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
-#' x <- generate(model, n = 1000, seed = 123)
-#' plot(x)
-#' fit <- gmwm2(x, model = wn()+ar1())
-#' fit
+#' n = 50000
+#' mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
+#' y = generate(mod, n = n)
+#' fit = gmwm2(y, model = wn() + ar1(phi = .9) + ar1(phi = .99))
+#' plot(fit)
 #' @export
 gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
   # unwrap generated_* objects
@@ -538,7 +559,17 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
 
   theta_domain <- theta_to_domain(model, res$par, prep = prep)
   theta_init_domain <- theta_to_domain(model, prep$theta0, prep = prep)
-  wv_theo <- get_theoretical_wv(res$par, model = model, n = n, wv_obj = wv_emp, prep = prep)
+  if (inherits(model, "sum_model")) {
+    wv_out <- get_theoretical_wv(res$par, model = model, n = n, wv_obj = wv_emp, prep = prep, return_components = TRUE)
+    wv_theo <- wv_out$sum
+    wv_theo_components <- wv_out$components
+    names(wv_theo_components) <- vapply(seq_along(model$models),
+                                        function(i) model$models[[i]]$model,
+                                        character(1))
+  } else {
+    wv_theo <- get_theoretical_wv(res$par, model = model, n = n, wv_obj = wv_emp, prep = prep)
+    wv_theo_components <- NULL
+  }
 
   out <- list(
     theta_hat = res$par,
@@ -547,6 +578,7 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
     model = model,
     empirical_wvar = wv_emp,
     theoretical_wvar = wv_theo,
+    theoretical_wvar_components = wv_theo_components,
     optim = res,
     n = n
   )
@@ -640,24 +672,27 @@ print.gmwm2_fit <- function(x, digits = 4,show_initial_parameters = FALSE, ...) 
 
 #' Plot method for a \code{gmwm2_fit} object
 #'
-#' Plots empirical wavelet variance with the fitted theoretical curve.
+#' Plots empirical wavelet variance with the fitted theoretical curve and,
+#' for sum models, component-implied theoretical curves.
 #'
 #' @param x A \code{gmwm2_fit} object.
 #' @param show_ci Logical; if TRUE and available, show empirical CI bars.
 #' @param col_emp Color for empirical WV points/line.
 #' @param col_theo Color for theoretical WV line.
+#' @param col_ci Color for empirical WV CI band.
 #' @param lwd Line width for theoretical curve.
-#' @param pch Plotting character for empirical points.
+#' @param pch_emp Plotting character for empirical points.
+#' @param pch_theo Plotting character for theoretical points.
+#' @param cex_theo Size for theoretical points.
+#' @param legend_pos Legend position (e.g., "topleft") or "auto".
 #' @param ... Additional arguments passed to `plot()`.
 #' @return The input object, invisibly.
 #' @examples
-#' n = 1000
-#' mod4 = wn(20) + rw(.1)
-#' y4 = generate(mod4, n = n)
-#' plot(y4)
-#' fit4 = gmwm2(y4, model = wn() + rw())
-#' fit4
-#' plot(fit4)
+#' n = 50000
+#' mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
+#' y = generate(mod, n = n)
+#' fit = gmwm2(y, model = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1))
+#' plot(fit)
 #' @export
 plot.gmwm2_fit <- function(x,
                            show_ci = TRUE,
@@ -713,15 +748,34 @@ plot.gmwm2_fit <- function(x,
       prep = prep
     )
   }
+  theo_components <- NULL
+  if (inherits(x$model, "sum_model")) {
+    theo_components <- x$theoretical_wvar_components
+    if (is.null(theo_components)) {
+      prep <- prepare_optim_layout(x$model)
+      wv_out <- get_theoretical_wv(
+        theta = x$theta_hat,
+        model = x$model,
+        n = x$n,
+        tau = scales,
+        prep = prep,
+        return_components = TRUE
+      )
+      theo_components <- wv_out$components
+    }
+  }
 
   if (isTRUE(show_ci) &&
       !is.null(wv_emp$ci_low) &&
       !is.null(wv_emp$ci_high) &&
       length(wv_emp$ci_low) == length(scales) &&
       length(wv_emp$ci_high) == length(scales)) {
-    yl <- range(c(wv_emp$ci_low, wv_emp$ci_high), finite = TRUE)
+    yl <- range(c(wv_emp$ci_low, wv_emp$ci_high, theo), finite = TRUE)
   } else {
     yl <- range(c(var_emp, theo), finite = TRUE)
+  }
+  if (!is.null(theo_components)) {
+    yl <- range(c(yl, unlist(theo_components)), finite = TRUE)
   }
 
   plot(
@@ -768,19 +822,46 @@ plot.gmwm2_fit <- function(x,
 
   lines(scales, var_emp, type = "b", col = col_emp, pch = pch_emp)
   lines(scales, theo, type = "b", col = col_theo, pch = pch_theo, cex = cex_theo, lwd = lwd)
+  if (!is.null(theo_components) && length(theo_components) > 0L) {
+    comp_cols <- .gmwmx2_get_plot_colors(length(theo_components))
+    for (i in seq_along(theo_components)) {
+      lines(scales, theo_components[[i]], type = "l", col = comp_cols[i], lwd = 1)
+    }
+  }
 
   legend_pos <- if (identical(legend_pos, "auto")) {
     pick_legend_pos(scales, var_emp, yl)
   } else {
     legend_pos
   }
+  legend_labels <- c("Empirical WV", "Theoretical WV", "Empirical WV CI")
+  legend_cols <- c(col_emp, col_theo, col_ci)
+  legend_pch <- c(pch_emp, pch_theo, 15)
+  legend_pt_cex <- c(1, cex_theo, 3)
+  legend_lty <- c(1, 1, NA)
+
+  if (!is.null(theo_components) && length(theo_components) > 0L) {
+    comp_names <- names(theo_components)
+    if (is.null(comp_names) || any(comp_names == "")) {
+      comp_names <- vapply(seq_along(theo_components),
+                           function(i) paste0("Component ", i),
+                           character(1))
+    }
+    comp_cols <- .gmwmx2_get_plot_colors(length(theo_components))
+    legend_labels <- c(legend_labels, comp_names)
+    legend_cols <- c(legend_cols, comp_cols)
+    legend_pch <- c(legend_pch, rep(NA_integer_, length(comp_cols)))
+    legend_pt_cex <- c(legend_pt_cex, rep(1, length(comp_cols)))
+    legend_lty <- c(legend_lty, rep(1, length(comp_cols)))
+  }
+
   legend(
     legend_pos,
-    legend = c("Empirical WV", "Theoretical WV", "Empirical WV CI"),
-    col = c(col_emp, col_theo, col_ci),
-    pch = c(pch_emp, pch_theo, 15),
-    pt.cex = c(1, cex_theo, 3),
-    lty = c(1),
+    legend = legend_labels,
+    col = legend_cols,
+    pch = legend_pch,
+    pt.cex = legend_pt_cex,
+    lty = legend_lty,
     horiz = FALSE,
     bty = "n",
     bg = "transparent"
@@ -790,12 +871,4 @@ plot.gmwm2_fit <- function(x,
 
   invisible(x)
 }
-
-
-
-
-
-
-
-
 

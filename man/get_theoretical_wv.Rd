@@ -4,7 +4,15 @@
 \alias{get_theoretical_wv}
 \title{Theoretical wavelet variance from model parameters}
 \usage{
-get_theoretical_wv(theta, model, n, wv_obj = NULL, tau = NULL, prep = NULL)
+get_theoretical_wv(
+  theta,
+  model,
+  n,
+  wv_obj = NULL,
+  tau = NULL,
+  prep = NULL,
+  return_components = FALSE
+)
 }
 \arguments{
 \item{theta}{Real-valued parameter vector (unconstrained).}

@@ -27,24 +27,31 @@
 
 \item{col_theo}{Color for theoretical WV line.}
 
+\item{col_ci}{Color for empirical WV CI band.}
+
 \item{lwd}{Line width for theoretical curve.}
 
-\item{...}{Additional arguments passed to \code{plot()}.}
+\item{pch_emp}{Plotting character for empirical points.}
 
-\item{pch}{Plotting character for empirical points.}
+\item{pch_theo}{Plotting character for theoretical points.}
+
+\item{cex_theo}{Size for theoretical points.}
+
+\item{legend_pos}{Legend position (e.g., "topleft") or "auto".}
+
+\item{...}{Additional arguments passed to \code{plot()}.}
 }
 \value{
 The input object, invisibly.
 }
 \description{
-Plots empirical wavelet variance with the fitted theoretical curve.
+Plots empirical wavelet variance with the fitted theoretical curve and,
+for sum models, component-implied theoretical curves.
 }
 \examples{
-n = 1000
-mod4 = wn(20) + rw(.1)
-y4 = generate(mod4, n = n)
-plot(y4)
-fit4 = gmwm2(y4, model = wn() + rw())
-fit4
-plot(fit4)
+n = 50000
+mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
+y = generate(mod, n = n)
+fit = gmwm2(y, model = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1))
+plot(fit)
 }

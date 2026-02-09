@@ -18,5 +18,6 @@ into component parameters for a \code{sum_model}.
 }
 \examples{
 mod <- wn(1) + pl(kappa = 0.5, sigma2 = 2)
+prepare_optim_layout(mod)
 }
 \keyword{internal}
