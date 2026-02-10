@@ -25,13 +25,16 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/generate.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/get_autocovariance.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/get_theoretical_wv.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/get_variance_covariance_matrix_model.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwm2.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new_no_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_plot_colors.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/index.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/inv_trans_alpha_matern.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/inv_trans_kappa_pl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn_gmwmx_no_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/matern.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/pl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.fit_gnss_ts_ngl.html</loc></url>
