@@ -60,7 +60,7 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
 #' @param control Control list passed to `stats::optim`.
 #' @param ... Reserved for future extensions.
 #' @return A fitted model object (to be defined).
-#' @export
+#' @keywords internal
 gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
 #-------------------------------------------
   n=1000

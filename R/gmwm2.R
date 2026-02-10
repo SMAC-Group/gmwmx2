@@ -225,6 +225,8 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
 
   # Transform REAL -> DOMAIN using the model-specific transformation function:
   #   transformation_function(phi_real, sigma2_real, ...) -> (phi_domain, sigma2_domain, ...)
+  # assume that theta is in the correct order and set names
+  names(theta) <- pnames
   dom <- do.call(object$transformation_function, as.list(theta))
   dom <- as.numeric(dom)
   # assign names to dom for do.call ordering in autocovariance_function, even if transformation_function returned unnamed
@@ -241,6 +243,16 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
 # -------------------------- SUM MODEL CASE --------------------------
 #' @keywords internal
 get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, return_components = FALSE, ...) {
+
+  #-------------------------------------------------------
+  # object = wn(1) + pl(kappa = -.5, sigma2 = 2)
+  # theta = c(1, -.5, 2)
+  # prep = prepare_optim_layout(object)
+  # n=10
+  # return_components = F
+  #-------------------------------------------------------
+
+
   # Basic input checks
   n <- as.integer(n)
   if (length(n) != 1L || is.na(n) || n <= 0L) {
@@ -286,28 +298,36 @@ get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, r
   }
 
   # Loop over components and add their autocovariances
-  for (info in prep$layout) {
-    # Component model object
-    m <- object$models[[info$i]]
+  number_of_components = length(prep$layout)
 
-    # Extract this component's REAL parameters from the big theta vector
-    th_i <- theta[info$idx]
-    names(th_i) <- info$pnames  # assign param names for do.call ordering
 
-    # Transform REAL -> DOMAIN for this component
-    dom_i <- do.call(m$transformation_function, as.list(th_i))
-    dom_i <- as.numeric(dom_i)
-    names(dom_i) <- info$pnames
+  # loop over components using the prep layout to extract parameters for each component from the big theta vector, transform to domain, evaluate autocovariance, and sum
+  for(component in seq(number_of_components)){
 
+    # extract index of the parameters in theta vector
+    index_param_in_theta_for_component = prep$layout[[component]]$idx
+    # extract parameter names for this component
+    param_names_for_component = prep$layout[[component]]$pnames
+    # extract from theta and give name
+    theta_component = theta[index_param_in_theta_for_component]
+    names(theta_component) = param_names_for_component
+    # transform to domain parameters
+    domain_param_component = do.call(object$models[[component]]$transformation_function, as.list(theta_component))
+    # set to numeric
+    domain_param_component = as.numeric(domain_param_component)
+    # reset names
+    names(domain_param_component) = param_names_for_component
     # Evaluate this component's autocovariance in DOMAIN
-    ac_i <- do.call(m$autocovariance_function, c(as.list(dom_i), list(n = n)))
+    ac_i <- do.call(object$models[[component]]$autocovariance_function, c(as.list(domain_param_component), list(n = n)))
 
     # Add it to the sum
     out <- out + ac_i
     if (isTRUE(return_components)) {
-      acs[[info$i]] <- ac_i
+        acs[[component]] <- ac_i
     }
   }
+
+
 
   if (isTRUE(return_components)) {
     return(list(sum = out, components = acs))
@@ -318,11 +338,11 @@ get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, r
 
 # ----------------------------------------- test it
 # mod = wn(sigma2=1)
-# get_autocovariance(mod, n=10, theta = c(0))
+# get_autocovariance(mod, n=10, theta = log(1))
 # mod = wn(sigma2 = 1) + pl(kappa = -.9, sigma2 = 2)
-#
+# #
 # get_autocovariance(mod, n=10)
-# get_autocovariance(mod, n=10, theta = c(log(1), inv_trans_kappa_pl(-.9), log(2)), prep = prepare_optim_layout(mod))
+# get_autocovariance(mod, n=10, theta = c(log(1), inv_trans_kappa_pl(-.9), log(1.9)), prep = prepare_optim_layout(mod), return_components = T)
 #
 
 #----------------------------------------------- try procedure to estimate parameters by matching autocovariance
