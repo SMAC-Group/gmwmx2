@@ -85,7 +85,7 @@ time_series_model objects and composite sum_model objects."><meta property="og:i
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_variance_covariance_matrix_model</span><span class="op">(</span><span class="va">model</span>, <span class="va">n</span>, theta <span class="op">=</span> <span class="cn">NULL</span>, prep <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_variance_covariance_matrix_model</span><span class="op">(</span><span class="va">model</span>, <span class="va">n</span>, theta <span class="op">=</span> <span class="cn">NULL</span>, prep <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -101,7 +101,7 @@ time_series_model objects and composite sum_model objects."><meta property="og:i
 
 
 <dt id="arg-theta">theta<a class="anchor" aria-label="anchor" href="#arg-theta"></a></dt>
-<dd><p>Optional parameter vector (not supported yet).</p></dd>
+<dd><p>Optional parameter vector (already in domain space of the parameters).</p></dd>
 
 
 <dt id="arg-prep">prep<a class="anchor" aria-label="anchor" href="#arg-prep"></a></dt>
