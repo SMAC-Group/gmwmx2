@@ -46,6 +46,135 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
 
 
 
+#' Variance-covariance matrix implied by a model
+#'
+#' Constructs the variance-covariance matrix for a model using its
+#' `get_variance_covariance_matrix_signal` method. Supports both single
+#' `time_series_model` objects and composite `sum_model` objects.
+#'
+#' @param model A `time_series_model` or `sum_model`.
+#' @param n Length of the signal.
+#' @param theta Optional parameter vector (already in domain space of the parameters).
+#' @param prep Optional output from `prepare_optim_layout(model)` (unused for now).
+#' @return Variance-covariance matrix of dimension `n x n`.
+#' @keywords internal
+get_variance_covariance_matrix_model <- function(model, n, theta = NULL, prep = NULL, ...) {
+  UseMethod("get_variance_covariance_matrix_model")
+}
+
+#' @keywords internal
+get_variance_covariance_matrix_model.time_series_model <- function(model, n, theta = NULL, prep = NULL, ...) {
+
+  n <- as.integer(n)
+  if (length(n) != 1L || is.na(n) || n <= 0L) {
+    stop("`n` must be a positive integer.", call. = FALSE)
+  }
+  # if theta not provided, then use model$parameters, otherwise use theta, but set names to theta according to the order of parameters in model$parameters
+  if(is.null(theta)){
+    pars <- model$parameters
+    if (is.null(pars) || any(is.null(pars))) {
+      stop("Model parameters must be set (not NULL).", call. = FALSE)
+    }
+    do.call(model$get_variance_covariance_matrix_signal, c(as.list(pars), list(n = n)))
+    # else evaluate get_variance_covariance_matrix_signal with theta, but set names to theta according to the order of parameters in model$parameters
+  }else{
+    # set names to theta according to the order of parameters in model$parameters
+    names(theta) = names(model$parameters)
+    do.call(model$get_variance_covariance_matrix_signal, c(as.list(theta), list(n)))
+  }
+}
+
+#' @keywords internal
+get_variance_covariance_matrix_model.sum_model <- function(model, n, theta = NULL, prep = NULL, ...) {
+
+
+  #------------------------
+  # model = ar1() +rw()
+  # n = 10
+  # theta = c(.5,1,1)
+  # prep = prepare_optim_layout(ar1() +rw())
+  #------------------------
+
+  # check on n
+  n <- as.integer(n)
+  if (length(n) != 1L || is.na(n) || n <= 0L) {
+    stop("`n` must be a positive integer.", call. = FALSE)
+  }
+
+  # if theta is not provided, ensure all model parameters are set
+  if (is.null(theta)) {
+    missing_params <- vapply(model$models, function(m) {
+      pars <- m$parameters
+      is.null(pars) || any(is.null(pars))
+    }, logical(1L))
+    if (any(missing_params)) {
+      stop("Model parameters must be set (not NULL).", call. = FALSE)
+    }
+  }
+
+  # if theta not provided, then evaluate get_variance_covariance_matrix_signal for each model in model$models with their respective parameters, and sum the resulting covariance matrices
+  if (is.null(theta)) {
+    cov_list <- lapply(model$models, function(m) {
+      pars <- m$parameters
+      if (is.null(pars) || any(is.null(pars))) {
+        stop("Model parameters must be set (not NULL).", call. = FALSE)
+      }
+      do.call(m$get_variance_covariance_matrix_signal, c(as.list(pars), list(n = n)))
+    })
+    cov_mat = Reduce(`+`, cov_list)
+    return(cov_mat)
+  }else{
+
+    # throw an error if prep is null, because we need it to know how to extract the parameters for each component from theta
+    if(is.null(prep)){
+     stop("`prep` must be provided when `theta` is provided, as it contains the layout information to extract parameters for each component from `theta`.", call. = FALSE)
+    }
+
+    # theta is provided and prep is provided so we construct the covariance matrix for each model in model$models with the respective parameters from theta, and sum the resulting covariance matrices
+    # theta is assumed to be already in the domain of the parameters
+    number_of_components = length(prep$layout)
+    cov_mat = matrix(0, nrow = n, ncol = n)
+    for(component in seq(number_of_components)){
+
+      # extract index of the parameters in theta vector
+      index_param_in_theta_for_component = prep$layout[[component]]$idx
+      # extract parameter names for this component
+      param_names_for_component = prep$layout[[component]]$pnames
+      # extract from theta and give name
+      theta_component = theta[index_param_in_theta_for_component]
+      names(theta_component) = param_names_for_component
+      # Evaluate this component's autocovariance in DOMAIN
+      cov_mat_component <- do.call(model$models[[component]]$get_variance_covariance_matrix_signal, c(as.list(theta_component), list(n = n)))
+
+      # Add it to the sum
+      cov_mat <- cov_mat + cov_mat_component
+
+    }
+     return(cov_mat)
+  }
+}
+
+
+# mat1  = get_variance_covariance_matrix_model(model = ar1(.5, 1) +rw(1), n = 10)
+# mat2  =get_variance_covariance_matrix_model(model = ar1() +rw(), n = 10, theta = c(.5,1,1), prep = prepare_optim_layout(ar1() +rw()))
+# all.equal(mat1, mat2)
+# mat3 = get_variance_covariance_matrix_model(model = ar1() +rw(), n = 10, theta = c(.9,.5,1), prep = prepare_optim_layout(ar1() +rw()))
+# all.equal(mat1, mat3)
+
+# # phi = .8
+# # sigma2 = 1
+# # n=10
+# fast_toeplitz_matrix_from_vector_cpp(sigma2 * (phi^(0:(n - 1))) / (1 - phi^2)) + get_sigma_mat_rw(n, 1)
+
+
+
+
+
+
+
+
+
+
 #' GMWMX estimator
 #'
 #' Draft interface for a future `gmwmx2()` that can be called either with a
@@ -62,25 +191,36 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
 #' @return A fitted model object (to be defined).
 #' @keywords internal
 gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
-#-------------------------------------------
-  n=1000
-  X =matrix(NA, nrow=n, ncol=2)
-  X[,1] = 1
-  X[,2] = 1:n
-  beta = c(1, .2)
-  y = X %*% beta + generate(ar1(phi=0.8, sigma2=20) + wn(20), n=n)$series
-  plot(X[,2], y, type='l')
-  method = "L-BFGS-B"
-  control = list()
-#----------------------------------------------
+  #-------------------------------------------
+  # n=5000
+  # X =matrix(NA, nrow=n, ncol=2)
+  # X[,1] = 1
+  # X[,2] = 1:n
+  # beta = c(1, .2)
+  # eps = generate(ar1(phi=0.8, sigma2=20) + wn(20), n=n)$series
+  # # plot(wv::wvar(eps))
+  # y = X %*% beta + eps
+  # plot(X[,2], y, type='l')
+  # method = "L-BFGS-B"
+  # control = list()
+  # omega =NULL
+  # model = ar1()+wn()
+  #----------------------------------------------
 
-  # get dimension of X and y
-  n = nrow(X)
-  p = ncol(X)
 
   # Placeholder for the actual implementation
   if (is.null(X) || is.null(y)) {
     stop("Both X and y must be provided for the generic regression interface.")
+  }
+
+  # check model
+  if (is.null(model) || (!inherits(model, "time_series_model") && !inherits(model, "sum_model"))) {
+    stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
+  }
+
+  # check that y length matches number of rows in X
+  if (length(y) != nrow(X)) {
+    stop("`y` length must match the number of rows in `X`.", call. = FALSE)
   }
 
   # check that there are no NA in X, stop if so
@@ -93,6 +233,11 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
     stop("Response vector y contains NA values. Please remove or impute missing data.")
   }
 
+
+  # get dimension of X and y
+  n = nrow(X)
+  p = ncol(X)
+
   # obtain beta hat
   beta_hat <- .lm.fit(y = y, x = X)$coefficients
 
@@ -100,14 +245,15 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
   eps_hat <- y - X %*% beta_hat
 
   # compute (X^TX)^{-1} using QR decomposition for numerical stability
-  XtX <- t(X) %*% X
+  X_transpose = t(X)
+  XtX <- X_transpose %*% X
   qr_decomp <- qr(X)
   R <- qr.R(qr_decomp)
   R_inv <- Matrix::solve(R)
   inv_XtX <- R_inv %*% t(R_inv)
 
   # compute hat matrix
-  H <- X %*% inv_XtX %*% t(X)
+  H <- X %*% inv_XtX %*% X_transpose
   D <- diag(n) - H
 
   # pre-compute quantities on D=(I-H), with H = X(X^TX)^{-1}X^T to later use in optimization function
@@ -122,19 +268,7 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
   # compute empirical wv on estimated residuals
   wv_emp <- wv::wvar(eps_hat)
 
-  # res <- optim(
-  #   par = prep$theta0,
-  #   fn = loss_fn_gmwmx_no_missing,
-  #   model = model,
-  #   n = n,
-  #   prep = prep,
-  #   wv_obj = wv_emp,
-  #   omega = omega,
-  #   method = method,
-  #   control = control,
-  #   ...
-  # )
-
+  # perform optimization to estimate stochastic parameters
   res <- optim(
     par = prep$theta0,
     fn = loss_fn_gmwmx_no_missing,
@@ -145,78 +279,98 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
     wv_obj = wv_emp,
     omega = omega,
     method = method,
-    control = control
+    control = control,
+    ...
 
   )
 
-
+  # transform estimated parameters to domain
   theta_domain <- theta_to_domain(model, res$par, prep = prep)
   theta_init_domain <- theta_to_domain(model, prep$theta0, prep = prep)
 
+  # flatten theta domain to a vector
+  theta_domain_vec <- unlist(theta_domain)
 
+  # get variance covariance matrix of epsilon hat with model at estimated parameters
+  variance_covariance_mat_epsilon <- get_variance_covariance_matrix_model(model, n, theta = theta_domain_vec, prep = prep)
 
+  # construct variance covariance of beta hat with model at estimated parameters
+  variance_covariance_beta_hat = inv_XtX %*% X_transpose %*% variance_covariance_mat_epsilon %*% X %*% inv_XtX
 
+  std_beta_hat = sqrt(diag(variance_covariance_beta_hat))
 
-  # fit a stochastic model to the residuals
+  # construct output
+  out = list(
+    beta_hat = beta_hat,
+    std_beta_hat = std_beta_hat,
+    theta_domain = theta_domain,
+    convergence = res$convergence,
+    value = res$value,
+    model = model
+  )
 
-
-
-
-
-
-
-
-}
-
-#' Variance-covariance matrix implied by a model
-#'
-#' Constructs the variance-covariance matrix for a model using its
-#' `get_variance_covariance_matrix_signal` method. Supports both single
-#' `time_series_model` objects and composite `sum_model` objects.
-#'
-#' @param model A `time_series_model` or `sum_model`.
-#' @param n Length of the signal.
-#' @param theta Optional parameter vector (not supported yet).
-#' @param prep Optional output from `prepare_optim_layout(model)` (unused for now).
-#' @return Variance-covariance matrix of dimension `n x n`.
-#' @keywords internal
-get_variance_covariance_matrix_model <- function(model, n, theta = NULL, prep = NULL) {
-  n <- as.integer(n)
-  if (length(n) != 1L || is.na(n) || n <= 0L) {
-    stop("`n` must be a positive integer.", call. = FALSE)
-  }
-
-  if (!is.null(theta)) {
-    stop("`theta` is not supported yet. Set model parameters and call without `theta`.",
-         call. = FALSE)
-  }
-
-  if (inherits(model, "time_series_model")) {
-    pars <- model$parameters
-    if (is.null(pars) || any(is.null(pars))) {
-      stop("Model parameters must be set (not NULL).", call. = FALSE)
-    }
-    return(do.call(model$get_variance_covariance_matrix_signal, c(as.list(pars), list(n = n))))
-  }
-
-  if (inherits(model, "sum_model")) {
-    cov_list <- lapply(model$models, function(m) {
-      pars <- m$parameters
-      if (is.null(pars) || any(is.null(pars))) {
-        stop("Model parameters must be set (not NULL).", call. = FALSE)
-      }
-      do.call(m$get_variance_covariance_matrix_signal, c(as.list(pars), list(n = n)))
-    })
-    return(Reduce(`+`, cov_list))
-  }
-
-  stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
+  # assign class to output
+  class(out) = "gmwmx2_fit"
+  return(out)
 }
 
 
-# get_variance_covariance_matrix_model(model = ar1(.5, 1) +rw(1), n = 10)
-# get_variance_covariance_matrix_model(model = ar1() +rw(), n = 10, theta = c(.5,1,1), prep = prepare_optim_layout(ar1() +rw()))
-# # phi = .8
-# # sigma2 = 1
-# # n=10
-# fast_toeplitz_matrix_from_vector_cpp(sigma2 * (phi^(0:(n - 1))) / (1 - phi^2)) + get_sigma_mat_rw(n, 1)
+
+#
+# # do a little check
+# n = 1000
+# X = matrix(NA, nrow=n, ncol=4)
+# # intercept
+# X[,1] = 1
+# # trend
+# X[,2] = 1:n
+# # add a sin signal
+# omega_1 <- (1 / 365.25) * 2 * pi
+# X[, 3] <- sin((1:n) * omega_1)
+# X[, 4] <- cos((1:n) * omega_1)
+# beta = c(1, .2, 3,4)
+# yy = X%*% beta
+# plot(X[,2], yy, type='l')
+# B = 500
+# mat_res = matrix(NA, nrow=B, ncol=19)
+# for(b in seq(B)){
+#   eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = (123 + b))$series
+#   # plot(wv::wvar(eps))
+#   y = X %*% beta + eps
+#   fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + ar1() )
+#   # mispecified model assuming white noise as the stochastic model
+#   fit2 = lm(y~X[,2] + X[,3] + X[,4])
+#
+#   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
+#                    summary(fit2)$coefficients[,1],
+#                    summary(fit2)$coefficients[,2],
+#                    fit$theta_domain$`AR(1)_2`,
+#                    fit$theta_domain$`White Noise_1`)
+#   cat("Iteration ", b, " completed.\n")
+# }
+#
+# # compute empirical coverage
+# mat_res_df = as.data.frame(mat_res)
+# colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
+#                          "gmwmx_beta2_hat", "gmwmx_beta3_hat",
+#                          "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
+#                          "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
+#                          "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
+#                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
+#                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
+# zval = qnorm(0.975)
+# mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
+# mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
+# mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
+# mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
+# # empirical coverage of gmwmx beta
+# dplyr::between(rep(1, 500), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
+# dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
+#
+# # do the same for lm beta
+# mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
+# mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
+# mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
+# mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
+# dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
+# dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()

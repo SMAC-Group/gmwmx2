@@ -17,13 +17,32 @@
 #' @examples
 #' mod <- wn(1) + pl(kappa = 0.5, sigma2 = 2)
 prepare_optim_layout <- function(model) {
+  get_param_names <- function(m) {
+    pnames <- names(formals(m$transformation_function))
+    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
+    pnames <- names(formals(m$inv_transformation_function))
+    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
+    pnames <- names(m$parameters)
+    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
+    NULL
+  }
 
   if (inherits(model, "time_series_model")) {
-    theta0 <- do.call(model$inv_transformation_function, as.list(model$parameters))
-    theta0 <- as.numeric(theta0)
-    names(theta0) <- names(model$parameters)
+    pnames <- get_param_names(model)
+    if (is.null(pnames) || length(pnames) == 0L) {
+      stop("Model parameters must be named.", call. = FALSE)
+    }
 
-    return(list(kind = "single", theta0 = theta0, pnames = names(model$parameters)))
+    if (is.null(model$parameters)) {
+      theta0 <- rep(0, length(pnames))
+      names(theta0) <- pnames
+    } else {
+      theta0 <- do.call(model$inv_transformation_function, as.list(model$parameters))
+      theta0 <- as.numeric(theta0)
+      names(theta0) <- names(model$parameters)
+    }
+
+    return(list(kind = "single", theta0 = theta0, pnames = pnames))
   }
 
   if (inherits(model, "sum_model")) {
@@ -33,11 +52,18 @@ prepare_optim_layout <- function(model) {
 
     for (i in seq_along(model$models)) {
       m <- model$models[[i]]
-      pnames <- names(m$parameters)
+      pnames <- get_param_names(m)
+      if (is.null(pnames) || length(pnames) == 0L) {
+        stop("Model parameters must be named.", call. = FALSE)
+      }
       k <- length(pnames)
 
-      th_i <- do.call(m$inv_transformation_function, as.list(m$parameters))
-      th_i <- as.numeric(th_i)
+      if (is.null(m$parameters)) {
+        th_i <- rep(0, k)
+      } else {
+        th_i <- do.call(m$inv_transformation_function, as.list(m$parameters))
+        th_i <- as.numeric(th_i)
+      }
       names(th_i) <- paste0(.comp_prefix(i), pnames)
 
       theta0 <- c(theta0, th_i)
@@ -55,6 +81,10 @@ prepare_optim_layout <- function(model) {
 
   stop("model must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
 }
+
+
+
+
 
 ## -------------------------- fill missing parameters --------------------------
 #' Fill missing model parameters using initial-parameter functions
@@ -244,13 +274,6 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
 #' @keywords internal
 get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, return_components = FALSE, ...) {
 
-  #-------------------------------------------------------
-  # object = wn(1) + pl(kappa = -.5, sigma2 = 2)
-  # theta = c(1, -.5, 2)
-  # prep = prepare_optim_layout(object)
-  # n=10
-  # return_components = F
-  #-------------------------------------------------------
 
 
   # Basic input checks
@@ -892,6 +915,5 @@ plot.gmwm2_fit <- function(x,
 
   invisible(x)
 }
-
 
 

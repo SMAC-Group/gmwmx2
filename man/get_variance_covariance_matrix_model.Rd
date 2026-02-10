@@ -4,14 +4,14 @@
 \alias{get_variance_covariance_matrix_model}
 \title{Variance-covariance matrix implied by a model}
 \usage{
-get_variance_covariance_matrix_model(model, n, theta = NULL, prep = NULL)
+get_variance_covariance_matrix_model(model, n, theta = NULL, prep = NULL, ...)
 }
 \arguments{
 \item{model}{A \code{time_series_model} or \code{sum_model}.}
 
 \item{n}{Length of the signal.}
 
-\item{theta}{Optional parameter vector (not supported yet).}
+\item{theta}{Optional parameter vector (already in domain space of the parameters).}
 
 \item{prep}{Optional output from \code{prepare_optim_layout(model)} (unused for now).}
 }
