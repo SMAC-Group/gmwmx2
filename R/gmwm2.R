@@ -184,6 +184,7 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
   # ---------------------------------------------------------------------
   # Case 1: theta is NULL -> use DOMAIN parameters stored in object$parameters
   # ---------------------------------------------------------------------
+  # note that only a time series model has parameters, not sum model
   if (is.null(theta)) {
     pars <- object$parameters
     if (is.null(pars) || any(is.null(pars))) {
@@ -191,7 +192,6 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
     }
 
     # Evaluate autocovariance in DOMAIN:
-    #   autocovariance_function(kappa=?, sigma2=?, n=?)
     return(do.call(object$autocovariance_function, c(as.list(pars), list(n = n))))
   }
 
@@ -202,6 +202,7 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
   theta <- as.numeric(theta)
 
   # Parameter names expected by this model (e.g., c("kappa","sigma2"))
+  # assign names to theta for do.call ordering, even if theta was passed unnamed (we check length below)
   pnames <- names(object$parameters)
   if (is.null(pnames) || any(pnames == "")) {
     stop("Model parameters must be named.", call. = FALSE)
@@ -226,6 +227,7 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
   #   transformation_function(phi_real, sigma2_real, ...) -> (phi_domain, sigma2_domain, ...)
   dom <- do.call(object$transformation_function, as.list(theta))
   dom <- as.numeric(dom)
+  # assign names to dom for do.call ordering in autocovariance_function, even if transformation_function returned unnamed
   names(dom) <- pnames
 
   # Evaluate autocovariance in DOMAIN with transformed parameters
