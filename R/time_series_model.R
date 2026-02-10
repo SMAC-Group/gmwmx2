@@ -14,6 +14,25 @@ Ma <- function(x, alpha){
   2/gamma(alpha-1/2)/2^(alpha-1/2)*abs(x)^(alpha-1/2)*besselK(abs(x), abs(alpha-1/2))
 }
 
+## -------------------------- parameter checks --------------------------
+.check_positive <- function(x, name) {
+  if (!is.null(x) && (!is.finite(x) || x <= 0)) {
+    stop(name, " must be > 0.", call. = FALSE)
+  }
+}
+
+.check_in_open_interval <- function(x, name, lower, upper) {
+  if (!is.null(x) && (!is.finite(x) || x <= lower || x >= upper)) {
+    stop(name, " must be in (", lower, ", ", upper, ").", call. = FALSE)
+  }
+}
+
+.check_greater_than <- function(x, name, lower) {
+  if (!is.null(x) && (!is.finite(x) || x <= lower)) {
+    stop(name, " must be > ", lower, ".", call. = FALSE)
+  }
+}
+
 
 
 # define stationary powerlaw model
@@ -37,7 +56,7 @@ Ma <- function(x, alpha){
 #' @param sigma2 Process variance (> 0).
 #' @return A `time_series_model` object.
 #' @examples
-#' mod <- pl(kappa = 0.5, sigma2 = 2)
+#' mod <- pl(kappa = -0.5, sigma2 = 2)
 #' mod
 #' @export
 #' @references
@@ -46,6 +65,8 @@ Ma <- function(x, alpha){
 #'
 #' Hosking JRM (1981). "Fractional differencing." *Biometrika*, 68(1), 165-176.
 pl = function(kappa = NULL, sigma2 = NULL){
+  .check_in_open_interval(kappa, "kappa", -1, 1)
+  .check_positive(sigma2, "sigma2")
   res = list(
     "parameters" = c("kappa" = kappa, "sigma2" = sigma2),
     "model" = "Stationary PowerLaw",
@@ -100,6 +121,7 @@ pl = function(kappa = NULL, sigma2 = NULL){
 #' mod
 #' @export
 wn = function(sigma2 = NULL){
+  .check_positive(sigma2, "sigma2")
   res = list(
     "parameters" = c("sigma2" = sigma2),
     "model" = "White Noise",
@@ -155,6 +177,9 @@ wn = function(sigma2 = NULL){
 #' mod
 #' @export
 matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
+  .check_positive(sigma2, "sigma2")
+  .check_positive(lambda, "lambda")
+  .check_greater_than(alpha, "alpha", 1/2)
   res = list(
     "parameters" = c("sigma2" = sigma2, "lambda" = lambda, "alpha" = alpha),
   "model" = "Matern",
@@ -215,6 +240,8 @@ matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
 #' mod
 #' @export
 ar1 <- function(phi = NULL, sigma2 = NULL) {
+  .check_in_open_interval(phi, "phi", -1, 1)
+  .check_positive(sigma2, "sigma2")
   res <- list(
     "parameters" = c("phi" = phi, "sigma2" = sigma2),
     "model" = "AR(1)",
@@ -278,6 +305,7 @@ ar1 <- function(phi = NULL, sigma2 = NULL) {
 #' mod
 #' @export
 rw = function(sigma2 =NULL){
+  .check_positive(sigma2, "sigma2")
   res = list(
     "parameters" = c("sigma2" = sigma2),
     "model" = "Random Walk",
@@ -353,6 +381,7 @@ rw = function(sigma2 =NULL){
 #' Bos MS, Fernandes RMS, Williams SDP, Bastos L (2008). "Fast error analysis
 #' of continuous GPS observations." *Journal of Geodesy*, 82, 157-166.
 flicker = function(sigma2 = NULL){
+  .check_positive(sigma2, "sigma2")
   res = list(
     "parameters" = c("sigma2" = sigma2),
     "model" = "Flicker",

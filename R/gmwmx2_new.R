@@ -361,24 +361,26 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
   invisible(x)
 }
 
+#
+# n = 10000
+# X = matrix(NA, nrow=n, ncol=4)
+# # intercept
+# X[,1] = 1
+# # trend
+# X[,2] = 1:n
+# # add a sin signal
+# omega_1 <- (1 / 365.25) * 2 * pi
+# X[, 3] <- sin((1:n) * omega_1)
+# X[, 4] <- cos((1:n) * omega_1)
+# beta = c(1, .2, 3,4)
+# yy = X%*% beta
+# plot(X[,2], yy, type='l')
+# eps = generate(wn(1) + pl(kappa = -.9, sigma2 = 1), n=n, seed = (123 + b))$series
+# y = X %*% beta + eps
+# fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + pl() )
+# fit
 
-n = 1000
-X = matrix(NA, nrow=n, ncol=4)
-# intercept
-X[,1] = 1
-# trend
-X[,2] = 1:n
-# add a sin signal
-omega_1 <- (1 / 365.25) * 2 * pi
-X[, 3] <- sin((1:n) * omega_1)
-X[, 4] <- cos((1:n) * omega_1)
-beta = c(1, .2, 3,4)
-yy = X%*% beta
-plot(X[,2], yy, type='l')
-eps = generate(ar1(phi=0.95, sigma2=20) + wn(10), n=n, seed = (123 + b))$series
-y = X %*% beta + eps
-fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + ar1() )
-fit
+
 #
 # # do a little check, do not remove, to use later for a vignette
 # n = 1000

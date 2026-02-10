@@ -30,7 +30,7 @@ and for \eqn{h > 0}{h > 0}
 \eqn{\gamma(h) =\mathrm{cov}(X_t, X_{t+h}) = \frac{-\kappa/2 + h - 1}{\kappa/2 + h}\,\gamma(h-1)}.
 }
 \examples{
-mod <- pl(kappa = 0.5, sigma2 = 2)
+mod <- pl(kappa = -0.5, sigma2 = 2)
 mod
 }
 \references{
