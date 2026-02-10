@@ -314,10 +314,73 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
   return(out)
 }
 
+#' Print method for gmwmx2_fit
+#'
+#' Displays a table of regression coefficients with standard errors and
+#' summarizes the fitted stochastic model with estimated parameters.
+#'
+#' @param x A `gmwmx2_fit` object.
+#' @param digits Significant digits to display.
+#' @param ... Passed to print methods.
+#' @return The input object, invisibly.
+#' @export
+print.gmwmx2_fit <- function(x, digits = 4, ...) {
+  cat("GMWMX fit\n")
+
+  # regression table
+  coef_names <- names(x$beta_hat)
+  if (is.null(coef_names) || any(coef_names == "")) {
+    coef_names <- paste0("beta", seq_along(x$beta_hat))
+  }
+  coef_tab <- data.frame(
+    Estimate = as.numeric(x$beta_hat),
+    Std.Error = as.numeric(x$std_beta_hat),
+    row.names = coef_names
+  )
+  print(coef_tab, digits = digits, ...)
+
+  cat("\nStochastic model\n")
+  if (inherits(x$model, "time_series_model")) {
+    cat("  Model      :", x$model$model, "\n")
+    pars <- if (!is.null(x$theta_domain)) x$theta_domain else x$model$parameters
+    cat("  Parameters :", format_params(pars, digits = digits), "\n")
+  } else if (inherits(x$model, "sum_model")) {
+    n <- length(x$model$models)
+    cat("  Sum of", n, "processes\n")
+    for (i in seq_along(x$model$models)) {
+      m <- x$model$models[[i]]
+      pars <- m$parameters
+      if (!is.null(x$theta_domain) && is.list(x$theta_domain) && length(x$theta_domain) >= i) {
+        pars <- x$theta_domain[[i]]
+      }
+      cat(sprintf("  [%d] %s\n", i, m$model))
+      cat("       Estimated parameters :", format_params(pars, digits = digits), "\n")
+    }
+  }
+
+  invisible(x)
+}
 
 
+n = 1000
+X = matrix(NA, nrow=n, ncol=4)
+# intercept
+X[,1] = 1
+# trend
+X[,2] = 1:n
+# add a sin signal
+omega_1 <- (1 / 365.25) * 2 * pi
+X[, 3] <- sin((1:n) * omega_1)
+X[, 4] <- cos((1:n) * omega_1)
+beta = c(1, .2, 3,4)
+yy = X%*% beta
+plot(X[,2], yy, type='l')
+eps = generate(ar1(phi=0.95, sigma2=20) + wn(10), n=n, seed = (123 + b))$series
+y = X %*% beta + eps
+fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + ar1() )
+fit
 #
-# # do a little check
+# # do a little check, do not remove, to use later for a vignette
 # n = 1000
 # X = matrix(NA, nrow=n, ncol=4)
 # # intercept
