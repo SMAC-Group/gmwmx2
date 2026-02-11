@@ -31,6 +31,7 @@ reference:
   - title: Estimate a model
     contents:
     - gmwmx2
+    - gmwmx2_new
     - print.gmwmx2_fit
     - summary.fit_gnss_ts_ngl
     - plot.fit_gnss_ts_ngl
@@ -50,6 +51,8 @@ navbar:
     menu:
     - text: "Data generation"
       href: articles/data_generation.html
+    - text: "GMWMX2 new"
+      href: articles/gmwmx2_new.html
     - text: "Estimate composite stochastic processes"
       href: articles/estimate_composite_stochastic_models.html
     - text: "Load and plot data from the Nevada Geodetic Laboratory"

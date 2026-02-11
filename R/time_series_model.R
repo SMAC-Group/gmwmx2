@@ -251,8 +251,8 @@ ar1 <- function(phi = NULL, sigma2 = NULL) {
     "inv_transformation_function" = function(phi, sigma2) c(atanh(phi), log(sigma2)),
 
     "autocovariance_function" = function(phi, sigma2, n) {
-      if (!is.finite(phi) || abs(phi) >= 1) stop("phi must be in (-1, 1) for stationarity.")
-      if (!is.finite(sigma2) || sigma2 <= 0) stop("sigma2 must be > 0 (innovation variance).")
+      # if (!is.finite(phi) || abs(phi) >= 1) stop("phi must be in (-1, 1) for stationarity.")
+      # if (!is.finite(sigma2) || sigma2 <= 0) stop("sigma2 must be > 0 (innovation variance).")
       n <- as.integer(n)
       if (length(n) != 1L || is.na(n) || n <= 0L) stop("`n` must be a positive integer.")
 

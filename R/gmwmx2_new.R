@@ -251,6 +251,7 @@ get_variance_covariance_matrix_model.sum_model <- function(model, n, theta = NUL
 #' @return A fitted model object (to be defined).
 #' @keywords internal
 gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+  start_time <- Sys.time()
   #-------------------------------------------
   # n=5000
   # X =matrix(NA, nrow=n, ncol=2)
@@ -366,7 +367,8 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
     theta_domain = theta_domain,
     convergence = res$convergence,
     value = res$value,
-    model = model
+    model = model,
+    run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs"))
   )
 
   # assign class to output
@@ -399,6 +401,14 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
   )
   print(coef_tab, digits = digits, ...)
 
+  if (!is.null(x$missing_params) && !is.null(x$missing_prop)) {
+    cat("\nMissingness model\n")
+    cat("  Proportion missing :", formatC(x$missing_prop, digits = digits, format = "f"), "\n")
+    cat("  p1                 :", formatC(x$missing_params$p1, digits = digits, format = "f"), "\n")
+    cat("  p2                 :", formatC(x$missing_params$p2, digits = digits, format = "f"), "\n")
+    cat("  p*                 :", formatC(x$missing_params$pstar, digits = digits, format = "f"), "\n")
+  }
+
   cat("\nStochastic model\n")
   if (inherits(x$model, "time_series_model")) {
     cat("  Model      :", x$model$model, "\n")
@@ -416,6 +426,11 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
       cat(sprintf("  [%d] %s\n", i, m$model))
       cat("       Estimated parameters :", format_params(pars, digits = digits), "\n")
     }
+  }
+
+  if (!is.null(x$run_time_sec)) {
+    cat("\nRuntime (seconds)\n")
+    cat("  Total              :", formatC(x$run_time_sec, digits = digits, format = "f"), "\n")
   }
 
   invisible(x)
@@ -528,6 +543,7 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 #' @return A fitted model object (to be defined).
 #' @keywords internal
 gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+  start_time <- Sys.time()
   #-------------------------------------------
   # n=3000
   # X =matrix(NA, nrow=n, ncol=2)
@@ -633,6 +649,7 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
 
   # define pstar hat (expecation of missingness process)
   pstar_hat <- p_hat[2] / (p_hat[1] + p_hat[2])
+  missing_prop <- mean(is.na(y))
 
   # get vec autocovariance theo omega
   vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], n)
@@ -704,7 +721,10 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
     theta_domain = theta_domain,
     convergence = res$convergence,
     value = res$value,
-    model = model
+    model = model,
+    missing_params = list(p1 = p_hat[1], p2 = p_hat[2], pstar = pstar_hat),
+    missing_prop = missing_prop,
+    run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs"))
   )
 
   # assign class to output
@@ -768,3 +788,66 @@ gmwmx2_new <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control =
     ...
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+#
+#
+# phi_ar1 = .99
+# sigma2_ar1 = 20
+# sigma2_wn = 20
+# n = 500
+# B = 500
+# mat_res = matrix(NA, nrow=B, ncol=19)
+# for(b in seq(B)){
+#   # b=82
+#   eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
+#   y = X %*% beta + eps
+#   fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
+#   # mispecified model assuming white noise as the stochastic model
+#   fit2 = lm(y~X[,2] + X[,3] + X[,4])
+#
+#   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
+#                    summary(fit2)$coefficients[,1],
+#                    summary(fit2)$coefficients[,2],
+#                    fit$theta_domain$`AR(1)_2`,
+#                    fit$theta_domain$`White Noise_1`)
+#   cat("Iteration ", b, " completed.\n")
+# }
+
+
+# #
+# # # compute empirical coverage
+# # mat_res_df = as.data.frame(mat_res)
+# # colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
+# #                          "gmwmx_beta2_hat", "gmwmx_beta3_hat",
+# #                          "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
+# #                          "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
+# #                          "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
+# #                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
+# #                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
+# # zval = qnorm(0.975)
+# # mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
+# # mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
+# # mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
+# # mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
+# # # empirical coverage of gmwmx beta
+# # dplyr::between(rep(1, 500), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
+# # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
+# #
+# # # do the same for lm beta
+# # mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
+# # mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
+# # mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
+# # mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
+# # dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
+# # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
+# #

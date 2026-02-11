@@ -48,10 +48,10 @@ inverse squared width of the empirical WV confidence intervals. Provide
 \code{omega} to use a custom weighting (e.g., from a theoretical covariance).
 }
 \examples{
-n = 50000
-mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
+n = 10000
+mod = wn(20) + ar1(phi = .99, sigma2 = .1)
 y = generate(mod, n = n)
-fit = gmwm2(y, model = wn() + ar1(phi = .9) + ar1(phi = .99))
+fit = gmwm2(y, model = wn() + ar1() )
 plot(fit)
 }
 \references{

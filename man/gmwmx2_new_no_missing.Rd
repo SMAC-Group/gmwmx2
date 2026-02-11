@@ -15,11 +15,11 @@ gmwmx2_new_no_missing(
 )
 }
 \arguments{
-\item{X}{Optional design matrix for a generic regression interface.}
+\item{X}{Design matrix for a generic regression interface.}
 
-\item{y}{Optional response vector for a generic regression interface.}
+\item{y}{Response vector for a generic regression interface.}
 
-\item{model}{Optional stochastic model specification.}
+\item{model}{Stochastic model specification.}
 
 \item{omega}{Optional weighting matrix. If \code{NULL}, uses inverse CI width.}
 
