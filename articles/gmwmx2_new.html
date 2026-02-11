@@ -133,43 +133,24 @@ function with and without missing values.</p>
 <span><span class="va">X</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="va">omega_1</span><span class="op">)</span></span>
 <span><span class="va">beta</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi<span class="op">=</span><span class="fl">0.95</span>, sigma2<span class="op">=</span><span class="fl">20</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, n<span class="op">=</span><span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">$</span><span class="va">series</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">yy</span> <span class="op">=</span> <span class="va">X</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">beta</span> <span class="op">+</span> <span class="va">eps</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">yy</span> <span class="op">=</span> <span class="va">X</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">beta</span> <span class="op">+</span> <span class="va">eps</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, <span class="va">yy</span>, type<span class="op">=</span><span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="fit-model">Fit model<a class="anchor" aria-label="anchor" href="#fit-model"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">yy</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## GMWMX fit</span></span>
-<span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1  3.91221   6.36847</span></span>
-<span><span class="co">## beta2  1.99916   0.01102</span></span>
-<span><span class="co">## beta3  0.06727   4.22714</span></span>
-<span><span class="co">## beta4  4.49853   4.21890</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Stochastic model</span></span>
-<span><span class="co">##   Sum of 2 processes</span></span>
-<span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 23.81 </span></span>
-<span><span class="co">##   [2] AR(1)</span></span>
-<span><span class="co">##        Estimated parameters : phi =  0.96, sigma2 = 16.43 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.2572</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="monte-carlo-simulation-to-demonstrate-the-empirical-coverage-of-confidence-intervals-for-beta-estimates-from-gmwmx2_new">Monte Carlo simulation to demonstrate the empirical coverage of
 confidence intervals for beta estimates from
 <code>gmwmx2_new()</code><a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-to-demonstrate-the-empirical-coverage-of-confidence-intervals-for-beta-estimates-from-gmwmx2_new"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">500</span></span>
 <span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="va">B</span>, ncol<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
@@ -186,7 +167,7 @@ confidence intervals for beta estimates from
 <span>                   <span class="va">fit</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`White Noise_1`</span><span class="op">)</span></span>
 <span>  <span class="co"># cat("Iteration ", b, " completed.\n")</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compute empirical coverage</span></span>
 <span><span class="va">mat_res_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">mat_res</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mat_res_df</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gmwmx_beta0_hat"</span>, <span class="st">"gmwmx_beta1_hat"</span>,</span>
@@ -216,7 +197,7 @@ confidence intervals for beta estimates from
 <div class="section level2">
 <h2 id="with-missing-values">With missing values<a class="anchor" aria-label="anchor" href="#with-missing-values"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Introduce missing values in y</span></span>
 <span><span class="co"># y[some_index] &lt;- NA</span></span>
 <span><span class="co"># model &lt;- wn() + ar1()</span></span>
