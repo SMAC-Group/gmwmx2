@@ -82,7 +82,12 @@ series_rw <- generate(model_rw, n = 500)
 plot(series_rw)
 ```
 
-
+## Flicker
+```{r}
+model_fl <- flicker(sigma2 = 1)
+series_fl <- generate(model_fl, n = 500)
+plot(series_fl)
+```
 
 # Composite models (sum of processes)
 

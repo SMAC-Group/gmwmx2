@@ -712,10 +712,11 @@ plot.generated_time_series <- function(x, ...) {
   plot(
     seq_len(n), y, type = "n",
     xlab = "Time", ylab = "Value",
-    main = paste0("Model: ", x$model),
+    main = "",
     las = 1,
     ...
   )
+  graphics::mtext(side = 3, text = paste0("Model: ", x$model), line = 0.2)
   graphics::grid(col = "grey85", lty=1)
   lines(seq_len(n), y, lty = 1, col = line_col)
   invisible(x)
@@ -751,10 +752,11 @@ plot.generated_composite_model_time_series <- function(x, ...) {
     plot(
       seq_len(n), series_i, type = "n",
       xlab = "Time", ylab = "Value",
-      main = main_i,
+      main = "",
       las = 1,
       ...
     )
+    graphics::mtext(side = 3, text = main_i, line = 0.2)
     graphics::grid(col = "grey85", lty=1)
     lines(seq_len(n), series_i, lty = 1, col = line_cols[[i]])
   }
@@ -763,10 +765,11 @@ plot.generated_composite_model_time_series <- function(x, ...) {
   plot(
     seq_len(n), x$series, type = "n",
     xlab = "Time", ylab = "Value",
-    main = sum_title,
+    main = "",
     las = 1,
     ...
   )
+  graphics::mtext(side = 3, text = sum_title, line = 0.2)
   graphics::grid(col = "grey85", lty=1)
   lines(seq_len(n), x$series, lty = 1, col = "grey40")
 
