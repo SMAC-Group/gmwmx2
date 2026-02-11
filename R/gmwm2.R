@@ -407,6 +407,11 @@ loss_fn <- function(theta, model, n, prep, wv_obj, omega = NULL) {
 
   difference <- nu_hat - theo_wv
   objective <- t(difference) %*% omega %*% difference
+
+  # prevent agains optimization problem diverging due to numerical issues, if objective is not finite, return a large number
+  if(!is.finite(objective)) return(1e30)
+
+
   return(objective)
   # compute loss
 }
@@ -564,12 +569,15 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' @importFrom stats optim
 #' @examples
 #' n = 10000
-#' mod = wn(20) + ar1(phi = .99, sigma2 = .1)
-#' y = generate(mod, n = n)
+#' mod = wn(20) + ar1(phi = .995, sigma2 = .2)
+#' y = generate(mod, n = n, seed = 123)
+#' plot(y)
 #' fit = gmwm2(y, model = wn() + ar1() )
 #' plot(fit)
 #' @export
 gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+
+
   # unwrap generated_* objects
   if (inherits(x, "generated_time_series") || inherits(x, "generated_composite_model_time_series")) {
     x <- x$series

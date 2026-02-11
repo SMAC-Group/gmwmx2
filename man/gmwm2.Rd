@@ -49,8 +49,9 @@ inverse squared width of the empirical WV confidence intervals. Provide
 }
 \examples{
 n = 10000
-mod = wn(20) + ar1(phi = .99, sigma2 = .1)
-y = generate(mod, n = n)
+mod = wn(20) + ar1(phi = .995, sigma2 = .2)
+y = generate(mod, n = n, seed = 123)
+plot(y)
 fit = gmwm2(y, model = wn() + ar1() )
 plot(fit)
 }
