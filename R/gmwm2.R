@@ -646,10 +646,11 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
 #' @param show_initial_parameters Logical; if TRUE, also show the initial parameters used for optimization.
 #' @param ... Unused.
 #' @examples
-#' model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
-#' x <- generate(model, n = 1000, seed = 123)
-#' plot(x)
-#' fit <- gmwm2(x, model = wn()+ar1())
+#' n = 10000
+#' mod = wn(20) + ar1(phi = .995, sigma2 = .2)
+#' y = generate(mod, n = n, seed = 123)
+#' plot(y)
+#' fit = gmwm2(y, model = wn() + ar1() )
 #' fit
 #' @return The input object, invisibly.
 #' @export
@@ -741,10 +742,12 @@ print.gmwm2_fit <- function(x, digits = 4,show_initial_parameters = FALSE, ...) 
 #' @param ... Additional arguments passed to `plot()`.
 #' @return The input object, invisibly.
 #' @examples
-#' n = 50000
-#' mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
-#' y = generate(mod, n = n)
-#' fit = gmwm2(y, model = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1))
+#' n = 10000
+#' mod = wn(20) + ar1(phi = .995, sigma2 = .2)
+#' y = generate(mod, n = n, seed = 123)
+#' plot(y)
+#' fit = gmwm2(y, model = wn() + ar1() )
+#' fit
 #' plot(fit)
 #' @export
 plot.gmwm2_fit <- function(x,
