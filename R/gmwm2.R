@@ -562,10 +562,10 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' @importFrom wv wvar
 #' @importFrom stats optim
 #' @examples
-#' n = 50000
-#' mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
+#' n = 10000
+#' mod = wn(20) + ar1(phi = .99, sigma2 = .1)
 #' y = generate(mod, n = n)
-#' fit = gmwm2(y, model = wn() + ar1(phi = .9) + ar1(phi = .99))
+#' fit = gmwm2(y, model = wn() + ar1() )
 #' plot(fit)
 #' @export
 gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {

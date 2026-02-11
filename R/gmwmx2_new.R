@@ -34,10 +34,65 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
   }
 
   difference <- nu_hat - theo_wv
-  objective <- t(difference) %*% omega %*% difference
+  objective <- as.numeric(t(difference) %*% omega %*% difference)
   return(objective)
   # compute loss
 }
+
+
+
+
+#' Loss function for GMWMX with missing value
+#'
+#' Computes the weighted squared error between empirical wavelet variance
+#' and theoretical wavelet variance implied by a model and parameter vector.
+#'
+#' @param theta Real-valued parameter vector.
+#' @param model A `time_series_model` or `sum_model`.
+#' @param n Length of autocovariance to compute.
+#' @param prep Output from `prepare_optim_layout`.
+#' @param wv_obj A `wv::wvar` object.
+#' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
+#' @return Scalar objective value.
+#' @keywords internal
+loss_fn_gmwmx_with_missing <- function(theta, model, n, prep, wv_obj, quantities_D, vec_autocov_omega, pstar_hat, omega = NULL) {
+
+  # compute autocovariance from theta
+  autocov_vec <- get_autocovariance(object = model, n = n, theta = theta, prep = prep)
+
+  # retreat autocovariance to take account of the fact that we are using the residuals of a regression, not the original series
+  vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
+    mat_D_q_term_1 = quantities_D$mat_D_q_term_1,
+    mat_D_q_term_2 = quantities_D$mat_D_q_term_2,
+    sum_on_sub_diag_of_D = quantities_D$sum_on_sub_diag_of_D,
+    vec_autocov = autocov_vec, approx_type = "3"
+  )
+
+  # retreat autocovariance of epsilon hat with the missing data mechanism
+  vec_mean_per_diag_w_missing <- vec_mean_autocov_eps_hat * (vec_autocov_omega + pstar_hat^2)
+
+  # compute wv from autocovariance
+  theo_wv <- autocovariance_to_wv(vec_mean_per_diag_w_missing, tau = wv_obj$scales)
+
+  # define omega
+  nu_hat <- wv_obj$variance
+  if (is.null(omega)) {
+    omega <- diag(1 / (wv_obj$ci_low - wv_obj$ci_high)^2)
+  }
+
+  difference <- nu_hat - theo_wv
+  objective <- as.numeric(t(difference) %*% omega %*% difference)
+  return(objective)
+  # compute loss
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -186,9 +241,9 @@ get_variance_covariance_matrix_model.sum_model <- function(model, n, theta = NUL
 #' \code{gnss_ts_ngl} object (current workflow) or with a generic design matrix
 #' and response vector.
 #'
-#' @param X Optional design matrix for a generic regression interface.
-#' @param y Optional response vector for a generic regression interface.
-#' @param model Optional stochastic model specification.
+#' @param X Design matrix for a generic regression interface.
+#' @param y Response vector for a generic regression interface.
+#' @param model Stochastic model specification.
 #' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
 #' @param method Optimization method passed to `stats::optim`.
 #' @param control Control list passed to `stats::optim`.
@@ -463,9 +518,9 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 #' \code{gnss_ts_ngl} object (current workflow) or with a generic design matrix
 #' and response vector.
 #'
-#' @param X Optional design matrix for a generic regression interface.
-#' @param y Optional response vector for a generic regression interface.
-#' @param model Optional stochastic model specification.
+#' @param X Design matrix for a generic regression interface.
+#' @param y response vector for a generic regression interface.
+#' @param model Stochastic model specification.
 #' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
 #' @param method Optimization method passed to `stats::optim`.
 #' @param control Control list passed to `stats::optim`.
@@ -474,12 +529,12 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 #' @keywords internal
 gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
   #-------------------------------------------
-  # n=5000
+  # n=3000
   # X =matrix(NA, nrow=n, ncol=2)
   # X[,1] = 1
   # X[,2] = 1:n
   # beta = c(1, .2)
-  # eps = generate(ar1(phi=0.8, sigma2=20) + wn(20), n=n)$series
+  # eps = generate(ar1(phi=0.99, sigma2=5) + wn(25), n=n)$series
   # plot(wv::wvar(eps))
   # y = X %*% beta + eps
   # plot(X[,2], y, type='l')
@@ -487,6 +542,34 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
   # control = list()
   # omega =NULL
   # model = ar1()+wn()
+  # generate_omega <- function(n, p1, p2, seed = NULL) {
+  #   # create vector
+  #   c1 <- 1000
+  #   vec_omega <- vector(mode = "numeric", length = n + c1)
+  #   vec_omega[1] <- 1
+  #   if (!is.null(seed)) {
+  #     set.seed(seed)
+  #   }
+  #   for (i in 2:(n + c1)) {
+  #     # generate
+  #     if (vec_omega[i - 1] == 1) {
+  #       vec_omega[i] <- rbinom(n = 1, size = 1, prob = (1 - p1))
+  #     } else if (vec_omega[i - 1] == 0) {
+  #       vec_omega[i] <- rbinom(n = 1, size = 1, prob = p2)
+  #     }
+  #   }
+  #   return(tail(vec_omega, n = n))
+  # }
+  #
+  #
+  # Z = generate_omega(n, p1 = 0.05, p2 = 0.91, seed = 123)
+  # idx_missing = which(Z == 0)
+  # y[idx_missing] = NA
+  # X
+  # y
+
+
+
   #----------------------------------------------
 
 
@@ -510,21 +593,49 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
     stop("Design matrix X contains NA values. Please remove or impute missing data.")
   }
 
-  # check if there are no NA in y, stop if so
-  if (any(is.na(y))) {
-    stop("Response vector y contains NA values. Please remove or impute missing data.")
+  # require missing values in y for this implementation
+  if (!any(is.na(y))) {
+    stop("`y` contains no missing values. Use `gmwmx2_new_no_missing()`.", call. = FALSE)
   }
+  message("Response vector y contains NA values. Modelling missing data with a two states Markov model.")
 
 
   # get dimension of X and y
   n = nrow(X)
   p = ncol(X)
 
-  # obtain beta hat
-  beta_hat <- .lm.fit(y = y, x = X)$coefficients
+  # identify missing observation
+  vec_is_present = !is.na(y)
+  vec_is_present = as.numeric(vec_is_present)
+  id_non_missing = which(!is.na(y))
 
-  # obtain epsilon hat
-  eps_hat <- y - X %*% beta_hat
+  # obtain X sub and y sub
+  X_sub = X[id_non_missing, ]
+  y_sub = y[id_non_missing]
+
+  # obtain beta hat
+  beta_hat <- .lm.fit(y = y_sub, x = X_sub)$coefficients
+
+  # obtain residuals when we have data
+  eps_hat_sub = y_sub - X_sub %*% beta_hat
+
+  # fill in vector with zero when we have missing values
+  eps_hat_filled <- vector(mode = "numeric", length = n)
+
+  # fill in residuals where we have data, otherwise zero
+  eps_hat_filled[id_non_missing] = eps_hat_sub
+
+  # compute empirical wv on this vector filled with zero
+  wv_emp = wv::wvar(eps_hat_filled)
+
+  # estimate missing data mechanism parameters
+  p_hat = estimate_p1_p2_mle_cpp(vec_is_present)
+
+  # define pstar hat (expecation of missingness process)
+  pstar_hat <- p_hat[2] / (p_hat[1] + p_hat[2])
+
+  # get vec autocovariance theo omega
+  vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], n)
 
   # compute (X^TX)^{-1} using QR decomposition for numerical stability
   X_transpose = t(X)
@@ -542,22 +653,21 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
   quantities_D <- pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type = "3")
 
   # fill missing parameters in model
-  model <- fill_missing_parameters(model, signal = eps_hat)
+  model <- fill_missing_parameters(model, signal = eps_hat_filled)
 
   # prepare optim layout
   prep <- prepare_optim_layout(model)
 
-  # compute empirical wv on estimated residuals
-  wv_emp <- wv::wvar(eps_hat)
-
   # perform optimization to estimate stochastic parameters
   res <- optim(
     par = prep$theta0,
-    fn = loss_fn_gmwmx_no_missing,
+    fn = loss_fn_gmwmx_with_missing,
     model = model,
     n = n,
     prep = prep,
     quantities_D = quantities_D,
+    vec_autocov_omega = vec_autocov_omega,
+    pstar_hat = pstar_hat,
     wv_obj = wv_emp,
     omega = omega,
     method = method,
@@ -565,6 +675,7 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
     ...
 
   )
+
 
   # transform estimated parameters to domain
   theta_domain <- theta_to_domain(model, res$par, prep = prep)
@@ -576,10 +687,15 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
   # get variance covariance matrix of epsilon hat with model at estimated parameters
   variance_covariance_mat_epsilon <- get_variance_covariance_matrix_model(model, n, theta = theta_domain_vec, prep = prep)
 
-  # construct variance covariance of beta hat with model at estimated parameters
-  variance_covariance_beta_hat = inv_XtX %*% X_transpose %*% variance_covariance_mat_epsilon %*% X %*% inv_XtX
+  # compute variance covariance of Z (missingness process)
+  var_cov_omega <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_omega))
 
+  # compute variance covariance of beta hat
+  variance_covariance_beta_hat <- pstar_hat^(-2) * inv_XtX %*% X_transpose %*% ((var_cov_omega + pstar_hat^2) * variance_covariance_mat_epsilon) %*% X %*% inv_XtX
+
+  # get std of beta hat
   std_beta_hat = sqrt(diag(variance_covariance_beta_hat))
+
 
   # construct output
   out = list(
@@ -597,6 +713,58 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
 }
 
 
+#' GMWMX estimator (dispatching on missingness)
+#'
+#' Convenience wrapper that selects the missing or non-missing implementation
+#' based on the presence of `NA` values in `y`.
+#'
+#' @param X Optional design matrix for a generic regression interface.
+#' @param y Optional response vector for a generic regression interface.
+#' @param model Optional stochastic model specification.
+#' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
+#' @param method Optimization method passed to `stats::optim`.
+#' @param control Control list passed to `stats::optim`.
+#' @param ... Reserved for future extensions.
+#' @return A fitted model object.
+#' @export
+gmwmx2_new <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+  if (is.null(X) || is.null(y) || is.null(model)) {
+    stop("`X`, `y`, and `model` must be provided.", call. = FALSE)
+  }
 
+  # check model
+  if (!inherits(model, "time_series_model") && !inherits(model, "sum_model")) {
+    stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
+  }
 
+  # check that y length matches number of rows in X
+  if (length(y) != nrow(X)) {
+    stop("`y` length must match the number of rows in `X`.", call. = FALSE)
+  }
 
+  if (all(is.na(y))) {
+    stop("`y` contains only NA values; cannot fit model.", call. = FALSE)
+  }
+
+  if (any(is.na(y))) {
+    return(gmwmx2_new_with_missing(
+      X = X,
+      y = y,
+      model = model,
+      omega = omega,
+      method = method,
+      control = control,
+      ...
+    ))
+  }
+
+  gmwmx2_new_no_missing(
+    X = X,
+    y = y,
+    model = model,
+    omega = omega,
+    method = method,
+    control = control,
+    ...
+  )
+}
