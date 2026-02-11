@@ -4,6 +4,7 @@
 <url><loc>https://smac-group.github.io/gmwmx2/articles/estimate_composite_stochastic_models.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/articles/estimate_small_network.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/articles/fit_model.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/articles/gmwmx2_new.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/articles/index.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/articles/load_plot_data_ngl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/articles/plot_large_network.html</loc></url>
@@ -28,6 +29,7 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/get_variance_covariance_matrix_model.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwm2.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new_no_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new_with_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_plot_colors.html</loc></url>
@@ -36,6 +38,7 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/inv_trans_kappa_pl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn_gmwmx_no_missing.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn_gmwmx_with_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/matern.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/pl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.fit_gnss_ts_ngl.html</loc></url>
