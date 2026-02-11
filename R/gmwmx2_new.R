@@ -155,16 +155,21 @@ get_variance_covariance_matrix_model.sum_model <- function(model, n, theta = NUL
 }
 
 
+# # do some test
 # mat1  = get_variance_covariance_matrix_model(model = ar1(.5, 1) +rw(1), n = 10)
 # mat2  =get_variance_covariance_matrix_model(model = ar1() +rw(), n = 10, theta = c(.5,1,1), prep = prepare_optim_layout(ar1() +rw()))
 # all.equal(mat1, mat2)
-# mat3 = get_variance_covariance_matrix_model(model = ar1() +rw(), n = 10, theta = c(.9,.5,1), prep = prepare_optim_layout(ar1() +rw()))
-# all.equal(mat1, mat3)
-
-# # phi = .8
-# # sigma2 = 1
-# # n=10
-# fast_toeplitz_matrix_from_vector_cpp(sigma2 * (phi^(0:(n - 1))) / (1 - phi^2)) + get_sigma_mat_rw(n, 1)
+# mat3 = get_variance_covariance_matrix_model(model = ar1(phi = .5,2) +flicker(1), n = 10)
+# mat4 = get_variance_covariance_matrix_model(model = ar1() +flicker(), n = 10, theta = c(.5,2,1), prep = prepare_optim_layout(ar1() +flicker()))
+# all.equal(mat3, mat4)
+# # verify some combination to be sure
+# mat5  = get_variance_covariance_matrix_model(model = ar1(.5, 1) +rw(1), n = 10)
+# sigma2 = 1
+# phi = .5
+# n=10
+# vec_autocov = sigma2 * (phi^(0:(n - 1))) / (1 - phi^2)
+# mat6 = fast_toeplitz_matrix_from_vector_cpp(vec_autocov) + get_sigma_mat_rw(n, 1)
+# all.equal(mat5, mat6)
 
 
 
@@ -361,6 +366,14 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
   invisible(x)
 }
 
+
+
+
+
+
+
+
+
 #
 # n = 10000
 # X = matrix(NA, nrow=n, ncol=4)
@@ -439,3 +452,151 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 # mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
 # dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
 # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
+
+
+
+
+
+#' GMWMX estimator with missing
+#'
+#' Draft interface for a future `gmwmx2()` that can be called either with a
+#' \code{gnss_ts_ngl} object (current workflow) or with a generic design matrix
+#' and response vector.
+#'
+#' @param X Optional design matrix for a generic regression interface.
+#' @param y Optional response vector for a generic regression interface.
+#' @param model Optional stochastic model specification.
+#' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
+#' @param method Optimization method passed to `stats::optim`.
+#' @param control Control list passed to `stats::optim`.
+#' @param ... Reserved for future extensions.
+#' @return A fitted model object (to be defined).
+#' @keywords internal
+gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+  #-------------------------------------------
+  # n=5000
+  # X =matrix(NA, nrow=n, ncol=2)
+  # X[,1] = 1
+  # X[,2] = 1:n
+  # beta = c(1, .2)
+  # eps = generate(ar1(phi=0.8, sigma2=20) + wn(20), n=n)$series
+  # # plot(wv::wvar(eps))
+  # y = X %*% beta + eps
+  # plot(X[,2], y, type='l')
+  # method = "L-BFGS-B"
+  # control = list()
+  # omega =NULL
+  # model = ar1()+wn()
+  #----------------------------------------------
+
+
+  # Placeholder for the actual implementation
+  if (is.null(X) || is.null(y)) {
+    stop("Both X and y must be provided for the generic regression interface.")
+  }
+
+  # check model
+  if (is.null(model) || (!inherits(model, "time_series_model") && !inherits(model, "sum_model"))) {
+    stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
+  }
+
+  # check that y length matches number of rows in X
+  if (length(y) != nrow(X)) {
+    stop("`y` length must match the number of rows in `X`.", call. = FALSE)
+  }
+
+  # check that there are no NA in X, stop if so
+  if (any(is.na(X))) {
+    stop("Design matrix X contains NA values. Please remove or impute missing data.")
+  }
+
+  # check if there are no NA in y, stop if so
+  if (any(is.na(y))) {
+    stop("Response vector y contains NA values. Please remove or impute missing data.")
+  }
+
+
+  # get dimension of X and y
+  n = nrow(X)
+  p = ncol(X)
+
+  # obtain beta hat
+  beta_hat <- .lm.fit(y = y, x = X)$coefficients
+
+  # obtain epsilon hat
+  eps_hat <- y - X %*% beta_hat
+
+  # compute (X^TX)^{-1} using QR decomposition for numerical stability
+  X_transpose = t(X)
+  XtX <- X_transpose %*% X
+  qr_decomp <- qr(X)
+  R <- qr.R(qr_decomp)
+  R_inv <- Matrix::solve(R)
+  inv_XtX <- R_inv %*% t(R_inv)
+
+  # compute hat matrix
+  H <- X %*% inv_XtX %*% X_transpose
+  D <- diag(n) - H
+
+  # pre-compute quantities on D=(I-H), with H = X(X^TX)^{-1}X^T to later use in optimization function
+  quantities_D <- pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type = "3")
+
+  # fill missing parameters in model
+  model <- fill_missing_parameters(model, signal = eps_hat)
+
+  # prepare optim layout
+  prep <- prepare_optim_layout(model)
+
+  # compute empirical wv on estimated residuals
+  wv_emp <- wv::wvar(eps_hat)
+
+  # perform optimization to estimate stochastic parameters
+  res <- optim(
+    par = prep$theta0,
+    fn = loss_fn_gmwmx_no_missing,
+    model = model,
+    n = n,
+    prep = prep,
+    quantities_D = quantities_D,
+    wv_obj = wv_emp,
+    omega = omega,
+    method = method,
+    control = control,
+    ...
+
+  )
+
+  # transform estimated parameters to domain
+  theta_domain <- theta_to_domain(model, res$par, prep = prep)
+  theta_init_domain <- theta_to_domain(model, prep$theta0, prep = prep)
+
+  # flatten theta domain to a vector
+  theta_domain_vec <- unlist(theta_domain)
+
+  # get variance covariance matrix of epsilon hat with model at estimated parameters
+  variance_covariance_mat_epsilon <- get_variance_covariance_matrix_model(model, n, theta = theta_domain_vec, prep = prep)
+
+  # construct variance covariance of beta hat with model at estimated parameters
+  variance_covariance_beta_hat = inv_XtX %*% X_transpose %*% variance_covariance_mat_epsilon %*% X %*% inv_XtX
+
+  std_beta_hat = sqrt(diag(variance_covariance_beta_hat))
+
+  # construct output
+  out = list(
+    beta_hat = beta_hat,
+    std_beta_hat = std_beta_hat,
+    theta_domain = theta_domain,
+    convergence = res$convergence,
+    value = res$value,
+    model = model
+  )
+
+  # assign class to output
+  class(out) = "gmwmx2_fit"
+  return(out)
+}
+
+
+
+
+
