@@ -13,6 +13,9 @@ knitr::opts_chunk$set(
   fig.height = 6,
   fig.align = "center"
 )
+
+# so not to executate this vignette during pckg devlopment
+knitr::opts_chunk$set(eval = FALSE)
 ```
 
 This vignette will showcase how to use `gmwmx2_new()` function with and without missing
@@ -24,7 +27,7 @@ library(gmwmx2)
 
 # Without missing values
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 n = 1000
 X = matrix(NA, nrow=n, ncol=4)
 # intercept
@@ -42,7 +45,7 @@ yy = X%*% beta + eps
 ```
 
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 plot(X[,2], yy, type='l')
 ```
 
