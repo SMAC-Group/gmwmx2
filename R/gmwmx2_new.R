@@ -480,7 +480,7 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
   # X[,2] = 1:n
   # beta = c(1, .2)
   # eps = generate(ar1(phi=0.8, sigma2=20) + wn(20), n=n)$series
-  # # plot(wv::wvar(eps))
+  # plot(wv::wvar(eps))
   # y = X %*% beta + eps
   # plot(X[,2], y, type='l')
   # method = "L-BFGS-B"

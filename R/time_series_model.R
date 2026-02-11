@@ -422,7 +422,6 @@ flicker = function(sigma2 = NULL){
 
 
 
-
 # ---------------------------------------------- define constructor for time_series_model
 
 # container
