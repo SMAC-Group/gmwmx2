@@ -27,3 +27,8 @@ where \eqn{\mathcal{K}_\omega(x)} is the modified Bessel function of the second 
 mod <- matern(sigma2 = 1, lambda = 0.2, alpha = 1.0)
 mod
 }
+\references{
+Lilly JM, Sykulski AM, Early JJ, Olhede SC (2017). "Fractional Brownian motion,
+the Matérn process, and stochastic modeling of turbulent dispersion."
+\emph{Nonlinear Processes in Geophysics}, 24(3), 481-514.
+}

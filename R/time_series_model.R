@@ -176,6 +176,10 @@ wn = function(sigma2 = NULL){
 #' mod <- matern(sigma2 = 1, lambda = 0.2, alpha = 1.0)
 #' mod
 #' @export
+#' @references
+#' Lilly JM, Sykulski AM, Early JJ, Olhede SC (2017). "Fractional Brownian motion,
+#' the Matérn process, and stochastic modeling of turbulent dispersion."
+#' *Nonlinear Processes in Geophysics*, 24(3), 481-514.
 matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
   .check_positive(sigma2, "sigma2")
   .check_positive(lambda, "lambda")
