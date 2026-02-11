@@ -35,6 +35,10 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
 
   difference <- nu_hat - theo_wv
   objective <- as.numeric(t(difference) %*% omega %*% difference)
+
+  # prevent agains optimization problem diverging due to numerical issues, if objective is not finite, return a large number
+  if(!is.finite(objective)) return(1e30)
+
   return(objective)
   # compute loss
 }
@@ -82,6 +86,11 @@ loss_fn_gmwmx_with_missing <- function(theta, model, n, prep, wv_obj, quantities
 
   difference <- nu_hat - theo_wv
   objective <- as.numeric(t(difference) %*% omega %*% difference)
+
+  # prevent agains optimization problem diverging due to numerical issues, if objective is not finite, return a large number
+  if(!is.finite(objective)) return(1e30)
+
+
   return(objective)
   # compute loss
 }
@@ -266,6 +275,36 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
   # control = list()
   # omega =NULL
   # model = ar1()+wn()
+
+
+
+  #
+  #
+  #
+  # n = 1000
+  # X = matrix(NA, nrow=n, ncol=4)
+  # # intercept
+  # X[,1] = 1
+  # # # trend
+  # X[,2] = 1:n
+  # # # add a sin signal
+  # omega_1 <- (1 / 365.25) * 2 * pi
+  # X[, 3] <- sin((1:n) * omega_1)
+  # X[, 4] <- cos((1:n) * omega_1)
+  # beta = c(1, 2, 3,4)
+  # eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = 123)$series
+  # # plot(wv::wvar(eps))
+  # yy = X%*% beta + eps
+  # b=145
+  # eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
+  # # plot(wv::wvar(eps))
+  # y = X %*% beta + eps
+  # fit = gmwmx2_new_no_missing(X = X, y = y, model = wn(20) + ar1(phi=.95, sigma2 = 20) )
+  #
+  # model = wn(20) + ar1(phi=.95, sigma2 = 20)
+  # method = "L-BFGS-B"
+  # control = list()
+  # omega=NULL
   #----------------------------------------------
 
 
@@ -344,6 +383,24 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
     ...
 
   )
+
+  # loss_fn_gmwmx_no_missing(theta = prep$theta0, model = model, n = n,
+  #                          prep = prep, wv_obj = wv_emp, quantities_D = quantities_D, omega = omega)
+  #
+  # res <- optim(
+  #   par = prep$theta0,
+  #   fn = loss_fn_gmwmx_no_missing,
+  #   model = model,
+  #   n = n,
+  #   prep = prep,
+  #   quantities_D = quantities_D,
+  #   wv_obj = wv_emp,
+  #   omega = omega,
+  #   method = method,
+  #   control = control
+  #   # ...
+  #
+  # )
 
   # transform estimated parameters to domain
   theta_domain <- theta_to_domain(model, res$par, prep = prep)
@@ -790,28 +847,39 @@ gmwmx2_new <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control =
 }
 
 
-
-
-
-
-
-
-
-
-
 #
 #
-# phi_ar1 = .99
-# sigma2_ar1 = 20
-# sigma2_wn = 20
-# n = 500
+#
+#
+#
+#
+# n = 1000
+# X = matrix(NA, nrow=n, ncol=4)
+# # intercept
+# X[,1] = 1
+# # # trend
+# X[,2] = 1:n
+# # # add a sin signal
+# omega_1 <- (1 / 365.25) * 2 * pi
+# X[, 3] <- sin((1:n) * omega_1)
+# X[, 4] <- cos((1:n) * omega_1)
+# beta = c(1, 2, 3,4)
+# eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = 123)$series
+# plot(wv::wvar(eps))
+# yy = X%*% beta + eps
 # B = 500
 # mat_res = matrix(NA, nrow=B, ncol=19)
+# b=145
+# eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
+# plot(wv::wvar(eps))
+# y = X %*% beta + eps
+# fit1 = gmwmx2_new(X = X, y = y, model = wn(20) + ar1(phi=.95,sigma2 =  20) )
+# fit2 = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
+#
+#
+#
 # for(b in seq(B)){
-#   # b=82
-#   eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
-#   y = X %*% beta + eps
-#   fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
+#
 #   # mispecified model assuming white noise as the stochastic model
 #   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 #
@@ -822,32 +890,32 @@ gmwmx2_new <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control =
 #                    fit$theta_domain$`White Noise_1`)
 #   cat("Iteration ", b, " completed.\n")
 # }
-
-
-# #
-# # # compute empirical coverage
-# # mat_res_df = as.data.frame(mat_res)
-# # colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
-# #                          "gmwmx_beta2_hat", "gmwmx_beta3_hat",
-# #                          "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
-# #                          "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
-# #                          "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
-# #                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
-# #                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
-# # zval = qnorm(0.975)
-# # mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
-# # mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
-# # mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
-# # mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
-# # # empirical coverage of gmwmx beta
-# # dplyr::between(rep(1, 500), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
-# # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
-# #
-# # # do the same for lm beta
-# # mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
-# # mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
-# # mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
-# # mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
-# # dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
-# # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
-# #
+#
+#
+# # #
+# # # # compute empirical coverage
+# # # mat_res_df = as.data.frame(mat_res)
+# # # colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
+# # #                          "gmwmx_beta2_hat", "gmwmx_beta3_hat",
+# # #                          "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
+# # #                          "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
+# # #                          "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
+# # #                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
+# # #                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
+# # # zval = qnorm(0.975)
+# # # mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
+# # # mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
+# # # mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
+# # # mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
+# # # # empirical coverage of gmwmx beta
+# # # dplyr::between(rep(1, 500), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
+# # # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
+# # #
+# # # # do the same for lm beta
+# # # mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
+# # # mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
+# # # mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
+# # # mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
+# # # dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
+# # # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
+# # #

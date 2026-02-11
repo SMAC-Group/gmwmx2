@@ -169,6 +169,7 @@ fill_missing_parameters <- function(model, signal) {
 }
 
 
+
 # -------------------------- get_autocovariance with optional theta --------------------------
 #
 # Goal:

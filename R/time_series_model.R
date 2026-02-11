@@ -274,7 +274,7 @@ ar1 <- function(phi = NULL, sigma2 = NULL) {
       as.numeric(x)
     },
     "get_initial_parameters_function" = function(signal){
-      phi = runif(n = 1, min = -1, max = 1)
+      phi = runif(n = 1, min = -.5, max = .5)
       sigma2 = var(signal)
       return(c("phi"=phi, "sigma2"=sigma2))
     },
