@@ -24,10 +24,10 @@ Note that we use the convention that the power spectral density satisfies
 \eqn{P(f) \propto |f|^{\kappa}}, where \eqn{\kappa > -1} ensures second-order
 stationarity. This corresponds to the alternative notation
 \eqn{P(f) \propto |f|^{-\alpha}} with \eqn{\alpha = -\kappa}.
-The autocovariance used here (Hosking, 1981) is
+The autocovariance \eqn{\gamma(h) = \mathrm{cov}(X_t, X_{t+h})} used here (Hosking, 1981) is
 \eqn{\gamma(0) = \sigma^{2} \frac{\Gamma(1+\kappa)}{\Gamma\left(1+\kappa/2\right)^2}},
 and for \eqn{h > 0}{h > 0}
-\eqn{\gamma(h) =\mathrm{cov}(X_t, X_{t+h}) = \frac{-\kappa/2 + h - 1}{\kappa/2 + h}\,\gamma(h-1)}.
+\eqn{\gamma(h) = \frac{-\kappa/2 + h - 1}{\kappa/2 + h}\,\gamma(h-1)}.
 }
 \examples{
 mod <- pl(kappa = -0.5, sigma2 = 2)
