@@ -190,6 +190,15 @@ numeric series in <code>$series</code>:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">series_rw</span><span class="op">)</span></span></code></pre></div>
 <p><img src="data_generation_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
+<div class="section level3">
+<h3 id="flicker">Flicker<a class="anchor" aria-label="anchor" href="#flicker"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model_fl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">series_fl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_fl</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">series_fl</span><span class="op">)</span></span></code></pre></div>
+<p><img src="data_generation_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="composite-models-sum-of-processes">Composite models (sum of processes)<a class="anchor" aria-label="anchor" href="#composite-models-sum-of-processes"></a>
@@ -197,14 +206,14 @@ numeric series in <code>$series</code>:</p>
 <p>Use <code>+</code> to build a composite model from multiple
 stochastic processes. The result is a <code>sum_model</code> that can be
 passed to <code><a href="../reference/generate.html">generate()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_wn_ar1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.8</span>, sigma2 <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">model_wn_ar1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "sum_model"</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series_wn_ar1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_wn_ar1</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">series_wn_ar1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data_generation_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<p><img src="data_generation_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <p>The composite output is a
 <code>generated_composite_model_time_series</code> with:</p>
 <ul>
@@ -219,7 +228,7 @@ passed to <code><a href="../reference/generate.html">generate()</a></code>.</p>
 <li>
 <code>parameters</code> (parameters of each component)</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">series_wn_ar1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "series"     "components" "n"          "model"      "parameters"</span></span></code></pre>
 </div>
