@@ -39,10 +39,12 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn_gmwmx_no_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/loss_fn_gmwmx_with_missing.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/markov_two_states.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/matern.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/pl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.fit_gnss_ts_ngl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.generated_composite_model_time_series.html</loc></url>
+<url><loc>https://smac-group.github.io/gmwmx2/reference/plot.generated_missingness.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.generated_time_series.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.gmwm2_fit.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.gnss_ts_ngl.html</loc></url>
