@@ -17,6 +17,8 @@ reference:
     - generate
     - plot.generated_time_series
     - plot.generated_composite_model_time_series
+    - markov_two_states
+    - plot.generated_missingness
   - title: Composite stochastic models estimation
     contents:
     - gmwm2
