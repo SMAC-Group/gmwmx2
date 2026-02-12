@@ -426,6 +426,38 @@ flicker = function(sigma2 = NULL){
 
 
 
+markov_two_states = function(p1 = NULL, p2 = NULL){
+
+  res = list(
+    "parameters" = c("p1" = p1, "p2" = p2),
+    "model" = "Markov Two States",
+
+    "generation_function" =  function(p1, p2, n, seed = NULL){
+        # create vector
+        c1 <- 1000
+        vec_omega <- vector(mode = "numeric", length = n + c1)
+        vec_omega[1] <- 1
+        if (!is.null(seed)) {
+          set.seed(seed)
+        }
+        for (i in 2:(n + c1)) {
+          # generate
+          if (vec_omega[i - 1] == 1) {
+            vec_omega[i] <- rbinom(n = 1, size = 1, prob = (1 - p1))
+          } else if (vec_omega[i - 1] == 0) {
+            vec_omega[i] <- rbinom(n = 1, size = 1, prob = p2)
+          }
+        }
+        return(tail(vec_omega, n = n))
+    }
+  )
+  class(res) = "missingness_model"
+  return(res)
+}
+
+
+
+
 # ---------------------------------------------- define constructor for time_series_model
 
 # container
@@ -562,6 +594,15 @@ print.sum_model <- function(x, ...) {
   invisible(x)
 }
 
+# Print a missingness process
+#' @export
+print.missingness_model <- function(x, ...) {
+  cat("Missingness process\n")
+  cat("  Model      :", x$model, "\n")
+  cat("  Parameters :", format_params(x$parameters), "\n")
+  invisible(x)
+}
+
 
 
 
@@ -622,6 +663,35 @@ generate.time_series_model <- function(object, n, seed = NULL, ...) {
     parameters = pars
   )
   class(res) <- "generated_time_series"
+  res
+}
+
+# Generate from a missingness model
+#' @export
+generate.missingness_model <- function(object, n, seed = NULL, ...) {
+  stopifnot(inherits(object, "missingness_model"))
+  n <- as.integer(n)
+  if (length(n) != 1L || n <= 0L) stop("`n` must be a positive integer.")
+
+  if (!is.null(seed)) {
+    old_seed <- .Random.seed
+    on.exit({
+      if (exists("old_seed", inherits = FALSE))
+        .Random.seed <<- old_seed
+    }, add = TRUE)
+    set.seed(seed)
+  }
+
+  pars <- object$parameters
+  x <- do.call(object$generation_function, c(as.list(pars), list(n = n, seed = seed)))
+
+  res <- list(
+    series = as.numeric(x),
+    n = n,
+    model = object$model,
+    parameters = pars
+  )
+  class(res) <- "generated_missingness"
   res
 }
 
@@ -722,6 +792,37 @@ plot.generated_time_series <- function(x, ...) {
   graphics::mtext(side = 3, text = paste0("Model: ", x$model), line = 0.2)
   graphics::grid(col = "grey85", lty=1)
   lines(seq_len(n), y, lty = 1, col = line_col)
+  invisible(x)
+}
+
+#' Plot a generated missingness process
+#'
+#' Produces a step plot for a `generated_missingness` object.
+#'
+#' @param x A `generated_missingness`.
+#' @param ... Additional arguments passed to `plot()`.
+#' @return Invisibly returns `x`.
+#' @examples
+#' m0 <- markov_two_states()(p1 = 0.05, p2 = 0.9)
+#' z0 <- generate(m0, n = 200, seed = 123)
+#' plot(z0)
+#' @export
+plot.generated_missingness <- function(x, ...) {
+  y <- x$series
+  n <- length(y)
+  line_col <- .gmwmx2_get_plot_colors(1L)
+  plot(
+    seq_len(n), y, type = "n",
+    xlab = "Time", ylab = "Observed (1) / Missing (0)",, xlim=c(1, n),
+    ylim = c(-0.05, 1.05),
+    main = "",
+    las = 1,
+    ...
+  )
+
+  graphics::mtext(side = 3, text = paste0("Missingness model: ", x$model), line = 0.2)
+  graphics::grid(col = "grey85", lty=1)
+  lines(seq_len(n), y, type = "s", lty = 1, col = line_col)
   invisible(x)
 }
 

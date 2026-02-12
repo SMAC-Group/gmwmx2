@@ -22,7 +22,7 @@ This vignette is a detailed, self-contained simulation walkthrough that showcase
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
 signal, generate noise, fit models, and run Monte Carlo experiments to check coverage of
 confidence intervals. For each setting, we also plot the empirical distributions of the
-estimated functional parameters and stochastic parameters.
+estimated functional and stochastic parameters.
 
 ```{r}
 library(gmwmx2)
@@ -233,7 +233,7 @@ for(b in seq(B_pl)){
   eps = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                  n = n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + pl())
+  fit = gmwmx2_new(X = X, y = y, model = wn() + pl())
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 
   mat_res_pl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
@@ -349,7 +349,7 @@ for(b in seq(B_fl)){
   eps = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                  n = n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + flicker())
+  fit = gmwmx2_new(X = X, y = y, model = wn() + flicker())
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 
   mat_res_fl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
