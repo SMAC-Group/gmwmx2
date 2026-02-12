@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 
 # so not to executate this vignette during pckg devlopment
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
 ```
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
@@ -24,7 +24,7 @@ signal, generate noise, fit models, and run Monte Carlo experiments to check cov
 confidence intervals. For each setting, we also plot the empirical distributions of the
 estimated functional parameters and stochastic parameters.
 
-```{r}
+```{r, eval=TRUE}
 library(gmwmx2)
 library(wv)
 library(dplyr)
@@ -89,7 +89,7 @@ This is a classic short-memory model often used as a baseline.
 phi_ar1 = 0.95
 sigma2_ar1 = 20
 sigma2_wn = 20
-eps = generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
+eps = gmwmx2::generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
 plot(X[, 2], y, type = "l", main = "Simulated y (WN + AR1)")
@@ -210,7 +210,7 @@ dplyr::between(rep(beta[2], 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper
 Here we replace AR(1) by a stationary power-law component with spectral index
 `kappa = -0.8`. This introduces long-memory behavior.
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 kappa_pl <- -0.8
 sigma2_wn <- 10
 sigma2_pl <- 10
@@ -257,7 +257,7 @@ colnames(mat_res_pl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 
 # Plot empirical distributions (beta and stochastic parameters)
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 par(mfrow = c(1, 4))
 boxplot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
         names = c("beta0"),
