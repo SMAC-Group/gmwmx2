@@ -426,13 +426,28 @@ flicker = function(sigma2 = NULL){
 
 
 
-markov_two_states = function(p1 = NULL, p2 = NULL){
+#' Markov two-state missingness model
+#'
+#' Constructs a `missingness_model` representing a two-state Markov process
+#' for missing/observed indicators. The process takes values in \{0, 1\},
+#' where 1 indicates observed and 0 indicates missing.
+#'
+#' @param p1 Transition probability from observed (1) to missing (0).
+#' @param p2 Transition probability from missing (0) to observed (1).
+#' @return A `missingness_model` object.
+#' @examples
+#' mod <- markov_two_states(p1 = 0.05, p2 = 0.95)
+#' mod
+#' z <- generate(mod, n = 200, seed = 123)
+#' plot(z)
+#' @export
+markov_two_states <- function(p1 = NULL, p2 = NULL) {
 
-  res = list(
+  res <- list(
     "parameters" = c("p1" = p1, "p2" = p2),
     "model" = "Markov Two States",
 
-    "generation_function" =  function(p1, p2, n, seed = NULL){
+    "generation_function" = function(p1, p2, n, seed = NULL) {
         # create vector
         c1 <- 1000
         vec_omega <- vector(mode = "numeric", length = n + c1)
@@ -451,7 +466,7 @@ markov_two_states = function(p1 = NULL, p2 = NULL){
         return(tail(vec_omega, n = n))
     }
   )
-  class(res) = "missingness_model"
+  class(res) <- "missingness_model"
   return(res)
 }
 
@@ -785,6 +800,7 @@ plot.generated_time_series <- function(x, ...) {
   plot(
     seq_len(n), y, type = "n",
     xlab = "Time", ylab = "Value",
+    xlim = c(1, n),
     main = "",
     las = 1,
     ...
@@ -813,7 +829,8 @@ plot.generated_missingness <- function(x, ...) {
   line_col <- .gmwmx2_get_plot_colors(1L)
   plot(
     seq_len(n), y, type = "n",
-    xlab = "Time", ylab = "Observed (1) / Missing (0)",, xlim=c(1, n),
+    xlab = "Time", ylab = "Observed (1) / Missing (0)",
+    xlim = c(1, n),
     ylim = c(-0.05, 1.05),
     main = "",
     las = 1,
@@ -856,6 +873,7 @@ plot.generated_composite_model_time_series <- function(x, ...) {
     plot(
       seq_len(n), series_i, type = "n",
       xlab = "Time", ylab = "Value",
+      xlim = c(1, n),
       main = "",
       las = 1,
       ...
@@ -869,6 +887,7 @@ plot.generated_composite_model_time_series <- function(x, ...) {
   plot(
     seq_len(n), x$series, type = "n",
     xlab = "Time", ylab = "Value",
+    xlim = c(1, n),
     main = "",
     las = 1,
     ...
