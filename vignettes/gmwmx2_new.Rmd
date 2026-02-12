@@ -28,6 +28,13 @@ estimated functional and stochastic parameters.
 library(gmwmx2)
 library(wv)
 library(dplyr)
+
+boxplot_mean_dot <- function(x, ...) {
+  boxplot(x, ...)
+  x_mat <- as.matrix(x)
+  mean_vals <- colMeans(x_mat, na.rm = TRUE)
+  points(seq_along(mean_vals), mean_vals, pch = 16, col = "black")
+}
 ```
 
 # Overview of the simulation
@@ -143,22 +150,22 @@ colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 
 ```{r}
 par(mfrow = c(1, 4))
-boxplot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
         names = c("beta0"),
         main = expression(beta[0]), ylab = "Estimate")
 abline(h = beta[1], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
         names = c("beta1"),
         main = expression(beta[1]), ylab = "Estimate")
 abline(h = beta[2], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
         names = c("beta2"),
         main = expression(beta[2]), ylab = "Estimate")
 abline(h = beta[3], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
         names = c("beta3"),
         main = expression(beta[3]), ylab = "Estimate")
 abline(h = beta[4], col = "black", lwd = 2)
@@ -166,17 +173,17 @@ abline(h = beta[4], col = "black", lwd = 2)
 
 par(mfrow = c(1, 3))
 
-boxplot(mat_res_df$phi_ar1,las=1,
+boxplot_mean_dot(mat_res_df$phi_ar1,las=1,
         names = c("phi_ar1"),
         main = expression(phi["AR1"]), ylab = "Estimate")
 abline(h = phi_ar1, col = "black", lwd = 2)
 
-boxplot(mat_res_df$sigma_2_ar1,las=1,
+boxplot_mean_dot(mat_res_df$sigma_2_ar1,las=1,
         names = c("phi_ar1"),
         main = expression(sigma["AR1"]^2), ylab = "Estimate")
 abline(h = sigma2_ar1, col = "black", lwd = 2)
 
-boxplot(mat_res_df$sigma_2_wn,las=1,
+boxplot_mean_dot(mat_res_df$sigma_2_wn,las=1,
         names = c("phi_ar1"),
         main = expression(sigma["WN"]^2), ylab = "Estimate")
 abline(h = sigma2_wn, col = "black", lwd = 2)
@@ -259,22 +266,22 @@ colnames(mat_res_pl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 
 ```{r}
 par(mfrow = c(1, 4))
-boxplot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
         names = c("beta0"),
         main = expression(beta[0]), ylab = "Estimate")
 abline(h = beta[1], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
         names = c("beta1"),
         main = expression(beta[1]), ylab = "Estimate")
 abline(h = beta[2], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
         names = c("beta2"),
         main = expression(beta[2]), ylab = "Estimate")
 abline(h = beta[3], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
         names = c("beta3"),
         main = expression(beta[3]), ylab = "Estimate")
 abline(h = beta[4], col = "black", lwd = 2)
@@ -286,15 +293,15 @@ par(mfrow = c(1, 1))
 ```{r}
 par(mfrow = c(1, 3))
 
-boxplot(mat_res_pl_df$kappa_pl,las=1,
+boxplot_mean_dot(mat_res_pl_df$kappa_pl,las=1,
         main = expression(kappa["PL"]), ylab = "Estimate")
 abline(h = kappa_pl, col = "black", lwd = 2)
 
-boxplot(mat_res_pl_df$sigma2_pl,las=1,
+boxplot_mean_dot(mat_res_pl_df$sigma2_pl,las=1,
         main = expression(sigma["PL"]^2), ylab = "Estimate")
 abline(h = sigma2_pl, col = "black", lwd = 2)
 
-boxplot(mat_res_pl_df$sigma2_wn,las=1,
+boxplot_mean_dot(mat_res_pl_df$sigma2_wn,las=1,
         names = c("phi_ar1"),
         main = expression(sigma["WN"]^2), ylab = "Estimate")
 abline(h = sigma2_wn, col = "black", lwd = 2)
@@ -375,22 +382,22 @@ colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 
 ```{r}
 par(mfrow = c(1, 4))
-boxplot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
         names = c("beta0"),
         main = expression(beta[0]), ylab = "Estimate")
 abline(h = beta[1], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
         names = c("beta1"),
         main = expression(beta[1]), ylab = "Estimate")
 abline(h = beta[2], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
         names = c("beta2"),
         main = expression(beta[2]), ylab = "Estimate")
 abline(h = beta[3], col = "black", lwd = 2)
 
-boxplot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
+boxplot_mean_dot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
         names = c("beta3"),
         main = expression(beta[3]), ylab = "Estimate")
 abline(h = beta[4], col = "black", lwd = 2)
@@ -402,11 +409,11 @@ par(mfrow = c(1, 1))
 ```{r}
 par(mfrow = c(1, 2))
 
-boxplot(mat_res_fl_df$sigma2_fl,las=1,
+boxplot_mean_dot(mat_res_fl_df$sigma2_fl,las=1,
         main = expression(sigma["FL"]^2), ylab = "Estimate")
 abline(h = sigma2_fl, col = "black", lwd = 2)
 
-boxplot(mat_res_fl_df$sigma2_wn,las=1,
+boxplot_mean_dot(mat_res_fl_df$sigma2_wn,las=1,
         names = c("phi_ar1"),
         main = expression(sigma["WN"]^2), ylab = "Estimate")
 abline(h = sigma2_wn_fl, col = "black", lwd = 2)
