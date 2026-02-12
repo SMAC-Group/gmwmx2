@@ -22,9 +22,10 @@ The input object, invisibly.
 Print method for a \code{gmwm2_fit} object
 }
 \examples{
-model <- wn(sigma2 = 1) + ar1(phi = 0.8, sigma2 = 0.5)
-x <- generate(model, n = 1000, seed = 123)
-plot(x)
-fit <- gmwm2(x, model = wn()+ar1())
+n = 10000
+mod = wn(20) + ar1(phi = .995, sigma2 = .2)
+y = generate(mod, n = n, seed = 123)
+plot(y)
+fit = gmwm2(y, model = wn() + ar1() )
 fit
 }

@@ -49,9 +49,11 @@ Plots empirical wavelet variance with the fitted theoretical curve and,
 for sum models, component-implied theoretical curves.
 }
 \examples{
-n = 50000
-mod = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1)
-y = generate(mod, n = n)
-fit = gmwm2(y, model = wn(20) + ar1(phi = .9, sigma2 = 1)+ar1(phi = .99, sigma2 = .1))
+n = 10000
+mod = wn(20) + ar1(phi = .995, sigma2 = .2)
+y = generate(mod, n = n, seed = 123)
+plot(y)
+fit = gmwm2(y, model = wn() + ar1() )
+fit
 plot(fit)
 }

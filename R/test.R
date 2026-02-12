@@ -125,3 +125,59 @@
 # dplyr::between(rep(beta[1], 500), mat_res_pl_df$lower_ci_lm_beta0, mat_res_pl_df$upper_ci_lm_beta0) %>% mean()
 # dplyr::between(rep(beta[2], 500), mat_res_pl_df$lower_ci_lm_beta1, mat_res_pl_df$upper_ci_lm_beta1) %>% mean()
 #
+# #
+# # # ---- simulation: white noise + flicker ----
+# sigma2_wn_fl <- 15
+# sigma2_fl <- 10
+# n = 1000
+# eps_fl = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl), n = n, seed = 123)
+# plot(eps_fl$series, type="l")
+# plot(wv::wvar(eps_fl$series))
+# y_fl = X %*% beta + eps_fl$series
+#
+# fit_fl = gmwmx2_new(X = X, y = y_fl, model = wn() + flicker())
+# fit_fl
+#
+# B_fl = 500
+# mat_res_fl = matrix(NA, nrow = B_fl, ncol = 18)
+# for(b in seq(B_fl)){
+#   eps = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl), n = n, seed = (123 + b))$series
+#   y = X %*% beta + eps
+#   fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + flicker())
+#   # mispecified model assuming white noise as the stochastic model
+#   fit2 = lm(y~X[,2] + X[,3] + X[,4])
+#
+#   mat_res_fl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
+#                       summary(fit2)$coefficients[,1],
+#                       summary(fit2)$coefficients[,2],
+#                       fit$theta_domain$`Flicker_2`,
+#                       fit$theta_domain$`White Noise_1`)
+#   cat("Iteration ", b, " \n")
+# }
+#
+# # compute empirical coverage
+# mat_res_fl_df = as.data.frame(mat_res_fl)
+# colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
+#                             "gmwmx_beta2_hat", "gmwmx_beta3_hat",
+#                             "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
+#                             "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
+#                             "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
+#                             "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
+#                             "sigma2_fl" ,"sigma2_wn")
+# zval = qnorm(0.975)
+# mat_res_fl_df$upper_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat + zval * mat_res_fl_df$gmwmx_std_beta0_hat
+# mat_res_fl_df$lower_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat - zval * mat_res_fl_df$gmwmx_std_beta0_hat
+# mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
+# mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
+# # empirical coverage of gmwmx beta
+# dplyr::between(rep(beta[1], 500), mat_res_fl_df$lower_ci_gmwmx_beta0, mat_res_fl_df$upper_ci_gmwmx_beta0) %>% mean()
+# dplyr::between(rep(beta[2], 500), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
+#
+# # do the same for lm beta
+# mat_res_fl_df$upper_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat + zval * mat_res_fl_df$lm_std_beta0_hat
+# mat_res_fl_df$lower_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat - zval * mat_res_fl_df$lm_std_beta0_hat
+# mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
+# mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
+# dplyr::between(rep(beta[1], 500), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
+# dplyr::between(rep(beta[2], 500), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
+#
