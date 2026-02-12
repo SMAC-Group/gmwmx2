@@ -1,8 +1,8 @@
 ---
-title: "GMWMX2 New: Simulation Walkthrough"
+title: "GMWMX: Simulation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GMWMX2 New Simulation Walkthrough}
+  %\VignetteIndexEntry{GMWMX: Simulation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
