@@ -440,6 +440,7 @@ flicker = function(sigma2 = NULL){
 #' mod
 #' z <- generate(mod, n = 200, seed = 123)
 #' plot(z)
+#' @importFrom stats rbinom
 #' @export
 markov_two_states <- function(p1 = NULL, p2 = NULL) {
 
@@ -660,10 +661,19 @@ generate.time_series_model <- function(object, n, seed = NULL, ...) {
   if (length(n) != 1L || n <= 0L) stop("`n` must be a positive integer.")
 
   if (!is.null(seed)) {
-    old_seed <- .Random.seed
+    old_seed <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+      .Random.seed
+    } else {
+      NULL
+    }
     on.exit({
-      if (exists("old_seed", inherits = FALSE))
+      if (is.null(old_seed)) {
+        if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+          rm(".Random.seed", envir = .GlobalEnv)
+        }
+      } else {
         .Random.seed <<- old_seed
+      }
     }, add = TRUE)
     set.seed(seed)
   }
@@ -689,10 +699,19 @@ generate.missingness_model <- function(object, n, seed = NULL, ...) {
   if (length(n) != 1L || n <= 0L) stop("`n` must be a positive integer.")
 
   if (!is.null(seed)) {
-    old_seed <- .Random.seed
+    old_seed <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+      .Random.seed
+    } else {
+      NULL
+    }
     on.exit({
-      if (exists("old_seed", inherits = FALSE))
+      if (is.null(old_seed)) {
+        if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+          rm(".Random.seed", envir = .GlobalEnv)
+        }
+      } else {
         .Random.seed <<- old_seed
+      }
     }, add = TRUE)
     set.seed(seed)
   }
@@ -718,10 +737,19 @@ generate.sum_model <- function(object, n, seed = NULL, ...) {
   if (length(n) != 1L || n <= 0L) stop("`n` must be a positive integer.")
 
   if (!is.null(seed)) {
-    old_seed <- .Random.seed
+    old_seed <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+      .Random.seed
+    } else {
+      NULL
+    }
     on.exit({
-      if (exists("old_seed", inherits = FALSE))
+      if (is.null(old_seed)) {
+        if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
+          rm(".Random.seed", envir = .GlobalEnv)
+        }
+      } else {
         .Random.seed <<- old_seed
+      }
     }, add = TRUE)
     set.seed(seed)
   }
