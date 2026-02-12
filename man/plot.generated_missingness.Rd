@@ -18,7 +18,7 @@ Invisibly returns \code{x}.
 Produces a step plot for a \code{generated_missingness} object.
 }
 \examples{
-m0 <- markov_two_states()(p1 = 0.05, p2 = 0.9)
+m0 <- markov_two_states(p1 = 0.05, p2 = 0.9)
 z0 <- generate(m0, n = 200, seed = 123)
 plot(z0)
 }
