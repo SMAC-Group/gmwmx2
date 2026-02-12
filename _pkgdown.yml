@@ -24,7 +24,7 @@ reference:
     - gmwm2
     - print.gmwm2_fit
     - plot.gmwm2_fit
-  - title: Estimate regression model with dependent errors described by a composite stochastic process
+  - title: Estimate regression model with dependent errors
     contents:
     - gmwmx2_new
     - gmwmx2
@@ -55,7 +55,7 @@ navbar:
       href: articles/data_generation.html
     - text: "Estimate composite stochastic processes"
       href: articles/estimate_composite_stochastic_models.html
-    - text: "Estimate regression model with dependent errors"
+    - text: "Estimate regression models with dependent errors"
       href: articles/gmwmx2_new.html
     - text: "Load and plot data from the Nevada Geodetic Laboratory"
       href: articles/load_plot_data_ngl.html
