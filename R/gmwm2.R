@@ -409,7 +409,7 @@ loss_fn <- function(theta, model, n, prep, wv_obj, omega = NULL) {
   objective <- t(difference) %*% omega %*% difference
 
   # prevent agains optimization problem diverging due to numerical issues, if objective is not finite, return a large number
-  if(!is.finite(objective)) return(1e30)
+  # if(!is.finite(objective)) return(1e30)
 
 
   return(objective)

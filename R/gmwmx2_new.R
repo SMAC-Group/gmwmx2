@@ -37,7 +37,7 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
   objective <- as.numeric(t(difference) %*% omega %*% difference)
 
   # prevent agains optimization problem diverging due to numerical issues, if objective is not finite, return a large number
-  if(!is.finite(objective)) return(1e30)
+  # if(!is.finite(objective)) return(1e30)
 
   return(objective)
   # compute loss
@@ -60,6 +60,8 @@ loss_fn_gmwmx_no_missing <- function(theta, model, n, prep, wv_obj, quantities_D
 #' @return Scalar objective value.
 #' @keywords internal
 loss_fn_gmwmx_with_missing <- function(theta, model, n, prep, wv_obj, quantities_D, vec_autocov_omega, pstar_hat, omega = NULL) {
+
+
 
   # compute autocovariance from theta
   autocov_vec <- get_autocovariance(object = model, n = n, theta = theta, prep = prep)
@@ -88,7 +90,7 @@ loss_fn_gmwmx_with_missing <- function(theta, model, n, prep, wv_obj, quantities
   objective <- as.numeric(t(difference) %*% omega %*% difference)
 
   # prevent agains optimization problem diverging due to numerical issues, if objective is not finite, return a large number
-  if(!is.finite(objective)) return(1e30)
+  # if(!is.finite(objective)) return(1e30)
 
 
   return(objective)
@@ -790,21 +792,36 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
 }
 
 
-#' GMWMX estimator (dispatching on missingness)
+#' GMWMX estimator (S3 dispatch)
+#'
+#' Dispatches either to the generic regression interface (design matrix + response)
+#' or to a \code{gnss_ts_ngl} workflow.
+#'
+#' @param X Either a design matrix (generic regression interface) or a
+#'   \code{gnss_ts_ngl} object.
+#' @param ... Additional arguments forwarded to the selected method.
+#' @return A fitted model object.
+#' @export
+gmwmx2_new <- function(X, ...) {
+  UseMethod("gmwmx2_new")
+}
+
+#' GMWMX estimator
 #'
 #' Convenience wrapper that selects the missing or non-missing implementation
 #' based on the presence of `NA` values in `y`.
 #'
-#' @param X Optional design matrix for a generic regression interface.
-#' @param y Optional response vector for a generic regression interface.
-#' @param model Optional stochastic model specification.
+#' @param X Design matrix for a generic regression interface.
+#' @param y Response vector for a generic regression interface.
+#' @param model Stochastic model specification.
 #' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
 #' @param method Optimization method passed to `stats::optim`.
 #' @param control Control list passed to `stats::optim`.
 #' @param ... Reserved for future extensions.
 #' @return A fitted model object.
+#' @rdname gmwmx2_new
 #' @export
-gmwmx2_new <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+gmwmx2_new.default <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
   if (is.null(X) || is.null(y) || is.null(model)) {
     stop("`X`, `y`, and `model` must be provided.", call. = FALSE)
   }
@@ -846,76 +863,255 @@ gmwmx2_new <- function(X, y, model, omega = NULL, method = "L-BFGS-B", control =
   )
 }
 
+#' GMWMX estimator for a \code{gnss_ts_ngl} object
+#'
+#'
+#' @param object A \code{gnss_ts_ngl} object.
+#' @param n_seasonal Number of seasonal signals.
+#' @param vec_earthquakes_relaxation_time Relaxation time for each earthquake.
+#' @param component Component to estimate ("N", "E", or "V").
+#' @param model Stochastic model specification.
+#' @param ... Reserved for future extensions.
+#' @return A fitted model object.
+#' @rdname gmwmx2_new
+#' @export
+gmwmx2_new.gnss_ts_ngl <- function(
+  object,
+  n_seasonal = 2,
+  vec_earthquakes_relaxation_time = NULL,
+  component = NULL,
+  model = NULL,
+  ...
+) {
 
-#
-#
-#
-#
-#
-#
-# n = 1000
-# X = matrix(NA, nrow=n, ncol=4)
-# # intercept
-# X[,1] = 1
-# # # trend
-# X[,2] = 1:n
-# # # add a sin signal
-# omega_1 <- (1 / 365.25) * 2 * pi
-# X[, 3] <- sin((1:n) * omega_1)
-# X[, 4] <- cos((1:n) * omega_1)
-# beta = c(1, 2, 3,4)
-# eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = 123)$series
-# plot(wv::wvar(eps))
-# yy = X%*% beta + eps
-# B = 500
-# mat_res = matrix(NA, nrow=B, ncol=19)
-# b=145
-# eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
-# plot(wv::wvar(eps))
-# y = X %*% beta + eps
-# fit1 = gmwmx2_new(X = X, y = y, model = wn(20) + ar1(phi=.95,sigma2 =  20) )
-# fit2 = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
-#
-#
-#
-# for(b in seq(B)){
-#
-#   # mispecified model assuming white noise as the stochastic model
-#   fit2 = lm(y~X[,2] + X[,3] + X[,4])
-#
-#   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
-#                    summary(fit2)$coefficients[,1],
-#                    summary(fit2)$coefficients[,2],
-#                    fit$theta_domain$`AR(1)_2`,
-#                    fit$theta_domain$`White Noise_1`)
-#   cat("Iteration ", b, " completed.\n")
-# }
-#
-#
-# # #
-# # # # compute empirical coverage
-# # # mat_res_df = as.data.frame(mat_res)
-# # # colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
-# # #                          "gmwmx_beta2_hat", "gmwmx_beta3_hat",
-# # #                          "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
-# # #                          "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
-# # #                          "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
-# # #                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
-# # #                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
-# # # zval = qnorm(0.975)
-# # # mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
-# # # mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
-# # # mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
-# # # mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
-# # # # empirical coverage of gmwmx beta
-# # # dplyr::between(rep(1, 500), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
-# # # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
-# # #
-# # # # do the same for lm beta
-# # # mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
-# # # mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
-# # # mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
-# # # mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
-# # # dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
-# # # dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
-# # #
+  #
+  # #------------------------------------------------------------
+  #
+  # object = gmwmx2::download_station_ngl("1LSU")
+  # model =wn() +ar1()
+  # vec_earthquakes_relaxation_time = NULL
+  # n_seasonal = 2
+  # component = "N"
+  # method = "L-BFGS-B"
+  # control = list()
+  # omega = NULL
+  #
+  # #------------------------------------------------------------
+  #
+  # # if some required objects are NULL
+  # if (is.null(object) || is.null(n_seasonal) || is.null(component) || is.null(model)) {
+  #   stop("`object`, `n_seasonal`, `component`, and `model` must be provided.", call. = FALSE)
+  # }
+  #
+  # # check stochastic model
+  # if (!inherits(model, "time_series_model") && !inherits(model, "sum_model")) {
+  #   stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
+  # }
+  #
+  # # Check class
+  # if (!inherits(object, "gnss_ts_ngl")) {
+  #   stop("Argument `x` should be a `gnss_ts_ngl` object")
+  # }
+  #
+  #
+  # # check that component is either N, E or V
+  # if (!component %in% c("N", "E", "V")) {
+  #   stop("Argument `component` should take either value `N` or `E` or `V`")
+  # }
+  #
+  # # check that n_seasonal is either 1 or 2
+  # if (!n_seasonal %in% c(1, 2)) {
+  #   stop("Argument `n_seasonal` should take either value `1` or `2`")
+  # }
+  #
+  #
+  # #------------------------------------------------------------
+  #
+  # # we construct design matrix X for that signal
+  # # create full index
+  # all_mjd_index <- seq(head(object$df_position$modified_julian_day, 1), tail(object$df_position$modified_julian_day, 1), by = 1)
+  #
+  # # create all jumps by combining jumps due to equipment change and jumps due to earthquakes
+  # jumps <- c(
+  #   object$df_equipment_software_changes$modified_julian_date,
+  #   object$df_earthquakes$modified_julian_date
+  # )
+  #
+  # # if multiple jumps  to prevent not invertible matrix
+  # jumps <- unique(jumps)
+  #
+  # # set times where earthquakes happen
+  # vec_earthquakes_index_mjd <- c(object$df_earthquakes$modified_julian_date)
+  #
+  # # if multiple earthquakes to prevent not invertible matrix
+  # vec_earthquakes_index_mjd <- unique(vec_earthquakes_index_mjd)
+  #
+  # if (length(jumps) == 0) {
+  #   jumps <- NULL
+  # }
+  #
+  # # ensure that no jumps or earthquake mjd are specified after the last date of recorded signal
+  # last_mjd_signal = tail(all_mjd_index,1)
+  # id_jumps_to_remove = which(jumps > last_mjd_signal)
+  # id_earthquake_index_to_remove = which(vec_earthquakes_index_mjd > last_mjd_signal)
+  #
+  # # Remove the identified indices if they exist
+  # if (length(id_jumps_to_remove) > 0) {
+  #   jumps <- jumps[-id_jumps_to_remove]
+  # }
+  #
+  # if (length(id_earthquake_index_to_remove) > 0) {
+  #   vec_earthquakes_index_mjd <- vec_earthquakes_index_mjd[-id_earthquake_index_to_remove]
+  # }
+  #
+  # # if after removing jumps or earthquake that are indicated after the last date, set to NULL
+  # if(length(vec_earthquakes_index_mjd) == 0){
+  #   vec_earthquakes_index_mjd = NULL
+  # }
+  #
+  # # if after removing jumps or earthquake that are indicated after the last date, set to NULL
+  # if(length(jumps) == 0){
+  #   jumps = NULL
+  # }
+  #
+  #
+  # # create design matrix
+  # X <- create_X_matrix(
+  #   all_mjd_index = all_mjd_index,
+  #   jumps = jumps,
+  #   n_seasonal = n_seasonal,
+  #   vec_earthquakes_index_mjd = vec_earthquakes_index_mjd,
+  #   vec_earthquakes_relaxation_time = vec_earthquakes_relaxation_time
+  # )
+  #
+  # # Extract Y given specified component
+  # if (component == "N") {
+  #   y_raw <- object$df_position$northings_fractional_portion
+  # } else if (component == "E") {
+  #   y_raw <- object$df_position$eastings_fractional_portion
+  # } else if (component == "V") {
+  #   y_raw <- object$df_position$vertical_fractional_portion
+  # }
+  #
+  #
+  # # create vector y where we have NA when we have no data, otherwise the value of the signal
+  # y <- rep(NA, length(all_mjd_index))
+  # id_signal = which(object$df_position$modified_julian_day %in% all_mjd_index)
+  # y[id_signal] = y_raw
+  #
+  # # get dimension of X and y
+  # n = nrow(X)
+  # p = ncol(X)
+  #
+  # # identify missing observation
+  # vec_is_present = !is.na(y)
+  # vec_is_present = as.numeric(vec_is_present)
+  # id_non_missing = which(!is.na(y))
+  #
+  # # obtain X sub and y sub
+  # X_sub = X[id_non_missing, ]
+  # y_sub = y[id_non_missing]
+  #
+  # # obtain beta hat
+  # beta_hat <- .lm.fit(y = y_sub, x = X_sub)$coefficients
+  #
+  # # obtain residuals when we have data
+  # eps_hat_sub = y_sub - X_sub %*% beta_hat
+  #
+  # # fill in vector with zero when we have missing values
+  # eps_hat_filled <- vector(mode = "numeric", length = n)
+  #
+  # # fill in residuals where we have data, otherwise zero
+  # eps_hat_filled[id_non_missing] = eps_hat_sub
+  #
+  # # compute empirical wv on this vector filled with zero
+  # wv_emp = wv::wvar(eps_hat_filled)
+  #
+  # # estimate missing data mechanism parameters
+  # p_hat = estimate_p1_p2_mle_cpp(vec_is_present)
+  #
+  # # define pstar hat (expecation of missingness process)
+  # pstar_hat <- p_hat[2] / (p_hat[1] + p_hat[2])
+  # missing_prop <- mean(is.na(y))
+  #
+  # # get vec autocovariance theo omega
+  # vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], n)
+  #
+  # # compute (X^TX)^{-1} using QR decomposition for numerical stability
+  # X_transpose = t(X)
+  # XtX <- X_transpose %*% X
+  # qr_decomp <- qr(X)
+  # R <- qr.R(qr_decomp)
+  # R_inv <- Matrix::solve(R)
+  # inv_XtX <- R_inv %*% t(R_inv)
+  #
+  # # compute hat matrix
+  # H <- X %*% inv_XtX %*% X_transpose
+  # D <- diag(n) - H
+  #
+  # # pre-compute quantities on D=(I-H), with H = X(X^TX)^{-1}X^T to later use in optimization function
+  # quantities_D <- pre_compute_quantities_on_D_only_required_smarter_cpp(D, approx_type = "3")
+  #
+  # # fill missing parameters in model
+  # model <- fill_missing_parameters(model, signal = eps_hat_filled)
+  #
+  # # prepare optim layout
+  # prep <- prepare_optim_layout(model)
+  #
+  # # perform optimization to estimate stochastic parameters
+  # res <- optim(
+  #   par = prep$theta0,
+  #   fn = loss_fn_gmwmx_with_missing,
+  #   model = model,
+  #   n = n,
+  #   prep = prep,
+  #   quantities_D = quantities_D,
+  #   vec_autocov_omega = vec_autocov_omega,
+  #   pstar_hat = pstar_hat,
+  #   wv_obj = wv_emp,
+  #   omega = omega,
+  #   method = method,
+  #   control = control
+  # )
+  #
+  #
+  # # transform estimated parameters to domain
+  # theta_domain <- theta_to_domain(model, res$par, prep = prep)
+  # theta_init_domain <- theta_to_domain(model, prep$theta0, prep = prep)
+  #
+  # # flatten theta domain to a vector
+  # theta_domain_vec <- unlist(theta_domain)
+  #
+  # # get variance covariance matrix of epsilon hat with model at estimated parameters
+  # variance_covariance_mat_epsilon <- get_variance_covariance_matrix_model(model, n, theta = theta_domain_vec, prep = prep)
+  #
+  # # compute variance covariance of Z (missingness process)
+  # var_cov_omega <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_omega))
+  #
+  # # compute variance covariance of beta hat
+  # variance_covariance_beta_hat <- pstar_hat^(-2) * inv_XtX %*% X_transpose %*% ((var_cov_omega + pstar_hat^2) * variance_covariance_mat_epsilon) %*% X %*% inv_XtX
+  #
+  # # get std of beta hat
+  # std_beta_hat = sqrt(diag(variance_covariance_beta_hat))
+  #
+  #
+  # # construct output
+  # out = list(
+  #   beta_hat = beta_hat,
+  #   std_beta_hat = std_beta_hat,
+  #   theta_domain = theta_domain,
+  #   convergence = res$convergence,
+  #   value = res$value,
+  #   model = model,
+  #   missing_params = list(p1 = p_hat[1], p2 = p_hat[2], pstar = pstar_hat),
+  #   missing_prop = missing_prop,
+  #   run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs"))
+  # )
+  #
+  #
+  #
+
+
+
+}
+

@@ -2,9 +2,13 @@
 % Please edit documentation in R/gmwmx2_new.R
 \name{gmwmx2_new}
 \alias{gmwmx2_new}
-\title{GMWMX estimator (dispatching on missingness)}
+\alias{gmwmx2_new.default}
+\alias{gmwmx2_new.gnss_ts_ngl}
+\title{GMWMX estimator (S3 dispatch)}
 \usage{
-gmwmx2_new(
+gmwmx2_new(X, ...)
+
+\method{gmwmx2_new}{default}(
   X,
   y,
   model,
@@ -13,13 +17,24 @@ gmwmx2_new(
   control = list(),
   ...
 )
+
+\method{gmwmx2_new}{gnss_ts_ngl}(
+  object,
+  n_seasonal = 2,
+  vec_earthquakes_relaxation_time = NULL,
+  component = NULL,
+  model = NULL,
+  ...
+)
 }
 \arguments{
-\item{X}{Optional design matrix for a generic regression interface.}
+\item{X}{Design matrix for a generic regression interface.}
 
-\item{y}{Optional response vector for a generic regression interface.}
+\item{...}{Reserved for future extensions.}
 
-\item{model}{Optional stochastic model specification.}
+\item{y}{Response vector for a generic regression interface.}
+
+\item{model}{Stochastic model specification.}
 
 \item{omega}{Optional weighting matrix. If \code{NULL}, uses inverse CI width.}
 
@@ -27,12 +42,25 @@ gmwmx2_new(
 
 \item{control}{Control list passed to \code{stats::optim}.}
 
-\item{...}{Reserved for future extensions.}
+\item{object}{A \code{gnss_ts_ngl} object.}
+
+\item{n_seasonal}{Number of seasonal signals.}
+
+\item{vec_earthquakes_relaxation_time}{Relaxation time for each earthquake.}
+
+\item{component}{Component to estimate ("N", "E", or "V").}
 }
 \value{
 A fitted model object.
+
+A fitted model object.
+
+A fitted model object.
 }
 \description{
+Dispatches either to the generic regression interface (design matrix + response)
+or to a \code{gnss_ts_ngl} workflow.
+
 Convenience wrapper that selects the missing or non-missing implementation
 based on the presence of \code{NA} values in \code{y}.
 }
