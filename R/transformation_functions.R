@@ -9,9 +9,9 @@
 #' @param x Numeric vector on the real line.
 #' @return Numeric vector of transformed values in (-1, 1).
 #' @keywords internal
-trans_kappa_pl <- function(x) {
-  # exp(x) - 1
-  tanh(x)
+trans_from_real_to_minus_1_and_1 <- function(x) {
+  eps = 1e-6
+  (1 - eps) * tanh(x)
 }
 
 # transform from domain to real line
@@ -22,9 +22,11 @@ trans_kappa_pl <- function(x) {
 #' @param x Numeric vector in (-1, 1).
 #' @return Numeric vector on the real line.
 #' @keywords internal
-inv_trans_kappa_pl <- function(x){
-  # log(x + 1)
-  atanh(x)
+inv_trans_from_real_to_minus_1_and_1 <- function(kappa) {
+  eps = 1e-6
+  # safety clamp in case user gives boundary value
+  kappa <- pmin(pmax(kappa, -(1 - eps)), (1 - eps))
+  atanh(kappa / (1 - eps))
 }
 
 

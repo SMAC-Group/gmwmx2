@@ -884,9 +884,9 @@ gmwmx2_new.gnss_ts_ngl <- function(
   ...
 ) {
 
-  #
-  # #------------------------------------------------------------
-  #
+  # #
+  # # #------------------------------------------------------------
+  # #
   # object = gmwmx2::download_station_ngl("1LSU")
   # model =wn() +ar1()
   # vec_earthquakes_relaxation_time = NULL
@@ -895,9 +895,9 @@ gmwmx2_new.gnss_ts_ngl <- function(
   # method = "L-BFGS-B"
   # control = list()
   # omega = NULL
-  #
-  # #------------------------------------------------------------
-  #
+  # #
+  # # #------------------------------------------------------------
+  # #
   # # if some required objects are NULL
   # if (is.null(object) || is.null(n_seasonal) || is.null(component) || is.null(model)) {
   #   stop("`object`, `n_seasonal`, `component`, and `model` must be provided.", call. = FALSE)
@@ -913,7 +913,6 @@ gmwmx2_new.gnss_ts_ngl <- function(
   #   stop("Argument `x` should be a `gnss_ts_ngl` object")
   # }
   #
-  #
   # # check that component is either N, E or V
   # if (!component %in% c("N", "E", "V")) {
   #   stop("Argument `component` should take either value `N` or `E` or `V`")
@@ -927,9 +926,12 @@ gmwmx2_new.gnss_ts_ngl <- function(
   #
   # #------------------------------------------------------------
   #
-  # # we construct design matrix X for that signal
-  # # create full index
+  #
+  # # create full index of MJD values
   # all_mjd_index <- seq(head(object$df_position$modified_julian_day, 1), tail(object$df_position$modified_julian_day, 1), by = 1)
+  #
+  # # set n
+  # n = length(all_mjd_index)
   #
   # # create all jumps by combining jumps due to equipment change and jumps due to earthquakes
   # jumps <- c(
@@ -986,31 +988,19 @@ gmwmx2_new.gnss_ts_ngl <- function(
   #
   # # Extract Y given specified component
   # if (component == "N") {
-  #   y_raw <- object$df_position$northings_fractional_portion
+  #   y_sub <- object$df_position$northings_fractional_portion
   # } else if (component == "E") {
-  #   y_raw <- object$df_position$eastings_fractional_portion
+  #   y_sub <- object$df_position$eastings_fractional_portion
   # } else if (component == "V") {
-  #   y_raw <- object$df_position$vertical_fractional_portion
+  #   y_sub <- object$df_position$vertical_fractional_portion
   # }
   #
+  # # identify which of all_mjd index is present and subset X and y
+  # id_mjd_present = which(all_mjd_index %in% object$df_position$modified_julian_day)
+  # vec_presence = as.numeric(all_mjd_index %in% object$df_position$modified_julian_day)
   #
-  # # create vector y where we have NA when we have no data, otherwise the value of the signal
-  # y <- rep(NA, length(all_mjd_index))
-  # id_signal = which(object$df_position$modified_julian_day %in% all_mjd_index)
-  # y[id_signal] = y_raw
-  #
-  # # get dimension of X and y
-  # n = nrow(X)
-  # p = ncol(X)
-  #
-  # # identify missing observation
-  # vec_is_present = !is.na(y)
-  # vec_is_present = as.numeric(vec_is_present)
-  # id_non_missing = which(!is.na(y))
-  #
-  # # obtain X sub and y sub
-  # X_sub = X[id_non_missing, ]
-  # y_sub = y[id_non_missing]
+  # # obtain X sub
+  # X_sub = X[id_mjd_present, ]
   #
   # # obtain beta hat
   # beta_hat <- .lm.fit(y = y_sub, x = X_sub)$coefficients
@@ -1022,17 +1012,16 @@ gmwmx2_new.gnss_ts_ngl <- function(
   # eps_hat_filled <- vector(mode = "numeric", length = n)
   #
   # # fill in residuals where we have data, otherwise zero
-  # eps_hat_filled[id_non_missing] = eps_hat_sub
+  # eps_hat_filled[id_mjd_present] = eps_hat_sub
   #
   # # compute empirical wv on this vector filled with zero
   # wv_emp = wv::wvar(eps_hat_filled)
   #
   # # estimate missing data mechanism parameters
-  # p_hat = estimate_p1_p2_mle_cpp(vec_is_present)
+  # p_hat = estimate_p1_p2_mle_cpp(vec_presence)
   #
   # # define pstar hat (expecation of missingness process)
   # pstar_hat <- p_hat[2] / (p_hat[1] + p_hat[2])
-  # missing_prop <- mean(is.na(y))
   #
   # # get vec autocovariance theo omega
   # vec_autocov_omega <- create_vec_theo_autocov_omega_cpp(p1 = p_hat[1], p2 = p_hat[2], n)
@@ -1074,7 +1063,6 @@ gmwmx2_new.gnss_ts_ngl <- function(
   #   control = control
   # )
   #
-  #
   # # transform estimated parameters to domain
   # theta_domain <- theta_to_domain(model, res$par, prep = prep)
   # theta_init_domain <- theta_to_domain(model, prep$theta0, prep = prep)
@@ -1085,17 +1073,17 @@ gmwmx2_new.gnss_ts_ngl <- function(
   # # get variance covariance matrix of epsilon hat with model at estimated parameters
   # variance_covariance_mat_epsilon <- get_variance_covariance_matrix_model(model, n, theta = theta_domain_vec, prep = prep)
   #
-  # # compute variance covariance of Z (missingness process)
+  # # # compute variance covariance of Z (missingness process)
   # var_cov_omega <- fast_toeplitz_matrix_from_vector_cpp(as.vector(vec_autocov_omega))
-  #
-  # # compute variance covariance of beta hat
+  # #
+  # # # compute variance covariance of beta hat
   # variance_covariance_beta_hat <- pstar_hat^(-2) * inv_XtX %*% X_transpose %*% ((var_cov_omega + pstar_hat^2) * variance_covariance_mat_epsilon) %*% X %*% inv_XtX
-  #
-  # # get std of beta hat
+  # #
+  # # # get std of beta hat
   # std_beta_hat = sqrt(diag(variance_covariance_beta_hat))
-  #
-  #
-  # # construct output
+  # #
+  # #
+  # # # construct output
   # out = list(
   #   beta_hat = beta_hat,
   #   std_beta_hat = std_beta_hat,
@@ -1107,7 +1095,7 @@ gmwmx2_new.gnss_ts_ngl <- function(
   #   missing_prop = missing_prop,
   #   run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs"))
   # )
-  #
+  # #
   #
   #
 

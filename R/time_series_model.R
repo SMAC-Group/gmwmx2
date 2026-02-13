@@ -72,11 +72,11 @@ pl = function(kappa = NULL, sigma2 = NULL){
     "model" = "Stationary PowerLaw",
     "transformation_function" = function(kappa, sigma2){
       # transform parameter from real to domain parameters
-      return(c(trans_kappa_pl(kappa), exp(sigma2)))
+      return(c(trans_from_real_to_minus_1_and_1(kappa), exp(sigma2)))
     },
     "inv_transformation_function" = function(kappa, sigma2){
       # transform parameter from domain to real parameters
-    return(c(inv_trans_kappa_pl(kappa), log(sigma2)))
+    return(c(inv_trans_from_real_to_minus_1_and_1(kappa), log(sigma2)))
     },
     "autocovariance_function" = function(kappa, sigma2, n){
       autocov = powerlaw_autocovariance(kappa, sigma2, n)
@@ -251,8 +251,8 @@ ar1 <- function(phi = NULL, sigma2 = NULL) {
     "model" = "AR(1)",
 
     # kept for consistency (not used if you keep params in domain)
-    "transformation_function" = function(phi, sigma2) c(tanh(phi), exp(sigma2)),
-    "inv_transformation_function" = function(phi, sigma2) c(atanh(phi), log(sigma2)),
+    "transformation_function" = function(phi, sigma2) c(trans_from_real_to_minus_1_and_1(phi), exp(sigma2)),
+    "inv_transformation_function" = function(phi, sigma2) c(inv_trans_from_real_to_minus_1_and_1(phi), log(sigma2)),
 
     "autocovariance_function" = function(phi, sigma2, n) {
       # if (!is.finite(phi) || abs(phi) >= 1) stop("phi must be in (-1, 1) for stationarity.")
@@ -655,10 +655,15 @@ generate <- function(object, n, seed = NULL, ...) UseMethod("generate")
 
 # Generate from a single model (parameters already in domain)
 #' @export
-generate.time_series_model <- function(object, n, seed = NULL, ...) {
+generate.time_series_model <- function(object, n =NULL, seed = NULL, ...) {
   stopifnot(inherits(object, "time_series_model"))
-  n <- as.integer(n)
+  # test on n
+  if(is.null(n)){
+    stop("`n` must be a positive integer.")
+  }
   if (length(n) != 1L || n <= 0L) stop("`n` must be a positive integer.")
+  n <- as.integer(n)
+
 
   if (!is.null(seed)) {
     old_seed <- if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {

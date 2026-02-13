@@ -175,14 +175,14 @@ objective_function_w_missing <- function(theta, wv_obj, n, quantities_D, approx_
 #' fit <- gmwmx2(x, n_seasonal = 2, component = "N")
 #' @export
 gmwmx2 <- function(x, n_seasonal = 2, vec_earthquakes_relaxation_time = NULL, component = "N", toeplitz_approx_var_cov_wv = TRUE, stochastic_model = "wn + fl") {
-  # x = download_station_ngl("P820")
+  # x = download_station_ngl("1LSU")
   # plot(x)
   # n_seasonal = 2
   # vec_earthquakes_relaxation_time = NULL
   # component = "N"
   # toeplitz_approx_var_cov_wv = TRUE
   # stochastic_model = "wn + fl"
-
+  #
   # Check class
   if (!inherits(x, "gnss_ts_ngl")) {
     stop("Argument `x` should be a `gnss_ts_ngl` object")
