@@ -79,6 +79,16 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.5" id="gmwmx2-version-005">gmwmx2 version 0.0.5<a class="anchor" aria-label="anchor" href="#gmwmx2-version-005"></a></h2>
+<ul><li>Added a new composable stochastic-model framework with <code>time_series_model</code> / <code>sum_model</code> objects and component constructors: <code><a href="../reference/wn.html">wn()</a></code>, <code><a href="../reference/ar1.html">ar1()</a></code>, <code><a href="../reference/rw.html">rw()</a></code>, <code><a href="../reference/pl.html">pl()</a></code>, <code><a href="../reference/flicker.html">flicker()</a></code>, and <code><a href="../reference/matern.html">matern()</a></code>.</li>
+<li>Added <code><a href="../reference/gmwm2.html">gmwm2()</a></code> to fit stochastic models directly from wavelet variance, with new helpers for parameter layout, transformations, theoretical WV computation, and model printing/plotting.</li>
+<li>Added <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code> as a generic GMWMX interface for arbitrary <code>X</code> and <code>y</code> (in addition to GNSS-specific workflows), including explicit paths for complete and incomplete series (<code><a href="../reference/gmwmx2_new_no_missing.html">gmwmx2_new_no_missing()</a></code> / <code><a href="../reference/gmwmx2_new_with_missing.html">gmwmx2_new_with_missing()</a></code>).</li>
+<li>Extended simulation/generation utilities with <code><a href="../reference/generate.html">generate()</a></code> methods for single and composite models plus missingness support (<code><a href="../reference/markov_two_states.html">markov_two_states()</a></code> and related plotting methods).</li>
+<li>Added random-walk covariance C++ back-end routines (<code>get_sigma_mat_rw()</code>, <code>get_mean_diagonal_super_diagonals_cov_mat_rw_cpp()</code>) and integrated them through <code>RcppExports</code>.</li>
+<li>Expanded documentation with many new man pages and three new vignettes: <code>data_generation.Rmd</code>, <code>estimate_composite_stochastic_models.Rmd</code>, and <code>gmwmx2_new.Rmd</code>.</li>
+<li>Updated package metadata and dependencies for the new modeling stack (notably adding <code>longmemo</code> and pkgdown URL metadata updates).</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.4" id="gmwmx2-version-004">gmwmx2 version 0.0.4<small>2026-01-07</small><a class="anchor" aria-label="anchor" href="#gmwmx2-version-004"></a></h2>
 <ul><li>updated functions <code>download_all_stations_ngl</code>, <code>download_estimated_velocities_ngl</code> and <code>download_station_ngl</code> so that it exit gracefully if NGL server is not reachable.</li>
 </ul></div>
