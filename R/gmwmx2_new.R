@@ -670,7 +670,7 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
   if (!any(is.na(y))) {
     stop("`y` contains no missing values. Use `gmwmx2_new_no_missing()`.", call. = FALSE)
   }
-  message("Response vector y contains NA values. Modelling missing data with a two states Markov model.")
+  # message("Response vector y contains NA values. Modelling missing data with a two states Markov model.")
 
 
   # get dimension of X and y
