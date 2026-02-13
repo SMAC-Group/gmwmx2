@@ -235,7 +235,7 @@ model.</p>
 <span><span class="co">##        Estimated parameters : phi =  0.96, sigma2 = 16.43 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.2571</span></span></code></pre>
+<span><span class="co">##   Total              : 0.2484</span></span></code></pre>
 <p>To assess uncertainty, we run a Monte Carlo simulation and check
 empirical coverage of the confidence intervals for
 <code>beta</code>.</p>
@@ -364,10 +364,10 @@ behavior.</p>
 <span><span class="va">fit_pl</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
 <span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1  -2.3955  9.969601</span></span>
+<span><span class="co">## beta1  -2.3955  9.973747</span></span>
 <span><span class="co">## beta2   0.0138  0.003852</span></span>
-<span><span class="co">## beta3   1.9090  0.816571</span></span>
-<span><span class="co">## beta4   2.8673  0.815430</span></span>
+<span><span class="co">## beta3   1.9090  0.816581</span></span>
+<span><span class="co">## beta4   2.8673  0.815440</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
@@ -377,7 +377,7 @@ behavior.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.9838, sigma2 = 5.361 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.0864</span></span></code></pre>
+<span><span class="co">##   Total              : 0.0849</span></span></code></pre>
 <p>Monte Carlo coverage for the power-law case:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_pl</span> <span class="op">=</span> <span class="fl">500</span></span>
@@ -467,7 +467,7 @@ behavior.</p>
 <pre><code><span><span class="co">## [1] 0.852</span></span></code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.864</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.88</span></span></code></pre>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
@@ -516,7 +516,7 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span><span class="co">##        Estimated parameters : sigma2 = 4.543 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.0894</span></span></code></pre>
+<span><span class="co">##   Total              : 0.0779</span></span></code></pre>
 <p>Monte Carlo coverage for the flicker case:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">500</span></span>
