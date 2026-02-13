@@ -88,7 +88,7 @@ pl = function(kappa = NULL, sigma2 = NULL){
       return(x)
     },
     "get_initial_parameters_function" = function(signal){
-      kappa = runif(n = 1, min = -1,max =  1)
+      kappa = runif(n = 1, min = -.8, max =  .8)
       sigma2 = var(signal)
       return(c("kappa" = kappa, "sigma2"=sigma2))
     },
