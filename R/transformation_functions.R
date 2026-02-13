@@ -1,5 +1,38 @@
 # define transformation functions for powerlaw
 
+
+
+
+
+# transform from real line to domain
+#' Transform power-law kappa from real line to domain
+#'
+#' Maps unconstrained real values to the stationary domain for the
+#' power-law parameter `kappa` using a `tanh` transform.
+#'
+#' @param x Numeric vector on the real line.
+#' @return Numeric vector of transformed values in (-1, 1).
+#' @keywords internal
+trans_kappa_pl <- function(x) {
+  # exp(x) - 1
+  tanh(x)
+}
+
+# transform from domain to real line
+#' Inverse transform for power-law kappa
+#'
+#' Maps domain values back to the real line using `atanh`.
+#'
+#' @param x Numeric vector in (-1, 1).
+#' @return Numeric vector on the real line.
+#' @keywords internal
+inv_trans_kappa_pl <- function(x){
+  # log(x + 1)
+  atanh(x)
+}
+
+
+
 # transform from real line to domain
 #' Transform power-law kappa from real line to domain
 #'
