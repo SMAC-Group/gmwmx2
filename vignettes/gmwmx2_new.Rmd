@@ -69,7 +69,7 @@ This is arbitrary and can be replaced with any design matrix suitable to your
 application.
 
 ```{r}
-n = 1000
+n = 10*365 
 X = matrix(NA, nrow = n, ncol = 4)
 # intercept
 X[, 1] = 1
@@ -115,7 +115,7 @@ To assess uncertainty, we run a Monte Carlo simulation and check empirical cover
 of the confidence intervals for `beta`.
 
 ```{r}
-B = 500
+B = 100
 mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
   eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = (123 + b))$series
@@ -234,7 +234,7 @@ fit_pl
 Monte Carlo coverage for the power-law case:
 
 ```{r}
-B_pl = 500
+B_pl = 100
 mat_res_pl = matrix(NA, nrow = B_pl, ncol = 19)
 for(b in seq(B_pl)){
   eps = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
@@ -350,7 +350,7 @@ fit_fl
 Monte Carlo coverage for the flicker case:
 
 ```{r}
-B_fl = 500
+B_fl = 100
 mat_res_fl = matrix(NA, nrow = B_fl, ncol = 18)
 for(b in seq(B_fl)){
   eps = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
