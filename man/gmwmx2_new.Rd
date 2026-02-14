@@ -19,7 +19,7 @@ gmwmx2_new(X, ...)
 )
 
 \method{gmwmx2_new}{gnss_ts_ngl}(
-  object,
+  X,
   n_seasonal = 2,
   vec_earthquakes_relaxation_time = NULL,
   component = NULL,
@@ -28,7 +28,7 @@ gmwmx2_new(X, ...)
 )
 }
 \arguments{
-\item{X}{Design matrix for a generic regression interface.}
+\item{X}{A \code{gnss_ts_ngl} object (GNSS time-series interface).}
 
 \item{...}{Reserved for future extensions.}
 
@@ -41,8 +41,6 @@ gmwmx2_new(X, ...)
 \item{method}{Optimization method passed to \code{stats::optim}.}
 
 \item{control}{Control list passed to \code{stats::optim}.}
-
-\item{object}{A \code{gnss_ts_ngl} object.}
 
 \item{n_seasonal}{Number of seasonal signals.}
 
