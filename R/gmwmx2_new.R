@@ -798,7 +798,7 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
 #' or to a \code{gnss_ts_ngl} workflow.
 #'
 #' @param X Either a design matrix (generic regression interface) or a
-#'   \code{gnss_ts_ngl} object.
+#'   \code{gnss_ts_ngl} object (GNSS time-series interface).
 #' @param ... Additional arguments forwarded to the selected method.
 #' @return A fitted model object.
 #' @export
@@ -866,7 +866,7 @@ gmwmx2_new.default <- function(X, y, model, omega = NULL, method = "L-BFGS-B", c
 #' GMWMX estimator for a \code{gnss_ts_ngl} object
 #'
 #'
-#' @param object A \code{gnss_ts_ngl} object.
+#' @param X A \code{gnss_ts_ngl} object (GNSS time-series interface).
 #' @param n_seasonal Number of seasonal signals.
 #' @param vec_earthquakes_relaxation_time Relaxation time for each earthquake.
 #' @param component Component to estimate ("N", "E", or "V").
@@ -876,7 +876,7 @@ gmwmx2_new.default <- function(X, y, model, omega = NULL, method = "L-BFGS-B", c
 #' @rdname gmwmx2_new
 #' @export
 gmwmx2_new.gnss_ts_ngl <- function(
-  object,
+  X,
   n_seasonal = 2,
   vec_earthquakes_relaxation_time = NULL,
   component = NULL,
@@ -1102,4 +1102,3 @@ gmwmx2_new.gnss_ts_ngl <- function(
 
 
 }
-
