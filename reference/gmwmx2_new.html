@@ -105,7 +105,7 @@ based on the presence of <code>NA</code> values in <code>y</code>.</p>
 <span></span>
 <span><span class="co"># S3 method for class 'gnss_ts_ngl'</span></span>
 <span><span class="fu">gmwmx2_new</span><span class="op">(</span></span>
-<span>  <span class="va">object</span>,</span>
+<span>  <span class="va">X</span>,</span>
 <span>  n_seasonal <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  vec_earthquakes_relaxation_time <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  component <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -119,7 +119,7 @@ based on the presence of <code>NA</code> values in <code>y</code>.</p>
 
 
 <dl><dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Design matrix for a generic regression interface.</p></dd>
+<dd><p>A <code>gnss_ts_ngl</code> object (GNSS time-series interface).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -144,10 +144,6 @@ based on the presence of <code>NA</code> values in <code>y</code>.</p>
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
 <dd><p>Control list passed to <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a></code>.</p></dd>
-
-
-<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
-<dd><p>A <code>gnss_ts_ngl</code> object.</p></dd>
 
 
 <dt id="arg-n-seasonal">n_seasonal<a class="anchor" aria-label="anchor" href="#arg-n-seasonal"></a></dt>
