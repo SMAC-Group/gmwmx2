@@ -57,6 +57,8 @@ navbar:
       href: articles/estimate_composite_stochastic_models.html
     - text: "Estimate regression models with dependent errors"
       href: articles/gmwmx2_new.html
+    - text: "Estimate regression models with dependent errors and missing observations"
+      href: articles/gmwmx2_new_w_missing.html
     - text: "Load and plot data from the Nevada Geodetic Laboratory"
       href: articles/load_plot_data_ngl.html
     - text: "Estimate geodetic time series from the Nevada Geodetic Laboratory"

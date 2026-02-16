@@ -1,11 +1,24 @@
 ---
-title: "GMWMX: Estimate linear models with dependent errors"
+title: "GMWMX: Estimate linear models with dependent errors and missing observations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GMWMX: Estimate linear models with dependent errors}
+  %\VignetteIndexEntry{GMWMX: Estimate linear models with dependent errors and missing observations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+This vignette shows how to perform inference for a linear regression model
+with dependent errors and missing observations. We work with the model
+\[
+  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
+\]
+where the error process \(\boldsymbol{\varepsilon}\) follows a composite stochastic model (e.g., white noise + AR(1)). Missingness is modeled by a
+binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
+observation, and \(Z_t = 0\) a msising observation. The observed series is
+\[
+  \tilde{\mathbf{Y}} = \mathbf{Y} \circ \mathbf{Z},
+\]
+which we implement by setting \(\tilde{\mathbf{Y}}\) to `NA` when \(Z_t = 0\).
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -18,11 +31,10 @@ knitr::opts_chunk$set(
 # knitr::opts_chunk$set(eval = FALSE)
 ```
 
-This vignette is a detailed, self-contained simulation walkthrough that showcases
-`gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
-signal, generate noise, fit models, and run Monte Carlo experiments to check coverage of
-confidence intervals. For each setting, we also plot the empirical distributions of the
-estimated functional and stochastic parameters.
+Overall, these examples illustrate how `gmwmx2_new()` supports inference for
+linear regression models with dependent errors when observations are missing,
+and how the results compare to a naive OLS fit that ignores dependence.
+
 
 ```{r}
 library(gmwmx2)
@@ -37,39 +49,15 @@ boxplot_mean_dot <- function(x, ...) {
 }
 ```
 
-# Overview of the simulation
+We load the packages used for simulation, wavelet variance diagnostics, and
+summary plots. The helper `boxplot_mean_dot()` overlays Monte Carlo means on
+top of each boxplot for easier comparison.
 
-We simulate a time series as
-
-`y = X %*% beta + epsilon`,
-
-where:
-
-1. `X` is a user-defined design matrix.
-2. `beta` are the true regression coefficients.
-3. `epsilon` is a stochastic process generated from a composite noise model (e.g., white
-noise + AR(1), white noise + power-law, white noise + flicker).
-
-The goal is to:
-
-1. Fit `gmwmx2_new()` on simulated data with known parameters.
-2. Compare results across different stochastic models.
-3. Run a Monte Carlo experiment to assess empirical coverage of the confidence
-intervals on `beta`.
-
-# Build an arbitrary design matrix X
-
-We use a generic design matrix that mirrors many geodetic or environmental signals:
-
-1. Intercept.
-2. Linear trend.
-3. Annual sinusoid and cosine.
-
-This is arbitrary and can be replaced with any design matrix suitable to your
-application.
+We first construct a design matrix with an intercept, linear trend, and annual
+seasonal components. This deterministic signal will be used across examples.
 
 ```{r}
-n = 10*365 
+n = 10*365
 X = matrix(NA, nrow = n, ncol = 4)
 # intercept
 X[, 1] = 1
@@ -86,43 +74,76 @@ plot(x = X[, 2], y = X %*% beta, type = "l",
      main = "Signal", xlab = "Time", ylab = "Signal")
 ```
 
-We now define three different stochastic noise settings using the same `X` and `beta`.
-
-# Example 1: White noise + AR(1)
-
-This is a classic short-memory model often used as a baseline.
+Next we simulate dependent errors, add them to the signal, and then introduce
+missing observations using a two‑state Markov model. This is the key difference
+from `vignettes/gmwmx2_new.Rmd`, which uses fully observed data.
 
 ```{r}
+# Example 1: White noise + AR(1)
+
+
 phi_ar1 = 0.95
 sigma2_ar1 = 20
 sigma2_wn = 20
-eps = gmwmx2::generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
+eps = generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
-plot(X[, 2], y, type = "l", main = "Simulated y (WN + AR1)")
+# generate missingness
+mod_missing = markov_two_states(p1 = 0.05, p2 = .95)
+Z = generate(mod_missing, n = n, seed = 123)
+plot(Z)
+Z_process = Z$series
+y_observed = ifelse(Z_process == 1, y, NA)
+plot(X[, 2], y_observed, type = "l", main = "Simulated y (WN + AR1)")
+# add grey boxes at missing indices (x ± eps) to visualize NA locations;
+# unlike `vignettes/gmwmx2_new.Rmd`, which plots the fully observed series
+na_idx <- which(is.na(y_observed))
+
+# choose epsilon relative to x spacing
+dx <- median(diff(X[, 2]), na.rm = TRUE)
+eps <- 0.45 * dx
+
+ylim <- par("usr")[3:4]
+for (i in na_idx) {
+  rect(
+    xleft = X[i, 2] - eps,
+    xright = X[i, 2] + eps,
+    ybottom = ylim[1],
+    ytop = ylim[2],
+    col = adjustcolor("grey20", alpha.f = 0.5),
+    border = NA
+  )
+}
+
+lines(X[, 2], y_observed)
 ```
 
+We then fit the dependent‑error regression using `gmwmx2_new()`, which accounts
+for the stochastic error model and the missing observations.
+
+
+
+```{r}
+#
 # Fit model (WN + AR1)
 
-We fit using `gmwmx2_new()` with a matching composite model.
-
-```{r}
-fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
+fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
 print(fit)
-```
 
-To assess uncertainty, we run a Monte Carlo simulation and check empirical coverage
-of the confidence intervals for `beta`.
 
-```{r}
-B = 100
+
+
+B = 10
 mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
+
   eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
-  # mispecified model assuming white noise as the stochastic model
-  fit2 = lm(y~X[,2] + X[,3] + X[,4])
+  Z = generate(mod_missing, n = n, seed = 123 + b)$series
+  y_observed = ifelse(Z == 1, y, NA)
+  fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
+  # mispecified model assuming white noise as the stochastic model and only on observed data
+  fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
                    summary(fit2)$coefficients[,1],
@@ -132,6 +153,11 @@ for(b in seq(B)){
   # cat("Iteration ", b, " completed.\n")
 }
 ```
+
+We now assess inference quality under missingness by repeating the simulation,
+fitting the correct dependent‑error model with `gmwmx2_new()`, and comparing
+against a misspecified OLS fit that treats the errors as i.i.d. and uses only
+observed data.
 
 ```{r}
 # compute empirical coverage
@@ -144,54 +170,63 @@ colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
 
-```
+
 
 # Plot empirical distributions (beta and stochastic parameters)
 
-```{r}
 par(mfrow = c(1, 4))
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
-        names = c("beta0"),
-        main = expression(beta[0]), ylab = "Estimate")
+                 names = c("beta0"),
+                 main = expression(beta[0]), ylab = "Estimate")
 abline(h = beta[1], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
-        names = c("beta1"),
-        main = expression(beta[1]), ylab = "Estimate")
+                 names = c("beta1"),
+                 main = expression(beta[1]), ylab = "Estimate")
 abline(h = beta[2], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
-        names = c("beta2"),
-        main = expression(beta[2]), ylab = "Estimate")
+                 names = c("beta2"),
+                 main = expression(beta[2]), ylab = "Estimate")
 abline(h = beta[3], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
-        names = c("beta3"),
-        main = expression(beta[3]), ylab = "Estimate")
+                 names = c("beta3"),
+                 main = expression(beta[3]), ylab = "Estimate")
 abline(h = beta[4], col = "black", lwd = 2)
 
 
 par(mfrow = c(1, 3))
 
 boxplot_mean_dot(mat_res_df$phi_ar1,las=1,
-        names = c("phi_ar1"),
-        main = expression(phi["AR1"]), ylab = "Estimate")
+                 names = c("phi_ar1"),
+                 main = expression(phi["AR1"]), ylab = "Estimate")
 abline(h = phi_ar1, col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df$sigma_2_ar1,las=1,
-        names = c("phi_ar1"),
-        main = expression(sigma["AR1"]^2), ylab = "Estimate")
+                 names = c("phi_ar1"),
+                 main = expression(sigma["AR1"]^2), ylab = "Estimate")
 abline(h = sigma2_ar1, col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df$sigma_2_wn,las=1,
-        names = c("phi_ar1"),
-        main = expression(sigma["WN"]^2), ylab = "Estimate")
+                 names = c("phi_ar1"),
+                 main = expression(sigma["WN"]^2), ylab = "Estimate")
 abline(h = sigma2_wn, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
-# Compute empirical coverage of confidence intervals for beta
+The boxplots summarize the empirical distribution of the regression estimates
+and stochastic parameters across Monte Carlo replications, with the true values
+shown as horizontal lines.
+
+Coverage is computed using normal approximations for the coefficient intervals.
+We report the empirical fraction of times the true \(\boldsymbol{\beta}\)
+entries fall inside the estimated intervals for both `gmwmx2_new()` and OLS.
+
+
 ```{r}
+# Compute empirical coverage of confidence intervals for beta
+
 zval = qnorm(0.975)
 mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
 mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
@@ -210,38 +245,58 @@ dplyr::between(rep(beta[1], B), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_c
 dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
 ```
 
+We now repeat the workflow for a long‑memory error model (white noise +
+stationary power‑law). The steps mirror the AR(1) case: simulate with
+missingness, fit `gmwmx2_new()`, and compare to a misspecified OLS fit.
 
+The parameter \(\kappa\) controls the long‑memory behavior of the power‑law
+component, while the variance terms split energy between white noise and the
+power‑law process.
 
-# Example 2: White noise + stationary power-law
-
-Here we replace AR(1) by a stationary power-law component with spectral index
-`kappa = -0.8`. This introduces long-memory behavior.
 
 ```{r}
+# Example 2: White noise + stationary power-law
+
+
+
 kappa_pl <- -0.8
-sigma2_wn <- 10
-sigma2_pl <- 10
+sigma2_wn <- 15
+sigma2_pl <- 5
 eps_pl = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
-                  n = n, seed = 123)
+                  n = n, seed = 1234)
 plot(eps_pl$series, type = "l")
 plot(wv::wvar(eps_pl$series))
 y_pl = X %*% beta + eps_pl$series
+Z = generate(mod_missing, n = n, seed = 1234)
+plot(Z)
+Z_process = Z$series
+y_observed = ifelse(Z_process == 1, y_pl, NA)
 
-fit_pl = gmwmx2_new(X = X, y = y_pl, model = wn() + pl())
+
+fit_pl = gmwmx2_new(X = X, y = y_observed, model = wn() + pl())
 fit_pl
 ```
 
-Monte Carlo coverage for the power-law case:
+As before, we keep the same missingness mechanism so that differences are driven
+by the error model rather than by the observation pattern.
+
+Monte Carlo replication for the power‑law case.
+
 
 ```{r}
-B_pl = 100
+B_pl = 10
 mat_res_pl = matrix(NA, nrow = B_pl, ncol = 19)
 for(b in seq(B_pl)){
   eps = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                  n = n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new(X = X, y = y, model = wn() + pl())
-  fit2 = lm(y~X[,2] + X[,3] + X[,4])
+
+  Z = generate(mod_missing, n = n, seed = (123 + b))
+  Z_process = Z$series
+  y_observed = ifelse(Z_process == 1, y, NA)
+
+  fit = gmwmx2_new(X = X, y = y_observed, model = wn() + pl())
+  fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
   mat_res_pl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
                       summary(fit2)$coefficients[,1],
@@ -250,7 +305,15 @@ for(b in seq(B_pl)){
                       fit$theta_domain$`White Noise_1`)
   # cat("Iteration ", b, " \n")
 }
+```
 
+Aggregate the Monte Carlo results and visualize regression estimates.
+
+The next plots focus on the distribution of \(\boldsymbol{\beta}\) estimates
+under the power‑law error model.
+
+
+```{r}
 mat_res_pl_df = as.data.frame(mat_res_pl)
 colnames(mat_res_pl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "gmwmx_beta2_hat", "gmwmx_beta3_hat",
@@ -260,57 +323,66 @@ colnames(mat_res_pl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "lm_std_beta0_hat", "lm_std_beta1_hat",
                             "lm_std_beta2_hat", "lm_std_beta3_hat",
                             "kappa_pl","sigma2_pl" ,"sigma2_wn")
-```
+
 
 # Plot empirical distributions (beta and stochastic parameters)
 
-```{r}
+
 par(mfrow = c(1, 4))
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
-        names = c("beta0"),
-        main = expression(beta[0]), ylab = "Estimate")
+                 names = c("beta0"),
+                 main = expression(beta[0]), ylab = "Estimate")
 abline(h = beta[1], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
-        names = c("beta1"),
-        main = expression(beta[1]), ylab = "Estimate")
+                 names = c("beta1"),
+                 main = expression(beta[1]), ylab = "Estimate")
 abline(h = beta[2], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
-        names = c("beta2"),
-        main = expression(beta[2]), ylab = "Estimate")
+                 names = c("beta2"),
+                 main = expression(beta[2]), ylab = "Estimate")
 abline(h = beta[3], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
-        names = c("beta3"),
-        main = expression(beta[3]), ylab = "Estimate")
+                 names = c("beta3"),
+                 main = expression(beta[3]), ylab = "Estimate")
 abline(h = beta[4], col = "black", lwd = 2)
 
 par(mfrow = c(1, 1))
 ```
+
+Plot the stochastic parameter estimates for the power‑law model.
+
+These plots focus on the long‑memory parameter and variance components that
+define the power‑law error process.
 
 
 ```{r}
 par(mfrow = c(1, 3))
 
 boxplot_mean_dot(mat_res_pl_df$kappa_pl,las=1,
-        main = expression(kappa["PL"]), ylab = "Estimate")
+                 main = expression(kappa["PL"]), ylab = "Estimate")
 abline(h = kappa_pl, col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_pl_df$sigma2_pl,las=1,
-        main = expression(sigma["PL"]^2), ylab = "Estimate")
+                 main = expression(sigma["PL"]^2), ylab = "Estimate")
 abline(h = sigma2_pl, col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_pl_df$sigma2_wn,las=1,
-        names = c("phi_ar1"),
-        main = expression(sigma["WN"]^2), ylab = "Estimate")
+                 names = c("phi_ar1"),
+                 main = expression(sigma["WN"]^2), ylab = "Estimate")
 abline(h = sigma2_wn, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
+Compute empirical coverage for the regression coefficients under the power‑law
+error model and compare against OLS.
 
-# Compute empirical coverage of confidence intervals for beta
+
 ```{r}
+# Compute empirical coverage of confidence intervals for beta
+
 zval = qnorm(0.975)
 mat_res_pl_df$upper_ci_gmwmx_beta0 = mat_res_pl_df$gmwmx_beta0_hat + zval * mat_res_pl_df$gmwmx_std_beta0_hat
 mat_res_pl_df$lower_ci_gmwmx_beta0 = mat_res_pl_df$gmwmx_beta0_hat - zval * mat_res_pl_df$gmwmx_std_beta0_hat
@@ -329,25 +401,43 @@ dplyr::between(rep(beta[1], B_pl), mat_res_pl_df$lower_ci_lm_beta0, mat_res_pl_d
 dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_lm_beta1, mat_res_pl_df$upper_ci_lm_beta1) %>% mean()
 ```
 
-# Example 3: White noise + flicker
+Finally, we repeat the missing‑data inference workflow for a flicker‑noise
+error model.
 
-Flicker noise corresponds to a non stationary power-law with spectral index `kappa = -1` but is
-handled explicitly by `flicker()` in this package.
+Flicker noise (1/f‑type behavior) provides a contrasting long‑memory structure
+to the power‑law case, and helps illustrate how inference changes across
+different dependent‑error models.
+
 
 ```{r}
+# Example 3: White noise + flicker
+
+
+
 sigma2_wn_fl <- 15
 sigma2_fl <- 10
 eps_fl = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                   n = n, seed = 123)
 plot(eps_fl$series, type = "l")
 plot(wv::wvar(eps_fl$series))
+Z = generate(mod_missing, n = n, seed = 1234)
+plot(Z)
+
 y_fl = X %*% beta + eps_fl$series
 
-fit_fl = gmwmx2_new(X = X, y = y_fl, model = wn() + flicker())
+Z = generate(mod_missing, n = n, seed = 1234)
+plot(Z)
+Z_process = Z$series
+
+
+y_observed = ifelse(Z_process == 1, y_fl, NA)
+
+fit_fl = gmwmx2_new(X = X, y = y_observed, model = wn() + flicker())
 fit_fl
 ```
 
-Monte Carlo coverage for the flicker case:
+Monte Carlo replication for the flicker‑noise case.
+
 
 ```{r}
 B_fl = 100
@@ -356,17 +446,28 @@ for(b in seq(B_fl)){
   eps = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                  n = n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new(X = X, y = y, model = wn() + flicker())
-  fit2 = lm(y~X[,2] + X[,3] + X[,4])
+
+
+  Z = generate(mod_missing, n = n, seed = (123 + b))
+  Z_process = Z$series
+  y_observed = ifelse(Z_process == 1, y, NA)
+
+
+
+  fit = gmwmx2_new(X = X, y = y_observed, model = wn() + flicker())
+  fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
   mat_res_fl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
                       summary(fit2)$coefficients[,1],
                       summary(fit2)$coefficients[,2],
                       fit$theta_domain$`Flicker_2`,
                       fit$theta_domain$`White Noise_1`)
-  # cat("Iteration ", b, " \n")
+  cat("Iteration ", b, " \n")
 }
+```
 
+
+```{r}
 mat_res_fl_df = as.data.frame(mat_res_fl)
 colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "gmwmx_beta2_hat", "gmwmx_beta3_hat",
@@ -378,9 +479,12 @@ colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "sigma2_fl" ,"sigma2_wn")
 ```
 
+Compute empirical coverage for the flicker‑noise case.
 
-# Compute empirical coverage of confidence intervals for beta
+
 ```{r}
+# Compute empirical coverage of confidence intervals for beta
+
 zval = qnorm(0.975)
 mat_res_fl_df$upper_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat + zval * mat_res_fl_df$gmwmx_std_beta0_hat
 mat_res_fl_df$lower_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat - zval * mat_res_fl_df$gmwmx_std_beta0_hat
@@ -397,70 +501,60 @@ mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl
 mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
 dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
 dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
-```
+
 
 
 
 # Plot empirical distributions (beta and stochastic parameters)
+```
+
+Plot regression estimates for the flicker‑noise case.
+
 
 ```{r}
 par(mfrow = c(1, 4))
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
-        names = c("beta0"),
-        main = expression(beta[0]), ylab = "Estimate")
+                 names = c("beta0"),
+                 main = expression(beta[0]), ylab = "Estimate")
 abline(h = beta[1], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta1_hat")],las=1,
-        names = c("beta1"),
-        main = expression(beta[1]), ylab = "Estimate")
+                 names = c("beta1"),
+                 main = expression(beta[1]), ylab = "Estimate")
 abline(h = beta[2], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta2_hat")],las=1,
-        names = c("beta2"),
-        main = expression(beta[2]), ylab = "Estimate")
+                 names = c("beta2"),
+                 main = expression(beta[2]), ylab = "Estimate")
 abline(h = beta[3], col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta3_hat")],las=1,
-        names = c("beta3"),
-        main = expression(beta[3]), ylab = "Estimate")
+                 names = c("beta3"),
+                 main = expression(beta[3]), ylab = "Estimate")
 abline(h = beta[4], col = "black", lwd = 2)
 
 par(mfrow = c(1, 1))
 ```
+
+Plot stochastic parameter estimates for the flicker‑noise case.
 
 
 ```{r}
 par(mfrow = c(1, 2))
 
 boxplot_mean_dot(mat_res_fl_df$sigma2_fl,las=1,
-        main = expression(sigma["FL"]^2), ylab = "Estimate")
+                 main = expression(sigma["FL"]^2), ylab = "Estimate")
 abline(h = sigma2_fl, col = "black", lwd = 2)
 
 boxplot_mean_dot(mat_res_fl_df$sigma2_wn,las=1,
-        names = c("phi_ar1"),
-        main = expression(sigma["WN"]^2), ylab = "Estimate")
+                 names = c("phi_ar1"),
+                 main = expression(sigma["WN"]^2), ylab = "Estimate")
 abline(h = sigma2_wn_fl, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
+
+
+
+
+
+
 ```
-
-
-
-
-
-# Interpreting the outputs
-
-The `gmwmx2_new()` object contains:
-
-1. `beta_hat` and `std_beta_hat`: regression estimates and standard errors.
-2. `theta_domain`: estimated stochastic parameters (e.g., AR(1), WN variance, power-law
-parameters, flicker variance).
-3. Diagnostic information about the fitted wavelet variance and optimization output.
-
-The Monte Carlo results provide empirical coverage for the nominal 95% confidence
-intervals. This helps assess whether standard errors from `gmwmx2_new()` are well
-calibrated under different noise models.
-
-# Missing values
-
-`gmwmx2_new()` can also be used with missing observations (set entries of `y` to `NA`),
-provided the missingness model is properly specified. 
