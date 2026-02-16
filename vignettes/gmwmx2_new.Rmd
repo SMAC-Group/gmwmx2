@@ -39,6 +39,14 @@ boxplot_mean_dot <- function(x, ...) {
 
 # Overview of the simulation
 
+We consider the linear model
+\[
+  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
+\]
+where \(\boldsymbol{\varepsilon} \sim F\!\left(0, \sigma(\boldsymbol{\gamma})\right)\)
+denotes a dependent‑error process with distribution family \(F\) and scale
+structure \(\sigma(\boldsymbol{\gamma})\).
+
 We simulate a time series as
 
 `y = X %*% beta + epsilon`,
