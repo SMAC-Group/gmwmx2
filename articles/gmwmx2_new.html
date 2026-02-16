@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GMWMX: Simulation • gmwmx2</title>
+<title>GMWMX: Estimate linear models with dependent errors • gmwmx2</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="../favicon-48x48.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="GMWMX: Simulation">
+<script src="../pkgdown.js"></script><meta property="og:title" content="GMWMX: Estimate linear models with dependent errors">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gmwmx2</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -67,6 +67,9 @@
     </li>
     <li>
       <a href="../articles/gmwmx2_new.html">Estimate regression models with dependent errors</a>
+    </li>
+    <li>
+      <a href="../articles/gmwmx2_new_w_missing.html">Estimate regression models with dependent errors and missing observations</a>
     </li>
     <li>
       <a href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory</a>
@@ -103,7 +106,8 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>GMWMX: Simulation</h1>
+      <h1 data-toc-skip>GMWMX: Estimate linear models with dependent
+errors</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/SMAC-Group/gmwmx2/blob/main/vignettes/gmwmx2_new.Rmd" class="external-link"><code>vignettes/gmwmx2_new.Rmd</code></a></small>
@@ -142,6 +146,15 @@ parameters.</p>
 <div class="section level2">
 <h2 id="overview-of-the-simulation">Overview of the simulation<a class="anchor" aria-label="anchor" href="#overview-of-the-simulation"></a>
 </h2>
+<p>We consider the linear model
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
+</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛆</mi><mo>∼</mo><mi>F</mi><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>σ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{\varepsilon} \sim F\!\left(0, \sigma(\boldsymbol{\gamma})\right)</annotation></semantics></math>
+denotes a dependent‑error process with distribution family
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
+and scale structure
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\sigma(\boldsymbol{\gamma})</annotation></semantics></math>.</p>
 <p>We simulate a time series as</p>
 <p><code>y = X %*% beta + epsilon</code>,</p>
 <p>where:</p>
@@ -235,7 +248,7 @@ model.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9563, sigma2 = 17.82 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.0779</span></span></code></pre>
+<span><span class="co">##   Total              : 1.1365</span></span></code></pre>
 <p>To assess uncertainty, we run a Monte Carlo simulation and check
 empirical coverage of the confidence intervals for
 <code>beta</code>.</p>
@@ -377,7 +390,7 @@ behavior.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.7848, sigma2 = 9.433 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.4646</span></span></code></pre>
+<span><span class="co">##   Total              : 0.4749</span></span></code></pre>
 <p>Monte Carlo coverage for the power-law case:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_pl</span> <span class="op">=</span> <span class="fl">100</span></span>
@@ -516,7 +529,7 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span><span class="co">##        Estimated parameters : sigma2 =   8.7 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.8359</span></span></code></pre>
+<span><span class="co">##   Total              : 0.8346</span></span></code></pre>
 <p>Monte Carlo coverage for the flicker case:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>

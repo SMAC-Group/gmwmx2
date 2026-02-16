@@ -6,10 +6,11 @@ articles:
   estimate_composite_stochastic_models: estimate_composite_stochastic_models.html
   estimate_small_network: estimate_small_network.html
   fit_model: fit_model.html
+  gmwmx2_new_w_missing: gmwmx2_new_w_missing.html
   gmwmx2_new: gmwmx2_new.html
   load_plot_data_ngl: load_plot_data_ngl.html
   plot_large_network: plot_large_network.html
-last_built: 2026-02-16T11:04Z
+last_built: 2026-02-16T13:09Z
 urls:
   reference: https://smac-group.github.io/gmwmx2/reference
   article: https://smac-group.github.io/gmwmx2/articles
