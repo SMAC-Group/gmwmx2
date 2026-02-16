@@ -452,50 +452,10 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 #' @return A fitted model object (to be defined).
 #' @keywords internal
 gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+
+  # record start time
   start_time <- Sys.time()
-  #-------------------------------------------
-  # n=3000
-  # X =matrix(NA, nrow=n, ncol=2)
-  # X[,1] = 1
-  # X[,2] = 1:n
-  # beta = c(1, .2)
-  # eps = generate(ar1(phi=0.99, sigma2=5) + wn(25), n=n)$series
-  # plot(wv::wvar(eps))
-  # y = X %*% beta + eps
-  # plot(X[,2], y, type='l')
-  # method = "L-BFGS-B"
-  # control = list()
-  # omega =NULL
-  # model = ar1()+wn()
-  # generate_omega <- function(n, p1, p2, seed = NULL) {
-  #   # create vector
-  #   c1 <- 1000
-  #   vec_omega <- vector(mode = "numeric", length = n + c1)
-  #   vec_omega[1] <- 1
-  #   if (!is.null(seed)) {
-  #     set.seed(seed)
-  #   }
-  #   for (i in 2:(n + c1)) {
-  #     # generate
-  #     if (vec_omega[i - 1] == 1) {
-  #       vec_omega[i] <- rbinom(n = 1, size = 1, prob = (1 - p1))
-  #     } else if (vec_omega[i - 1] == 0) {
-  #       vec_omega[i] <- rbinom(n = 1, size = 1, prob = p2)
-  #     }
-  #   }
-  #   return(tail(vec_omega, n = n))
-  # }
-  #
-  #
-  # Z = generate_omega(n, p1 = 0.05, p2 = 0.91, seed = 123)
-  # idx_missing = which(Z == 0)
-  # y[idx_missing] = NA
-  # X
-  # y
 
-
-
-  #----------------------------------------------
 
 
   # Placeholder for the actual implementation
@@ -522,8 +482,6 @@ gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NU
   if (!any(is.na(y))) {
     stop("`y` contains no missing values. Use `gmwmx2_new_no_missing()`.", call. = FALSE)
   }
-  # message("Response vector y contains NA values. Modelling missing data with a two states Markov model.")
-
 
   # get dimension of X and y
   n = nrow(X)

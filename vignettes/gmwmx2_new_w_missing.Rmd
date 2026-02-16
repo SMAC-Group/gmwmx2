@@ -15,7 +15,7 @@ with dependent errors and missing observations. We consider the model
 where the error process \(\boldsymbol{\varepsilon}\) follows a composite stochastic model. Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
 observation, and \(Z_t = 0\) a missing observation. The observed series is
 \[
-  \tilde{\mathbf{Y}} = \mathbf{Y} \circ \mathbf{Z},
+  \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z},
 \]
 which we implement by setting \(\tilde{\mathbf{Y}}\) to `NA` when \(Z_t = 0\).
 

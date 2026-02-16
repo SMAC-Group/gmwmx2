@@ -24,7 +24,7 @@ signal, generate noise, fit models, and run Monte Carlo experiments to check cov
 confidence intervals. For each setting, we also plot the empirical distributions of the
 estimated functional and stochastic parameters.
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 library(gmwmx2)
 library(wv)
 library(dplyr)
@@ -43,20 +43,9 @@ We consider the linear model
 \[
   \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
 \]
-where \(\boldsymbol{\varepsilon} \sim F\!\left(0, \sigma(\boldsymbol{\gamma})\right)\)
-denotes a dependent‑error process with distribution family \(F\) and scale
-structure \(\sigma(\boldsymbol{\gamma})\).
-
-We simulate a time series as
-
-`y = X %*% beta + epsilon`,
-
-where:
-
-1. `X` is a user-defined design matrix.
-2. `beta` are the true regression coefficients.
-3. `epsilon` is a stochastic process generated from a composite noise model (e.g., white
-noise + AR(1), white noise + power-law, white noise + flicker).
+where \(\boldsymbol{\varepsilon} \sim F\!\left(0, \boldsymbol{\Sigma}(\boldsymbol{\gamma})\right)\)
+denotes a dependent‑error process with distribution family \(F\) and variance
+structure \(\boldsymbol{\Sigma}(\boldsymbol{\gamma})\) parametrized by \(\boldsymbol{\gamma}\).
 
 The goal is to:
 
@@ -468,7 +457,4 @@ The Monte Carlo results provide empirical coverage for the nominal 95% confidenc
 intervals. This helps assess whether standard errors from `gmwmx2_new()` are well
 calibrated under different noise models.
 
-# Missing values
 
-`gmwmx2_new()` can also be used with missing observations (set entries of `y` to `NA`),
-provided the missingness model is properly specified. 
