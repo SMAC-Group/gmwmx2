@@ -440,8 +440,6 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 #'
 #' @param x A `gmwmx2_fit_gnss_ts_ngl` object.
 #' @param digits Significant digits to display.
-#' @param scale_parameters Logical; if TRUE, scale trend-related parameters to
-#'   m/year (multiplies by 365.25).
 #' @param ... Passed to print methods.
 #' @return The input object, invisibly.
 #' @export

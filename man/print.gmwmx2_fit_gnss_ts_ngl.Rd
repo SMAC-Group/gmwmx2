@@ -12,9 +12,6 @@
 \item{digits}{Significant digits to display.}
 
 \item{...}{Passed to print methods.}
-
-\item{scale_parameters}{Logical; if TRUE, scale trend-related parameters to
-m/year (multiplies by 365.25).}
 }
 \value{
 The input object, invisibly.
