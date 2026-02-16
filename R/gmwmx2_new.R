@@ -775,6 +775,9 @@ gmwmx2_new.default <- function(X, y, model, omega = NULL, method = "L-BFGS-B", c
 #' @param vec_earthquakes_relaxation_time Relaxation time for each earthquake.
 #' @param component Component to estimate ("N", "E", or "V").
 #' @param model Stochastic model specification.
+#' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
+#' @param method Optimization method passed to `stats::optim`.
+#' @param control Control list passed to `stats::optim`.
 #' @param ... Reserved for future extensions.
 #' @return A fitted model object.
 #' @rdname gmwmx2_new
