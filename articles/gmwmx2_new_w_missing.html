@@ -132,8 +132,8 @@ with
 indicating observation, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">Z_t = 0</annotation></semantics></math>
 a missing observation. The observed series is
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐘</mi><mo>∘</mo><mi>𝐙</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
-  \tilde{\mathbf{Y}} = \mathbf{Y} \circ \mathbf{Z},
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐘</mi><mo>⊙</mo><mi>𝐙</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+  \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z},
 </annotation></semantics></math> which we implement by setting
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><annotation encoding="application/x-tex">\tilde{\mathbf{Y}}</annotation></semantics></math>
 to <code>NA</code> when
@@ -262,7 +262,7 @@ and the missing observations.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9562, sigma2 = 17.41 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.4619</span></span></code></pre>
+<span><span class="co">##   Total              : 1.3852</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="va">B</span>, ncol<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
@@ -433,7 +433,7 @@ process.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.6179, sigma2 = 8.114 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5055</span></span></code></pre>
+<span><span class="co">##   Total              : 0.6400</span></span></code></pre>
 <p>As before, we keep the same missingness mechanism so that differences
 are driven by the error model rather than by the observation
 pattern.</p>
@@ -607,7 +607,7 @@ changes across different dependent‑error models.</p>
 <span><span class="co">##        Estimated parameters : sigma2 = 8.612 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.0724</span></span></code></pre>
+<span><span class="co">##   Total              : 1.5816</span></span></code></pre>
 <p>Monte Carlo replication for the flicker‑noise case.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>
@@ -632,109 +632,9 @@ changes across different dependent‑error models.</p>
 <span>                      <span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>,</span>
 <span>                      <span class="va">fit</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`Flicker_2`</span>,</span>
 <span>                      <span class="va">fit</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`White Noise_1`</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Iteration "</span>, <span class="va">b</span>, <span class="st">" \n"</span><span class="op">)</span></span>
+<span>  <span class="co"># cat("Iteration ", b, " \n")</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<pre><code><span><span class="co">## Iteration  1  </span></span>
-<span><span class="co">## Iteration  2  </span></span>
-<span><span class="co">## Iteration  3  </span></span>
-<span><span class="co">## Iteration  4  </span></span>
-<span><span class="co">## Iteration  5  </span></span>
-<span><span class="co">## Iteration  6  </span></span>
-<span><span class="co">## Iteration  7  </span></span>
-<span><span class="co">## Iteration  8  </span></span>
-<span><span class="co">## Iteration  9  </span></span>
-<span><span class="co">## Iteration  10  </span></span>
-<span><span class="co">## Iteration  11  </span></span>
-<span><span class="co">## Iteration  12  </span></span>
-<span><span class="co">## Iteration  13  </span></span>
-<span><span class="co">## Iteration  14  </span></span>
-<span><span class="co">## Iteration  15  </span></span>
-<span><span class="co">## Iteration  16  </span></span>
-<span><span class="co">## Iteration  17  </span></span>
-<span><span class="co">## Iteration  18  </span></span>
-<span><span class="co">## Iteration  19  </span></span>
-<span><span class="co">## Iteration  20  </span></span>
-<span><span class="co">## Iteration  21  </span></span>
-<span><span class="co">## Iteration  22  </span></span>
-<span><span class="co">## Iteration  23  </span></span>
-<span><span class="co">## Iteration  24  </span></span>
-<span><span class="co">## Iteration  25  </span></span>
-<span><span class="co">## Iteration  26  </span></span>
-<span><span class="co">## Iteration  27  </span></span>
-<span><span class="co">## Iteration  28  </span></span>
-<span><span class="co">## Iteration  29  </span></span>
-<span><span class="co">## Iteration  30  </span></span>
-<span><span class="co">## Iteration  31  </span></span>
-<span><span class="co">## Iteration  32  </span></span>
-<span><span class="co">## Iteration  33  </span></span>
-<span><span class="co">## Iteration  34  </span></span>
-<span><span class="co">## Iteration  35  </span></span>
-<span><span class="co">## Iteration  36  </span></span>
-<span><span class="co">## Iteration  37  </span></span>
-<span><span class="co">## Iteration  38  </span></span>
-<span><span class="co">## Iteration  39  </span></span>
-<span><span class="co">## Iteration  40  </span></span>
-<span><span class="co">## Iteration  41  </span></span>
-<span><span class="co">## Iteration  42  </span></span>
-<span><span class="co">## Iteration  43  </span></span>
-<span><span class="co">## Iteration  44  </span></span>
-<span><span class="co">## Iteration  45  </span></span>
-<span><span class="co">## Iteration  46  </span></span>
-<span><span class="co">## Iteration  47  </span></span>
-<span><span class="co">## Iteration  48  </span></span>
-<span><span class="co">## Iteration  49  </span></span>
-<span><span class="co">## Iteration  50  </span></span>
-<span><span class="co">## Iteration  51  </span></span>
-<span><span class="co">## Iteration  52  </span></span>
-<span><span class="co">## Iteration  53  </span></span>
-<span><span class="co">## Iteration  54  </span></span>
-<span><span class="co">## Iteration  55  </span></span>
-<span><span class="co">## Iteration  56  </span></span>
-<span><span class="co">## Iteration  57  </span></span>
-<span><span class="co">## Iteration  58  </span></span>
-<span><span class="co">## Iteration  59  </span></span>
-<span><span class="co">## Iteration  60  </span></span>
-<span><span class="co">## Iteration  61  </span></span>
-<span><span class="co">## Iteration  62  </span></span>
-<span><span class="co">## Iteration  63  </span></span>
-<span><span class="co">## Iteration  64  </span></span>
-<span><span class="co">## Iteration  65  </span></span>
-<span><span class="co">## Iteration  66  </span></span>
-<span><span class="co">## Iteration  67  </span></span>
-<span><span class="co">## Iteration  68  </span></span>
-<span><span class="co">## Iteration  69  </span></span>
-<span><span class="co">## Iteration  70  </span></span>
-<span><span class="co">## Iteration  71  </span></span>
-<span><span class="co">## Iteration  72  </span></span>
-<span><span class="co">## Iteration  73  </span></span>
-<span><span class="co">## Iteration  74  </span></span>
-<span><span class="co">## Iteration  75  </span></span>
-<span><span class="co">## Iteration  76  </span></span>
-<span><span class="co">## Iteration  77  </span></span>
-<span><span class="co">## Iteration  78  </span></span>
-<span><span class="co">## Iteration  79  </span></span>
-<span><span class="co">## Iteration  80  </span></span>
-<span><span class="co">## Iteration  81  </span></span>
-<span><span class="co">## Iteration  82  </span></span>
-<span><span class="co">## Iteration  83  </span></span>
-<span><span class="co">## Iteration  84  </span></span>
-<span><span class="co">## Iteration  85  </span></span>
-<span><span class="co">## Iteration  86  </span></span>
-<span><span class="co">## Iteration  87  </span></span>
-<span><span class="co">## Iteration  88  </span></span>
-<span><span class="co">## Iteration  89  </span></span>
-<span><span class="co">## Iteration  90  </span></span>
-<span><span class="co">## Iteration  91  </span></span>
-<span><span class="co">## Iteration  92  </span></span>
-<span><span class="co">## Iteration  93  </span></span>
-<span><span class="co">## Iteration  94  </span></span>
-<span><span class="co">## Iteration  95  </span></span>
-<span><span class="co">## Iteration  96  </span></span>
-<span><span class="co">## Iteration  97  </span></span>
-<span><span class="co">## Iteration  98  </span></span>
-<span><span class="co">## Iteration  99  </span></span>
-<span><span class="co">## Iteration  100</span></span></code></pre>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mat_res_fl_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">mat_res_fl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mat_res_fl_df</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gmwmx_beta0_hat"</span>, <span class="st">"gmwmx_beta1_hat"</span>,</span>
 <span>                            <span class="st">"gmwmx_beta2_hat"</span>, <span class="st">"gmwmx_beta3_hat"</span>,</span>
@@ -745,7 +645,7 @@ changes across different dependent‑error models.</p>
 <span>                            <span class="st">"lm_std_beta2_hat"</span>, <span class="st">"lm_std_beta3_hat"</span>,</span>
 <span>                            <span class="st">"sigma2_fl"</span> ,<span class="st">"sigma2_wn"</span><span class="op">)</span></span></code></pre></div>
 <p>Compute empirical coverage for the flicker‑noise case.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute empirical coverage of confidence intervals for beta</span></span>
 <span></span>
 <span><span class="va">zval</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span></span>
@@ -756,10 +656,10 @@ changes across different dependent‑error models.</p>
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">B_fl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta0</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.97</span></span></code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_fl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.93</span></span></code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
@@ -767,13 +667,13 @@ changes across different dependent‑error models.</p>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">B_fl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta0</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.08</span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_fl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.07</span></span></code></pre>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot empirical distributions (beta and stochastic parameters)</span></span></code></pre></div>
 <p>Plot regression estimates for the flicker‑noise case.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res_df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gmwmx_beta0_hat"</span><span class="op">)</span><span class="op">]</span>,las<span class="op">=</span><span class="fl">1</span>,</span>
 <span>                 names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta0"</span><span class="op">)</span>,</span>
@@ -795,10 +695,10 @@ changes across different dependent‑error models.</p>
 <span>                 main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gmwmx2_new_w_missing_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Plot stochastic parameter estimates for the flicker‑noise case.</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">sigma2_fl</span>,las<span class="op">=</span><span class="fl">1</span>,</span>
@@ -810,7 +710,7 @@ changes across different dependent‑error models.</p>
 <span>                 main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="st">"WN"</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn_fl</span>, col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gmwmx2_new_w_missing_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
   </div>
 
