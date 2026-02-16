@@ -444,7 +444,7 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 #' @return The input object, invisibly.
 #' @export
 print.gmwmx2_fit_gnss_ts_ngl <- function(x, digits = 4, ...) {
-  cat("GMWMX fit (GNSS)\n")
+  cat("GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)\n")
 
   # regression table with CI
   coef_names <- names(x$beta_hat)
