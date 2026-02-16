@@ -461,7 +461,7 @@ for(b in seq(B_fl)){
                       summary(fit2)$coefficients[,2],
                       fit$theta_domain$`Flicker_2`,
                       fit$theta_domain$`White Noise_1`)
-  cat("Iteration ", b, " \n")
+  # cat("Iteration ", b, " \n")
 }
 ```
 
