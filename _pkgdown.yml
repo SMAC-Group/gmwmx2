@@ -27,6 +27,7 @@ reference:
   - title: Estimate regression model with dependent errors
     contents:
     - gmwmx2_new
+    - print.gmwmx2_fit_gnss_ts_ngl
     - gmwmx2
     - print.gmwmx2_fit
     - summary.fit_gnss_ts_ngl
