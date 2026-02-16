@@ -378,6 +378,29 @@ colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "sigma2_fl" ,"sigma2_wn")
 ```
 
+
+# Compute empirical coverage of confidence intervals for beta
+```{r}
+zval = qnorm(0.975)
+mat_res_fl_df$upper_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat + zval * mat_res_fl_df$gmwmx_std_beta0_hat
+mat_res_fl_df$lower_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat - zval * mat_res_fl_df$gmwmx_std_beta0_hat
+mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
+mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
+# empirical coverage of gmwmx beta
+dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta0, mat_res_fl_df$upper_ci_gmwmx_beta0) %>% mean()
+dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
+
+# do the same for lm beta
+mat_res_fl_df$upper_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat + zval * mat_res_fl_df$lm_std_beta0_hat
+mat_res_fl_df$lower_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat - zval * mat_res_fl_df$lm_std_beta0_hat
+mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
+mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
+dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
+dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
+```
+
+
+
 # Plot empirical distributions (beta and stochastic parameters)
 
 ```{r}
@@ -419,6 +442,10 @@ boxplot_mean_dot(mat_res_fl_df$sigma2_wn,las=1,
 abline(h = sigma2_wn_fl, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
+
+
+
+
 
 # Interpreting the outputs
 
