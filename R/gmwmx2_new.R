@@ -788,6 +788,8 @@ gmwmx2_new.gnss_ts_ngl <- function(
   vec_earthquakes_relaxation_time = NULL,
   component = NULL,
   model = NULL,
+  omega =NULL,
+  method = "L-BFGS-B",
   ...
 ) {
 
