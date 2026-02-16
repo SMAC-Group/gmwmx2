@@ -505,6 +505,33 @@ print.gmwmx2_fit_gnss_ts_ngl <- function(x, digits = 4, ...) {
 }
 
 
+#' Plot a \code{gmwmx2_fit_gnss_ts_ngl} object
+#'
+#'
+#' @param x A \code{gmwmx2_fit_gnss_ts_ngl} object.
+#' @param ... Additional graphical parameters.
+#' @return No return value. Plot a \code{gmwmx2_fit_gnss_ts_ngl} object.
+#' @export
+plot.gmwmx2_fit_gnss_ts_ngl <- function(x, ...) {
+
+  # Save the current graphical parameters
+  old_par <- par(no.readonly = TRUE)
+
+
+
+  plot.new()
+  title(main = "gmwmx2_fit_gnss_ts_ngl plot (draft)")
+  invisible(x)
+
+  # Restore the original graphical parameters
+  par(old_par)
+
+  # Reset to a single plot layout
+  layout(1)
+
+}
+
+
 
 
 #' GMWMX estimator with missing
