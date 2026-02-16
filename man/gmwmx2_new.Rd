@@ -4,7 +4,7 @@
 \alias{gmwmx2_new}
 \alias{gmwmx2_new.default}
 \alias{gmwmx2_new.gnss_ts_ngl}
-\title{GMWMX estimator (S3 dispatch)}
+\title{GMWMX estimator}
 \usage{
 gmwmx2_new(X, ...)
 

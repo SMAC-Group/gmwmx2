@@ -52,7 +52,7 @@ trans_from_real_to_minus_1_and_1 <- function(x) {
 #'
 #' Maps domain values back to the real line using `atanh`.
 #'
-#' @param x Numeric vector in (-1, 1).
+#' @param kappa Numeric vector in (-1, 1).
 #' @return Numeric vector on the real line.
 #' @keywords internal
 inv_trans_from_real_to_minus_1_and_1 <- function(kappa) {

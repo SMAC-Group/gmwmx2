@@ -7,7 +7,7 @@
 inv_trans_from_real_to_minus_1_and_1(kappa)
 }
 \arguments{
-\item{x}{Numeric vector in (-1, 1).}
+\item{kappa}{Numeric vector in (-1, 1).}
 }
 \value{
 Numeric vector on the real line.
