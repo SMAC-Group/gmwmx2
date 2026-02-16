@@ -574,6 +574,13 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' plot(y)
 #' fit = gmwm2(y, model = wn() + ar1() )
 #' plot(fit)
+#' mod =  matern(1,1,5)+wn(.1)
+#  y = generate(mod, 10000)
+#  plot(y)
+#  plot(wv::wvar(y$series))
+#  fit = gmwm2(y$series, wn()+matern())
+#  fit
+#  plot(fit)
 #' @export
 gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
 
