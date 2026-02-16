@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwmx2_new.R
 \name{print.gmwmx2_fit_gnss_ts_ngl}
 \alias{print.gmwmx2_fit_gnss_ts_ngl}
-\title{Print method for gmwmx2_fit_gnss_ts_ngl}
+\title{Print method for a \code{gnss_ts_ngl} object}
 \usage{
 \method{print}{gmwmx2_fit_gnss_ts_ngl}(x, digits = 4, ...)
 }

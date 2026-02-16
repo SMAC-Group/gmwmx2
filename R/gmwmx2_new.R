@@ -1145,3 +1145,17 @@ gmwmx2_new.gnss_ts_ngl <- function(
   return(out)
 
 }
+
+
+
+
+
+
+
+
+
+#
+# #
+# station = gmwmx2::download_station_ngl("4VIR")
+# fit = gmwmx2_new(X = station, n_seasonal = 2, model = wn(1)+ matern(1,1,1), component = "N")
+# fit

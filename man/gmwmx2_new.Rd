@@ -24,6 +24,9 @@ gmwmx2_new(X, ...)
   vec_earthquakes_relaxation_time = NULL,
   component = NULL,
   model = NULL,
+  omega = NULL,
+  method = "L-BFGS-B",
+  control = list(),
   ...
 )
 }

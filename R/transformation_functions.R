@@ -74,7 +74,7 @@ inv_trans_from_real_to_minus_1_and_1 <- function(kappa) {
 #' @return Numeric vector with values > 1/2.
 #' @keywords internal
 trans_alpha_matern <- function(x) {
-  exp(x) + 1/2
+  exp(x) + 1/2 + 1e-6 # add small epsilon to ensure strictly greater than 1/2
 }
 
 # transform from domain to real line
@@ -85,4 +85,4 @@ trans_alpha_matern <- function(x) {
 #' @param x Numeric vector with values > 1/2.
 #' @return Numeric vector on the real line.
 #' @keywords internal
-inv_trans_alpha_matern <- function(x) log(x - 1/2)
+inv_trans_alpha_matern <- function(x) log(x - 1/2 - 1e-6) # subtract small epsilon to match forward transform
