@@ -551,9 +551,4 @@ boxplot_mean_dot(mat_res_fl_df$sigma2_wn,las=1,
 abline(h = sigma2_wn_fl, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 
-
-
-
-
-
 ```

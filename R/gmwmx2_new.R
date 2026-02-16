@@ -94,7 +94,7 @@ loss_fn_gmwmx_with_missing <- function(theta, model, n, prep, wv_obj, quantities
 
 
   return(objective)
-  # compute loss
+
 }
 
 
@@ -262,53 +262,9 @@ get_variance_covariance_matrix_model.sum_model <- function(model, n, theta = NUL
 #' @return A fitted model object (to be defined).
 #' @keywords internal
 gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+
+  # record start time
   start_time <- Sys.time()
-  #-------------------------------------------
-  # n=5000
-  # X =matrix(NA, nrow=n, ncol=2)
-  # X[,1] = 1
-  # X[,2] = 1:n
-  # beta = c(1, .2)
-  # eps = generate(ar1(phi=0.8, sigma2=20) + wn(20), n=n)$series
-  # # plot(wv::wvar(eps))
-  # y = X %*% beta + eps
-  # plot(X[,2], y, type='l')
-  # method = "L-BFGS-B"
-  # control = list()
-  # omega =NULL
-  # model = ar1()+wn()
-
-
-
-  #
-  #
-  #
-  # n = 1000
-  # X = matrix(NA, nrow=n, ncol=4)
-  # # intercept
-  # X[,1] = 1
-  # # # trend
-  # X[,2] = 1:n
-  # # # add a sin signal
-  # omega_1 <- (1 / 365.25) * 2 * pi
-  # X[, 3] <- sin((1:n) * omega_1)
-  # X[, 4] <- cos((1:n) * omega_1)
-  # beta = c(1, 2, 3,4)
-  # eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = 123)$series
-  # # plot(wv::wvar(eps))
-  # yy = X%*% beta + eps
-  # b=145
-  # eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
-  # # plot(wv::wvar(eps))
-  # y = X %*% beta + eps
-  # fit = gmwmx2_new_no_missing(X = X, y = y, model = wn(20) + ar1(phi=.95, sigma2 = 20) )
-  #
-  # model = wn(20) + ar1(phi=.95, sigma2 = 20)
-  # method = "L-BFGS-B"
-  # control = list()
-  # omega=NULL
-  #----------------------------------------------
-
 
   # Placeholder for the actual implementation
   if (is.null(X) || is.null(y)) {
@@ -385,24 +341,6 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
     ...
 
   )
-
-  # loss_fn_gmwmx_no_missing(theta = prep$theta0, model = model, n = n,
-  #                          prep = prep, wv_obj = wv_emp, quantities_D = quantities_D, omega = omega)
-  #
-  # res <- optim(
-  #   par = prep$theta0,
-  #   fn = loss_fn_gmwmx_no_missing,
-  #   model = model,
-  #   n = n,
-  #   prep = prep,
-  #   quantities_D = quantities_D,
-  #   wv_obj = wv_emp,
-  #   omega = omega,
-  #   method = method,
-  #   control = control
-  #   # ...
-  #
-  # )
 
   # transform estimated parameters to domain
   theta_domain <- theta_to_domain(model, res$par, prep = prep)
@@ -494,94 +432,6 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
 
   invisible(x)
 }
-
-
-
-
-
-
-
-
-
-#
-# n = 10000
-# X = matrix(NA, nrow=n, ncol=4)
-# # intercept
-# X[,1] = 1
-# # trend
-# X[,2] = 1:n
-# # add a sin signal
-# omega_1 <- (1 / 365.25) * 2 * pi
-# X[, 3] <- sin((1:n) * omega_1)
-# X[, 4] <- cos((1:n) * omega_1)
-# beta = c(1, .2, 3,4)
-# yy = X%*% beta
-# plot(X[,2], yy, type='l')
-# eps = generate(wn(1) + pl(kappa = -.9, sigma2 = 1), n=n, seed = (123 + b))$series
-# y = X %*% beta + eps
-# fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + pl() )
-# fit
-
-
-#
-# # do a little check, do not remove, to use later for a vignette
-# n = 1000
-# X = matrix(NA, nrow=n, ncol=4)
-# # intercept
-# X[,1] = 1
-# # trend
-# X[,2] = 1:n
-# # add a sin signal
-# omega_1 <- (1 / 365.25) * 2 * pi
-# X[, 3] <- sin((1:n) * omega_1)
-# X[, 4] <- cos((1:n) * omega_1)
-# beta = c(1, .2, 3,4)
-# yy = X%*% beta
-# plot(X[,2], yy, type='l')
-# B = 500
-# mat_res = matrix(NA, nrow=B, ncol=19)
-# for(b in seq(B)){
-#   eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = (123 + b))$series
-#   # plot(wv::wvar(eps))
-#   y = X %*% beta + eps
-#   fit = gmwmx2_new_no_missing(X = X, y = y, model = wn() + ar1() )
-#   # mispecified model assuming white noise as the stochastic model
-#   fit2 = lm(y~X[,2] + X[,3] + X[,4])
-#
-#   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
-#                    summary(fit2)$coefficients[,1],
-#                    summary(fit2)$coefficients[,2],
-#                    fit$theta_domain$`AR(1)_2`,
-#                    fit$theta_domain$`White Noise_1`)
-#   cat("Iteration ", b, " completed.\n")
-# }
-#
-# # compute empirical coverage
-# mat_res_df = as.data.frame(mat_res)
-# colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
-#                          "gmwmx_beta2_hat", "gmwmx_beta3_hat",
-#                          "gmwmx_std_beta0_hat", "gmwmx_std_beta1_hat",
-#                          "gmwmx_std_beta2_hat", "gmwmx_std_beta3_hat",
-#                          "lm_beta0_hat", "lm_beta1_hat", "lm_beta2_hat", "lm_beta3_hat",
-#                          "lm_std_beta0_hat", "lm_std_beta1_hat", "lm_std_beta2_hat", "lm_std_beta3_hat",
-#                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
-# zval = qnorm(0.975)
-# mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
-# mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
-# mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
-# mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
-# # empirical coverage of gmwmx beta
-# dplyr::between(rep(1, 500), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
-# dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
-#
-# # do the same for lm beta
-# mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
-# mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
-# mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
-# mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
-# dplyr::between(rep(1, 500), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
-# dplyr::between(rep(0.2, 500), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
-
 
 
 
