@@ -433,7 +433,7 @@ print.gmwmx2_fit <- function(x, digits = 4, ...) {
   invisible(x)
 }
 
-#' Print method for gmwmx2_fit_gnss_ts_ngl
+#' Print method for a \code{gnss_ts_ngl} object
 #'
 #' Displays regression coefficients with standard errors and confidence
 #' intervals, along with the fitted stochastic and missingness models.
@@ -790,6 +790,7 @@ gmwmx2_new.gnss_ts_ngl <- function(
   model = NULL,
   omega =NULL,
   method = "L-BFGS-B",
+  control = list(),
   ...
 ) {
 
