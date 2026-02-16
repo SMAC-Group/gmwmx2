@@ -8,13 +8,12 @@ vignette: >
 ---
 
 This vignette shows how to perform inference for a linear regression model
-with dependent errors and missing observations. We work with the model
+with dependent errors and missing observations. We consider the model
 \[
   \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
 \]
-where the error process \(\boldsymbol{\varepsilon}\) follows a composite stochastic model (e.g., white noise + AR(1)). Missingness is modeled by a
-binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
-observation, and \(Z_t = 0\) a msising observation. The observed series is
+where the error process \(\boldsymbol{\varepsilon}\) follows a composite stochastic model. Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
+observation, and \(Z_t = 0\) a missing observation. The observed series is
 \[
   \tilde{\mathbf{Y}} = \mathbf{Y} \circ \mathbf{Z},
 \]
@@ -133,7 +132,7 @@ print(fit)
 
 
 
-B = 10
+B = 100
 mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
 
@@ -284,7 +283,7 @@ Monte Carlo replication for the power‑law case.
 
 
 ```{r}
-B_pl = 10
+B_pl = 100
 mat_res_pl = matrix(NA, nrow = B_pl, ncol = 19)
 for(b in seq(B_pl)){
   eps = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
@@ -491,16 +490,16 @@ mat_res_fl_df$lower_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat - zval * mat_
 mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
 mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta0, mat_res_fl_df$upper_ci_gmwmx_beta0) %>% mean()
-dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
+dplyr::between(rep(beta[1], B_fl), mat_res_fl_df$lower_ci_gmwmx_beta0, mat_res_fl_df$upper_ci_gmwmx_beta0) %>% mean()
+dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
 
 # do the same for lm beta
 mat_res_fl_df$upper_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat + zval * mat_res_fl_df$lm_std_beta0_hat
 mat_res_fl_df$lower_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat - zval * mat_res_fl_df$lm_std_beta0_hat
 mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
 mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
-dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
+dplyr::between(rep(beta[1], B_fl), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
+dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
 
 
 
