@@ -47,9 +47,8 @@ The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obta
 
 The variance covariance matrix of the estimated regression parameters $\hat{\boldsymbol{\beta}}$ is then obtained as:
 \begin{equation}
-
-
-\end{equation}
+(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T 
+\end{equation}.
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
@@ -135,7 +134,7 @@ of the confidence intervals for the trend.
 B = 100
 mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
-  eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = (123 + b))$series
+  eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
   y = X %*% beta + eps
   fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
   # mispecified model assuming white noise as the stochastic model
@@ -225,13 +224,12 @@ dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_c
 
 # Example 2: White noise + stationary power-law
 
-Here we replace AR(1) by a stationary power-law component with spectral index
-`kappa = -0.8`. This introduces long-memory behavior.
+Here we replace AR(1) by a stationary power-law component.
 
 ```{r}
-kappa_pl <- -0.8
+kappa_pl <- -0.85
 sigma2_wn <- 1
-sigma2_pl <- 1
+sigma2_pl <- .8
 eps_pl = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                   n = n, seed = 123)
 plot(eps_pl$series, type = "l")
