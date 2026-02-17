@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate.R
 \name{generate}
 \alias{generate}
-\title{Generate a time series from a model}
+\title{Generate a time series from a \code{time_series_model} or \code{sum_model} object}
 \usage{
 generate(object, n, seed = NULL, ...)
 }
@@ -20,7 +20,7 @@ A \code{generated_time_series} (single model) or
 \code{generated_composite_model_time_series} (sum model).
 }
 \description{
-Generate a time series from a model
+Generate a time series from a \code{time_series_model} or \code{sum_model} object
 }
 \examples{
 # Single model

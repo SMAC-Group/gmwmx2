@@ -1,7 +1,7 @@
 
 # ------------------------------------------------------ function to generate data from stochastic model
 
-#' Generate a time series from a model
+#' Generate a time series from a `time_series_model` or `sum_model` object
 #'
 #' @param object A `time_series_model` or `sum_model`.
 #' @param n Length of series to generate.
