@@ -110,39 +110,139 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># fit station with WN and AR1</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">station_data</span> <span class="op">=</span> <span class="fu">gmwmx2</span><span class="fu">::</span><span class="fu"><a href="download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># fit station with WN and AR1</span></span></span>
 <span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">station_data</span>,</span></span>
 <span class="r-in"><span>  n_seasonal <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  model <span class="op">=</span> <span class="fu"><a href="wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span>, component <span class="op">=</span> <span class="st">"N"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'station_data' not found</span>
 <span class="r-in"><span><span class="va">fit1</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit1' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         Estimate Std.Error   CI.Lower   CI.Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              8.157e-01 2.272e-03  8.112e-01  8.201e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                 -1.075e-06 4.762e-07 -2.008e-06 -1.415e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)          -5.171e-04 2.253e-04 -9.587e-04 -7.554e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)          -4.128e-03 2.264e-04 -4.572e-03 -3.684e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)      1.091e-03 1.493e-04  7.985e-04  1.384e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)     -4.493e-04 1.499e-04 -7.431e-04 -1.554e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 52920        4.872e-04 1.369e-03 -2.196e-03  3.170e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53619       -3.065e-03 1.254e-03 -5.522e-03 -6.080e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53866       -5.649e-04 1.247e-03 -3.009e-03  1.879e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54637       -2.530e-04 2.010e-03 -4.192e-03  3.686e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54640        6.385e-03 2.011e-03  2.443e-03  1.033e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 55300       -2.511e-03 9.741e-04 -4.420e-03 -6.016e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56671       -1.206e-03 1.303e-03 -3.759e-03  1.347e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56868        1.113e-03 1.296e-03 -1.428e-03  3.654e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58298        3.333e-03 1.969e-03 -5.269e-04  7.193e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58004        1.139e-03 1.483e-03 -1.768e-03  4.046e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 58004 -7.180e-03 3.387e-03 -1.382e-02 -5.418e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Proportion missing : 0.0585 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p1                 : 0.0073 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p2                 : 0.1173 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p*                 : 0.9415 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sum of 2 processes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] White Noise</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : sigma2 = 1.433e-06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2] AR(1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : phi = 0.9802, sigma2 = 1.353e-07 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime (seconds)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Total              : 2.4727 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit1' not found</span>
+<span class="r-plt img"><img src="plot.gmwmx2_fit_gnss_ts_ngl-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># fit station with WN and PL</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">station_data</span>,</span></span>
 <span class="r-in"><span>  n_seasonal <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  model <span class="op">=</span> <span class="fu"><a href="wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="pl.html">pl</a></span><span class="op">(</span><span class="op">)</span>, component <span class="op">=</span> <span class="st">"N"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'station_data' not found</span>
 <span class="r-in"><span><span class="va">fit2</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit2' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         Estimate Std.Error   CI.Lower  CI.Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              8.157e-01 5.526e-01 -2.673e-01 1.899e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                 -1.075e-06 1.431e-05 -2.912e-05 2.697e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)          -5.171e-04 8.308e-03 -1.680e-02 1.577e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)          -4.128e-03 8.296e-03 -2.039e-02 1.213e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)      1.091e-03 7.973e-03 -1.454e-02 1.672e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)     -4.493e-04 7.981e-03 -1.609e-02 1.519e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 52920        4.872e-04 4.522e-02 -8.815e-02 8.912e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53619       -3.065e-03 3.934e-02 -8.016e-02 7.403e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53866       -5.649e-04 3.904e-02 -7.708e-02 7.595e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54637       -2.530e-04 1.290e-01 -2.532e-01 2.527e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54640        6.385e-03 1.291e-01 -2.466e-01 2.594e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 55300       -2.511e-03 2.891e-02 -5.918e-02 5.415e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56671       -1.206e-03 4.155e-02 -8.264e-02 8.023e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56868        1.113e-03 4.144e-02 -8.010e-02 8.233e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58298        3.333e-03 6.781e-02 -1.296e-01 1.362e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58004        1.139e-03 4.572e-02 -8.846e-02 9.074e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 58004 -7.180e-03 1.130e-01 -2.286e-01 2.142e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Proportion missing : 0.0585 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p1                 : 0.0073 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p2                 : 0.1173 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p*                 : 0.9415 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sum of 2 processes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] White Noise</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : sigma2 = 8.14e-07 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2] Stationary PowerLaw</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : kappa =    -1, sigma2 = 9.729e-07 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime (seconds)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Total              : 1.9988 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit2' not found</span>
+<span class="r-plt img"><img src="plot.gmwmx2_fit_gnss_ts_ngl-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># fit station with WN and Matern</span></span></span>
 <span class="r-in"><span><span class="va">fit3</span> <span class="op">=</span> <span class="fu"><a href="gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">station_data</span>,</span></span>
 <span class="r-in"><span>  n_seasonal <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  model <span class="op">=</span> <span class="fu"><a href="wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="matern.html">matern</a></span><span class="op">(</span><span class="op">)</span>, component <span class="op">=</span> <span class="st">"N"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'station_data' not found</span>
 <span class="r-in"><span><span class="va">fit3</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit3' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         Estimate Std.Error   CI.Lower   CI.Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              8.157e-01 2.393e-03  8.110e-01  8.204e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                 -1.075e-06 5.067e-07 -2.068e-06 -8.166e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)          -5.171e-04 2.187e-04 -9.458e-04 -8.839e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)          -4.128e-03 2.203e-04 -4.560e-03 -3.696e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)      1.091e-03 1.397e-04  8.174e-04  1.365e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)     -4.493e-04 1.404e-04 -7.244e-04 -1.741e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 52920        4.872e-04 1.410e-03 -2.276e-03  3.251e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53619       -3.065e-03 1.309e-03 -5.631e-03 -4.993e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53866       -5.649e-04 1.303e-03 -3.119e-03  1.990e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54637       -2.530e-04 2.007e-03 -4.186e-03  3.680e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54640        6.385e-03 2.008e-03  2.449e-03  1.032e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 55300       -2.511e-03 1.039e-03 -4.547e-03 -4.749e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56671       -1.206e-03 1.356e-03 -3.864e-03  1.452e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56868        1.113e-03 1.349e-03 -1.530e-03  3.756e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58298        3.333e-03 2.012e-03 -6.109e-04  7.277e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58004        1.139e-03 1.571e-03 -1.941e-03  4.219e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 58004 -7.180e-03 3.516e-03 -1.407e-02 -2.882e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Proportion missing : 0.0585 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p1                 : 0.0073 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p2                 : 0.1173 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   p*                 : 0.9415 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sum of 2 processes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] White Noise</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : sigma2 = 1.364e-06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2] Matern</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : sigma2 = 3.513e-06, lambda = 0.01454, alpha = 0.8918 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime (seconds)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Total              : 2.1586 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'fit3' not found</span>
+<span class="r-plt img"><img src="plot.gmwmx2_fit_gnss_ts_ngl-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
