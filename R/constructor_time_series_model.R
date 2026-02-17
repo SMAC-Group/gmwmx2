@@ -58,7 +58,7 @@ as_model_list <- function(x) {
 }
 
 # model + (model or sum_model)
-#' Add two model objects
+#' Add two \code{time_series_model} object
 #'
 #' Combines `time_series_model` and/or `sum_model` into a `sum_model`.
 #'
@@ -76,7 +76,7 @@ as_model_list <- function(x) {
 }
 
 # sum_model + (model or sum_model)
-#' Add to a sum_model
+#' Add to a \code{sum_model} object
 #'
 #' @param e1 Left operand.
 #' @param e2 Right operand.
