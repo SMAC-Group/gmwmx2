@@ -64,7 +64,7 @@ navbar:
     - text: "Load and plot data from the Nevada Geodetic Laboratory"
       href: articles/load_plot_data_ngl.html
     - text: "Estimate geodetic time series from the Nevada Geodetic Laboratory"
-      href: articles/estimate_geodetic_time_series_from_ngl.Rmd
+      href: articles/estimate_geodetic_time_series_from_ngl.html
     - text: "Estimate a small network of GNSS station"
       href: articles/estimate_small_network.html
     - text: "Plot a large network of GNSS station"
