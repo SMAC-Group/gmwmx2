@@ -121,10 +121,10 @@ errors</h1>
 linear models with dependent errors described by a composite stochastic
 process. Consider the model defined as:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mn>0</mn><mo>,</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}</annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{X} \in \mathbb{R}^{n \times p}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\mathbf{X} \in \mathbb{R}^{n \times p}</annotation></semantics></math>
 is a design matrix of observed predictors,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛃</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>p</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta} \in \mathbb{R}^p</annotation></semantics></math>
 is the regression parameter vector and
@@ -138,12 +138,13 @@ parameterized by the vector
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛄</mi><mo>∈</mo><mi>𝚪</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>q</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q</annotation></semantics></math>.</p>
 <p>The GMWMX estimator proposes to first estimate with the least square
 estimator defined as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}},
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐗</mi><mi>T</mi></msup><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>𝐗</mi><mi>T</mi></msup><mi>𝐘</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \hat{\boldsymbol{\beta}} = \left( \mathbf{X}^T  \mathbf{X}\right)^{-1}  \mathbf{X}^T \boldsymbol{Y},
 \end{equation}</annotation></semantics></math></p>
 <p>It then estimates the parameters of the stochastic model with a
 Generalized Method of Wavelet Moments approach <span class="citation">(Guerrier et al. 2013)</span> applied to the estimated
-residuals defined as .</p>
+residuals defined as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>𝐘</mi><mo>−</mo><mi>𝐗</mi><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - { \mathbf{X}} \hat{\boldsymbol{\beta}}</annotation></semantics></math>.</p>
 <p>More precisely, the estimated stochastic parameters, denoted as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛄</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\gamma}}</annotation></semantics></math>
 are defined as follows:</p>
@@ -183,6 +184,12 @@ but only of a vector of dimension
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
 which is then plugged into an explicit formula consisting in a linear
 combination of the elements of this vector.</p>
+<p>The variance covariance matrix of the estimated regression parameters
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\beta}}</annotation></semantics></math>
+is then obtained as:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐗</mi><mi>T</mi></msup><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>𝐗</mi><mi>T</mi></msup><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>𝛄</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mi>𝐗</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐗</mi><mi>T</mi></msup><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>𝐗</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">\begin{equation}
+(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T 
+\end{equation}</annotation></semantics></math>.</p>
 <p>This vignette is a detailed, self-contained simulation walkthrough
 that showcases <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code> for an arbitrary design matrix
 <code>X</code> and response vector <code>y</code>. We build the signal,
@@ -272,14 +279,14 @@ composed of white noise and autoregressive process of order 1.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9563, sigma2 = 0.8911 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.1732</span></span></code></pre>
+<span><span class="co">##   Total              : 1.2443</span></span></code></pre>
 <p>To assess uncertainty, we run a Monte Carlo simulation and check
 empirical coverage of the confidence intervals for the trend.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="va">B</span>, ncol<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi<span class="op">=</span><span class="fl">0.95</span>, sigma2<span class="op">=</span><span class="fl">20</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>, n<span class="op">=</span><span class="va">n</span>, seed <span class="op">=</span> <span class="op">(</span><span class="fl">123</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">series</span></span>
+<span>  <span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi<span class="op">=</span><span class="va">phi_ar1</span>, sigma2<span class="op">=</span><span class="va">sigma2_ar1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span>, n<span class="op">=</span><span class="va">n</span>, seed <span class="op">=</span> <span class="op">(</span><span class="fl">123</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">series</span></span>
 <span>  <span class="va">y</span> <span class="op">=</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">beta</span> <span class="op">+</span> <span class="va">eps</span></span>
 <span>  <span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span>
 <span>  <span class="co"># mispecified model assuming white noise as the stochastic model</span></span>
@@ -369,13 +376,11 @@ empirical coverage of the confidence intervals for the trend.</p>
 <div class="section level2">
 <h2 id="example-2-white-noise-stationary-power-law">Example 2: White noise + stationary power-law<a class="anchor" aria-label="anchor" href="#example-2-white-noise-stationary-power-law"></a>
 </h2>
-<p>Here we replace AR(1) by a stationary power-law component with
-spectral index <code>kappa = -0.8</code>. This introduces long-memory
-behavior.</p>
+<p>Here we replace AR(1) by a stationary power-law component.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">kappa_pl</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.8</span></span>
+<code class="sourceCode R"><span><span class="va">kappa_pl</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.85</span></span>
 <span><span class="va">sigma2_wn</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span><span class="va">sigma2_pl</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">sigma2_pl</span> <span class="op">&lt;-</span> <span class="fl">.8</span></span>
 <span><span class="va">eps_pl</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="va">kappa_pl</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_pl</span><span class="op">)</span>,</span>
 <span>                  n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eps_pl</span><span class="op">$</span><span class="va">series</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
@@ -392,20 +397,20 @@ behavior.</p>
 <span><span class="va">fit_pl</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
 <span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1 1.568897 0.6683459</span></span>
-<span><span class="co">## beta2 0.009916 0.0002137</span></span>
-<span><span class="co">## beta3 1.813515 0.1167690</span></span>
-<span><span class="co">## beta4 1.458802 0.1140669</span></span>
+<span><span class="co">## beta1 1.689352 0.8005764</span></span>
+<span><span class="co">## beta2 0.009907 0.0002295</span></span>
+<span><span class="co">## beta3 1.815708 0.1160633</span></span>
+<span><span class="co">## beta4 1.459359 0.1131306</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 1.075 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 1.074 </span></span>
 <span><span class="co">##   [2] Stationary PowerLaw</span></span>
-<span><span class="co">##        Estimated parameters : kappa = -0.7848, sigma2 = 0.9433 </span></span>
+<span><span class="co">##        Estimated parameters : kappa = -0.8406, sigma2 = 0.7393 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5038</span></span></code></pre>
+<span><span class="co">##   Total              : 0.4944</span></span></code></pre>
 <p>Monte Carlo coverage for the power-law case:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_pl</span> <span class="op">=</span> <span class="fl">100</span></span>
@@ -496,7 +501,7 @@ behavior.</p>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.16</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.14</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="example-3-white-noise-flicker">Example 3: White noise + flicker<a class="anchor" aria-label="anchor" href="#example-3-white-noise-flicker"></a>
@@ -536,7 +541,7 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span><span class="co">##        Estimated parameters : sigma2 = 0.8932 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.8612</span></span></code></pre>
+<span><span class="co">##   Total              : 0.9512</span></span></code></pre>
 <p>Monte Carlo coverage for the flicker case:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>
