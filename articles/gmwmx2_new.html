@@ -120,8 +120,8 @@ errors</h1>
 <p>This vignette demonstrate on to use the GMWMX estimator to estimate
 linear models with dependent errors described by a composite stochastic
 process. Consider the model defined as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
-    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mn>0</mn><mo>,</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{X} \in \mathbb{R}^{n \times p}</annotation></semantics></math>
@@ -138,26 +138,18 @@ parameterized by the vector
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛄</mi><mo>∈</mo><mi>𝚪</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>q</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q</annotation></semantics></math>.</p>
 <p>The GMWMX estimator proposes to first estimate with the least square
 estimator defined as:</p>
-<p><span class="math display">$$\begin{equation}
-    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T
-\tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T
-\tilde{\boldsymbol{Y}},
-    
-It then estimates the parameters of the stochastic model
-\eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments
-approach [@guerrier2013wavelet] applied to the estimated residuals
-defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} -
-{\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
-
-More precisely, the estimated stochastic parameters, denoted as
-$\hat{\boldsymbol{\gamma}}$ are defined as follows:
-\begin{equation}
-    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in
-\boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} -
-\boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega}
-\left(\hat{\boldsymbol{\nu}} -
-\boldsymbol{\nu}(\boldsymbol{\gamma})\right),
-\end{equation}$$</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}},
+\end{equation}</annotation></semantics></math></p>
+<p>It then estimates the parameters of the stochastic model with a
+Generalized Method of Wavelet Moments approach <span class="citation">[@guerrier2013wavelet]</span> applied to the estimated
+residuals defined as .</p>
+<p>More precisely, the estimated stochastic parameters, denoted as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛄</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\gamma}}</annotation></semantics></math>
+are defined as follows:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛄</mi><mo accent="true">̂</mo></mover><mo>=</mo><munder><mrow><mo>arg</mo><mo>min</mo></mrow><mrow><mi>𝛄</mi><mo>∈</mo><mi>𝚪</mi></mrow></munder><msup><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>𝛎</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>T</mi></msup><mi>𝛀</mi><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>𝛎</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right),
+\end{equation}</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\nu}}</annotation></semantics></math>
 is the vector of empirical wavelet variances computed on the estimated
@@ -183,7 +175,7 @@ generalize the results in <span class="citation">@zhang2008allan</span>
 to zero-mean non-stationary processes by using averages of the diagonals
 and super-diagonals of the covariance matrix of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>.
-What this implies is that the GMWM, does not require the storage of the
+What this implies is that the GMWMX, does not require the storage of the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n \times n</annotation></semantics></math>
 covariance matrix of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
@@ -247,8 +239,8 @@ same <code>X</code> and <code>beta</code>.</p>
 <p>This is a classic short-memory model often used as a baseline.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phi_ar1</span> <span class="op">=</span> <span class="fl">0.95</span></span>
-<span><span class="va">sigma2_ar1</span> <span class="op">=</span> <span class="fl">20</span></span>
-<span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="va">sigma2_ar1</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu">gmwmx2</span><span class="fu">::</span><span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="va">phi_ar1</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">$</span><span class="va">series</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -266,21 +258,21 @@ model.</p>
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
-<span><span class="co">##        Estimate Std.Error</span></span>
-<span><span class="co">## beta1  4.354920  3.182175</span></span>
-<span><span class="co">## beta2  0.008298  0.001509</span></span>
-<span><span class="co">## beta3  1.348255  2.118846</span></span>
-<span><span class="co">## beta4 -1.080620  2.100956</span></span>
+<span><span class="co">##       Estimate Std.Error</span></span>
+<span><span class="co">## beta1 1.750183 0.7115559</span></span>
+<span><span class="co">## beta2 0.009619 0.0003373</span></span>
+<span><span class="co">## beta3 1.854265 0.4737883</span></span>
+<span><span class="co">## beta4 0.922956 0.4697880</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 20.73 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 1.037 </span></span>
 <span><span class="co">##   [2] AR(1)</span></span>
-<span><span class="co">##        Estimated parameters : phi = 0.9563, sigma2 = 17.82 </span></span>
+<span><span class="co">##        Estimated parameters : phi = 0.9563, sigma2 = 0.8911 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.0785</span></span></code></pre>
+<span><span class="co">##   Total              : 1.0637</span></span></code></pre>
 <p>To assess uncertainty, we run a Monte Carlo simulation and check
 empirical coverage of the confidence intervals for
 <code>beta</code>.</p>
@@ -393,8 +385,8 @@ spectral index <code>kappa = -0.8</code>. This introduces long-memory
 behavior.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kappa_pl</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.8</span></span>
-<span><span class="va">sigma2_wn</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
-<span><span class="va">sigma2_pl</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">sigma2_wn</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">sigma2_pl</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">eps_pl</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="va">kappa_pl</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_pl</span><span class="op">)</span>,</span>
 <span>                  n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eps_pl</span><span class="op">$</span><span class="va">series</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
@@ -404,27 +396,29 @@ behavior.</p>
 <p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-9-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y_pl</span> <span class="op">=</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">beta</span> <span class="op">+</span> <span class="va">eps_pl</span><span class="op">$</span><span class="va">series</span></span>
-<span></span>
-<span><span class="va">fit_pl</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_pl</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">X</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="va">y_pl</span>, type <span class="op">=</span> <span class="st">"l"</span>, main <span class="op">=</span> <span class="st">"Simulated y (WN + PL)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-9-3.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_pl</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_pl</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit_pl</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
 <span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1 2.799010 2.1134952</span></span>
-<span><span class="co">## beta2 0.009736 0.0006758</span></span>
-<span><span class="co">## beta3 1.410281 0.3692561</span></span>
-<span><span class="co">## beta4 1.369720 0.3607111</span></span>
+<span><span class="co">## beta1 1.568897 0.6683459</span></span>
+<span><span class="co">## beta2 0.009916 0.0002137</span></span>
+<span><span class="co">## beta3 1.813515 0.1167690</span></span>
+<span><span class="co">## beta4 1.458802 0.1140669</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 10.75 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 1.075 </span></span>
 <span><span class="co">##   [2] Stationary PowerLaw</span></span>
-<span><span class="co">##        Estimated parameters : kappa = -0.7848, sigma2 = 9.433 </span></span>
+<span><span class="co">##        Estimated parameters : kappa = -0.7848, sigma2 = 0.9433 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.4674</span></span></code></pre>
+<span><span class="co">##   Total              : 0.4566</span></span></code></pre>
 <p>Monte Carlo coverage for the power-law case:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_pl</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res_pl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">B_pl</span>, ncol <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B_pl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
@@ -455,7 +449,7 @@ behavior.</p>
 <div class="section level2">
 <h2 id="plot-empirical-distributions-beta-and-stochastic-parameters-1">Plot empirical distributions (beta and stochastic parameters)<a class="anchor" aria-label="anchor" href="#plot-empirical-distributions-beta-and-stochastic-parameters-1"></a>
 </h2>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res_df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gmwmx_beta0_hat"</span><span class="op">)</span><span class="op">]</span>,las<span class="op">=</span><span class="fl">1</span>,</span>
 <span>        names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta0"</span><span class="op">)</span>,</span>
@@ -476,10 +470,10 @@ behavior.</p>
 <span>        names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta3"</span><span class="op">)</span>,</span>
 <span>        main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">kappa_pl</span>,las<span class="op">=</span><span class="fl">1</span>,</span>
@@ -494,14 +488,14 @@ behavior.</p>
 <span>        names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi_ar1"</span><span class="op">)</span>,</span>
 <span>        main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="st">"WN"</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn</span>, col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="compute-empirical-coverage-of-confidence-intervals-for-beta-1">Compute empirical coverage of confidence intervals for beta<a class="anchor" aria-label="anchor" href="#compute-empirical-coverage-of-confidence-intervals-for-beta-1"></a>
 </h2>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">zval</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta0</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">gmwmx_beta0_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">gmwmx_std_beta0_hat</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta0</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">gmwmx_beta0_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">gmwmx_std_beta0_hat</span></span>
@@ -510,10 +504,10 @@ behavior.</p>
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta0</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.84</span></span></code></pre>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.88</span></span></code></pre>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
@@ -521,7 +515,7 @@ behavior.</p>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta0</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.08</span></span></code></pre>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.16</span></span></code></pre>
 </div>
@@ -531,39 +525,41 @@ behavior.</p>
 <p>Flicker noise corresponds to a non stationary power-law with spectral
 index <code>kappa = -1</code> but is handled explicitly by
 <code><a href="../reference/flicker.html">flicker()</a></code> in this package.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sigma2_wn_fl</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
-<span><span class="va">sigma2_fl</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sigma2_wn_fl</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">sigma2_fl</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">eps_fl</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn_fl</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="va">sigma2_fl</span><span class="op">)</span>,</span>
 <span>                  n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eps_fl</span><span class="op">$</span><span class="va">series</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps_fl</span><span class="op">$</span><span class="va">series</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps_fl</span><span class="op">$</span><span class="va">series</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-15-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y_fl</span> <span class="op">=</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">beta</span> <span class="op">+</span> <span class="va">eps_fl</span><span class="op">$</span><span class="va">series</span></span>
-<span></span>
-<span><span class="va">fit_fl</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_fl</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">X</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="va">y_fl</span>, type <span class="op">=</span> <span class="st">"l"</span>, main <span class="op">=</span> <span class="st">"Simulated y (WN + Flicker)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-15-3.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_fl</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_fl</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit_fl</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
 <span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1 -0.77468  2.728255</span></span>
-<span><span class="co">## beta2  0.01042  0.001295</span></span>
-<span><span class="co">## beta3  1.90542  0.549380</span></span>
-<span><span class="co">## beta4  1.61661  0.531634</span></span>
+<span><span class="co">## beta1  0.43357 0.8738286</span></span>
+<span><span class="co">## beta2  0.01014 0.0004146</span></span>
+<span><span class="co">## beta3  1.96665 0.1751458</span></span>
+<span><span class="co">## beta4  1.53023 0.1694345</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 16.26 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 1.105 </span></span>
 <span><span class="co">##   [2] Flicker</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 =   8.7 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 0.8932 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.8289</span></span></code></pre>
+<span><span class="co">##   Total              : 0.8204</span></span></code></pre>
 <p>Monte Carlo coverage for the flicker case:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res_fl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">B_fl</span>, ncol <span class="op">=</span> <span class="fl">18</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B_fl</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
@@ -594,7 +590,7 @@ index <code>kappa = -1</code> but is handled explicitly by
 <div class="section level2">
 <h2 id="compute-empirical-coverage-of-confidence-intervals-for-beta-2">Compute empirical coverage of confidence intervals for beta<a class="anchor" aria-label="anchor" href="#compute-empirical-coverage-of-confidence-intervals-for-beta-2"></a>
 </h2>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">zval</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">0.975</span><span class="op">)</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta0</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">gmwmx_beta0_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">gmwmx_std_beta0_hat</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta0</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">gmwmx_beta0_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">gmwmx_std_beta0_hat</span></span>
@@ -603,25 +599,25 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta0</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.97</span></span></code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.93</span></span></code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta0</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta0_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta0_hat</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta0</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.09</span></span></code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## [1] 0.08</span></span></code></pre>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.07</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.05</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="plot-empirical-distributions-beta-and-stochastic-parameters-2">Plot empirical distributions (beta and stochastic parameters)<a class="anchor" aria-label="anchor" href="#plot-empirical-distributions-beta-and-stochastic-parameters-2"></a>
 </h2>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res_df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gmwmx_beta0_hat"</span><span class="op">)</span><span class="op">]</span>,las<span class="op">=</span><span class="fl">1</span>,</span>
 <span>        names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta0"</span><span class="op">)</span>,</span>
@@ -642,10 +638,10 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span>        names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta3"</span><span class="op">)</span>,</span>
 <span>        main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">beta</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">sigma2_fl</span>,las<span class="op">=</span><span class="fl">1</span>,</span>
@@ -656,28 +652,9 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span>        names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi_ar1"</span><span class="op">)</span>,</span>
 <span>        main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="st">"WN"</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimate"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn_fl</span>, col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<p><img src="gmwmx2_new_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="interpreting-the-outputs">Interpreting the outputs<a class="anchor" aria-label="anchor" href="#interpreting-the-outputs"></a>
-</h2>
-<p>The <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code> object contains:</p>
-<ol style="list-style-type: decimal">
-<li>
-<code>beta_hat</code> and <code>std_beta_hat</code>: regression
-estimates and standard errors.</li>
-<li>
-<code>theta_domain</code>: estimated stochastic parameters (e.g.,
-AR(1), WN variance, power-law parameters, flicker variance).</li>
-<li>Diagnostic information about the fitted wavelet variance and
-optimization output.</li>
-</ol>
-<p>The Monte Carlo results provide empirical coverage for the nominal
-95% confidence intervals. This helps assess whether standard errors from
-<code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code> are well calibrated under different noise
-models.</p>
 </div>
   </div>
 
