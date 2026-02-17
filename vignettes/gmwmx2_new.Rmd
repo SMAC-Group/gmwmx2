@@ -30,6 +30,7 @@ The GMWMX estimator proposes to first estimate \eqn{\boldsymbol{\beta}} with the
 
 \begin{equation}
     \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}},
+\end{equation}
     
 It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - {\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
 
