@@ -19,6 +19,17 @@ observation, and \(Z_t = 0\) a missing observation. The observed series is
 \]
 which we implement by setting \(\tilde{\mathbf{Y}}\) to `NA` when \(Z_t = 0\).
 
+The observed design matrix
+can be written as \(\tilde{\mathbf{X}} = \mathbf{Z} \otimes \mathbf{1}^T \odot \mathbf{X}\).
+The least‑squares estimator based on observed data is
+\[
+  \hat{\boldsymbol{\beta}} =
+  \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
+\]
+and we compute residuals \(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
+We then estimate the stochastic parameters using the GMWM objective built from
+the empirical wavelet variance of \(\hat{\boldsymbol{\varepsilon}}\).
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   fig.width = 10,

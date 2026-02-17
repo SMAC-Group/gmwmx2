@@ -9,7 +9,7 @@ Ma(x, alpha)
 \arguments{
 \item{x}{Numeric vector of lags (non-negative).}
 
-\item{alpha}{Smoothness parameter (> 1/2).}
+\item{alpha}{Smoothness parameter in (1/2, 10).}
 }
 \value{
 Numeric vector of correlations for each lag in \code{x}.

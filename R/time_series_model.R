@@ -170,7 +170,7 @@ wn = function(sigma2 = NULL){
 #'
 #' @param sigma2 Marginal variance (> 0).
 #' @param lambda Range/scale parameter (> 0).
-#' @param alpha Smoothness parameter (> 1/2).
+#' @param alpha Smoothness parameter in (1/2, 10).
 #' @return A `time_series_model` object.
 #' @examples
 #' mod <- matern(sigma2 = 1, lambda = 0.2, alpha = 1.0)
@@ -183,7 +183,7 @@ wn = function(sigma2 = NULL){
 matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
   .check_positive(sigma2, "sigma2")
   .check_positive(lambda, "lambda")
-  .check_greater_than(alpha, "alpha", 1/2)
+  .check_in_open_interval(alpha, "alpha", 1/2, 10)
   res = list(
     "parameters" = c("sigma2" = sigma2, "lambda" = lambda, "alpha" = alpha),
   "model" = "Matern",

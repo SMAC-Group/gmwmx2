@@ -54,6 +54,7 @@ y = generate(mod, n = n, seed = 123)
 plot(y)
 fit = gmwm2(y, model = wn() + ar1() )
 plot(fit)
+mod =  matern(1,1,5)+wn(.1)
 }
 \references{
 Guerrier, S., Skaloud, J., Stebler, Y., and Victoria-Feser, M.-P. (2013).

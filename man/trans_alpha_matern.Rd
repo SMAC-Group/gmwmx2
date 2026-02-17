@@ -10,7 +10,7 @@ trans_alpha_matern(x)
 \item{x}{Numeric vector on the real line.}
 }
 \value{
-Numeric vector with values in (1/2, 10).
+Numeric vector with values > 1/2.
 }
 \description{
 Ensures Matérn smoothness parameter \code{alpha} is in (1/2, 10) by mapping
