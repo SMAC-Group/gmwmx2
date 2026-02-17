@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{plot.generated_time_series}
 \alias{plot.generated_time_series}
-\title{Plot a generated time series}
+\title{Plot a \code{generated_time_series} object}
 \usage{
 \method{plot}{generated_time_series}(x, ...)
 }

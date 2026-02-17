@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{plot.generated_composite_model_time_series}
 \alias{plot.generated_composite_model_time_series}
-\title{Plot a generated composite time series}
+\title{Plot a \code{generated_composite_model_time_series} object}
 \usage{
 \method{plot}{generated_composite_model_time_series}(x, ...)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{plot.generated_missingness}
 \alias{plot.generated_missingness}
-\title{Plot a generated missingness process}
+\title{Plot a \code{generated_missingness} object}
 \usage{
 \method{plot}{generated_missingness}(x, ...)
 }
