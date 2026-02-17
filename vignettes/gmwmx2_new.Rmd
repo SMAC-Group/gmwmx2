@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process. Consider the model defined as:
 
 \begin{equation}
-    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
 where $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
@@ -35,6 +35,7 @@ The GMWMX estimator proposes to first estimate \eqn{\boldsymbol{\beta}} with the
 It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - {\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
 
 More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbol{\gamma}}$ are defined as follows:
+
 \begin{equation}
     \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right),
 \end{equation}
