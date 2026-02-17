@@ -47,7 +47,7 @@ The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obta
 
 The variance covariance matrix of the estimated regression parameters $\hat{\boldsymbol{\beta}}$ is then obtained as:
 \begin{equation}
-(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T 
+(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} 
 \end{equation}.
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
@@ -228,8 +228,8 @@ Here we replace AR(1) by a stationary power-law component.
 
 ```{r}
 kappa_pl <- -0.85
-sigma2_wn <- 1
-sigma2_pl <- .8
+sigma2_wn <- .5
+sigma2_pl <- .5
 eps_pl = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                   n = n, seed = 123)
 plot(eps_pl$series, type = "l")

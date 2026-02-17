@@ -577,7 +577,7 @@ gmwmx2_plot_colors <- c(
 
 
 
-#' Plot a generated time series
+#' Plot a `generated_time_series` object
 #'
 #' Produces a single line plot for a `generated_time_series` object.
 #'
@@ -607,7 +607,7 @@ plot.generated_time_series <- function(x, ...) {
   invisible(x)
 }
 
-#' Plot a generated missingness process
+#' Plot a `generated_missingness` object
 #'
 #' Produces a step plot for a `generated_missingness` object.
 #'
@@ -639,7 +639,7 @@ plot.generated_missingness <- function(x, ...) {
   invisible(x)
 }
 
-#' Plot a generated composite time series
+#' Plot a `generated_composite_model_time_series` object
 #'
 #' Produces stacked line plots for each component and the sum for a
 #' `generated_composite_model_time_series` object.
@@ -695,12 +695,3 @@ plot.generated_composite_model_time_series <- function(x, ...) {
   invisible(x)
 }
 
-
-
-
-# ------------------------------------ exemple of usage
-# model1 =ar1(phi=.91, sigma2=10) + wn(10)
-# print(model1)
-# x1 = generate(model1, n = 10000, seed=123)
-# str(x1)
-# plot(x1)
