@@ -18,7 +18,7 @@ No return value. Plot a \code{gmwmx2_fit_gnss_ts_ngl} object.
 Plot a \code{gmwmx2_fit_gnss_ts_ngl} object
 }
 \examples{
-fit station with WN and AR1
+# fit station with WN and AR1
 fit1 <- gmwmx2_new(
   station_data,
   n_seasonal = 2,
@@ -26,7 +26,7 @@ fit1 <- gmwmx2_new(
 )
 fit1
 plot(fit1)
-fit station with WN and PL
+# fit station with WN and PL
 fit2 <- gmwmx2_new(
   station_data,
   n_seasonal = 2,
@@ -34,7 +34,7 @@ fit2 <- gmwmx2_new(
 )
 fit2
 plot(fit2)
-fit station with WN and Matern
+# fit station with WN and Matern
 fit3 = gmwmx2_new(
   station_data,
   n_seasonal = 2,

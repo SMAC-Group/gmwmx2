@@ -72,6 +72,7 @@ inv_trans_from_real_to_minus_1_and_1 <- function(kappa) {
 #'
 #' @param x Numeric vector on the real line.
 #' @return Numeric vector with values > 1/2.
+#' @importFrom stats plogis qlogis
 #' @keywords internal
 trans_alpha_matern <- function(x) {
   eps <- 1e-6
