@@ -941,7 +941,7 @@ gmwmx2_new.gnss_ts_ngl <- function(
     std_beta_hat <- sqrt(diag(variance_covariance_beta_hat))
 
     # compute proportion of missing on signal
-    missing_prop <- mean(is.na(y))
+    missing_prop <- mean(vec_presence == 0)
 
     # --------------- compute theoretical WV at estimated parameters
     autocov_vec <- get_autocovariance(object = model, n = n, theta = res$par, prep = prep)
