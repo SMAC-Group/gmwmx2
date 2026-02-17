@@ -259,23 +259,38 @@ print.gmwmx2_fit_gnss_ts_ngl <- function(x, digits = 4, ...) {
 #' @param x A \code{gmwmx2_fit_gnss_ts_ngl} object.
 #' @param ... Additional graphical parameters.
 #' @return No return value. Plot a \code{gmwmx2_fit_gnss_ts_ngl} object.
+#' @examples
+station_data = gmwmx2::download_station_ngl("1LSU")
+#' fit station with WN and AR1
+#' fit1 <- gmwmx2_new(
+#'   station_data,
+#'   n_seasonal = 2,
+#'   model = wn() + ar1(), component = "N"
+#' )
+#' fit1
+#' plot(fit1)
+#' fit station with WN and PL
+#' fit2 <- gmwmx2_new(
+#'   station_data,
+#'   n_seasonal = 2,
+#'   model = wn() + pl(), component = "N"
+#' )
+#' fit2
+#' plot(fit2)
+#' fit station with WN and Matern
+#' fit3 = gmwmx2_new(
+#'   station_data,
+#'   n_seasonal = 2,
+#'   model = wn() + matern(), component = "N"
+#' )
+#' fit3
+#' plot(fit3)
+#'
 #' @export
 plot.gmwmx2_fit_gnss_ts_ngl <- function(x, ...) {
   # Save the current graphical parameters
   # #------------------
-  # # load a station
-  # X = gmwmx2::download_station_ngl("1LSU")
-  # # fit station
-  # fit <- gmwmx2_new(
-  #   X = X,
-  #   n_seasonal = 2,
-  #   vec_earthquakes_relaxation_time = NULL,
-  #   component = "N",
-  #   model = wn() + ar1(),
-  #   method = "L-BFGS-B",
-  #   control = list()
-  # )
-  # x=fit
+  # load a station
 
 
   #------------------
