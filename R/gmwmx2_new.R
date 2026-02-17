@@ -262,13 +262,166 @@ print.gmwmx2_fit_gnss_ts_ngl <- function(x, digits = 4, ...) {
 #' @export
 plot.gmwmx2_fit_gnss_ts_ngl <- function(x, ...) {
   # Save the current graphical parameters
+  # #------------------
+  # # load a station
+  # X = gmwmx2::download_station_ngl("1LSU")
+  # # fit station
+  # fit <- gmwmx2_new(
+  #   X = X,
+  #   n_seasonal = 2,
+  #   vec_earthquakes_relaxation_time = NULL,
+  #   component = "N",
+  #   model = wn() + ar1(),
+  #   method = "L-BFGS-B",
+  #   control = list()
+  # )
+  # x=fit
+
+
+  #------------------
   old_par <- par(no.readonly = TRUE)
 
-
-
+  # set parameters for layout
+  mat_layout <- matrix(c(1, 2, 3, 4), ncol = 1, nrow = 4)
+  layout(mat_layout, heights = c(.1, .1, 1, 1))
+  par(mar = c(0, 0, 0, 0))
   plot.new()
-  title(main = "gmwmx2_fit_gnss_ts_ngl plot (draft)")
-  invisible(x)
+  if (x$component == "N") {
+    axis_name <- "Northing (m)"
+  } else if (x$component == "E") {
+    axis_name <- "Easting (m)"
+  } else if (x$component == "V") {
+    axis_name <- "Vertical (m)"
+  }
+  model_text <- format_model_text(x$model)
+  # mtext(side = 3, text = paste0("Model: ", model_text), line = 0.2)
+
+  text_station <- c(paste0(
+    "Station ", unique(x$df_position$station_name),
+    ": ",
+    axis_name, " | ",
+    model_text
+  ))
+  legend("center",
+         horiz = T,
+         legend = text_station,
+         bty = "n", cex = 1.3
+  )
+  plot.new()
+  legend("center",
+         horiz = T,
+         legend = c("NA", "Equipment/Software change", "Earthquake", "Estimated fit"),
+         col = c("grey60", "blue", "darkorange", "red"),
+         pch = c(15, NA, NA, NA),
+         pt.cex = c(2, NA, NA, NA),
+         # x.intersp = 0.8,
+         text.width = c(.1, .3, .2, .1),
+         lty = c(NA, 1, 1, 1), bty = "n"
+  )
+  par(mar = c(3.5, 4.5, 2, 2.1))
+
+
+  component <- x$component
+  if (component == "E") {
+    axis_name <- "Easting (m)"
+  } else if (component == "N") {
+    axis_name <- "Northing (m)"
+  } else if (component == "V") {
+    axis_name <- "Vertical (m)"
+  }
+
+  # plot data
+  plot(x = rownames(x$design_matrix_X), y = x$y, type = "l", las = 1, ylab = "", xlab = "")
+  mtext(side = 1, "Modified Julian Date", line = 3)
+  mtext(side = 2, axis_name, line = 3.2)
+
+  grid(col = "grey90", lty = 2)
+  # add signal
+  lines(x = rownames(x$design_matrix_X), y = x$y)
+
+  # add estimated fit
+  lines(x = rownames(x$design_matrix_X), y = x$design_matrix_X %*% x$beta_hat, col = "red")
+
+  # compute NA over the time series
+  all_mjd <- seq(
+    head(x$df_position$modified_julian_day, 1),
+    tail(x$df_position$modified_julian_day, 1)
+  )
+  missing_mjd <- all_mjd[which(!all_mjd %in% x$df_position$modified_julian_day)]
+
+  # missing data
+  for (i in seq_along(missing_mjd)) {
+    abline(v = missing_mjd[i], col = "grey60")
+  }
+
+  # add equipment change
+  for (i in seq((dim(x$df_equipment_software_changes)[1]))) {
+    abline(v = x$df_equipment_software_changes$modified_julian_date, col = "blue")
+  }
+
+  # add earthquake
+  for (i in seq((dim(x$df_earthquakes)[1]))) {
+    abline(v = x$df_earthquakes$modified_julian_date, col = "darkorange")
+  }
+  box()
+
+
+  # plot empirical WV and theorical implied wv
+  yl <- c(min(x$empirical_wvar$ci_low), max(x$empirical_wvar$ci_high))
+
+  plot(NA,
+       ylim = yl,
+       xlim = c(min((x$empirical_wvar$scales)), max(x$empirical_wvar$scales)),
+       main = "",
+       ylab = "",
+       xlab = "",
+       log = "xy",
+       xaxt = "n",
+       yaxt = "n"
+  )
+  mtext(side = 1, text = "Scales", line = 2.3)
+  mtext(side = 2, text = "Wavelet Variance", line = 3.2)
+
+  # Create a vector of labels in the desired format
+  exponents <- log2(x$empirical_wvar$scales)
+  labels <- sapply(exponents, function(x) as.expression(bquote(2^.(x))))
+
+  axis(1, at = x$empirical_wvar$scales, labels = labels)
+
+  polygon(
+    x = c(x$empirical_wvar$scales, rev(x$empirical_wvar$scales)),
+    y = c(x$empirical_wvar$ci_low, rev(x$empirical_wvar$ci_high)),
+    col = "#ccf1f8",
+    border = NA
+  )
+
+  ylab <- floor(log10(yl[1])):ceiling(log10(yl[2]))
+  axis(2, at = 10^ylab, labels = parse(text = sprintf("10^%.0f", ylab)), las = 1)
+
+  # add grid
+  abline(h = 10^ylab, col = "grey90", lt = 2)
+  for (i in seq_along(exponents)) {
+    abline(v = 2^exponents[i], col = "grey90", lt = 2)
+  }
+  # add empirical WV
+  lines(x$empirical_wvar$scales, x$empirical_wvar$variance, type = "b", col = "black", pch = 16)
+  # add theoretical wv
+  lines(x = x$empirical_wvar$scales, y = x$theoretical_wvar, type = "b", col = "darkorange", pch = 21, cex = 1.4)
+
+
+  legend(
+    "bottomleft",
+    legend = c("Empirical WV", "Estimated Theoretical WV"),
+    col = c("black", "darkorange"),
+    pch = c(16, 21),
+    pt.cex = c(1, 1.4),
+    lty = c(1),
+    horiz = FALSE,
+    bty = "n", bg = "transparent"
+  )
+
+  box()
+
 
   # Restore the original graphical parameters
   par(old_par)
@@ -747,6 +900,8 @@ gmwmx2_new.gnss_ts_ngl <- function(
       omega = omega,
       method = method,
       control = control,
+
+
       ...
     )
 
@@ -769,9 +924,27 @@ gmwmx2_new.gnss_ts_ngl <- function(
     # # get std of beta hat
     std_beta_hat <- sqrt(diag(variance_covariance_beta_hat))
 
-
+    # compute proportion of missing on signal
     missing_prop <- mean(is.na(y))
 
+    # --------------- compute theoretical WV at estimated parameters
+    autocov_vec <- get_autocovariance(object = model, n = n, theta = res$par, prep = prep)
+
+    # retreat autocovariance to take account of the fact that we are using the residuals of a regression, not the original series
+    vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
+      mat_D_q_term_1 = quantities_D$mat_D_q_term_1,
+      mat_D_q_term_2 = quantities_D$mat_D_q_term_2,
+      sum_on_sub_diag_of_D = quantities_D$sum_on_sub_diag_of_D,
+      vec_autocov = autocov_vec, approx_type = "3"
+    )
+
+    # retreat autocovariance of epsilon hat with the missing data mechanism
+    vec_mean_per_diag_w_missing <- vec_mean_autocov_eps_hat * (vec_autocov_omega + pstar_hat^2)
+
+    # compute wv from autocovariance
+    theo_wv <- autocovariance_to_wv(vec_mean_per_diag_w_missing, tau = wv_emp$scales)
+
+    # ---------------
 
     # # construct output
     out <- list(
@@ -783,7 +956,15 @@ gmwmx2_new.gnss_ts_ngl <- function(
       model = model,
       missing_params = list(p1 = p_hat[1], p2 = p_hat[2], pstar = pstar_hat),
       missing_prop = missing_prop,
-      run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs"))
+      run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs")),
+      component = component,
+      design_matrix_X = X_sub,
+      y = y_sub,
+      df_position = X$df_position,
+      df_earthquakes = X$df_earthquakes,
+      df_equipment_software_changes = X$df_equipment_software_changes,
+      empirical_wvar = wv_emp,
+      theoretical_wvar = theo_wv
     )
 
     # without missing observations (all mjd are in y)
@@ -864,7 +1045,23 @@ gmwmx2_new.gnss_ts_ngl <- function(
     # construct variance covariance of beta hat with model at estimated parameters
     variance_covariance_beta_hat <- inv_XtX %*% X_transpose %*% variance_covariance_mat_epsilon %*% X_mat %*% inv_XtX
 
+    # get std from matrix of variance covariance of beta hat
     std_beta_hat <- sqrt(diag(variance_covariance_beta_hat))
+
+    # compute autocovariance from theta
+    autocov_vec <- get_autocovariance(object = model, n = n, theta = res$par, prep = prep)
+
+    # retreat autocovariance to take account of the fact that we are using the residuals of a regression, not the original series
+    vec_mean_autocov_eps_hat <- compute_all_mean_diag_fast_w_linear_interp_only_required_cpp(
+      mat_D_q_term_1 = quantities_D$mat_D_q_term_1,
+      mat_D_q_term_2 = quantities_D$mat_D_q_term_2,
+      sum_on_sub_diag_of_D = quantities_D$sum_on_sub_diag_of_D,
+      vec_autocov = autocov_vec, approx_type = "3"
+    )
+
+    # compute wv from autocovariance
+    theo_wv <- autocovariance_to_wv(vec_mean_autocov_eps_hat, tau = wv_emp$scales)
+
 
     # construct output
     out <- list(
@@ -874,7 +1071,15 @@ gmwmx2_new.gnss_ts_ngl <- function(
       convergence = res$convergence,
       value = res$value,
       model = model,
-      run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs"))
+      run_time_sec = as.numeric(difftime(Sys.time(), start_time, units = "secs")),
+      component = component,
+      design_matrix_X = X_mat,
+      y = y_sub,
+      df_position = X$df_position,
+      df_earthquakes = X$df_earthquakes,
+      df_equipment_software_changes = X$df_equipment_software_changes,
+      empirical_wvar = wv_emp,
+      theoretical_wvar = theo_wv
     )
   }
 

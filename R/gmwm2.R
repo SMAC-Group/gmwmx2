@@ -731,6 +731,25 @@ print.gmwm2_fit <- function(x, digits = 4,show_initial_parameters = FALSE, ...) 
   invisible(x)
 }
 
+
+#' Format model text
+#'
+#' Internal helper to create a human-readable model label for printing.
+#'
+#' @param model A \code{time_series_model} or \code{sum_model}.
+#' @return A single string describing the model.
+#' @keywords internal
+format_model_text <- function(model) {
+  if (inherits(model, "sum_model")) {
+    parts <- vapply(model$models, function(m) m$model, character(1))
+    paste(parts, collapse = " + ")
+  } else if (inherits(model, "time_series_model")) {
+    model$model
+  } else {
+    "Unknown model"
+  }
+}
+
 #' Plot method for a \code{gmwm2_fit} object
 #'
 #' Plots empirical wavelet variance with the fitted theoretical curve and,
@@ -768,16 +787,7 @@ plot.gmwm2_fit <- function(x,
                            cex_theo = 1.4,
                            legend_pos = "auto",
                            ...) {
-  format_model_text <- function(model) {
-    if (inherits(model, "sum_model")) {
-      parts <- vapply(model$models, function(m) m$model, character(1))
-      paste(parts, collapse = " + ")
-    } else if (inherits(model, "time_series_model")) {
-      model$model
-    } else {
-      "Unknown model"
-    }
-  }
+
 
   pick_legend_pos <- function(scales, var_emp, yl) {
     if (length(scales) == 0L || length(var_emp) == 0L) {
@@ -934,5 +944,4 @@ plot.gmwm2_fit <- function(x,
 
   invisible(x)
 }
-
 
