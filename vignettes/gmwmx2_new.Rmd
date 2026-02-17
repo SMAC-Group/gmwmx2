@@ -33,13 +33,23 @@ The GMWMX estimator proposes to first estimate \eqn{\boldsymbol{\beta}} with the
     
 It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - {\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
 
-Then estimated stochastic parameters 
+More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbol{\gamma}}$ are defined as follows:
+\begin{equation}
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right),
+\end{equation}
+
+where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$, $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$ and $\boldsymbol{\Omega}$ is a weighting matrix. 
+
+The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWM, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
+
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
 signal, generate noise, fit models, and run Monte Carlo experiments to check coverage of
 confidence intervals. For each setting, we also plot the empirical distributions of the
 estimated functional and stochastic parameters.
+
+
 
 ```{r, message=FALSE,warning=FALSE}
 library(gmwmx2)
@@ -54,22 +64,7 @@ boxplot_mean_dot <- function(x, ...) {
 }
 ```
 
-# Overview of the simulation
 
-We consider the linear model
-\[
-  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
-\]
-where \(\boldsymbol{\varepsilon} \sim F\!\left(0, \boldsymbol{\Sigma}(\boldsymbol{\gamma})\right)\)
-denotes a dependent‑error process with distribution family \(F\) and variance
-structure \(\boldsymbol{\Sigma}(\boldsymbol{\gamma})\) parametrized by \(\boldsymbol{\gamma}\).
-
-The goal is to:
-
-1. Fit `gmwmx2_new()` on simulated data with known parameters.
-2. Compare results across different stochastic models.
-3. Run a Monte Carlo experiment to assess empirical coverage of the confidence
-intervals on `beta`.
 
 # Build an arbitrary design matrix X
 
