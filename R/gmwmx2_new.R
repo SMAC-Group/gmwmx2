@@ -260,7 +260,7 @@ print.gmwmx2_fit_gnss_ts_ngl <- function(x, digits = 4, ...) {
 #' @param ... Additional graphical parameters.
 #' @return No return value. Plot a \code{gmwmx2_fit_gnss_ts_ngl} object.
 #' @examples
-station_data = gmwmx2::download_station_ngl("1LSU")
+# station_data = gmwmx2::download_station_ngl("1LSU")
 #' fit station with WN and AR1
 #' fit1 <- gmwmx2_new(
 #'   station_data,
@@ -464,6 +464,7 @@ plot.gmwmx2_fit_gnss_ts_ngl <- function(x, ...) {
 #' @return A fitted model object (to be defined).
 #' @keywords internal
 gmwmx2_new_with_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
+
   # record start time
   start_time <- Sys.time()
 
