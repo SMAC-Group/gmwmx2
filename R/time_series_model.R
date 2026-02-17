@@ -7,7 +7,7 @@
 #' This is used internally to build the full autocovariance vector.
 #' @importFrom stats runif var
 #' @param x Numeric vector of lags (non-negative).
-#' @param alpha Smoothness parameter (> 1/2).
+#' @param alpha Smoothness parameter in (1/2, 10).
 #' @return Numeric vector of correlations for each lag in `x`.
 #' @keywords internal
 Ma <- function(x, alpha){

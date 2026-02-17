@@ -13,6 +13,6 @@ inv_trans_alpha_matern(x)
 Numeric vector on the real line.
 }
 \description{
-Maps domain values (> 1/2) back to the real line.
+Maps domain values in (1/2, 10) back to the real line.
 }
 \keyword{internal}

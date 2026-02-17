@@ -11,7 +11,7 @@ matern(sigma2 = NULL, lambda = NULL, alpha = NULL)
 
 \item{lambda}{Range/scale parameter (> 0).}
 
-\item{alpha}{Smoothness parameter (> 1/2).}
+\item{alpha}{Smoothness parameter in (1/2, 10).}
 }
 \value{
 A \code{time_series_model} object.

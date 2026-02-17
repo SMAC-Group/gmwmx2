@@ -63,26 +63,34 @@ inv_trans_from_real_to_minus_1_and_1 <- function(kappa) {
 }
 
 
-# for matern process, alpha should be greater than 1/2
+# for matern process, alpha should be greater than 1/2 and bounded above
 # transform from real line to domain
 #' Transform Matérn alpha from real line to domain
 #'
-#' Ensures Matérn smoothness parameter `alpha` is > 1/2 by mapping
-#' real values with `exp(x) + 1/2`.
+#' Ensures Matérn smoothness parameter `alpha` is in (1/2, 10) by mapping
+#' real values with a scaled logistic transform.
 #'
 #' @param x Numeric vector on the real line.
 #' @return Numeric vector with values > 1/2.
 #' @keywords internal
 trans_alpha_matern <- function(x) {
-  exp(x) + 1/2 + 1e-6 # add small epsilon to ensure strictly greater than 1/2
+  eps <- 1e-6
+  lower <- 1/2 + eps
+  upper <- 10 - eps
+  lower + (upper - lower) * plogis(x)
 }
 
 # transform from domain to real line
 #' Inverse transform for Matérn alpha
 #'
-#' Maps domain values (> 1/2) back to the real line.
+#' Maps domain values in (1/2, 10) back to the real line.
 #'
 #' @param x Numeric vector with values > 1/2.
 #' @return Numeric vector on the real line.
 #' @keywords internal
-inv_trans_alpha_matern <- function(x) log(x - 1/2 - 1e-6) # subtract small epsilon to match forward transform
+inv_trans_alpha_matern <- function(x) {
+  eps <- 1e-6
+  lower <- 1/2 + eps
+  upper <- 10 - eps
+  qlogis((x - lower) / (upper - lower))
+}
