@@ -40,7 +40,7 @@ More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbo
 
 where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$, $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$ and $\boldsymbol{\Omega}$ is a weighting matrix. 
 
-The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWM, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
+The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWMX, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
 
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
@@ -103,8 +103,8 @@ This is a classic short-memory model often used as a baseline.
 
 ```{r}
 phi_ar1 = 0.95
-sigma2_ar1 = 20
-sigma2_wn = 20
+sigma2_ar1 = 1
+sigma2_wn = 1
 eps = gmwmx2::generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
@@ -228,14 +228,18 @@ Here we replace AR(1) by a stationary power-law component with spectral index
 
 ```{r}
 kappa_pl <- -0.8
-sigma2_wn <- 10
-sigma2_pl <- 10
+sigma2_wn <- 1
+sigma2_pl <- 1
 eps_pl = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                   n = n, seed = 123)
 plot(eps_pl$series, type = "l")
 plot(wv::wvar(eps_pl$series))
 y_pl = X %*% beta + eps_pl$series
+plot(X[, 2], y_pl, type = "l", main = "Simulated y (WN + PL)")
+```
 
+
+```{r}
 fit_pl = gmwmx2_new(X = X, y = y_pl, model = wn() + pl())
 fit_pl
 ```
@@ -344,14 +348,18 @@ Flicker noise corresponds to a non stationary power-law with spectral index `kap
 handled explicitly by `flicker()` in this package.
 
 ```{r}
-sigma2_wn_fl <- 15
-sigma2_fl <- 10
+sigma2_wn_fl <- 1
+sigma2_fl <- 1
 eps_fl = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                   n = n, seed = 123)
 plot(eps_fl$series, type = "l")
 plot(wv::wvar(eps_fl$series))
 y_fl = X %*% beta + eps_fl$series
+plot(X[, 2], y_fl, type = "l", main = "Simulated y (WN + Flicker)")
+```
 
+
+```{r}
 fit_fl = gmwmx2_new(X = X, y = y_fl, model = wn() + flicker())
 fit_fl
 ```
@@ -454,19 +462,5 @@ par(mfrow = c(1, 1))
 
 
 
-
-
-# Interpreting the outputs
-
-The `gmwmx2_new()` object contains:
-
-1. `beta_hat` and `std_beta_hat`: regression estimates and standard errors.
-2. `theta_domain`: estimated stochastic parameters (e.g., AR(1), WN variance, power-law
-parameters, flicker variance).
-3. Diagnostic information about the fitted wavelet variance and optimization output.
-
-The Monte Carlo results provide empirical coverage for the nominal 95% confidence
-intervals. This helps assess whether standard errors from `gmwmx2_new()` are well
-calibrated under different noise models.
 
 
