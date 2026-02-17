@@ -19,6 +19,23 @@ This vignette shows how to estimate composite stochastic models using
 `gmwm2()`. We generate data from known models, fit composite candidates,
 and visualize the fits.
 
+We consider a zero-mean stochastic process \(\{Y_t\}_{t=1}^n\) generated from a
+composite model parametrized by \(\boldsymbol{\gamma} \in \boldsymbol{\Gamma}\).
+
+Given a parametric model with parameters \(\boldsymbol{\gamma}\), the GMWM
+estimator minimizes the weighted wavelet-variance discrepancy:
+\[
+  \hat{\boldsymbol{\gamma}} =
+  \arg\min_{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}
+  \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right)^\top
+  \boldsymbol{\Omega}
+  \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right),
+\]
+where \(\hat{\boldsymbol{\nu}}\) is the empirical wavelet variance of the
+observed series and \(\boldsymbol{\nu}(\boldsymbol{\gamma})\) is the theoretical
+wavelet variance implied by the model.
+
+
 ```{r}
 library(gmwmx2)
 set.seed(123)
@@ -62,4 +79,3 @@ fit4 = gmwm2(y4, model = wn() + rw())
 fit4
 plot(fit4)
 ```
-

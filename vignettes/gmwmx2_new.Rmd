@@ -22,18 +22,18 @@ knitr::opts_chunk$set(
 This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process. Consider the model defined as:
 
 \begin{equation}
-    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
-where $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
+where $\mathbf{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
 
 The GMWMX estimator proposes to first estimate \eqn{\boldsymbol{\beta}} with the least square estimator defined as:
 
 \begin{equation}
-    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}},
+    \hat{\boldsymbol{\beta}} = \left( \mathbf{X}^T  \mathbf{X}\right)^{-1}  \mathbf{X}^T \boldsymbol{Y},
 \end{equation}
     
-It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - {\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
+It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as $\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - { \mathbf{X}} \hat{\boldsymbol{\beta}}$.
 
 More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbol{\gamma}}$ are defined as follows:
 
@@ -44,6 +44,12 @@ More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbo
 where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$, $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$ and $\boldsymbol{\Omega}$ is a weighting matrix. 
 
 The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWMX, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
+
+The variance covariance matrix of the estimated regression parameters $\hat{\boldsymbol{\beta}}$ is then obtained as:
+\begin{equation}
+
+
+\end{equation}
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
