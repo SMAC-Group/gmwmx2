@@ -117,41 +117,76 @@ errors and missing observations</h1>
 
     
     
-<p>This vignette shows how to perform inference for a linear regression
-model with dependent errors and missing observations. We consider the
-model
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
-  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
-</annotation></semantics></math> where the error process
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>
-follows a composite stochastic model. Missingness is modeled by a binary
-process
+<p>This vignette demonstrate on to use the GMWMX estimator to estimate
+linear models with dependent errors described by a composite stochastic
+process in presence of missing observations. Consider the model defined
+as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mn>0</mn><mo>,</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+\end{equation}</annotation></semantics></math></p>
+<p>Missingness is modeled by a binary process
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐙</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">}</mo><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf{Z} \in \{0,1\}^n</annotation></semantics></math>
 with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">Z_t = 1</annotation></semantics></math>
 indicating observation, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">Z_t = 0</annotation></semantics></math>
-a missing observation. The observed series is
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐘</mi><mo>⊙</mo><mi>𝐙</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
-  \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z},
-</annotation></semantics></math> which we implement by setting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><annotation encoding="application/x-tex">\tilde{\mathbf{Y}}</annotation></semantics></math>
-to <code>NA</code> when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">Z_t = 0</annotation></semantics></math>.</p>
-<p>The observed design matrix can be written as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐙</mi><mo>⊗</mo><msup><mn>𝟏</mn><mi>T</mi></msup><mo>⊙</mo><mi>𝐗</mi></mrow><annotation encoding="application/x-tex">\tilde{\mathbf{X}} = \mathbf{Z} \otimes \mathbf{1}^T \odot \mathbf{X}</annotation></semantics></math>.
+a missing observation. The missingness process is independent of $ and
+respect the following definition:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>i</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>Z</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">with probability </mtext><mspace width="0.333em"></mspace></mrow><mi>ρ</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>W</mi><mi>i</mi></msub><mo>∼</mo><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mrow><mtext mathvariant="normal">with probability </mtext><mspace width="0.333em"></mspace></mrow><mn>1</mn><mo>−</mo><mi>ρ</mi><mo>,</mo></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\begin{equation}
+  Z_i =
+\begin{cases}
+    Z_{i-1}, &amp; \text{with probability } \rho, \\
+    W_i \sim \mathrm{Bernoulli}(\mu(\bm{\vartheta})), &amp; \text{with probability } 1-\rho,
+\end{cases}
+\end{equation}</annotation></semantics></math> with expectation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>Z</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mspace width="0.167em"></mspace><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, \, 1]</annotation></semantics></math>,
+for all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mi>…</mi><mi>n</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">i \in \{1, \ldots n\}</annotation></semantics></math>,
+with covariance matrix
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚲</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>var</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐙</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right) \in \mathbb{R}^{n\times n}</annotation></semantics></math>
+whose structure is assumed known up to the parameter vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛝</mi><mo>∈</mo><mi>𝚼</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k</annotation></semantics></math>
+The observed series is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐘</mi><mo>⊙</mo><mi>𝐙</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+  \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z}.
+</annotation></semantics></math></p>
+<p>The design matrix with rows zeroed out for missing observations can
+be written as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐙</mi><mo>⊗</mo><msup><mn>𝟏</mn><mi>T</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊙</mo><mi>𝐗</mi></mrow><annotation encoding="application/x-tex">\tilde{\mathbf{X}} = \left(\mathbf{Z} \otimes \mathbf{1}^T\right) \odot \mathbf{X}</annotation></semantics></math>.
 The least‑squares estimator based on observed data is
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>,</mo></mrow><annotation encoding="application/x-tex">
   \hat{\boldsymbol{\beta}} =
   \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
 </annotation></semantics></math> and we compute residuals
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}</annotation></semantics></math>.
-We then estimate the stochastic parameters using the GMWM objective
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}</annotation></semantics></math>.</p>
+<p>We then estimate the parameters of the missingness process using
+maximum likelihood estimation, assuming a Markov model using the Maximum
+Likelihood Estimator.</p>
+<p>We then estimate the stochastic parameters using the GMWM objective
 built from the empirical wavelet variance of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}}</annotation></semantics></math>.</p>
+<p><span class="math display">$$\begin{equation}
+    \hat{\boldsymbol{\gamma}} = \argmin_{\boldsymbol{\gamma} \in
+\boldsymbol{\Gamma}} \,\{\hat{\boldsymbol{\nu}} -
+\boldsymbol{\nu}(\boldsymbol{\gamma},
+\hat{\boldsymbol{\vartheta}})\}^{\trans} \, \boldsymbol{\Omega} \,
+\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma},
+\hat{\boldsymbol{\vartheta}})\},
+\end{equation}$$</span></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\nu}}</annotation></semantics></math>
+is the estimated WV computed on the estimated residuals
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛝</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\vartheta}}</annotation></semantics></math>
+is the pre-computed estimator of the parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛝</mi><annotation encoding="application/x-tex">\boldsymbol{\vartheta}</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛀</mi><annotation encoding="application/x-tex">\boldsymbol{\Omega}</annotation></semantics></math>
+being any positive-definite matrix.</p>
 <p>Overall, these examples illustrate how <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code>
-supports inference for linear regression models with dependent errors
-when observations are missing, and how the results compare to a naive
+supports inference for linear regression models with dependent errors in
+presence of missing observations, and how the results compare to a naive
 OLS fit that ignores dependence.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://smac-group.github.io/gmwmx2/">gmwmx2</a></span><span class="op">)</span></span>
@@ -273,7 +308,7 @@ and the missing observations.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9562, sigma2 = 17.41 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.2922</span></span></code></pre>
+<span><span class="co">##   Total              : 1.2533</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="va">B</span>, ncol<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
@@ -444,7 +479,7 @@ process.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.6179, sigma2 = 8.114 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.3590</span></span></code></pre>
+<span><span class="co">##   Total              : 0.3535</span></span></code></pre>
 <p>As before, we keep the same missingness mechanism so that differences
 are driven by the error model rather than by the observation
 pattern.</p>
@@ -618,7 +653,7 @@ changes across different dependent‑error models.</p>
 <span><span class="co">##        Estimated parameters : sigma2 = 8.612 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.9892</span></span></code></pre>
+<span><span class="co">##   Total              : 0.9744</span></span></code></pre>
 <p>Monte Carlo replication for the flicker‑noise case.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>
