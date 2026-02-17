@@ -75,7 +75,7 @@
       <a href="../articles/load_plot_data_ngl.html">Load and plot data from the Nevada Geodetic Laboratory</a>
     </li>
     <li>
-      <a href="../articles/fit_model.html">Estimate geodetic time series from the Nevada Geodetic Laboratory</a>
+      <a href="../articles/estimate_geodetic_time_series_from_ngl.Rmd">Estimate geodetic time series from the Nevada Geodetic Laboratory</a>
     </li>
     <li>
       <a href="../articles/estimate_small_network.html">Estimate a small network of GNSS station</a>
@@ -273,7 +273,7 @@ and the missing observations.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9562, sigma2 = 17.41 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.2453</span></span></code></pre>
+<span><span class="co">##   Total              : 1.3477</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="va">B</span>, ncol<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
@@ -444,7 +444,7 @@ process.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.6179, sigma2 = 8.114 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.3454</span></span></code></pre>
+<span><span class="co">##   Total              : 0.3645</span></span></code></pre>
 <p>As before, we keep the same missingness mechanism so that differences
 are driven by the error model rather than by the observation
 pattern.</p>
@@ -618,7 +618,7 @@ changes across different dependent‑error models.</p>
 <span><span class="co">##        Estimated parameters : sigma2 = 8.612 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.9614</span></span></code></pre>
+<span><span class="co">##   Total              : 1.0700</span></span></code></pre>
 <p>Monte Carlo replication for the flicker‑noise case.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>
