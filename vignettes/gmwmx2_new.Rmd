@@ -1,6 +1,7 @@
 ---
 title: "GMWMX: Estimate linear models with dependent errors"
 output: rmarkdown::html_vignette
+bibliography: REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{GMWMX: Estimate linear models with dependent errors}
   %\VignetteEngine{knitr::rmarkdown}
@@ -42,8 +43,7 @@ More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbo
 
 where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$, $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$ and $\boldsymbol{\Omega}$ is a weighting matrix. 
 
-The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWMX, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
-
+The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWMX, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
@@ -115,7 +115,7 @@ plot(X[, 2], y, type = "l", main = "Simulated y (WN + AR1)")
 
 # Fit model (WN + AR1)
 
-We fit using `gmwmx2_new()` with a matching composite model.
+We fit using `gmwmx2_new()` with a composite model composed of white noise and autoregressive process of order 1.
 
 ```{r}
 fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
@@ -123,7 +123,7 @@ print(fit)
 ```
 
 To assess uncertainty, we run a Monte Carlo simulation and check empirical coverage
-of the confidence intervals for `beta`.
+of the confidence intervals for the trend.
 
 ```{r}
 B = 100
@@ -204,20 +204,14 @@ par(mfrow = c(1, 1))
 # Compute empirical coverage of confidence intervals for beta
 ```{r}
 zval = qnorm(0.975)
-mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
-mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
 mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
 mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
 dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
 
 # do the same for lm beta
-mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
-mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
 mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
 mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
 dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
 ```
 
@@ -327,20 +321,14 @@ par(mfrow = c(1, 1))
 # Compute empirical coverage of confidence intervals for beta
 ```{r}
 zval = qnorm(0.975)
-mat_res_pl_df$upper_ci_gmwmx_beta0 = mat_res_pl_df$gmwmx_beta0_hat + zval * mat_res_pl_df$gmwmx_std_beta0_hat
-mat_res_pl_df$lower_ci_gmwmx_beta0 = mat_res_pl_df$gmwmx_beta0_hat - zval * mat_res_pl_df$gmwmx_std_beta0_hat
 mat_res_pl_df$upper_ci_gmwmx_beta1 = mat_res_pl_df$gmwmx_beta1_hat + zval * mat_res_pl_df$gmwmx_std_beta1_hat
 mat_res_pl_df$lower_ci_gmwmx_beta1 = mat_res_pl_df$gmwmx_beta1_hat - zval * mat_res_pl_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B_pl), mat_res_pl_df$lower_ci_gmwmx_beta0, mat_res_pl_df$upper_ci_gmwmx_beta0) %>% mean()
 dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_gmwmx_beta1, mat_res_pl_df$upper_ci_gmwmx_beta1) %>% mean()
 
 # do the same for lm beta
-mat_res_pl_df$upper_ci_lm_beta0 = mat_res_pl_df$lm_beta0_hat + zval * mat_res_pl_df$lm_std_beta0_hat
-mat_res_pl_df$lower_ci_lm_beta0 = mat_res_pl_df$lm_beta0_hat - zval * mat_res_pl_df$lm_std_beta0_hat
 mat_res_pl_df$upper_ci_lm_beta1 = mat_res_pl_df$lm_beta1_hat + zval * mat_res_pl_df$lm_std_beta1_hat
 mat_res_pl_df$lower_ci_lm_beta1 = mat_res_pl_df$lm_beta1_hat - zval * mat_res_pl_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B_pl), mat_res_pl_df$lower_ci_lm_beta0, mat_res_pl_df$upper_ci_lm_beta0) %>% mean()
 dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_lm_beta1, mat_res_pl_df$upper_ci_lm_beta1) %>% mean()
 ```
 
@@ -401,20 +389,14 @@ colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 # Compute empirical coverage of confidence intervals for beta
 ```{r}
 zval = qnorm(0.975)
-mat_res_fl_df$upper_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat + zval * mat_res_fl_df$gmwmx_std_beta0_hat
-mat_res_fl_df$lower_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat - zval * mat_res_fl_df$gmwmx_std_beta0_hat
 mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
 mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta0, mat_res_fl_df$upper_ci_gmwmx_beta0) %>% mean()
 dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
 
 # do the same for lm beta
-mat_res_fl_df$upper_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat + zval * mat_res_fl_df$lm_std_beta0_hat
-mat_res_fl_df$lower_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat - zval * mat_res_fl_df$lm_std_beta0_hat
 mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
 mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B_pl), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
 dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
 ```
 
