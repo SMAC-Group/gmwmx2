@@ -18,6 +18,23 @@ knitr::opts_chunk$set(
 # knitr::opts_chunk$set(eval = FALSE)
 ```
 
+This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process. Consider the model defined as:
+
+\begin{equation}
+    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+\end{equation}
+
+where $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
+
+The GMWMX estimator proposes to first estimate \eqn{\boldsymbol{\beta}} with the least square estimator defined as:
+
+\begin{equation}
+    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}},
+    
+It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - {\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
+
+Then estimated stochastic parameters 
+
 This vignette is a detailed, self-contained simulation walkthrough that showcases
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
 signal, generate noise, fit models, and run Monte Carlo experiments to check coverage of
