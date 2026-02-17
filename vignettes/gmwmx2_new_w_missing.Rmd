@@ -36,16 +36,15 @@ The least‑squares estimator based on observed data is
 \]
 and we compute residuals \(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
 
-We then estimate the parameters of the missingness process using maximum likelihood estimation, assuming a Markov model using the Maximum Likelihood Estimator.
+We then estimate the parameters of the missingness process using maximum likelihood estimation, assuming a two state Markov model using the Maximum Likelihood Estimator.
 
-We then estimate the stochastic parameters using the GMWM objective built from
-the empirical wavelet variance of \(\hat{\boldsymbol{\varepsilon}}\).
+We then estimate the stochastic parameters using the GMWM estimator:
 
 \begin{equation}
     \hat{\boldsymbol{\gamma}} = \argmin_{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}} \,\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\}^{\trans} \, \boldsymbol{\Omega} \, \{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\},
 \end{equation}
 
-where $\hat{\boldsymbol{\nu}}$ is the estimated WV computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and $\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter $\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite matrix.
+where $\hat{\boldsymbol{\nu}}$ is the estimated wavelet variance computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and $\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter $\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite matrix.
 
 
 
@@ -67,7 +66,7 @@ linear regression models with dependent errors in presence of missing observatio
 and how the results compare to a naive OLS fit that ignores dependence.
 
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(gmwmx2)
 library(wv)
 library(dplyr)
@@ -111,14 +110,13 @@ from `vignettes/gmwmx2_new.Rmd`, which uses fully observed data.
 
 ```{r}
 # Example 1: White noise + AR(1)
-
-
 phi_ar1 = 0.95
-sigma2_ar1 = 20
-sigma2_wn = 20
+sigma2_ar1 = 1
+sigma2_wn = 1
 eps = generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
+
 # generate missingness
 mod_missing = markov_two_states(p1 = 0.05, p2 = .95)
 Z = generate(mod_missing, n = n, seed = 123)
@@ -160,10 +158,6 @@ for the stochastic error model and the missing observations.
 
 fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
 print(fit)
-
-
-
-
 B = 100
 mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
@@ -250,7 +244,7 @@ The boxplots summarize the empirical distribution of the regression estimates
 and stochastic parameters across Monte Carlo replications, with the true values
 shown as horizontal lines.
 
-Coverage is computed using normal approximations for the coefficient intervals.
+
 We report the empirical fraction of times the true \(\boldsymbol{\beta}\)
 entries fall inside the estimated intervals for both `gmwmx2_new()` and OLS.
 
@@ -281,8 +275,7 @@ stationary power‑law). The steps mirror the AR(1) case: simulate with
 missingness, fit `gmwmx2_new()`, and compare to a misspecified OLS fit.
 
 The parameter \(\kappa\) controls the long‑memory behavior of the power‑law
-component, while the variance terms split energy between white noise and the
-power‑law process.
+component.
 
 
 ```{r}
@@ -291,8 +284,8 @@ power‑law process.
 
 
 kappa_pl <- -0.8
-sigma2_wn <- 15
-sigma2_pl <- 5
+sigma2_wn <- 1
+sigma2_pl <- .8
 eps_pl = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                   n = n, seed = 1234)
 plot(eps_pl$series, type = "l")
@@ -383,10 +376,8 @@ abline(h = beta[4], col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
-Plot the stochastic parameter estimates for the power‑law model.
+Plot the estimated stochastic parameter estimates for the power‑law model.
 
-These plots focus on the long‑memory parameter and variance components that
-define the power‑law error process.
 
 
 ```{r}
@@ -435,18 +426,13 @@ dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_lm_beta1, mat_res_pl_d
 Finally, we repeat the missing‑data inference workflow for a flicker‑noise
 error model.
 
-Flicker noise (1/f‑type behavior) provides a contrasting long‑memory structure
-to the power‑law case, and helps illustrate how inference changes across
-different dependent‑error models.
-
-
 ```{r}
 # Example 3: White noise + flicker
 
 
 
-sigma2_wn_fl <- 15
-sigma2_fl <- 10
+sigma2_wn_fl <- 1
+sigma2_fl <- 1
 eps_fl = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                   n = n, seed = 123)
 plot(eps_fl$series, type = "l")
