@@ -133,7 +133,7 @@ plot(fit2)
 ```
 
 ```{r}
-fit3 = gmwmx2(station_data, n_seasonal = 2, component = "N", stochastic_model = wn() + ar1())
+fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", stochastic_model = wn() + ar1())
 fit3
 plot(fit3)
 ```
