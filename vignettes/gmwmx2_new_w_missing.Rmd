@@ -7,28 +7,49 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette shows how to perform inference for a linear regression model
-with dependent errors and missing observations. We consider the model
-\[
-  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
-\]
-where the error process \(\boldsymbol{\varepsilon}\) follows a composite stochastic model. Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
-observation, and \(Z_t = 0\) a missing observation. The observed series is
-\[
-  \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z},
-\]
-which we implement by setting \(\tilde{\mathbf{Y}}\) to `NA` when \(Z_t = 0\).
+This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process in presence of missing observations. Consider the model defined as:
 
-The observed design matrix
-can be written as \(\tilde{\mathbf{X}} = \mathbf{Z} \otimes \mathbf{1}^T \odot \mathbf{X}\).
+\begin{equation}
+    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+\end{equation}
+
+Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
+observation, and \(Z_t = 0\) a missing observation. The missingness process is independent of $\mathbf{Y} and respect the following definition:
+\begin{equation}
+  Z_i =
+\begin{cases}
+    Z_{i-1}, & \text{with probability } \rho, \\
+    W_i \sim \mathrm{Bernoulli}(\mu(\bm{\vartheta})), & \text{with probability } 1-\rho,
+\end{cases}
+\end{equation}
+with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, \, 1]$, for all $i \in \{1, \ldots n\}$, with covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right) \in \mathbb{R}^{n\times n}$  whose structure is assumed known up to the parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$ The observed series is
+\[
+  \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z}.
+\]
+
+The design matrix with rows zeroed out for missing observations
+can be written as \(\tilde{\mathbf{X}} = \left(\mathbf{Z} \otimes \mathbf{1}^T\right) \odot \mathbf{X}\).
 The least‑squares estimator based on observed data is
 \[
   \hat{\boldsymbol{\beta}} =
   \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
 \]
 and we compute residuals \(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
+
+We then estimate the parameters of the missingness process using maximum likelihood estimation, assuming a Markov model using the Maximum Likelihood Estimator.
+
 We then estimate the stochastic parameters using the GMWM objective built from
 the empirical wavelet variance of \(\hat{\boldsymbol{\varepsilon}}\).
+
+\begin{equation}
+    \hat{\boldsymbol{\gamma}} = \argmin_{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}} \,\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\}^{\trans} \, \boldsymbol{\Omega} \, \{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\},
+\end{equation}
+
+where $\hat{\boldsymbol{\nu}}$ is the estimated WV computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and $\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter $\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite matrix.
+
+
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -42,7 +63,7 @@ knitr::opts_chunk$set(
 ```
 
 Overall, these examples illustrate how `gmwmx2_new()` supports inference for
-linear regression models with dependent errors when observations are missing,
+linear regression models with dependent errors in presence of missing observations,
 and how the results compare to a naive OLS fit that ignores dependence.
 
 
