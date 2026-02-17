@@ -138,6 +138,17 @@ a missing observation. The observed series is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><annotation encoding="application/x-tex">\tilde{\mathbf{Y}}</annotation></semantics></math>
 to <code>NA</code> when
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">Z_t = 0</annotation></semantics></math>.</p>
+<p>The observed design matrix can be written as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐙</mi><mo>⊗</mo><msup><mn>𝟏</mn><mi>T</mi></msup><mo>⊙</mo><mi>𝐗</mi></mrow><annotation encoding="application/x-tex">\tilde{\mathbf{X}} = \mathbf{Z} \otimes \mathbf{1}^T \odot \mathbf{X}</annotation></semantics></math>.
+The least‑squares estimator based on observed data is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>,</mo></mrow><annotation encoding="application/x-tex">
+  \hat{\boldsymbol{\beta}} =
+  \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
+</annotation></semantics></math> and we compute residuals
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}</annotation></semantics></math>.
+We then estimate the stochastic parameters using the GMWM objective
+built from the empirical wavelet variance of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}}</annotation></semantics></math>.</p>
 <p>Overall, these examples illustrate how <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code>
 supports inference for linear regression models with dependent errors
 when observations are missing, and how the results compare to a naive
@@ -262,7 +273,7 @@ and the missing observations.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9562, sigma2 = 17.41 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.2737</span></span></code></pre>
+<span><span class="co">##   Total              : 1.2459</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow<span class="op">=</span><span class="va">B</span>, ncol<span class="op">=</span><span class="fl">19</span><span class="op">)</span></span>
@@ -433,7 +444,7 @@ process.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.6179, sigma2 = 8.114 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.3600</span></span></code></pre>
+<span><span class="co">##   Total              : 0.3536</span></span></code></pre>
 <p>As before, we keep the same missingness mechanism so that differences
 are driven by the error model rather than by the observation
 pattern.</p>
@@ -607,7 +618,7 @@ changes across different dependent‑error models.</p>
 <span><span class="co">##        Estimated parameters : sigma2 = 8.612 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.9734</span></span></code></pre>
+<span><span class="co">##   Total              : 0.9765</span></span></code></pre>
 <p>Monte Carlo replication for the flicker‑noise case.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>

@@ -117,6 +117,80 @@ errors</h1>
 
     
     
+<p>This vignette demonstrate on to use the GMWMX estimator to estimate
+linear models with dependent errors described by a composite stochastic
+process. Consider the model defined as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+\end{equation}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{X} \in \mathbb{R}^{n \times p}</annotation></semantics></math>
+is a design matrix of observed predictors,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛃</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>p</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta} \in \mathbb{R}^p</annotation></semantics></math>
+is the regression parameter vector and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛆</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>ε</mi><mi>i</mi></msub><msub><mo stretchy="false" form="postfix">}</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}</annotation></semantics></math>
+is a zero-mean process following an unspecified joint distribution
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℱ</mi><annotation encoding="application/x-tex">\mathcal{F}</annotation></semantics></math>
+with positive-definite covariance function
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}</annotation></semantics></math>
+characterizing the second-order dependence structure of the process and
+parameterized by the vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛄</mi><mo>∈</mo><mi>𝚪</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>q</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q</annotation></semantics></math>.</p>
+<p>The GMWMX estimator proposes to first estimate with the least square
+estimator defined as:</p>
+<p><span class="math display">$$\begin{equation}
+    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T
+\tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T
+\tilde{\boldsymbol{Y}},
+    
+It then estimates the parameters of the stochastic model
+\eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments
+approach [@guerrier2013wavelet] applied to the estimated residuals
+defined as \eqn{\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} -
+{\boldsymbol{X}} \hat{\boldsymbol{\beta}}}.
+
+More precisely, the estimated stochastic parameters, denoted as
+$\hat{\boldsymbol{\gamma}}$ are defined as follows:
+\begin{equation}
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in
+\boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} -
+\boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega}
+\left(\hat{\boldsymbol{\nu}} -
+\boldsymbol{\nu}(\boldsymbol{\gamma})\right),
+\end{equation}$$</span></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\nu}}</annotation></semantics></math>
+is the vector of empirical wavelet variances computed on the estimated
+residuals
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛎</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{\nu}(\boldsymbol{\gamma})</annotation></semantics></math>
+is the vector of theoretical wavelet variance implied by the stochastic
+model with parameters
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛄</mi><annotation encoding="application/x-tex">\boldsymbol{\gamma}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛀</mi><annotation encoding="application/x-tex">\boldsymbol{\Omega}</annotation></semantics></math>
+is a weighting matrix.</p>
+<p>The theoretical wavelet variance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛎</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{\nu}(\boldsymbol{\gamma})</annotation></semantics></math>
+is obtained using the results of <span class="citation">@xu2017study</span> and <span class="citation">@zhang2008allan</span> that provide a computationally
+efficient form of the theoretical Allan variance (equivalent to the Haar
+wavelet variance up to a constant) for zero-mean stochastic processes
+such as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>
+to avoid computing these large matrices multiplication in the objective
+function. Indeed in <span class="citation">@xu2017study</span> they
+generalize the results in <span class="citation">@zhang2008allan</span>
+to zero-mean non-stationary processes by using averages of the diagonals
+and super-diagonals of the covariance matrix of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>.
+What this implies is that the GMWM, does not require the storage of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n \times n</annotation></semantics></math>
+covariance matrix of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
+but only of a vector of dimension
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+which is then plugged into an explicit formula consisting in a linear
+combination of the elements of this vector.</p>
 <p>This vignette is a detailed, self-contained simulation walkthrough
 that showcases <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code> for an arbitrary design matrix
 <code>X</code> and response vector <code>y</code>. We build the signal,
@@ -135,29 +209,6 @@ parameters.</p>
 <span>  <span class="va">mean_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rowSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">x_mat</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">mean_vals</span><span class="op">)</span>, <span class="va">mean_vals</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="overview-of-the-simulation">Overview of the simulation<a class="anchor" aria-label="anchor" href="#overview-of-the-simulation"></a>
-</h2>
-<p>We consider the linear model
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
-  \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
-</annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛆</mi><mo>∼</mo><mi>F</mi><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{\varepsilon} \sim F\!\left(0, \boldsymbol{\Sigma}(\boldsymbol{\gamma})\right)</annotation></semantics></math>
-denotes a dependent‑error process with distribution family
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
-and variance structure
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{\Sigma}(\boldsymbol{\gamma})</annotation></semantics></math>
-parametrized by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛄</mi><annotation encoding="application/x-tex">\boldsymbol{\gamma}</annotation></semantics></math>.</p>
-<p>The goal is to:</p>
-<ol style="list-style-type: decimal">
-<li>Fit <code><a href="../reference/gmwmx2_new.html">gmwmx2_new()</a></code> on simulated data with known
-parameters.</li>
-<li>Compare results across different stochastic models.</li>
-<li>Run a Monte Carlo experiment to assess empirical coverage of the
-confidence intervals on <code>beta</code>.</li>
-</ol>
-</div>
 <div class="section level2">
 <h2 id="build-an-arbitrary-design-matrix-x">Build an arbitrary design matrix X<a class="anchor" aria-label="anchor" href="#build-an-arbitrary-design-matrix-x"></a>
 </h2>
@@ -229,7 +280,7 @@ model.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9563, sigma2 = 17.82 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.0727</span></span></code></pre>
+<span><span class="co">##   Total              : 1.0785</span></span></code></pre>
 <p>To assess uncertainty, we run a Monte Carlo simulation and check
 empirical coverage of the confidence intervals for
 <code>beta</code>.</p>
@@ -371,7 +422,7 @@ behavior.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.7848, sigma2 = 9.433 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.4689</span></span></code></pre>
+<span><span class="co">##   Total              : 0.4674</span></span></code></pre>
 <p>Monte Carlo coverage for the power-law case:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_pl</span> <span class="op">=</span> <span class="fl">100</span></span>
@@ -510,7 +561,7 @@ index <code>kappa = -1</code> but is handled explicitly by
 <span><span class="co">##        Estimated parameters : sigma2 =   8.7 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.8316</span></span></code></pre>
+<span><span class="co">##   Total              : 0.8289</span></span></code></pre>
 <p>Monte Carlo coverage for the flicker case:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">B_fl</span> <span class="op">=</span> <span class="fl">100</span></span>
