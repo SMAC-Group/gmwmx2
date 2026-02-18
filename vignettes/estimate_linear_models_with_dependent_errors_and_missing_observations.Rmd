@@ -48,10 +48,11 @@ The least‑squares estimator based on observed data is
 \]
 and we compute residuals
 
-\(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
+\begin{equation}
+\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}.
+\end{equation}
 
-We then estimate the parameters of the missingness process via maximum
-likelihood, assuming a two-state Markov model.
+We then obtain $\boldsymbol{\vartheta}$, the estimated parameters of the missingness process using the maximum likelihood estimator, assuming a two-state Markov model.
 
 We then estimate the stochastic parameters using the GMWM estimator:
 

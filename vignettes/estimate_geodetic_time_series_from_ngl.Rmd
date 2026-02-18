@@ -21,7 +21,8 @@ knitr::opts_chunk$set(
 ```
 
 # Model and estimator
-This vignette builds on the general framework described in the vignettes ""Estimate linear models with dependent errors" and "Estimate linear models with dependent errors and missing observations". We do not repeat the full model, missingness mechanism, or estimation details here. Please refer to these vignettes for the formal setup, and use this one as a
+
+This vignette builds on the general framework described in the vignettes "Estimate linear models with dependent errors" and "Estimate linear models with dependent errors and missing observations". We do not repeat the full model, missingness mechanism, or estimation details here. Please refer to these vignettes for the formal setup, and use this one as a
 hands-on guide for geodetic time series from the Nevada Geodetic Laboratory.
 
 
@@ -95,6 +96,7 @@ a single time-series model (e.g., `wn()`, `ar1()`, `pl()`, `matern()`, `rw()`,
 very general and easy to adapt to your application.
 
 # Example of estimation
+
 Let us showcase how to estimate tectonic velocity for one specific component
 (North, East, or Vertical) of one station.
 
@@ -103,31 +105,30 @@ First, load the `gmwmx2` package.
 library(gmwmx2)
 ```
 
-# Download a station from Nevada Geodetic Laboratory
+## Download a station from Nevada Geodetic Laboratory
 ```{r}
 station_data <- download_station_ngl("1LSU")
 ```
 
-# Plot Station
+## Plot Station
 ```{r}
 plot(station_data)
 ```
 
 
-# Plot Northing component
+## Plot Northing component
 ```{r}
 plot(station_data, component = "N")
 ```
 
 
-# Estimate model on station data
+## Estimate models on station data
 ```{r}
 fit1 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn())
 fit1
 ```
 
 
-# Plot estimated model
 ```{r}
 plot(fit1)
 ```
