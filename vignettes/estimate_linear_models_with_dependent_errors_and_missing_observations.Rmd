@@ -451,6 +451,15 @@ y_observed = ifelse(Z_process == 1, y_fl, NA)
 ```
 
 
+```{r}
+plot(X[, 2], y_observed, type = "l", main = "Simulated y (WN + FL)")
+id_not_observed = which(is.na(y_observed))
+for(i in id_not_observed){
+  abline(v = X[i, 2], col = "grey70", lty =1)
+}
+```
+
+
 ## Fit model
 ```{r}
 fit_fl = gmwmx2_new(X = X, y = y_observed, model = wn() + flicker())

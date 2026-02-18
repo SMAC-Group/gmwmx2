@@ -21,10 +21,7 @@ knitr::opts_chunk$set(
 ```
 
 # Model and estimator
-This vignette builds on the general framework described in the vignette
-"Estimate linear models with dependent errors and missing observations." We do
-not repeat the full model, missingness mechanism, or estimation details here.
-Please refer to that vignette for the formal setup, and use this one as a
+This vignette builds on the general framework described in the vignettes ""Estimate linear models with dependent errors" and "Estimate linear models with dependent errors and missing observations". We do not repeat the full model, missingness mechanism, or estimation details here. Please refer to these vignettes for the formal setup, and use this one as a
 hands-on guide for geodetic time series from the Nevada Geodetic Laboratory.
 
 
@@ -32,8 +29,8 @@ hands-on guide for geodetic time series from the Nevada Geodetic Laboratory.
 
 While the GMWMX, as described above and in more detail in
 @voirol2024inference, is a general method for estimating large linear models
-with complex dependence structures in the presence of missing data, the
-`gmwmx2` R package is currently developed specifically to estimate tectonic
+with complex dependence structures in presence of missing observations, the
+`gmwmx2` `R` package allows to estimate tectonic
 velocities from position time series in graticule distance (GD) coordinates
 provided by the Nevada Geodetic Laboratory
 [@blewitt2024improved; @blewitt2018harnessing].
@@ -108,7 +105,7 @@ library(gmwmx2)
 
 # Download a station from Nevada Geodetic Laboratory
 ```{r}
-station_data <- download_station_ngl("CHML")
+station_data <- download_station_ngl("1LSU")
 ```
 
 # Plot Station
@@ -136,7 +133,7 @@ plot(fit1)
 ```
 
 ```{r}
-fit2 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn()+ ar1())
+fit2 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn()+ pl())
 fit2
 ```
 
@@ -145,21 +142,14 @@ plot(fit2)
 ```
 
 ```{r}
-fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + pl())
+fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + ar1())
 fit3
+```
+
+
+```{r}
 plot(fit3)
 ```
 
-```{r}
-fit4 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + flicker())
-fit4
-plot(fit4)
-```
-
-```{r}
-fit5 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() +  matern())
-fit5
-plot(fit5)
-```
 
 # References
