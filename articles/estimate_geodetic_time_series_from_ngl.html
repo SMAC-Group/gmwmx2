@@ -302,7 +302,7 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##   Parameters : sigma2 = 1.65e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.6793</span></span></code></pre>
+<span><span class="co">##   Total              : 1.5218</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -343,13 +343,54 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : kappa =    -1, sigma2 = 9.708e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 2.0435</span></span></code></pre>
+<span><span class="co">##   Total              : 1.9517</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit3</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit3</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit3</span></span></code></pre></div>
+<pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
+<span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
+<span><span class="co">## Intercept              8.156e-01 2.298e-03  8.111e-01  8.201e-01</span></span>
+<span><span class="co">## Trend                 -1.090e-06 5.367e-07 -2.142e-06 -3.774e-08</span></span>
+<span><span class="co">## Sin (Annual)          -5.216e-04 1.246e-04 -7.659e-04 -2.773e-04</span></span>
+<span><span class="co">## Cos (Annual)          -4.129e-03 1.279e-04 -4.380e-03 -3.878e-03</span></span>
+<span><span class="co">## Sin (Semi-Annual)      1.089e-03 8.826e-05  9.160e-04  1.262e-03</span></span>
+<span><span class="co">## Cos (Semi-Annual)     -4.455e-04 8.823e-05 -6.184e-04 -2.725e-04</span></span>
+<span><span class="co">## Jump: MJD 52920        4.958e-04 9.597e-04 -1.385e-03  2.377e-03</span></span>
+<span><span class="co">## Jump: MJD 53619       -3.057e-03 1.001e-03 -5.019e-03 -1.095e-03</span></span>
+<span><span class="co">## Jump: MJD 53866       -5.586e-04 1.020e-03 -2.559e-03  1.441e-03</span></span>
+<span><span class="co">## Jump: MJD 54637       -2.499e-04 1.594e-03 -3.374e-03  2.875e-03</span></span>
+<span><span class="co">## Jump: MJD 54640        6.393e-03 1.581e-03  3.294e-03  9.492e-03</span></span>
+<span><span class="co">## Jump: MJD 55300       -2.496e-03 1.066e-03 -4.586e-03 -4.063e-04</span></span>
+<span><span class="co">## Jump: MJD 56671       -1.193e-03 1.114e-03 -3.377e-03  9.908e-04</span></span>
+<span><span class="co">## Jump: MJD 56868        1.120e-03 1.101e-03 -1.038e-03  3.279e-03</span></span>
+<span><span class="co">## Jump: MJD 58298        3.321e-03 1.458e-03  4.623e-04  6.179e-03</span></span>
+<span><span class="co">## Jump: MJD 58004        1.137e-03 1.493e-03 -1.790e-03  4.064e-03</span></span>
+<span><span class="co">## Earthquake: MJD 58004 -7.135e-03 3.175e-03 -1.336e-02 -9.126e-04</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Missingness model</span></span>
+<span><span class="co">##   Proportion missing : 0.0584 </span></span>
+<span><span class="co">##   p1                 : 0.0073 </span></span>
+<span><span class="co">##   p2                 : 0.1173 </span></span>
+<span><span class="co">##   p*                 : 0.9416 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Stochastic model</span></span>
+<span><span class="co">##   Sum of 2 processes</span></span>
+<span><span class="co">##   [1] White Noise</span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 8.156e-07 </span></span>
+<span><span class="co">##   [2] Flicker</span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 9.725e-07 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Runtime (seconds)</span></span>
+<span><span class="co">##   Total              : 4.2708</span></span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit4</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fit4</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
 <span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
 <span><span class="co">## Intercept              8.156e-01 2.265e-03  8.112e-01  8.200e-01</span></span>
@@ -384,10 +425,10 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9803, sigma2 = 1.35e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.5962</span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<span><span class="co">##   Total              : 1.5885</span></span></code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
