@@ -1,9 +1,9 @@
 ---
-title: "Estimate a small network of GNSS station"
+title: "Estimate a small network of GNSS stations"
 output: rmarkdown::html_vignette
 bibliography: REFERENCES.bib
 vignette: >
-  %\VignetteIndexEntry{Estimate a small network of GNSS station}
+  %\VignetteIndexEntry{Estimate a small network of GNSS stations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 
 
-# so not to executate this vignette during pckg devlopment
+# so as not to execute this vignette during package development
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
@@ -105,7 +105,7 @@ make_transparent <- function(colors, alpha = 0.5) {
 
 # Estimate a small network in France
 ```{r}
-# Estimate little network in France
+# Estimate a small network in France
 all_station <- download_all_stations_ngl()
 
 # download selected stations
@@ -175,7 +175,7 @@ combined_raster <- merge(
 
 # Plot estimated N-E velocities and associated uncertainty
 ```{r}
-# sett plot limits
+# set plot limits
 xlims <- c(2, 7)
 ylims <- c(44, 48)
 
@@ -317,4 +317,3 @@ text(
   labels = "20 mm/year"
 )
 ```
-

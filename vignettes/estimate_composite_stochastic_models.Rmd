@@ -17,15 +17,15 @@ knitr::opts_chunk$set(
 
 This vignette shows how to estimate composite stochastic models using
 `gmwm2()`. We generate data from known models, fit composite candidates,
-and visualize the fits.
+and visualize the results.
 
 We consider a zero-mean stochastic process \(\{Y_t\}_{t=1}^n\) generated from a
-composite model parametrized by \(\boldsymbol{\gamma} \in \boldsymbol{\Gamma}\).
+composite model parameterized by \(\boldsymbol{\gamma} \in \boldsymbol{\Gamma}\).
 
 Given a parametric model with parameters \(\boldsymbol{\gamma}\), the GMWM
-estimator estimates $\boldsymbol{\gamma}$ with the following optimization problem:
+estimator computes $\boldsymbol{\gamma}$ by solving:
 \begin{equation}
-    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right),
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\right\}^T \boldsymbol{\Omega} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\},
 \end{equation}
 
 where \(\hat{\boldsymbol{\nu}}\) is the empirical wavelet variance of the
@@ -40,39 +40,39 @@ set.seed(123)
 
 
 ```{r}
-n=10000
-mod1 = wn(sigma2 = 25) + ar1(phi = 0.99, sigma2 = 1)
-y1 = generate(mod1, n = n)
+n <- 10000
+mod1 <- wn(sigma2 = 25) + ar1(phi = 0.99, sigma2 = 1)
+y1 <- generate(mod1, n = n)
 plot(y1)
-fit1 = gmwm2(y1, model = wn() + ar1())
+fit1 <- gmwm2(y1, model = wn() + ar1())
 fit1
 plot(fit1)
 ```
 
 ```{r}
-mod2 = wn(5) + pl(kappa = -.9,sigma2 =  1)
-y2 = generate(mod2, n = n)
+mod2 <- wn(5) + pl(kappa = -0.9, sigma2 = 1)
+y2 <- generate(mod2, n = n)
 plot(y2)
-fit2 = gmwm2(y2, model = wn() + pl())
+fit2 <- gmwm2(y2, model = wn() + pl())
 fit2
 plot(fit2)
 ```
 
 ```{r}
-mod3 = wn(5) + ar1(phi = 0.98, sigma2 = 1) + rw(.1)
-y3 = generate(mod3, n = n)
+mod3 <- wn(5) + ar1(phi = 0.98, sigma2 = 1) + rw(0.1)
+y3 <- generate(mod3, n = n)
 plot(y3)
-fit3 = gmwm2(y3, model = wn() + ar1() + rw())
+fit3 <- gmwm2(y3, model = wn() + ar1() + rw())
 fit3        
 plot(fit3)
 ```
 
 
 ```{r}
-mod4 = wn(20) + rw(.1)
-y4 = generate(mod4, n = n)
+mod4 <- wn(20) + rw(0.1)
+y4 <- generate(mod4, n = n)
 plot(y4)
-fit4 = gmwm2(y4, model = wn() + rw())
+fit4 <- gmwm2(y4, model = wn() + rw())
 fit4
 plot(fit4)
 ```

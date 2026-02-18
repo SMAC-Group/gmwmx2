@@ -21,23 +21,46 @@ knitr::opts_chunk$set(
 ```
 
 # Model and estimator
-The `gmwmx2` `R` package allows to estimate linear model with dependent errors described by composite stochastic model in presence of missing data.
+The `gmwmx2` R package supports estimation of linear models with dependent
+errors described by a composite stochastic model in the presence of missing
+data.
 
 More precisely, we assume the following model:
 \begin{equation}
     \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
-where $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
+where $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ is a design matrix of
+observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression
+parameter vector, and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$
+is a zero-mean process following an unspecified joint distribution
+$\mathcal{F}$ with positive-definite covariance function
+$\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$,
+characterizing the second-order dependence structure of the process and
+parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
 
-We then define the a random variable $\boldsymbol{Z} =\{Z_{i}\}_{i=1,\ldots,n}$ which describes the missing observation mechanism. More specifically, the vector $\boldsymbol{Z} \in \{0, 1\}^n$ is a binary-valued stationary process independent of $\boldsymbol{Y}$ with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in [0, \, 1)$, $\forall \, i$, and covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \mathbb{V}[\boldsymbol{Z}] \in \mathbb{R}^{n\times n}$ whose structure is assumed known up to the parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$
+We then define a random variable $\boldsymbol{Z} = \{Z_{i}\}_{i=1,\ldots,n}$
+that describes the missing-observation mechanism. More specifically, the vector
+$\boldsymbol{Z} \in \{0, 1\}^n$ is a binary-valued stationary process
+independent of $\boldsymbol{Y}$ with expectation
+$\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in [0, 1)$, for all $i$, and
+covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \mathbb{V}[\boldsymbol{Z}]
+\in \mathbb{R}^{n\times n}$ whose structure is assumed known up to the
+parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$.
 
 
-We then assume that we only observe the stochastic process $\tilde{\boldsymbol{Y}} = \boldsymbol{Z} \odot \boldsymbol{Y}$, where $\odot$ denotes the Hadamard product. Hence, $\tilde{\boldsymbol{Y}} \in \mathbb{R}^n = \boldsymbol{Y} \odot \boldsymbol{Z}$ represents the observed process vector with null elements in the positions where observations are missing. 
+We observe only the stochastic process $\tilde{\boldsymbol{Y}} = \boldsymbol{Z} \odot \boldsymbol{Y}$,
+where $\odot$ denotes the Hadamard product. Hence,
+$\tilde{\boldsymbol{Y}} \in \mathbb{R}^n$ represents the observed process
+vector with null elements at positions where observations are missing. 
 
-Using $\otimes$ to denote the Kronecker product, we then define $\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X} \in \mathbb{R}^{n \times p}$ as the design matrix $\boldsymbol{X}$ with zero-valued vectors for the rows where observations are missing in $\boldsymbol{Y}$ (where $\boldsymbol{1}$ represents a vector of ones of dimension $p$).
+Using $\otimes$ to denote the Kronecker product, we define
+$\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X}
+\in \mathbb{R}^{n \times p}$ as the design matrix $\boldsymbol{X}$ with
+zero-valued rows where observations are missing in $\boldsymbol{Y}$ (where
+$\boldsymbol{1}$ represents a vector of ones of dimension $p$).
 
-We estimate the parameters $\boldsymbol{\beta}$ with the least square estimator:
+We estimate the parameters $\boldsymbol{\beta}$ with the least-squares estimator:
 
 \begin{equation}
     \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}}.
@@ -45,7 +68,9 @@ We estimate the parameters $\boldsymbol{\beta}$ with the least square estimator:
 
 We compute the estimated residuals as $\hat{\boldsymbol{\varepsilon}} = {\tilde{\boldsymbol{Y}}} - \tilde{{\boldsymbol{X}}} \hat{\boldsymbol{\beta}}$.
 
-We then estimate with the Maximum Likelihood Estimator the parameters $\boldsymbol{\vartheta}$ of the missingness process $\boldsymbol{Z}$ assuming that $\boldsymbol{Z}$ is generated from a Markov model with the following transition probabilities:
+We estimate the parameters $\boldsymbol{\vartheta}$ of the missingness process
+$\boldsymbol{Z}$ via maximum likelihood, assuming that $\boldsymbol{Z}$ is
+generated from a Markov model with the following transition probabilities:
 
 \begin{equation}
     \label{eq:markov_model_def}
@@ -57,40 +82,91 @@ We then estimate with the Maximum Likelihood Estimator the parameters $\boldsymb
 \end{aligned}
 \end{equation}
 
-We then estimate the parameters $\boldsymbol{\gamma}$ using a Generalized method of Wavelet Moments approach [@guerrier2013wavelet].
+We then estimate the parameters $\boldsymbol{\gamma}$ using a Generalized
+Method of Wavelet Moments approach [@guerrier2013wavelet].
 
-More precisely, we rely on the result of @xu2017study that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$ to avoid computing these large matrices multiplication in the objective function. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWM, which uses this form, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector (these elements being averages of the diagonal and super-diagonals of the covariance matrix).
+More precisely, we rely on results from @xu2017study, which provide a
+computationally efficient form of the theoretical Allan variance (equivalent
+to the Haar wavelet variance up to a constant) for zero-mean stochastic
+processes such as $\boldsymbol{\varepsilon}$, avoiding large matrix
+multiplications in the objective function. In @xu2017study they generalize the
+results in @zhang2008allan to zero-mean non-stationary processes by using
+averages of the diagonals and super-diagonals of the covariance matrix of
+$\boldsymbol{\varepsilon}$. This implies that the GMWM does not require
+storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$,
+but only a vector of length $n$ that is plugged into an explicit formula
+consisting of a linear combination of its elements (these elements are
+averages of the diagonal and super-diagonals of the covariance matrix).
 
 
 # Estimating tectonic velocities and crustal uplift
 
-While the GMWMX as described above and in more details in @voirol2024inference, is a general method for estimating large linear model with complex dependence structure in presence of missing data, the `gmwmx2` `R` package is currently developed specifically to estimate tectonic velocities from position times series in graticule distance coordinates system (GD) provided by the Nevada geodetic Laboratory [@blewitt2024improved; @blewitt2018harnessing].
+While the GMWMX, as described above and in more detail in
+@voirol2024inference, is a general method for estimating large linear models
+with complex dependence structures in the presence of missing data, the
+`gmwmx2` R package is currently developed specifically to estimate tectonic
+velocities from position time series in graticule distance (GD) coordinates
+provided by the Nevada Geodetic Laboratory
+[@blewitt2024improved; @blewitt2018harnessing].
 
 ## Trajectory model
 
-To estimate the trajectory model (see e.g., @bevis2014 for more details), we construct the design matrix $\boldsymbol{X}$ such that $i$-th component of the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows with $t_i$ representing the $i^{th}$ ordered time point (epoch) indicated in Modified Julian Date and $t_0$ representing the reference epoch located exactly in the middle of start and end point of
-the time series:
+To estimate the trajectory model (see, e.g., @bevis2014 for more details), we
+construct the design matrix $\boldsymbol{X}$ such that the $i$-th component of
+the vector $\mathbf{X} {{\boldsymbol{\beta}}}$ can be described as follows, with
+$t_i$ representing the $i^{\text{th}}$ ordered time point (epoch) in Modified
+Julian Date and $t_0$ representing the reference epoch located exactly in the
+middle of the start and end points of the time series:
 
 \begin{split}
  \mathbb{E}[\mathbf{Y}_i] &= \mathbf{X}_i^T {{\boldsymbol{\beta}}}  \\
 &= a + b \left(t_{i} - t_0\right) +  \sum_{h=1}^{m}\left[c_{h} \sin \left(2 \pi f_{h} t_{i}\right)  + d_h \cos \left(2 \pi f_h t_i\right)\right] + \\& \sum_{j=1}^{r}e_j H\left(t_i - t_j\right) + \sum_{k = 1 }^{s} l_k \left[1- \exp\left(\frac{-(t_i-t_k)}{\tau_k}\right)\right]H\left(t_{i}-\tau_k\right) 
 \end{split}
 
-where $a$ is the initial position at the reference epoch $t_0$, $b$ is the velocity parameter, $c_h$  and $d_h$ are the periodic motion parameters ($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms, respectively with $f_1 = \frac{1}{365.25}$ and $f_2 = \frac{2}{365.25}$). The offset terms models earthquakes, equipment changes or human intervention in which $e_j$ is the magnitude of the step at epochs $t_j$, $r$ is the total number of offsets, $H$ is the Heaviside step function defined as $H(x):= \begin{cases}1, & x \geq 0 \\ 0, & x<0\end{cases}$ and the last term allow to model post-seismic deformation (see e.g., @sobrero2020logarithmic) where $s$ is the number of post seismic relaxation time specified, $t_k$ is the time when the relaxation $k$
-starts in Modified Julian Date (MJD), $\tau_k$ is the relaxation period in days for the post-seismic relaxation $k$ and $l_k$ is the amplitude of the transient. Note that by default the estimates of the functional parameters  are provided in unit/day. 
+where $a$ is the initial position at the reference epoch $t_0$, $b$ is the
+velocity parameter, and $c_h$ and $d_h$ are the periodic motion parameters
+($h = 1$ and $h = 2$ represent the annual and semi-annual seasonal terms,
+respectively with $f_1 = \frac{1}{365.25}$ and $f_2 = \frac{2}{365.25}$). The
+offset terms model earthquakes, equipment changes, or human intervention, in
+which $e_j$ is the magnitude of the step at epochs $t_j$, $r$ is the total
+number of offsets, and $H$ is the Heaviside step function defined as
+$H(x):= \begin{cases}1, & x \geq 0 \\ 0, & x<0\end{cases}$. The last term allows
+us to model post-seismic deformation (see, e.g., @sobrero2020logarithmic) where
+$s$ is the number of post-seismic relaxation times specified, $t_k$ is the time
+when the relaxation $k$
+starts in Modified Julian Date (MJD), $\tau_k$ is the relaxation period in days
+for the post-seismic relaxation $k$, and $l_k$ is the amplitude of the
+transient. Note that by default the estimates of the functional parameters are
+provided in units/day. 
 
-When loading data from a specific station using the function `gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory the position time series in  GD coordinates, the time steps associated with a equipment or software change and the time steps associated with an earthquake near the station. All these objects are stored in a object of class `gnss_ts_ngl`.  
+When loading data from a specific station using
+`gmwmx2::download_station_ngl()`, we extract from the Nevada Geodetic Laboratory
+the position time series in GD coordinates, the time steps associated with
+equipment or software changes, and the time steps associated with earthquakes
+near the station. All these objects are stored in an object of class
+`gnss_ts_ngl`.  
 
-When applying the function `gmwmx2::gmwmx2()` to an object of class `gnss_ts_ngl`, we construct the design matrix $\boldsymbol{X}$ by considering an offset term for all equipment or software changes steps and all earthquakes indicated by the NGL. We also specify a post-seismic relaxation term for all earthquakes indicated by the NGL. If no relaxation time is specified in the argument `vec_earthquakes_relaxation_time`, we consider a default relaxation time of $365.25$ days. 
+When applying the function `gmwmx2::gmwmx2()` to an object of class
+`gnss_ts_ngl`, we construct the design matrix $\boldsymbol{X}$ by considering
+an offset term for all equipment or software change steps and all earthquakes
+indicated by the NGL. We also specify a post-seismic relaxation term for all
+earthquakes indicated by the NGL. If no relaxation time is specified in the
+argument `vec_earthquakes_relaxation_time`, we use a default relaxation time of
+$365.25$ days. 
 
 ## Stochastic model
 
-It is generally recognized that noise in GNSS time series is best described by a combination of colored noise plus white noise [@he2017review; @langbein2008noise; @williams2004error; @bos2013fast] where the white noise generally model noise at high frequencies and the colored noise model the lower frequencies of the spectrum. 
+It is generally recognized that noise in GNSS time series is best described by
+a combination of colored noise plus white noise
+[@he2017review; @langbein2008noise; @williams2004error; @bos2013fast], where the
+white noise generally models noise at high frequencies and the colored noise
+models the lower frequencies of the spectrum. 
 
 # Example of estimation
-Let us showcase how to estimate the tectonic velocity in for one specific component (North, East or Vertical) of one station.
+Let us showcase how to estimate tectonic velocity for one specific component
+(North, East, or Vertical) of one station.
 
-Let us first load the `gmwmx2` package.
+First, load the `gmwmx2` package.
 ```{r}
 library(gmwmx2)
 ```

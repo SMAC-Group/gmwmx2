@@ -15,11 +15,13 @@ knitr::opts_chunk$set(
   fig.align = "center"
 )
 
-# so not to executate this vignette during pckg devlopment
+# so as not to execute this vignette during package development
 # knitr::opts_chunk$set(eval = FALSE)
 ```
 
-This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process. Consider the model defined as:
+This vignette demonstrates how to use the GMWMX estimator to estimate linear
+models with dependent errors described by a composite stochastic process.
+Consider the model defined as:
 
 \begin{equation}
     \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
@@ -27,25 +29,45 @@ This vignette demonstrate on to use the GMWMX estimator to estimate linear model
 
 where $\mathbf{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
 
-The GMWMX estimator proposes to first estimate \eqn{\boldsymbol{\beta}} with the least square estimator defined as:
+The GMWMX estimator first estimates \eqn{\boldsymbol{\beta}} with the
+least-squares estimator:
 
 \begin{equation}
     \hat{\boldsymbol{\beta}} = \left( \mathbf{X}^T  \mathbf{X}\right)^{-1}  \mathbf{X}^T \boldsymbol{Y},
 \end{equation}
     
-It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach [@guerrier2013wavelet] applied to the estimated residuals defined as $\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - { \mathbf{X}} \hat{\boldsymbol{\beta}}$.
+It then estimates the parameters of the stochastic model
+\eqn{\boldsymbol{\gamma}} with a Generalized Method of Wavelet Moments approach
+[@guerrier2013wavelet] applied to the estimated residuals defined as
+$\hat{\boldsymbol{\varepsilon}} = {\boldsymbol{Y}} - { \mathbf{X}} \hat{\boldsymbol{\beta}}$.
 
-More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbol{\gamma}}$ are defined as follows:
+More precisely, the estimated stochastic parameters, denoted as
+$\hat{\boldsymbol{\gamma}}$, are defined as:
 
 \begin{equation}
     \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\}^T \boldsymbol{\Omega} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\},
 \end{equation}
 
-where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$, $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$ and $\boldsymbol{\Omega}$ is a weighting matrix. 
+where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances
+computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$,
+$\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet
+variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$,
+and $\boldsymbol{\Omega}$ is a weighting matrix. 
 
-The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is obtained using the results of @xu2017study and @zhang2008allan that provide a computationally efficient form of the theoretical Allan variance (equivalent to the Haar wavelet variance up to a constant) for zero-mean stochastic processes such as $\boldsymbol{\varepsilon}$. Indeed in @xu2017study they generalize the results in @zhang2008allan to zero-mean non-stationary processes by using averages of the diagonals and super-diagonals of the covariance matrix of $\boldsymbol{\varepsilon}$. What this implies is that the GMWMX, does not require the storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only of a vector of dimension $n$ which is then plugged into an explicit formula consisting in a linear combination of the elements of this vector. 
+The theoretical wavelet variance $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is
+obtained using the results of @xu2017study and @zhang2008allan that provide a
+computationally efficient form of the theoretical Allan variance (equivalent
+to the Haar wavelet variance up to a constant) for zero-mean stochastic
+processes such as $\boldsymbol{\varepsilon}$. In @xu2017study they generalize
+the results in @zhang2008allan to zero-mean non-stationary processes by using
+averages of the diagonals and super-diagonals of the covariance matrix of
+$\boldsymbol{\varepsilon}$. This implies that GMWMX does not require storage of
+the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$, but only a
+vector of length $n$ that is plugged into an explicit formula consisting of a
+linear combination of its elements. 
 
-The variance covariance matrix of the estimated regression parameters $\hat{\boldsymbol{\beta}}$ is then obtained as:
+The variance-covariance matrix of the estimated regression parameters
+$\hat{\boldsymbol{\beta}}$ is then obtained as:
 \begin{equation}
 (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} 
 \end{equation}.
@@ -140,7 +162,7 @@ for(b in seq(B)){
   eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
   y = X %*% beta + eps
   fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
-  # mispecified model assuming white noise as the stochastic model
+  # misspecified model assuming white noise as the stochastic model
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 
   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
@@ -462,7 +484,6 @@ mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl
 mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
 dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
 ```
-
 
 
 

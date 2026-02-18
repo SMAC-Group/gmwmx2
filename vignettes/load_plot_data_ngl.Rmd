@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 
 
-Let us first load the `gmwmx2` package.
+First, load the `gmwmx2` package.
 ```{r}
 library(gmwmx2)
 ```
@@ -36,18 +36,18 @@ head(all_stations)
 ```{r}
 data_1LSU <- download_station_ngl("1LSU")
 ```
-# Extract GNSS position time series of station
+# Extract GNSS position time series for the station
 ```{r}
 attributes(data_1LSU)
 head(data_1LSU$df_position)
 ```
 
-# Extract equipment or software changes steps
+# Extract equipment or software change steps
 ```{r}
 head(data_1LSU$df_equipment_software_changes)
 ```
 
-# Extract earthquakes steps
+# Extract earthquake steps
 ```{r}
 head(data_1LSU$df_earthquakes)
 ```

@@ -7,14 +7,18 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process in presence of missing observations. Consider the model defined as:
+This vignette demonstrates how to use the GMWMX estimator to estimate linear
+models with dependent errors described by a composite stochastic process in
+the presence of missing observations. Consider the model defined as:
 
 \begin{equation}
     \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
-Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_i = 1\) indicating
-observation, and \(Z_i = 0\) a missing observation with $i \in \{1,\ldots, n\}$. The missingness process is independent of $\mathbf{Y}$ and respect the following definition:
+Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with
+\(Z_i = 1\) indicating an observation and \(Z_i = 0\) a missing observation
+for $i \in \{1,\ldots, n\}$. The missingness process is independent of
+$\mathbf{Y}$ and follows the definition:
 \begin{equation}
   Z_i =
 \begin{cases}
@@ -22,7 +26,12 @@ observation, and \(Z_i = 0\) a missing observation with $i \in \{1,\ldots, n\}$.
     W_i \sim \mathrm{Bernoulli}(\mu(\bm{\vartheta})), & \text{with probability } 1-\rho,
 \end{cases}
 \end{equation}
-with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, 1]$, for all $i \in \{1, \ldots n\}$, with covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right) \in \mathbb{R}^{n\times n}$  whose structure is assumed known up to the parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$ The observed series is
+with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, 1]$ for
+all $i \in \{1, \ldots n\}$, with covariance matrix
+$\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right)
+\in \mathbb{R}^{n\times n}$ whose structure is assumed known up to the
+parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$.
+The observed series is
 \[
   \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z}.
 \]
@@ -34,9 +43,11 @@ The least‑squares estimator based on observed data is
   \hat{\boldsymbol{\beta}} =
   \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
 \]
-and we compute residuals \(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
+and we compute residuals
+\(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
 
-We then estimate the parameters of the missingness process using maximum likelihood estimation, assuming a two state Markov model using the Maximum Likelihood Estimator.
+We then estimate the parameters of the missingness process via maximum
+likelihood, assuming a two-state Markov model.
 
 We then estimate the stochastic parameters using the GMWM estimator:
 
@@ -44,12 +55,19 @@ We then estimate the stochastic parameters using the GMWM estimator:
     \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \,\left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\right\}^{T} \, \boldsymbol{\Omega} \, \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\right\},
 \end{equation}
 
-where $\hat{\boldsymbol{\nu}}$ is the estimated wavelet variance computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and $\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter $\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite matrix.
+where $\hat{\boldsymbol{\nu}}$ is the estimated wavelet variance computed on the
+estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and
+$\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter
+$\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite
+matrix.
 
-The variance covariance matrix of the estimated regression parameters $\hat{\boldsymbol{\beta}}$ is then obtained as:
+The variance-covariance matrix of the estimated regression parameters
+$\hat{\boldsymbol{\beta}}$ is then obtained as:
 
 \begin{equation}
-\mu(\hat{\boldsymbol{\vartheta}})^{-2}(\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T} \boldsymbol{\Sigma}(\hat{\boldsymbol{\gamma}}, \hat{\boldsymbol{\vartheta}})\mathbf{X} (\mathbf{X}^{T}\mathbf{X})^{-1}$
+\mu(\hat{\boldsymbol{\vartheta}})^{-2}(\mathbf{X}^{T}\mathbf{X})^{-1}
+\mathbf{X}^{T} \boldsymbol{\Sigma}(\hat{\boldsymbol{\gamma}}, \hat{\boldsymbol{\vartheta}})
+\mathbf{X} (\mathbf{X}^{T}\mathbf{X})^{-1}
 \end{equation}
 
 
@@ -61,7 +79,7 @@ knitr::opts_chunk$set(
   fig.align = "center"
 )
 
-# so not to executate this vignette during pckg devlopment
+# so as not to execute this vignette during package development
 # knitr::opts_chunk$set(eval = FALSE)
 ```
 
@@ -170,7 +188,7 @@ for(b in seq(B)){
   Z = generate(mod_missing, n = n, seed = 123 + b)$series
   y_observed = ifelse(Z == 1, y, NA)
   fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
-  # mispecified model assuming white noise as the stochastic model and only on observed data
+  # misspecified model assuming white noise as the stochastic model and only on observed data
   fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
   mat_res[b, ] = c(fit$beta_hat, fit$std_beta_hat,
@@ -536,4 +554,3 @@ mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl
 dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
 
 ```
-
