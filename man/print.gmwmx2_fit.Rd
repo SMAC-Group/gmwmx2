@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwmx2_new.R
 \name{print.gmwmx2_fit}
 \alias{print.gmwmx2_fit}
-\title{Print method for gmwmx2_fit}
+\title{Print method for a \code{gmwmx2_fit} object}
 \usage{
 \method{print}{gmwmx2_fit}(x, digits = 4, ...)
 }
