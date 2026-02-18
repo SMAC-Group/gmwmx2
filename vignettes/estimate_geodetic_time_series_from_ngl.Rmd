@@ -32,7 +32,7 @@ While the GMWMX, as described above and in more detail in
 @voirol2024inference, is a general method for estimating large linear models
 with complex dependence structures in presence of missing observations, the
 `gmwmx2` `R` package allows to estimate tectonic
-velocities from position time series in graticule distance (GD) coordinates
+velocities and crustal uplift from position time series in graticule distance (GD) coordinates
 provided by the Nevada Geodetic Laboratory
 [@blewitt2024improved; @blewitt2018harnessing].
 
