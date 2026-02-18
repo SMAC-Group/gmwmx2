@@ -16,8 +16,7 @@ the presence of missing observations. Consider the model defined as:
 \end{equation}
 
 Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with
-\(Z_i = 1\) indicating an observation and \(Z_i = 0\) a missing observation
-for $i \in \{1,\ldots, n\}$. The missingness process is independent of
+\(Z_i = 1\) indicating an observation and \(Z_i = 0\) a missing observation. The missingness process is independent of
 $\mathbf{Y}$ and follows the definition:
 \begin{equation}
   Z_i =
@@ -27,7 +26,7 @@ $\mathbf{Y}$ and follows the definition:
 \end{cases}
 \end{equation}
 with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, 1]$ for
-all $i \in \{1, \ldots n\}$, with covariance matrix
+all $i \in \{1, \ldots, n\}$, with covariance matrix
 $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right)
 \in \mathbb{R}^{n\times n}$ whose structure is assumed known up to the
 parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$.
@@ -87,6 +86,9 @@ Overall, these examples illustrate how `gmwmx2_new()` supports inference for
 linear regression models with dependent errors in presence of missing observations,
 and how the results compare to a naive OLS fit that ignores dependence.
 
+We load the packages used for simulation, wavelet variance diagnostics, and
+summary plots. The helper `boxplot_mean_dot()` overlays Monte Carlo means on
+top of each boxplot for easier comparison.
 
 ```{r, warning=FALSE, message=FALSE}
 library(gmwmx2)
@@ -101,9 +103,6 @@ boxplot_mean_dot <- function(x, ...) {
 }
 ```
 
-We load the packages used for simulation, wavelet variance diagnostics, and
-summary plots. The helper `boxplot_mean_dot()` overlays Monte Carlo means on
-top of each boxplot for easier comparison.
 
 We first construct a design matrix with an intercept, linear trend, and annual
 seasonal components. This deterministic signal will be used across examples.

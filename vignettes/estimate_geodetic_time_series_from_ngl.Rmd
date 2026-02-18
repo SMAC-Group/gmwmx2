@@ -1,9 +1,9 @@
 ---
-title: "Estimate geodetic time series with dependent errors and missing observations"
+title: "Estimate geodetic time series from the Nevada Geodetic Laboratory"
 output: rmarkdown::html_vignette
 bibliography: REFERENCES.bib
 vignette: >
-  %\VignetteIndexEntry{Estimate geodetic time series with dependent errors and missing observations}
+  %\VignetteIndexEntry{Estimate geodetic time series from the Nevada Geodetic Laboratory}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,82 +21,11 @@ knitr::opts_chunk$set(
 ```
 
 # Model and estimator
-The `gmwmx2` R package supports estimation of linear models with dependent
-errors described by a composite stochastic model in the presence of missing
-data.
-
-More precisely, we assume the following model:
-\begin{equation}
-    \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
-\end{equation}
-
-where $\boldsymbol{X} \in \mathbb{R}^{n \times p}$ is a design matrix of
-observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression
-parameter vector, and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$
-is a zero-mean process following an unspecified joint distribution
-$\mathcal{F}$ with positive-definite covariance function
-$\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$,
-characterizing the second-order dependence structure of the process and
-parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
-
-We then define a random variable $\boldsymbol{Z} = \{Z_{i}\}_{i=1,\ldots,n}$
-that describes the missing-observation mechanism. More specifically, the vector
-$\boldsymbol{Z} \in \{0, 1\}^n$ is a binary-valued stationary process
-independent of $\boldsymbol{Y}$ with expectation
-$\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in [0, 1)$, for all $i$, and
-covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \mathbb{V}[\boldsymbol{Z}]
-\in \mathbb{R}^{n\times n}$ whose structure is assumed known up to the
-parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$.
-
-
-We observe only the stochastic process $\tilde{\boldsymbol{Y}} = \boldsymbol{Z} \odot \boldsymbol{Y}$,
-where $\odot$ denotes the Hadamard product. Hence,
-$\tilde{\boldsymbol{Y}} \in \mathbb{R}^n$ represents the observed process
-vector with null elements at positions where observations are missing. 
-
-Using $\otimes$ to denote the Kronecker product, we define
-$\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X}
-\in \mathbb{R}^{n \times p}$ as the design matrix $\boldsymbol{X}$ with
-zero-valued rows where observations are missing in $\boldsymbol{Y}$ (where
-$\boldsymbol{1}$ represents a vector of ones of dimension $p$).
-
-We estimate the parameters $\boldsymbol{\beta}$ with the least-squares estimator:
-
-\begin{equation}
-    \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}}.
-\end{equation}
-
-We compute the estimated residuals as $\hat{\boldsymbol{\varepsilon}} = {\tilde{\boldsymbol{Y}}} - \tilde{{\boldsymbol{X}}} \hat{\boldsymbol{\beta}}$.
-
-We estimate the parameters $\boldsymbol{\vartheta}$ of the missingness process
-$\boldsymbol{Z}$ via maximum likelihood, assuming that $\boldsymbol{Z}$ is
-generated from a Markov model with the following transition probabilities:
-
-\begin{equation}
-    \label{eq:markov_model_def}
-    \begin{aligned}
-& P\left( Z_2=1 \mid Z_1=1\right)=1 - p_1 \\
-& P\left(Z_2=1 \mid Z_1=0\right) = p_2 \\
-& P\left(Z_2=0 \mid Z_1=1\right)=p_1 \\
-& P\left(Z_2=0 \mid Z_1=0\right)=1-p_2.
-\end{aligned}
-\end{equation}
-
-We then estimate the parameters $\boldsymbol{\gamma}$ using a Generalized
-Method of Wavelet Moments approach [@guerrier2013wavelet].
-
-More precisely, we rely on results from @xu2017study, which provide a
-computationally efficient form of the theoretical Allan variance (equivalent
-to the Haar wavelet variance up to a constant) for zero-mean stochastic
-processes such as $\boldsymbol{\varepsilon}$, avoiding large matrix
-multiplications in the objective function. In @xu2017study they generalize the
-results in @zhang2008allan to zero-mean non-stationary processes by using
-averages of the diagonals and super-diagonals of the covariance matrix of
-$\boldsymbol{\varepsilon}$. This implies that the GMWM does not require
-storage of the $n \times n$ covariance matrix of $\boldsymbol{\varepsilon}$,
-but only a vector of length $n$ that is plugged into an explicit formula
-consisting of a linear combination of its elements (these elements are
-averages of the diagonal and super-diagonals of the covariance matrix).
+This vignette builds on the general framework described in the vignette
+"Estimate linear models with dependent errors and missing observations." We do
+not repeat the full model, missingness mechanism, or estimation details here.
+Please refer to that vignette for the formal setup, and use this one as a
+hands-on guide for geodetic time series from the Nevada Geodetic Laboratory.
 
 
 # Estimating tectonic velocities and crustal uplift
@@ -162,6 +91,12 @@ a combination of colored noise plus white noise
 white noise generally models noise at high frequencies and the colored noise
 models the lower frequencies of the spectrum. 
 
+In `gmwmx2`, you can pass any valid stochastic model to the estimator: either
+a single time-series model (e.g., `wn()`, `ar1()`, `pl()`, `matern()`, `rw()`,
+`flicker()`) or a composite sum model built with `+` (e.g.,
+`wn() + pl()` or `wn() + ar1() + rw()`). This makes the stochastic specification
+very general and easy to adapt to your application.
+
 # Example of estimation
 Let us showcase how to estimate tectonic velocity for one specific component
 (North, East, or Vertical) of one station.
@@ -190,7 +125,7 @@ plot(station_data, component = "N")
 
 # Estimate model on station data
 ```{r}
-fit1 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn()+ pl())
+fit1 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn())
 fit1
 ```
 
@@ -199,8 +134,9 @@ fit1
 ```{r}
 plot(fit1)
 ```
+
 ```{r}
-fit2 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn()+ flicker())
+fit2 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn()+ ar1())
 fit2
 ```
 
@@ -209,12 +145,21 @@ plot(fit2)
 ```
 
 ```{r}
-fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + ar1())
+fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + pl())
 fit3
 plot(fit3)
 ```
 
+```{r}
+fit4 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + flicker())
+fit4
+plot(fit4)
+```
 
-
+```{r}
+fit5 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() +  matern())
+fit5
+plot(fit5)
+```
 
 # References
