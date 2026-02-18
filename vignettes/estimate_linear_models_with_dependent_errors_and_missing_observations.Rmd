@@ -13,8 +13,8 @@ This vignette demonstrate on to use the GMWMX estimator to estimate linear model
     \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
-Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
-observation, and \(Z_t = 0\) a missing observation with $t \in \{1,\ldots, n\}$. The missingness process is independent of $\mathbf{Y}$ and respect the following definition:
+Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_i = 1\) indicating
+observation, and \(Z_i = 0\) a missing observation with $i \in \{1,\ldots, n\}$. The missingness process is independent of $\mathbf{Y}$ and respect the following definition:
 \begin{equation}
   Z_i =
 \begin{cases}
@@ -41,12 +41,16 @@ We then estimate the parameters of the missingness process using maximum likelih
 We then estimate the stochastic parameters using the GMWM estimator:
 
 \begin{equation}
-    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \,\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\}^{T} \, \boldsymbol{\Omega} \, \{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\},
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \,\left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\right\}^{T} \, \boldsymbol{\Omega} \, \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\right\},
 \end{equation}
 
 where $\hat{\boldsymbol{\nu}}$ is the estimated wavelet variance computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and $\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter $\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite matrix.
 
+The variance covariance matrix of the estimated regression parameters $\hat{\boldsymbol{\beta}}$ is then obtained as:
 
+\begin{equation}
+\mu(\hat{\boldsymbol{\vartheta}})^{-2}(\mathbf{X}^{T}\mathbf{X})^{-1} \mathbf{X}^{T} \boldsymbol{\Sigma}(\hat{\boldsymbol{\gamma}}, \hat{\boldsymbol{\vartheta}})\mathbf{X} (\mathbf{X}^{T}\mathbf{X})^{-1}$
+\end{equation}
 
 
 
@@ -86,6 +90,9 @@ top of each boxplot for easier comparison.
 We first construct a design matrix with an intercept, linear trend, and annual
 seasonal components. This deterministic signal will be used across examples.
 
+
+
+# Build an arbitrary design matrix X
 ```{r}
 n = 10*365
 X = matrix(NA, nrow = n, ncol = 4)
@@ -108,8 +115,12 @@ Next we simulate dependent errors, add them to the signal, and then introduce
 missing observations using a two‑state Markov model. This is the key difference
 from `vignettes/gmwmx2_new.Rmd`, which uses fully observed data.
 
-```{r}
+
 # Example 1: White noise + AR(1)
+
+## Generate signal
+
+```{r}
 phi_ar1 = 0.95
 sigma2_ar1 = 1
 sigma2_wn = 1
@@ -124,45 +135,37 @@ plot(Z)
 Z_process = Z$series
 y_observed = ifelse(Z_process == 1, y, NA)
 plot(X[, 2], y_observed, type = "l", main = "Simulated y (WN + AR1)")
-# add grey boxes at missing indices (x ± eps) to visualize NA locations;
-# unlike `vignettes/gmwmx2_new.Rmd`, which plots the fully observed series
-na_idx <- which(is.na(y_observed))
 
-# choose epsilon relative to x spacing
-dx <- median(diff(X[, 2]), na.rm = TRUE)
-eps <- 0.45 * dx
 
-ylim <- par("usr")[3:4]
-for (i in na_idx) {
-  rect(
-    xleft = X[i, 2] - eps,
-    xright = X[i, 2] + eps,
-    ybottom = ylim[1],
-    ytop = ylim[2],
-    col = adjustcolor("grey20", alpha.f = 0.5),
-    border = NA
-  )
+
+id_not_observed = which(is.na(y_observed))
+for(i in id_not_observed){
+  abline(v = X[i, 2], col = "grey70", lty =1)
 }
-
-lines(X[, 2], y_observed)
 ```
 
 We then fit the dependent‑error regression using `gmwmx2_new()`, which accounts
 for the stochastic error model and the missing observations.
 
 
-
+## Fit model
 ```{r}
-#
-# Fit model (WN + AR1)
-
 fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
 print(fit)
+```
+
+## Monte Carlo simulation
+We now assess inference quality under missingness by repeating the simulation,
+fitting the correct dependent‑error model with `gmwmx2_new()`, and comparing
+against a misspecified OLS fit that treats the errors as i.i.d. and uses only
+observed data.
+
+```{r}
 B = 100
 mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
 
-  eps = generate(ar1(phi=0.95, sigma2=20) + wn(20), n=n, seed = (123 + b))$series
+  eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
   y = X %*% beta + eps
   Z = generate(mod_missing, n = n, seed = 123 + b)$series
   y_observed = ifelse(Z == 1, y, NA)
@@ -179,11 +182,8 @@ for(b in seq(B)){
 }
 ```
 
-We now assess inference quality under missingness by repeating the simulation,
-fitting the correct dependent‑error model with `gmwmx2_new()`, and comparing
-against a misspecified OLS fit that treats the errors as i.i.d. and uses only
-observed data.
 
+## Plot empirical distributions of estimated parameters
 ```{r}
 # compute empirical coverage
 mat_res_df = as.data.frame(mat_res)
@@ -196,8 +196,6 @@ colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                          "phi_ar1","sigma_2_ar1" ,"sigma_2_wn")
 
 
-
-# Plot empirical distributions (beta and stochastic parameters)
 
 par(mfrow = c(1, 4))
 boxplot_mean_dot(mat_res_df[, c("gmwmx_beta0_hat")],las=1,
@@ -248,25 +246,18 @@ shown as horizontal lines.
 We report the empirical fraction of times the true \(\boldsymbol{\beta}\)
 entries fall inside the estimated intervals for both `gmwmx2_new()` and OLS.
 
-
+## Compute empirical coverage of confidence intervals
 ```{r}
 # Compute empirical coverage of confidence intervals for beta
-
 zval = qnorm(0.975)
-mat_res_df$upper_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat + zval * mat_res_df$gmwmx_std_beta0_hat
-mat_res_df$lower_ci_gmwmx_beta0 = mat_res_df$gmwmx_beta0_hat - zval * mat_res_df$gmwmx_std_beta0_hat
 mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
 mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B), mat_res_df$lower_ci_gmwmx_beta0, mat_res_df$upper_ci_gmwmx_beta0) %>% mean()
 dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
 
 # do the same for lm beta
-mat_res_df$upper_ci_lm_beta0 = mat_res_df$lm_beta0_hat + zval * mat_res_df$lm_std_beta0_hat
-mat_res_df$lower_ci_lm_beta0 = mat_res_df$lm_beta0_hat - zval * mat_res_df$lm_std_beta0_hat
 mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
 mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B), mat_res_df$lower_ci_lm_beta0, mat_res_df$upper_ci_lm_beta0) %>% mean()
 dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_ci_lm_beta1) %>% mean()
 ```
 
@@ -277,12 +268,11 @@ missingness, fit `gmwmx2_new()`, and compare to a misspecified OLS fit.
 The parameter \(\kappa\) controls the long‑memory behavior of the power‑law
 component.
 
-
-```{r}
 # Example 2: White noise + stationary power-law
 
+## Generate signal
 
-
+```{r}
 kappa_pl <- -0.8
 sigma2_wn <- 1
 sigma2_pl <- .8
@@ -296,17 +286,21 @@ plot(Z)
 Z_process = Z$series
 y_observed = ifelse(Z_process == 1, y_pl, NA)
 
+plot(X[, 2], y_observed, type = "l", main = "Simulated y (WN + PL)")
+id_not_observed = which(is.na(y_observed))
+for(i in id_not_observed){
+  abline(v = X[i, 2], col = "grey70", lty =1)
+}
+```
 
+## Fit model
+```{r}
 fit_pl = gmwmx2_new(X = X, y = y_observed, model = wn() + pl())
 fit_pl
 ```
 
-As before, we keep the same missingness mechanism so that differences are driven
-by the error model rather than by the observation pattern.
 
-Monte Carlo replication for the power‑law case.
-
-
+## Monte Carlo simulation
 ```{r}
 B_pl = 100
 mat_res_pl = matrix(NA, nrow = B_pl, ncol = 19)
@@ -331,11 +325,7 @@ for(b in seq(B_pl)){
 }
 ```
 
-Aggregate the Monte Carlo results and visualize regression estimates.
-
-The next plots focus on the distribution of \(\boldsymbol{\beta}\) estimates
-under the power‑law error model.
-
+## Plot empirical distributions of estimated parameters
 
 ```{r}
 mat_res_pl_df = as.data.frame(mat_res_pl)
@@ -376,8 +366,6 @@ abline(h = beta[4], col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
-Plot the estimated stochastic parameter estimates for the power‑law model.
-
 
 
 ```{r}
@@ -401,36 +389,26 @@ par(mfrow = c(1, 1))
 Compute empirical coverage for the regression coefficients under the power‑law
 error model and compare against OLS.
 
-
+## Compute empirical coverage of confidence intervals
 ```{r}
-# Compute empirical coverage of confidence intervals for beta
-
 zval = qnorm(0.975)
-mat_res_pl_df$upper_ci_gmwmx_beta0 = mat_res_pl_df$gmwmx_beta0_hat + zval * mat_res_pl_df$gmwmx_std_beta0_hat
-mat_res_pl_df$lower_ci_gmwmx_beta0 = mat_res_pl_df$gmwmx_beta0_hat - zval * mat_res_pl_df$gmwmx_std_beta0_hat
 mat_res_pl_df$upper_ci_gmwmx_beta1 = mat_res_pl_df$gmwmx_beta1_hat + zval * mat_res_pl_df$gmwmx_std_beta1_hat
 mat_res_pl_df$lower_ci_gmwmx_beta1 = mat_res_pl_df$gmwmx_beta1_hat - zval * mat_res_pl_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B_pl), mat_res_pl_df$lower_ci_gmwmx_beta0, mat_res_pl_df$upper_ci_gmwmx_beta0) %>% mean()
 dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_gmwmx_beta1, mat_res_pl_df$upper_ci_gmwmx_beta1) %>% mean()
 
 # do the same for lm beta
-mat_res_pl_df$upper_ci_lm_beta0 = mat_res_pl_df$lm_beta0_hat + zval * mat_res_pl_df$lm_std_beta0_hat
-mat_res_pl_df$lower_ci_lm_beta0 = mat_res_pl_df$lm_beta0_hat - zval * mat_res_pl_df$lm_std_beta0_hat
 mat_res_pl_df$upper_ci_lm_beta1 = mat_res_pl_df$lm_beta1_hat + zval * mat_res_pl_df$lm_std_beta1_hat
 mat_res_pl_df$lower_ci_lm_beta1 = mat_res_pl_df$lm_beta1_hat - zval * mat_res_pl_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B_pl), mat_res_pl_df$lower_ci_lm_beta0, mat_res_pl_df$upper_ci_lm_beta0) %>% mean()
+
 dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_lm_beta1, mat_res_pl_df$upper_ci_lm_beta1) %>% mean()
 ```
 
-Finally, we repeat the missing‑data inference workflow for a flicker‑noise
-error model.
+#  Example 3: White noise + flicker
+
+## Generate signal
 
 ```{r}
-# Example 3: White noise + flicker
-
-
-
 sigma2_wn_fl <- 1
 sigma2_fl <- 1
 eps_fl = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
@@ -448,14 +426,16 @@ Z_process = Z$series
 
 
 y_observed = ifelse(Z_process == 1, y_fl, NA)
+```
 
+
+## Fit model
+```{r}
 fit_fl = gmwmx2_new(X = X, y = y_observed, model = wn() + flicker())
 fit_fl
 ```
 
-Monte Carlo replication for the flicker‑noise case.
-
-
+## Monte Carlo simulation
 ```{r}
 B_fl = 100
 mat_res_fl = matrix(NA, nrow = B_fl, ncol = 18)
@@ -483,7 +463,7 @@ for(b in seq(B_fl)){
 }
 ```
 
-
+## Plot empirical distributions of estimated parameters
 ```{r}
 mat_res_fl_df = as.data.frame(mat_res_fl)
 colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
@@ -495,37 +475,6 @@ colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "lm_std_beta2_hat", "lm_std_beta3_hat",
                             "sigma2_fl" ,"sigma2_wn")
 ```
-
-Compute empirical coverage for the flicker‑noise case.
-
-
-```{r}
-# Compute empirical coverage of confidence intervals for beta
-
-zval = qnorm(0.975)
-mat_res_fl_df$upper_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat + zval * mat_res_fl_df$gmwmx_std_beta0_hat
-mat_res_fl_df$lower_ci_gmwmx_beta0 = mat_res_fl_df$gmwmx_beta0_hat - zval * mat_res_fl_df$gmwmx_std_beta0_hat
-mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
-mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
-# empirical coverage of gmwmx beta
-dplyr::between(rep(beta[1], B_fl), mat_res_fl_df$lower_ci_gmwmx_beta0, mat_res_fl_df$upper_ci_gmwmx_beta0) %>% mean()
-dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
-
-# do the same for lm beta
-mat_res_fl_df$upper_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat + zval * mat_res_fl_df$lm_std_beta0_hat
-mat_res_fl_df$lower_ci_lm_beta0 = mat_res_fl_df$lm_beta0_hat - zval * mat_res_fl_df$lm_std_beta0_hat
-mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
-mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
-dplyr::between(rep(beta[1], B_fl), mat_res_fl_df$lower_ci_lm_beta0, mat_res_fl_df$upper_ci_lm_beta0) %>% mean()
-dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
-
-
-
-
-# Plot empirical distributions (beta and stochastic parameters)
-```
-
-Plot regression estimates for the flicker‑noise case.
 
 
 ```{r}
@@ -553,8 +502,6 @@ abline(h = beta[4], col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
-Plot stochastic parameter estimates for the flicker‑noise case.
-
 
 ```{r}
 par(mfrow = c(1, 2))
@@ -570,3 +517,23 @@ abline(h = sigma2_wn_fl, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 
 ```
+
+
+
+## Compute empirical coverage of confidence intervals
+```{r}
+# Compute empirical coverage of confidence intervals for beta
+
+zval = qnorm(0.975)
+mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
+mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
+# empirical coverage of gmwmx beta
+dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
+
+# do the same for lm beta
+mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
+mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
+dplyr::between(rep(beta[2], B_fl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
+
+```
+
