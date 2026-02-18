@@ -121,22 +121,23 @@ Geodetic Laboratory</h1>
 <h2 id="model-and-estimator">Model and estimator<a class="anchor" aria-label="anchor" href="#model-and-estimator"></a>
 </h2>
 <p>This vignette builds on the general framework described in the
-vignette “Estimate linear models with dependent errors and missing
-observations.” We do not repeat the full model, missingness mechanism,
-or estimation details here. Please refer to that vignette for the formal
-setup, and use this one as a hands-on guide for geodetic time series
-from the Nevada Geodetic Laboratory.</p>
+vignettes ““Estimate linear models with dependent errors” and “Estimate
+linear models with dependent errors and missing observations”. We do not
+repeat the full model, missingness mechanism, or estimation details
+here. Please refer to these vignettes for the formal setup, and use this
+one as a hands-on guide for geodetic time series from the Nevada
+Geodetic Laboratory.</p>
 </div>
 <div class="section level2">
 <h2 id="estimating-tectonic-velocities-and-crustal-uplift">Estimating tectonic velocities and crustal uplift<a class="anchor" aria-label="anchor" href="#estimating-tectonic-velocities-and-crustal-uplift"></a>
 </h2>
 <p>While the GMWMX, as described above and in more detail in <span class="citation">Voirol et al. (2024)</span>, is a general method for
-estimating large linear models with complex dependence structures in the
-presence of missing data, the <code>gmwmx2</code> R package is currently
-developed specifically to estimate tectonic velocities from position
-time series in graticule distance (GD) coordinates provided by the
-Nevada Geodetic Laboratory <span class="citation">(Blewitt 2024;
-Blewitt, Hammond, and Kreemer 2018)</span>.</p>
+estimating large linear models with complex dependence structures in
+presence of missing observations, the <code>gmwmx2</code> <code>R</code>
+package allows to estimate tectonic velocities from position time series
+in graticule distance (GD) coordinates provided by the Nevada Geodetic
+Laboratory <span class="citation">(Blewitt 2024; Blewitt, Hammond, and
+Kreemer 2018)</span>.</p>
 <div class="section level3">
 <h3 id="trajectory-model">Trajectory model<a class="anchor" aria-label="anchor" href="#trajectory-model"></a>
 </h3>
@@ -249,7 +250,7 @@ component (North, East, or Vertical) of one station.</p>
 <h2 id="download-a-station-from-nevada-geodetic-laboratory">Download a station from Nevada Geodetic Laboratory<a class="anchor" aria-label="anchor" href="#download-a-station-from-nevada-geodetic-laboratory"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">station_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"CHML"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">station_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="plot-station">Plot Station<a class="anchor" aria-label="anchor" href="#plot-station"></a>
@@ -273,42 +274,36 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="va">fit1</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
 <span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
-<span><span class="co">## Intercept             -7.091e-01 1.733e-03 -7.125e-01 -7.057e-01</span></span>
-<span><span class="co">## Trend                  7.383e-05 1.656e-06  7.059e-05  7.708e-05</span></span>
-<span><span class="co">## Sin (Annual)          -6.634e-04 6.846e-05 -7.975e-04 -5.292e-04</span></span>
-<span><span class="co">## Cos (Annual)           7.706e-04 7.422e-05  6.252e-04  9.161e-04</span></span>
-<span><span class="co">## Sin (Semi-Annual)      7.358e-04 6.214e-05  6.140e-04  8.576e-04</span></span>
-<span><span class="co">## Cos (Semi-Annual)     -3.093e-04 6.319e-05 -4.332e-04 -1.855e-04</span></span>
-<span><span class="co">## Jump: MJD 56248        1.698e-02 3.830e-04  1.623e-02  1.773e-02</span></span>
-<span><span class="co">## Jump: MJD 55391        7.543e-03 3.880e-04  6.783e-03  8.303e-03</span></span>
-<span><span class="co">## Jump: MJD 55563        1.638e-03 6.495e-04  3.650e-04  2.911e-03</span></span>
-<span><span class="co">## Jump: MJD 55603        2.768e-03 1.790e-03 -7.408e-04  6.277e-03</span></span>
-<span><span class="co">## Jump: MJD 55606        7.748e-04 2.834e-03 -4.780e-03  6.330e-03</span></span>
-<span><span class="co">## Jump: MJD 56011       -1.185e-03 4.883e-04 -2.142e-03 -2.282e-04</span></span>
-<span><span class="co">## Jump: MJD 56085        1.270e-03 4.982e-04  2.940e-04  2.247e-03</span></span>
-<span><span class="co">## Jump: MJD 56748       -6.812e-04 2.418e-04 -1.155e-03 -2.073e-04</span></span>
-<span><span class="co">## Jump: MJD 57281       -3.590e-04 3.781e-04 -1.100e-03  3.820e-04</span></span>
-<span><span class="co">## Earthquake: MJD 55391  1.819e-02 1.639e-03  1.498e-02  2.141e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55563  9.271e-04 9.866e-03 -1.841e-02  2.026e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55603 -3.728e-01 4.797e-01 -1.313e+00  5.673e-01</span></span>
-<span><span class="co">## Earthquake: MJD 55606  3.633e-01 4.757e-01 -5.690e-01  1.296e+00</span></span>
-<span><span class="co">## Earthquake: MJD 56011  4.511e-03 4.160e-03 -3.643e-03  1.266e-02</span></span>
-<span><span class="co">## Earthquake: MJD 56085 -1.898e-02 3.618e-03 -2.607e-02 -1.189e-02</span></span>
-<span><span class="co">## Earthquake: MJD 56748 -9.572e-03 9.609e-04 -1.146e-02 -7.689e-03</span></span>
-<span><span class="co">## Earthquake: MJD 57281 -2.302e-02 1.422e-03 -2.581e-02 -2.023e-02</span></span>
+<span><span class="co">## Intercept              8.156e-01 1.788e-04  8.152e-01  8.159e-01</span></span>
+<span><span class="co">## Trend                 -1.090e-06 3.588e-08 -1.160e-06 -1.019e-06</span></span>
+<span><span class="co">## Sin (Annual)          -5.216e-04 2.092e-05 -5.626e-04 -4.806e-04</span></span>
+<span><span class="co">## Cos (Annual)          -4.129e-03 2.091e-05 -4.170e-03 -4.088e-03</span></span>
+<span><span class="co">## Sin (Semi-Annual)      1.089e-03 2.057e-05  1.049e-03  1.129e-03</span></span>
+<span><span class="co">## Cos (Semi-Annual)     -4.455e-04 2.057e-05 -4.858e-04 -4.051e-04</span></span>
+<span><span class="co">## Jump: MJD 52920        4.958e-04 1.157e-04  2.691e-04  7.226e-04</span></span>
+<span><span class="co">## Jump: MJD 53619       -3.057e-03 9.985e-05 -3.253e-03 -2.861e-03</span></span>
+<span><span class="co">## Jump: MJD 53866       -5.586e-04 9.908e-05 -7.528e-04 -3.644e-04</span></span>
+<span><span class="co">## Jump: MJD 54637       -2.499e-04 7.663e-04 -1.752e-03  1.252e-03</span></span>
+<span><span class="co">## Jump: MJD 54640        6.393e-03 7.666e-04  4.890e-03  7.895e-03</span></span>
+<span><span class="co">## Jump: MJD 55300       -2.496e-03 7.267e-05 -2.639e-03 -2.354e-03</span></span>
+<span><span class="co">## Jump: MJD 56671       -1.193e-03 1.057e-04 -1.400e-03 -9.857e-04</span></span>
+<span><span class="co">## Jump: MJD 56868        1.120e-03 1.055e-04  9.134e-04  1.327e-03</span></span>
+<span><span class="co">## Jump: MJD 58298        3.321e-03 1.753e-04  2.977e-03  3.664e-03</span></span>
+<span><span class="co">## Jump: MJD 58004        1.137e-03 1.162e-04  9.096e-04  1.365e-03</span></span>
+<span><span class="co">## Earthquake: MJD 58004 -7.135e-03 2.909e-04 -7.705e-03 -6.565e-03</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0088 </span></span>
-<span><span class="co">##   p1                 : 0.0028 </span></span>
-<span><span class="co">##   p2                 : 0.3158 </span></span>
-<span><span class="co">##   p*                 : 0.9912 </span></span>
+<span><span class="co">##   Proportion missing : 0.0584 </span></span>
+<span><span class="co">##   p1                 : 0.0073 </span></span>
+<span><span class="co">##   p2                 : 0.1173 </span></span>
+<span><span class="co">##   p*                 : 0.9416 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Model      : White Noise </span></span>
-<span><span class="co">##   Parameters : sigma2 = 3.399e-06 </span></span>
+<span><span class="co">##   Parameters : sigma2 = 1.65e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.7181</span></span></code></pre>
+<span><span class="co">##   Total              : 1.5341</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="plot-estimated-model">Plot estimated model<a class="anchor" aria-label="anchor" href="#plot-estimated-model"></a>
@@ -317,193 +312,87 @@ component (North, East, or Vertical) of one station.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit2</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
-<span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
-<span><span class="co">## Intercept             -7.091e-01 4.350e-03 -7.176e-01 -7.006e-01</span></span>
-<span><span class="co">## Trend                  7.383e-05 4.156e-06  6.568e-05  8.198e-05</span></span>
-<span><span class="co">## Sin (Annual)          -6.634e-04 1.746e-04 -1.006e-03 -3.211e-04</span></span>
-<span><span class="co">## Cos (Annual)           7.706e-04 1.892e-04  3.998e-04  1.141e-03</span></span>
-<span><span class="co">## Sin (Semi-Annual)      7.358e-04 1.575e-04  4.272e-04  1.044e-03</span></span>
-<span><span class="co">## Cos (Semi-Annual)     -3.093e-04 1.604e-04 -6.236e-04  4.957e-06</span></span>
-<span><span class="co">## Jump: MJD 56248        1.698e-02 9.445e-04  1.513e-02  1.883e-02</span></span>
-<span><span class="co">## Jump: MJD 55391        7.543e-03 9.571e-04  5.667e-03  9.419e-03</span></span>
-<span><span class="co">## Jump: MJD 55563        1.638e-03 1.461e-03 -1.226e-03  4.502e-03</span></span>
-<span><span class="co">## Jump: MJD 55603        2.768e-03 2.220e-03 -1.583e-03  7.119e-03</span></span>
-<span><span class="co">## Jump: MJD 55606        7.748e-04 3.132e-03 -5.364e-03  6.913e-03</span></span>
-<span><span class="co">## Jump: MJD 56011       -1.185e-03 1.172e-03 -3.482e-03  1.112e-03</span></span>
-<span><span class="co">## Jump: MJD 56085        1.270e-03 1.193e-03 -1.068e-03  3.609e-03</span></span>
-<span><span class="co">## Jump: MJD 56748       -6.812e-04 6.133e-04 -1.883e-03  5.209e-04</span></span>
-<span><span class="co">## Jump: MJD 57281       -3.590e-04 9.322e-04 -2.186e-03  1.468e-03</span></span>
-<span><span class="co">## Earthquake: MJD 55391  1.819e-02 4.112e-03  1.014e-02  2.625e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55563  9.271e-04 2.214e-02 -4.246e-02  4.432e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55603 -3.728e-01 4.842e-01 -1.322e+00  5.762e-01</span></span>
-<span><span class="co">## Earthquake: MJD 55606  3.633e-01 4.786e-01 -5.748e-01  1.301e+00</span></span>
-<span><span class="co">## Earthquake: MJD 56011  4.511e-03 9.924e-03 -1.494e-02  2.396e-02</span></span>
-<span><span class="co">## Earthquake: MJD 56085 -1.898e-02 8.742e-03 -3.611e-02 -1.842e-03</span></span>
-<span><span class="co">## Earthquake: MJD 56748 -9.572e-03 2.435e-03 -1.435e-02 -4.799e-03</span></span>
-<span><span class="co">## Earthquake: MJD 57281 -2.302e-02 3.566e-03 -3.001e-02 -1.603e-02</span></span>
+<span><span class="co">##                         Estimate Std.Error   CI.Lower  CI.Upper</span></span>
+<span><span class="co">## Intercept              8.156e-01 5.516e-01 -2.656e-01 1.897e+00</span></span>
+<span><span class="co">## Trend                 -1.090e-06 1.419e-05 -2.889e-05 2.672e-05</span></span>
+<span><span class="co">## Sin (Annual)          -5.216e-04 8.274e-03 -1.674e-02 1.569e-02</span></span>
+<span><span class="co">## Cos (Annual)          -4.129e-03 8.275e-03 -2.035e-02 1.209e-02</span></span>
+<span><span class="co">## Sin (Semi-Annual)      1.089e-03 7.951e-03 -1.450e-02 1.667e-02</span></span>
+<span><span class="co">## Cos (Semi-Annual)     -4.455e-04 7.950e-03 -1.603e-02 1.514e-02</span></span>
+<span><span class="co">## Jump: MJD 52920        4.958e-04 4.510e-02 -8.790e-02 8.889e-02</span></span>
+<span><span class="co">## Jump: MJD 53619       -3.057e-03 3.923e-02 -7.995e-02 7.384e-02</span></span>
+<span><span class="co">## Jump: MJD 53866       -5.586e-04 3.894e-02 -7.688e-02 7.576e-02</span></span>
+<span><span class="co">## Jump: MJD 54637       -2.499e-04 1.287e-01 -2.525e-01 2.520e-01</span></span>
+<span><span class="co">## Jump: MJD 54640        6.393e-03 1.288e-01 -2.460e-01 2.588e-01</span></span>
+<span><span class="co">## Jump: MJD 55300       -2.496e-03 2.880e-02 -5.895e-02 5.395e-02</span></span>
+<span><span class="co">## Jump: MJD 56671       -1.193e-03 4.143e-02 -8.239e-02 8.000e-02</span></span>
+<span><span class="co">## Jump: MJD 56868        1.120e-03 4.132e-02 -7.987e-02 8.211e-02</span></span>
+<span><span class="co">## Jump: MJD 58298        3.321e-03 6.763e-02 -1.292e-01 1.359e-01</span></span>
+<span><span class="co">## Jump: MJD 58004        1.137e-03 4.560e-02 -8.825e-02 9.052e-02</span></span>
+<span><span class="co">## Earthquake: MJD 58004 -7.135e-03 1.126e-01 -2.278e-01 2.135e-01</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0088 </span></span>
-<span><span class="co">##   p1                 : 0.0028 </span></span>
-<span><span class="co">##   p2                 : 0.3158 </span></span>
-<span><span class="co">##   p*                 : 0.9912 </span></span>
+<span><span class="co">##   Proportion missing : 0.0584 </span></span>
+<span><span class="co">##   p1                 : 0.0073 </span></span>
+<span><span class="co">##   p2                 : 0.1173 </span></span>
+<span><span class="co">##   p*                 : 0.9416 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 2.469e-06 </span></span>
-<span><span class="co">##   [2] AR(1)</span></span>
-<span><span class="co">##        Estimated parameters : phi = 0.782, sigma2 = 9.644e-07 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 8.165e-07 </span></span>
+<span><span class="co">##   [2] Stationary PowerLaw</span></span>
+<span><span class="co">##        Estimated parameters : kappa =    -1, sigma2 = 9.708e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.3074</span></span></code></pre>
+<span><span class="co">##   Total              : 1.9651</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit3</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit3</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit3</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
 <span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
-<span><span class="co">## Intercept             -7.091e-01 7.923e-03 -7.246e-01 -6.936e-01</span></span>
-<span><span class="co">## Trend                  7.383e-05 7.537e-06  5.906e-05  8.860e-05</span></span>
-<span><span class="co">## Sin (Annual)          -6.634e-04 3.101e-04 -1.271e-03 -5.567e-05</span></span>
-<span><span class="co">## Cos (Annual)           7.706e-04 3.285e-04  1.268e-04  1.414e-03</span></span>
-<span><span class="co">## Sin (Semi-Annual)      7.358e-04 2.186e-04  3.073e-04  1.164e-03</span></span>
-<span><span class="co">## Cos (Semi-Annual)     -3.093e-04 2.254e-04 -7.511e-04  1.324e-04</span></span>
-<span><span class="co">## Jump: MJD 56248        1.698e-02 1.428e-03  1.418e-02  1.978e-02</span></span>
-<span><span class="co">## Jump: MJD 55391        7.543e-03 1.403e-03  4.794e-03  1.029e-02</span></span>
-<span><span class="co">## Jump: MJD 55563        1.638e-03 1.618e-03 -1.533e-03  4.810e-03</span></span>
-<span><span class="co">## Jump: MJD 55603        2.768e-03 2.214e-03 -1.570e-03  7.107e-03</span></span>
-<span><span class="co">## Jump: MJD 55606        7.748e-04 3.261e-03 -5.616e-03  7.166e-03</span></span>
-<span><span class="co">## Jump: MJD 56011       -1.185e-03 1.521e-03 -4.166e-03  1.796e-03</span></span>
-<span><span class="co">## Jump: MJD 56085        1.270e-03 1.561e-03 -1.789e-03  4.330e-03</span></span>
-<span><span class="co">## Jump: MJD 56748       -6.812e-04 1.257e-03 -3.144e-03  1.782e-03</span></span>
-<span><span class="co">## Jump: MJD 57281       -3.590e-04 1.404e-03 -3.110e-03  2.393e-03</span></span>
-<span><span class="co">## Earthquake: MJD 55391  1.819e-02 6.744e-03  4.976e-03  3.141e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55563  9.271e-04 2.384e-02 -4.579e-02  4.765e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55603 -3.728e-01 4.934e-01 -1.340e+00  5.942e-01</span></span>
-<span><span class="co">## Earthquake: MJD 55606  3.633e-01 4.879e-01 -5.929e-01  1.319e+00</span></span>
-<span><span class="co">## Earthquake: MJD 56011  4.511e-03 1.220e-02 -1.939e-02  2.841e-02</span></span>
-<span><span class="co">## Earthquake: MJD 56085 -1.898e-02 1.142e-02 -4.136e-02  3.411e-03</span></span>
-<span><span class="co">## Earthquake: MJD 56748 -9.572e-03 4.886e-03 -1.915e-02  4.788e-06</span></span>
-<span><span class="co">## Earthquake: MJD 57281 -2.302e-02 5.868e-03 -3.452e-02 -1.152e-02</span></span>
+<span><span class="co">## Intercept              8.156e-01 2.265e-03  8.112e-01  8.200e-01</span></span>
+<span><span class="co">## Trend                 -1.090e-06 4.736e-07 -2.018e-06 -1.613e-07</span></span>
+<span><span class="co">## Sin (Annual)          -5.216e-04 2.248e-04 -9.623e-04 -8.096e-05</span></span>
+<span><span class="co">## Cos (Annual)          -4.129e-03 2.264e-04 -4.573e-03 -3.685e-03</span></span>
+<span><span class="co">## Sin (Semi-Annual)      1.089e-03 1.493e-04  7.964e-04  1.382e-03</span></span>
+<span><span class="co">## Cos (Semi-Annual)     -4.455e-04 1.494e-04 -7.384e-04 -1.526e-04</span></span>
+<span><span class="co">## Jump: MJD 52920        4.958e-04 1.369e-03 -2.187e-03  3.179e-03</span></span>
+<span><span class="co">## Jump: MJD 53619       -3.057e-03 1.254e-03 -5.514e-03 -5.996e-04</span></span>
+<span><span class="co">## Jump: MJD 53866       -5.586e-04 1.247e-03 -3.003e-03  1.886e-03</span></span>
+<span><span class="co">## Jump: MJD 54637       -2.499e-04 2.009e-03 -4.187e-03  3.687e-03</span></span>
+<span><span class="co">## Jump: MJD 54640        6.393e-03 2.010e-03  2.453e-03  1.033e-02</span></span>
+<span><span class="co">## Jump: MJD 55300       -2.496e-03 9.734e-04 -4.404e-03 -5.887e-04</span></span>
+<span><span class="co">## Jump: MJD 56671       -1.193e-03 1.302e-03 -3.745e-03  1.359e-03</span></span>
+<span><span class="co">## Jump: MJD 56868        1.120e-03 1.297e-03 -1.421e-03  3.661e-03</span></span>
+<span><span class="co">## Jump: MJD 58298        3.321e-03 1.969e-03 -5.392e-04  7.181e-03</span></span>
+<span><span class="co">## Jump: MJD 58004        1.137e-03 1.484e-03 -1.771e-03  4.045e-03</span></span>
+<span><span class="co">## Earthquake: MJD 58004 -7.135e-03 3.385e-03 -1.377e-02 -5.004e-04</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0088 </span></span>
-<span><span class="co">##   p1                 : 0.0028 </span></span>
-<span><span class="co">##   p2                 : 0.3158 </span></span>
-<span><span class="co">##   p*                 : 0.9912 </span></span>
+<span><span class="co">##   Proportion missing : 0.0584 </span></span>
+<span><span class="co">##   p1                 : 0.0073 </span></span>
+<span><span class="co">##   p2                 : 0.1173 </span></span>
+<span><span class="co">##   p*                 : 0.9416 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 2.987e-07 </span></span>
-<span><span class="co">##   [2] Stationary PowerLaw</span></span>
-<span><span class="co">##        Estimated parameters : kappa = -0.7261, sigma2 = 3.75e-06 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 1.434e-06 </span></span>
+<span><span class="co">##   [2] AR(1)</span></span>
+<span><span class="co">##        Estimated parameters : phi = 0.9803, sigma2 = 1.35e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5336</span></span></code></pre>
+<span><span class="co">##   Total              : 1.5677</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit4</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fit4</span></span></code></pre></div>
-<pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
-<span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
-<span><span class="co">## Intercept             -7.091e-01 1.067e-02 -7.300e-01 -6.882e-01</span></span>
-<span><span class="co">## Trend                  7.383e-05 1.016e-05  5.391e-05  9.375e-05</span></span>
-<span><span class="co">## Sin (Annual)          -6.634e-04 4.072e-04 -1.462e-03  1.348e-04</span></span>
-<span><span class="co">## Cos (Annual)           7.706e-04 4.279e-04 -6.808e-05  1.609e-03</span></span>
-<span><span class="co">## Sin (Semi-Annual)      7.358e-04 2.609e-04  2.245e-04  1.247e-03</span></span>
-<span><span class="co">## Cos (Semi-Annual)     -3.093e-04 2.706e-04 -8.397e-04  2.211e-04</span></span>
-<span><span class="co">## Jump: MJD 56248        1.698e-02 1.800e-03  1.345e-02  2.050e-02</span></span>
-<span><span class="co">## Jump: MJD 55391        7.543e-03 1.716e-03  4.180e-03  1.091e-02</span></span>
-<span><span class="co">## Jump: MJD 55563        1.638e-03 1.781e-03 -1.854e-03  5.130e-03</span></span>
-<span><span class="co">## Jump: MJD 55603        2.768e-03 2.192e-03 -1.529e-03  7.065e-03</span></span>
-<span><span class="co">## Jump: MJD 55606        7.748e-04 3.328e-03 -5.747e-03  7.297e-03</span></span>
-<span><span class="co">## Jump: MJD 56011       -1.185e-03 1.806e-03 -4.726e-03  2.355e-03</span></span>
-<span><span class="co">## Jump: MJD 56085        1.270e-03 1.875e-03 -2.404e-03  4.945e-03</span></span>
-<span><span class="co">## Jump: MJD 56748       -6.812e-04 1.763e-03 -4.136e-03  2.774e-03</span></span>
-<span><span class="co">## Jump: MJD 57281       -3.590e-04 1.763e-03 -3.814e-03  3.096e-03</span></span>
-<span><span class="co">## Earthquake: MJD 55391  1.819e-02 8.731e-03  1.082e-03  3.531e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55563  9.271e-04 2.591e-02 -4.986e-02  5.171e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55603 -3.728e-01 4.887e-01 -1.331e+00  5.850e-01</span></span>
-<span><span class="co">## Earthquake: MJD 55606  3.633e-01 4.833e-01 -5.839e-01  1.310e+00</span></span>
-<span><span class="co">## Earthquake: MJD 56011  4.511e-03 1.414e-02 -2.321e-02  3.223e-02</span></span>
-<span><span class="co">## Earthquake: MJD 56085 -1.898e-02 1.364e-02 -4.570e-02  7.752e-03</span></span>
-<span><span class="co">## Earthquake: MJD 56748 -9.572e-03 6.809e-03 -2.292e-02  3.774e-03</span></span>
-<span><span class="co">## Earthquake: MJD 57281 -2.302e-02 7.612e-03 -3.794e-02 -8.102e-03</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0088 </span></span>
-<span><span class="co">##   p1                 : 0.0028 </span></span>
-<span><span class="co">##   p2                 : 0.3158 </span></span>
-<span><span class="co">##   p*                 : 0.9912 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Stochastic model</span></span>
-<span><span class="co">##   Sum of 2 processes</span></span>
-<span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 1.736e-06 </span></span>
-<span><span class="co">##   [2] Flicker</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 2.062e-06 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5195</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit5</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>  <span class="fu"><a href="../reference/matern.html">matern</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">fit5</span></span></code></pre></div>
-<pre><code><span><span class="co">## GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span></span>
-<span><span class="co">##                         Estimate Std.Error   CI.Lower   CI.Upper</span></span>
-<span><span class="co">## Intercept             -7.091e-01 5.036e-03 -0.7189635 -6.992e-01</span></span>
-<span><span class="co">## Trend                  7.383e-05 4.811e-06  0.0000644  8.326e-05</span></span>
-<span><span class="co">## Sin (Annual)          -6.634e-04 2.043e-04 -0.0010639 -2.629e-04</span></span>
-<span><span class="co">## Cos (Annual)           7.706e-04 2.212e-04  0.0003372  1.204e-03</span></span>
-<span><span class="co">## Sin (Semi-Annual)      7.358e-04 1.816e-04  0.0003800  1.092e-03</span></span>
-<span><span class="co">## Cos (Semi-Annual)     -3.093e-04 1.852e-04 -0.0006722  5.357e-05</span></span>
-<span><span class="co">## Jump: MJD 56248        1.698e-02 1.078e-03  0.0148639  1.909e-02</span></span>
-<span><span class="co">## Jump: MJD 55391        7.543e-03 1.093e-03  0.0054017  9.684e-03</span></span>
-<span><span class="co">## Jump: MJD 55563        1.638e-03 1.558e-03 -0.0014148  4.691e-03</span></span>
-<span><span class="co">## Jump: MJD 55603        2.768e-03 2.221e-03 -0.0015846  7.121e-03</span></span>
-<span><span class="co">## Jump: MJD 55606        7.748e-04 3.172e-03 -0.0054412  6.991e-03</span></span>
-<span><span class="co">## Jump: MJD 56011       -1.185e-03 1.306e-03 -0.0037454  1.375e-03</span></span>
-<span><span class="co">## Jump: MJD 56085        1.270e-03 1.328e-03 -0.0013320  3.873e-03</span></span>
-<span><span class="co">## Jump: MJD 56748       -6.812e-04 7.163e-04 -0.0020851  7.226e-04</span></span>
-<span><span class="co">## Jump: MJD 57281       -3.590e-04 1.064e-03 -0.0024450  1.727e-03</span></span>
-<span><span class="co">## Earthquake: MJD 55391  1.819e-02 4.751e-03  0.0088830  2.751e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55563  9.271e-04 2.340e-02 -0.0449432  4.680e-02</span></span>
-<span><span class="co">## Earthquake: MJD 55603 -3.728e-01 4.879e-01 -1.3290492  5.834e-01</span></span>
-<span><span class="co">## Earthquake: MJD 55606  3.633e-01 4.823e-01 -0.5819135  1.308e+00</span></span>
-<span><span class="co">## Earthquake: MJD 56011  4.511e-03 1.097e-02 -0.0169986  2.602e-02</span></span>
-<span><span class="co">## Earthquake: MJD 56085 -1.898e-02 9.768e-03 -0.0381208  1.686e-04</span></span>
-<span><span class="co">## Earthquake: MJD 56748 -9.572e-03 2.840e-03 -0.0151380 -4.006e-03</span></span>
-<span><span class="co">## Earthquake: MJD 57281 -2.302e-02 4.120e-03 -0.0310952 -1.495e-02</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0088 </span></span>
-<span><span class="co">##   p1                 : 0.0028 </span></span>
-<span><span class="co">##   p2                 : 0.3158 </span></span>
-<span><span class="co">##   p*                 : 0.9912 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Stochastic model</span></span>
-<span><span class="co">##   Sum of 2 processes</span></span>
-<span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 2.148e-11 </span></span>
-<span><span class="co">##   [2] Matern</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 5.11e-06, lambda = 0.1043, alpha = 0.6116 </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.9039</span></span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
