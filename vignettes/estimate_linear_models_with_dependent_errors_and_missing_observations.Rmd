@@ -18,6 +18,7 @@ the presence of missing observations. Consider the model defined as:
 Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with
 \(Z_i = 1\) indicating an observation and \(Z_i = 0\) a missing observation. The missingness process is independent of
 $\mathbf{Y}$ and follows the definition:
+
 \begin{equation}
   Z_i =
 \begin{cases}
@@ -25,12 +26,14 @@ $\mathbf{Y}$ and follows the definition:
     W_i \sim \mathrm{Bernoulli}(\mu(\bm{\vartheta})), & \text{with probability } 1-\rho,
 \end{cases}
 \end{equation}
+
 with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, 1]$ for
 all $i \in \{1, \ldots, n\}$, with covariance matrix
 $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right)
 \in \mathbb{R}^{n\times n}$ whose structure is assumed known up to the
 parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$.
 The observed series is
+
 \[
   \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z}.
 \]
@@ -38,11 +41,13 @@ The observed series is
 The design matrix with rows zeroed out for missing observations
 can be written as \(\tilde{\mathbf{X}} = \left(\mathbf{Z} \otimes \mathbf{1}^T\right) \odot \mathbf{X}\).
 The least‑squares estimator based on observed data is
+
 \[
   \hat{\boldsymbol{\beta}} =
   \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
 \]
 and we compute residuals
+
 \(\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}\).
 
 We then estimate the parameters of the missingness process via maximum
@@ -66,7 +71,7 @@ $\hat{\boldsymbol{\beta}}$ is then obtained as:
 \begin{equation}
 \mu(\hat{\boldsymbol{\vartheta}})^{-2}(\mathbf{X}^{T}\mathbf{X})^{-1}
 \mathbf{X}^{T} \boldsymbol{\Sigma}(\hat{\boldsymbol{\gamma}}, \hat{\boldsymbol{\vartheta}})
-\mathbf{X} (\mathbf{X}^{T}\mathbf{X})^{-1}
+\mathbf{X} (\mathbf{X}^{T}\mathbf{X})^{-1}.
 \end{equation}
 
 

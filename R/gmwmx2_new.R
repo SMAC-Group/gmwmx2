@@ -123,7 +123,7 @@ gmwmx2_new_no_missing <- function(X = NULL, y = NULL, model = NULL, omega = NULL
   return(out)
 }
 
-#' Print method for gmwmx2_fit
+#' Print method for a \code{gmwmx2_fit} object
 #'
 #' Displays a table of regression coefficients with standard errors and
 #' summarizes the fitted stochastic model with estimated parameters.

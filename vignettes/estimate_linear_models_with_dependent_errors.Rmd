@@ -68,9 +68,10 @@ linear combination of its elements.
 
 The variance-covariance matrix of the estimated regression parameters
 $\hat{\boldsymbol{\beta}}$ is then obtained as:
+
 \begin{equation}
-(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} 
-\end{equation}.
+(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T {\boldsymbol{\Sigma}}(\hat{\boldsymbol{\gamma}})  \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1}.
+\end{equation}
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
 `gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
