@@ -36,9 +36,9 @@ reference:
   - title: Load and plot NGL data
     contents:
     - download_station_ngl
+    - plot.gnss_ts_ngl
     - download_all_stations_ngl
     - download_estimated_velocities_ngl
-    - plot.gnss_ts_ngl
   - title: Data
     contents:
     - df_estimated_velocities_gmwmx
