@@ -348,7 +348,7 @@ plot.gmwmx2_fit_gnss_ts_ngl <- function(x, ...) {
   # plot data
   plot(x = rownames(x$design_matrix_X), y = x$y, type = "l", las = 1, ylab = "", xlab = "")
   mtext(side = 1, "Modified Julian Date", line = 3)
-  mtext(side = 2, axis_name, line = 3.2)
+  mtext(side = 2, axis_name, line = 3.4)
 
   grid(col = "grey90", lty = 2)
   # add signal

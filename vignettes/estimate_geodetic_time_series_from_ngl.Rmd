@@ -143,13 +143,22 @@ plot(fit2)
 ```
 
 ```{r}
-fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + ar1())
+fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + flicker())
 fit3
 ```
 
 
 ```{r}
 plot(fit3)
+```
+```{r}
+fit4 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + ar1())
+fit4
+```
+
+
+```{r}
+plot(fit4)
 ```
 
 
