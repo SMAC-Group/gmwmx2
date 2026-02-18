@@ -98,13 +98,13 @@ to `generate()`, to make the output deterministic. Using the same seed and
 model parameters produces the exact same time series.
 
 ```{r}
-model_wn_repro <- wn(sigma2 = 1)
+model_wn <- wn(sigma2 = 1)
 
 set.seed(1234)
-series_a <- generate(model_wn_repro, n = 100)
+series_a <- generate(model_wn, n = 100)
 
-series_b <- generate(model_wn_repro, n = 100, seed = 1234)
-series_c <- generate(model_wn_repro, n = 100, seed = 4321)
+series_b <- generate(model_wn, n = 100, seed = 1234)
+series_c <- generate(model_wn, n = 100, seed = 4321)
 
 all.equal(series_a$series, series_b$series)
 all.equal(series_a$series, series_c$series)
