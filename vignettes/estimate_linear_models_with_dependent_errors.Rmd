@@ -125,6 +125,7 @@ We fit using `gmwmx2_new()` with a composite model composed of white noise and a
 ```{r}
 fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
 print(fit)
+
 ```
 
 To assess uncertainty, we run a Monte Carlo simulation and check empirical coverage

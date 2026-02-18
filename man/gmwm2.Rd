@@ -28,9 +28,7 @@ An object of class \code{gmwm2_fit} with elements:
 }
 \description{
 Implements the Generalized Method of Wavelet Moments (GMWM) estimator
-to fit a \code{time_series_model} or \code{sum_model} to data. The estimator
-minimizes a weighted distance between empirical wavelet variance (WV)
-and the model-implied WV across scales.
+to fit a \code{time_series_model}, a \code{sum_model} or a numeric vector.
 }
 \details{
 The GMWM estimator solves a weighted least-squares criterion of the form
@@ -39,12 +37,12 @@ The GMWM estimator solves a weighted least-squares criterion of the form
   \boldsymbol{\Omega}
   (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))
 }
-where \eqn{\hat{\boldsymbol{\nu}}} denotes the \strong{empirical wavelet
-variance (WV)} vector and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
-the corresponding \strong{theoretical WV} vector implied by the model
+where \eqn{\hat{\boldsymbol{\nu}}} denotes the empirical wavelet
+variance and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
+the corresponding theoretical wavelet variance implied by the model
 parameters \eqn{\boldsymbol{\theta}}. The weighting matrix
 \eqn{\boldsymbol{\Omega}} defaults to a diagonal matrix with entries proportional to the
-inverse squared width of the empirical WV confidence intervals. Provide
+inverse squared width of the empirical WV asymptotic confidence intervals. Provide
 \code{omega} to use a custom weighting (e.g., from a theoretical covariance).
 }
 \examples{
@@ -52,9 +50,9 @@ n = 10000
 mod = wn(20) + ar1(phi = .995, sigma2 = .2)
 y = generate(mod, n = n, seed = 123)
 plot(y)
-fit = gmwm2(y, model = wn() + ar1() )
+fit = gmwm2(y, model = wn() + ar1())
+fit
 plot(fit)
-mod =  matern(1,1,5)+wn(.1)
 }
 \references{
 Guerrier, S., Skaloud, J., Stebler, Y., and Victoria-Feser, M.-P. (2013).

@@ -332,9 +332,7 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' Estimate composite stochastic model
 #'
 #' Implements the Generalized Method of Wavelet Moments (GMWM) estimator
-#' to fit a `time_series_model` or `sum_model` to data. The estimator
-#' minimizes a weighted distance between empirical wavelet variance (WV)
-#' and the model-implied WV across scales.
+#' to fit a `time_series_model`, a `sum_model` or a numeric vector.
 #'
 #' @param x Numeric vector, or a `generated_time_series` /
 #'   `generated_composite_model_time_series` object (its `series` is used).
@@ -354,12 +352,12 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #'   \boldsymbol{\Omega}
 #'   (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))
 #' }
-#' where \eqn{\hat{\boldsymbol{\nu}}} denotes the \strong{empirical wavelet
-#' variance (WV)} vector and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
-#' the corresponding \strong{theoretical WV} vector implied by the model
+#' where \eqn{\hat{\boldsymbol{\nu}}} denotes the empirical wavelet
+#' variance and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
+#' the corresponding theoretical wavelet variance implied by the model
 #' parameters \eqn{\boldsymbol{\theta}}. The weighting matrix
 #' \eqn{\boldsymbol{\Omega}} defaults to a diagonal matrix with entries proportional to the
-#' inverse squared width of the empirical WV confidence intervals. Provide
+#' inverse squared width of the empirical WV asymptotic confidence intervals. Provide
 #' `omega` to use a custom weighting (e.g., from a theoretical covariance).
 #' @references
 #' Guerrier, S., Skaloud, J., Stebler, Y., and Victoria-Feser, M.-P. (2013).
@@ -373,15 +371,9 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' mod = wn(20) + ar1(phi = .995, sigma2 = .2)
 #' y = generate(mod, n = n, seed = 123)
 #' plot(y)
-#' fit = gmwm2(y, model = wn() + ar1() )
+#' fit = gmwm2(y, model = wn() + ar1())
+#' fit
 #' plot(fit)
-#' mod =  matern(1,1,5)+wn(.1)
-#  y = generate(mod, 10000)
-#  plot(y)
-#  plot(wv::wvar(y$series))
-#  fit = gmwm2(y$series, wn()+matern())
-#  fit
-#  plot(fit)
 #' @export
 gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...) {
 
