@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process. Consider the model defined as:
 
 \begin{equation}
-    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
 where $\mathbf{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$. 
@@ -38,7 +38,7 @@ It then estimates the parameters of the stochastic model \eqn{\boldsymbol{\gamma
 More precisely, the estimated stochastic parameters, denoted as $\hat{\boldsymbol{\gamma}}$ are defined as follows:
 
 \begin{equation}
-    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right)^T \boldsymbol{\Omega} \left(\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right),
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\}^T \boldsymbol{\Omega} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\},
 \end{equation}
 
 where $\hat{\boldsymbol{\nu}}$ is the vector of empirical wavelet variances computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$, $\boldsymbol{\nu}(\boldsymbol{\gamma})$ is the vector of theoretical wavelet variance implied by the stochastic model with parameters $\boldsymbol{\gamma}$ and $\boldsymbol{\Omega}$ is a weighting matrix. 
@@ -106,7 +106,7 @@ We now define three different stochastic noise settings using the same `X` and `
 
 # Example 1: White noise + AR(1)
 
-This is a classic short-memory model often used as a baseline.
+## Generate signal
 
 ```{r}
 phi_ar1 = 0.95
@@ -118,7 +118,7 @@ y = X %*% beta + eps
 plot(X[, 2], y, type = "l", main = "Simulated y (WN + AR1)")
 ```
 
-# Fit model (WN + AR1)
+## Fit model
 
 We fit using `gmwmx2_new()` with a composite model composed of white noise and autoregressive process of order 1.
 
@@ -129,6 +129,8 @@ print(fit)
 
 To assess uncertainty, we run a Monte Carlo simulation and check empirical coverage
 of the confidence intervals for the trend.
+
+## Monte Carlo simulation
 
 ```{r}
 B = 100
@@ -162,7 +164,7 @@ colnames(mat_res_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 
 ```
 
-# Plot empirical distributions (beta and stochastic parameters)
+## Plot empirical distributions of estimated parameters
 
 ```{r}
 par(mfrow = c(1, 4))
@@ -206,14 +208,17 @@ abline(h = sigma2_wn, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
-# Compute empirical coverage of confidence intervals for beta
+## Compute empirical coverage of confidence intervals
 ```{r}
 zval = qnorm(0.975)
 mat_res_df$upper_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat + zval * mat_res_df$gmwmx_std_beta1_hat
 mat_res_df$lower_ci_gmwmx_beta1 = mat_res_df$gmwmx_beta1_hat - zval * mat_res_df$gmwmx_std_beta1_hat
 # empirical coverage of gmwmx beta
 dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_gmwmx_beta1, mat_res_df$upper_ci_gmwmx_beta1) %>% mean()
+```
 
+
+```{r}
 # do the same for lm beta
 mat_res_df$upper_ci_lm_beta1 = mat_res_df$lm_beta1_hat + zval * mat_res_df$lm_std_beta1_hat
 mat_res_df$lower_ci_lm_beta1 = mat_res_df$lm_beta1_hat - zval * mat_res_df$lm_std_beta1_hat
@@ -223,6 +228,9 @@ dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_c
 
 
 # Example 2: White noise + stationary power-law
+
+
+## Generate signal
 
 Here we replace AR(1) by a stationary power-law component.
 
@@ -238,13 +246,15 @@ y_pl = X %*% beta + eps_pl$series
 plot(X[, 2], y_pl, type = "l", main = "Simulated y (WN + PL)")
 ```
 
+## Fit model
 
 ```{r}
 fit_pl = gmwmx2_new(X = X, y = y_pl, model = wn() + pl())
 fit_pl
 ```
 
-Monte Carlo coverage for the power-law case:
+## Monte Carlo simulation
+
 
 ```{r}
 B_pl = 100
@@ -275,7 +285,7 @@ colnames(mat_res_pl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
                             "kappa_pl","sigma2_pl" ,"sigma2_wn")
 ```
 
-# Plot empirical distributions (beta and stochastic parameters)
+## Plot empirical distributions of estimated parameters
 
 ```{r}
 par(mfrow = c(1, 4))
@@ -322,7 +332,7 @@ par(mfrow = c(1, 1))
 ```
 
 
-# Compute empirical coverage of confidence intervals for beta
+## Compute empirical coverage of confidence intervals
 ```{r}
 zval = qnorm(0.975)
 mat_res_pl_df$upper_ci_gmwmx_beta1 = mat_res_pl_df$gmwmx_beta1_hat + zval * mat_res_pl_df$gmwmx_std_beta1_hat
@@ -338,8 +348,9 @@ dplyr::between(rep(beta[2], B_pl), mat_res_pl_df$lower_ci_lm_beta1, mat_res_pl_d
 
 # Example 3: White noise + flicker
 
-Flicker noise corresponds to a non stationary power-law with spectral index `kappa = -1` but is
-handled explicitly by `flicker()` in this package.
+Flicker noise corresponds to a non stationary power-law with spectral index $\kappa = -1$ but is handled explicitly by `flicker()` in this package.
+
+## Generate signal
 
 ```{r}
 sigma2_wn_fl <- 1
@@ -352,13 +363,14 @@ y_fl = X %*% beta + eps_fl$series
 plot(X[, 2], y_fl, type = "l", main = "Simulated y (WN + Flicker)")
 ```
 
-
+## Fit model
 ```{r}
 fit_fl = gmwmx2_new(X = X, y = y_fl, model = wn() + flicker())
 fit_fl
 ```
 
-Monte Carlo coverage for the flicker case:
+
+## Monte Carlo simulation
 
 ```{r}
 B_fl = 100
@@ -390,23 +402,8 @@ colnames(mat_res_fl_df) = c("gmwmx_beta0_hat", "gmwmx_beta1_hat",
 ```
 
 
-# Compute empirical coverage of confidence intervals for beta
-```{r}
-zval = qnorm(0.975)
-mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
-mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
-# empirical coverage of gmwmx beta
-dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
 
-# do the same for lm beta
-mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
-mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
-dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
-```
-
-
-
-# Plot empirical distributions (beta and stochastic parameters)
+## Plot empirical distributions of estimated parameters
 
 ```{r}
 par(mfrow = c(1, 4))
@@ -448,6 +445,22 @@ abline(h = sigma2_wn_fl, col = "black", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
+
+
+
+## Compute empirical coverage of confidence intervals
+```{r}
+zval = qnorm(0.975)
+mat_res_fl_df$upper_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat + zval * mat_res_fl_df$gmwmx_std_beta1_hat
+mat_res_fl_df$lower_ci_gmwmx_beta1 = mat_res_fl_df$gmwmx_beta1_hat - zval * mat_res_fl_df$gmwmx_std_beta1_hat
+# empirical coverage of gmwmx beta
+dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_gmwmx_beta1, mat_res_fl_df$upper_ci_gmwmx_beta1) %>% mean()
+
+# do the same for lm beta
+mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl_df$lm_std_beta1_hat
+mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
+dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
+```
 
 
 
