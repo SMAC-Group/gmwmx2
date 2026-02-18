@@ -134,10 +134,10 @@ Geodetic Laboratory.</p>
 <p>While the GMWMX, as described above and in more detail in <span class="citation">Voirol et al. (2024)</span>, is a general method for
 estimating large linear models with complex dependence structures in
 presence of missing observations, the <code>gmwmx2</code> <code>R</code>
-package allows to estimate tectonic velocities from position time series
-in graticule distance (GD) coordinates provided by the Nevada Geodetic
-Laboratory <span class="citation">(Blewitt 2024; Blewitt, Hammond, and
-Kreemer 2018)</span>.</p>
+package allows to estimate tectonic velocities and crustal uplift from
+position time series in graticule distance (GD) coordinates provided by
+the Nevada Geodetic Laboratory <span class="citation">(Blewitt 2024;
+Blewitt, Hammond, and Kreemer 2018)</span>.</p>
 <div class="section level3">
 <h3 id="trajectory-model">Trajectory model<a class="anchor" aria-label="anchor" href="#trajectory-model"></a>
 </h3>
@@ -302,7 +302,7 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##   Parameters : sigma2 = 1.65e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.5267</span></span></code></pre>
+<span><span class="co">##   Total              : 1.6793</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -343,7 +343,7 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : kappa =    -1, sigma2 = 9.708e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.9611</span></span></code></pre>
+<span><span class="co">##   Total              : 2.0435</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -384,7 +384,7 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9803, sigma2 = 1.35e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.5344</span></span></code></pre>
+<span><span class="co">##   Total              : 1.5962</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -395,8 +395,8 @@ component (North, East, or Vertical) of one station.</p>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-bevis2014" class="csl-entry">
-Bevis, Michael, and A. Brown. 2014. <span>“<span class="nocase">Trajectory models and reference frames for crustal motion
-geodesy</span>.”</span> <em>Journal of Geodesy</em> 88 (283): 283--311.
+Bevis, Michael, and A. Brown. 2014. <span>“<span class="nocase">Trajectory Models and Reference Frames for Crustal Motion
+Geodesy</span>.”</span> <em>Journal of Geodesy</em> 88 (283): 283--311.
 </div>
 <div id="ref-blewitt2024improved" class="csl-entry">
 Blewitt, Geoffrey. 2024. <span>“<span class="nocase">An Improved
