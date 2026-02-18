@@ -161,9 +161,13 @@ The least‑squares estimator based on observed data is</p>
   \hat{\boldsymbol{\beta}} =
   \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
 </annotation></semantics></math> and we compute residuals</p>
-<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}</annotation></semantics></math>.</p>
-<p>We then estimate the parameters of the missingness process via
-maximum likelihood, assuming a two-state Markov model.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+\hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}.
+\end{equation}</annotation></semantics></math></p>
+<p>We then obtain
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛝</mi><annotation encoding="application/x-tex">\boldsymbol{\vartheta}</annotation></semantics></math>,
+the estimated parameters of the missingness process using the maximum
+likelihood estimator, assuming a two-state Markov model.</p>
 <p>We then estimate the stochastic parameters using the GMWM
 estimator:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛄</mi><mo accent="true">̂</mo></mover><mo>=</mo><munder><mrow><mo>arg</mo><mo>min</mo></mrow><mrow><mi>𝛄</mi><mo>∈</mo><mi>𝚪</mi></mrow></munder><mspace width="0.167em"></mspace><msup><mrow><mo stretchy="true" form="prefix">{</mo><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>𝛎</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo>,</mo><mover><mi>𝛝</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mi>T</mi></msup><mspace width="0.167em"></mspace><mi>𝛀</mi><mspace width="0.167em"></mspace><mrow><mo stretchy="true" form="prefix">{</mo><mover><mi>𝛎</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>𝛎</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo>,</mo><mover><mi>𝛝</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
@@ -299,7 +303,7 @@ and the missing observations.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9562, sigma2 = 0.8705 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.3897</span></span></code></pre>
+<span><span class="co">##   Total              : 1.2944</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation"></a>
@@ -480,7 +484,7 @@ controls the long‑memory behavior of the power‑law component.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.7344, sigma2 = 0.9371 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5748</span></span></code></pre>
+<span><span class="co">##   Total              : 0.5881</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation-1">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-1"></a>
@@ -653,7 +657,7 @@ power‑law error model and compare against OLS.</p>
 <span><span class="co">##        Estimated parameters : sigma2 = 0.8848 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.2642</span></span></code></pre>
+<span><span class="co">##   Total              : 1.2306</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation-2">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-2"></a>

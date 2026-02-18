@@ -121,7 +121,7 @@ Geodetic Laboratory</h1>
 <h2 id="model-and-estimator">Model and estimator<a class="anchor" aria-label="anchor" href="#model-and-estimator"></a>
 </h2>
 <p>This vignette builds on the general framework described in the
-vignettes ““Estimate linear models with dependent errors” and “Estimate
+vignettes “Estimate linear models with dependent errors” and “Estimate
 linear models with dependent errors and missing observations”. We do not
 repeat the full model, missingness mechanism, or estimation details
 here. Please refer to these vignettes for the formal setup, and use this
@@ -245,30 +245,29 @@ component (North, East, or Vertical) of one station.</p>
 <p>First, load the <code>gmwmx2</code> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://smac-group.github.io/gmwmx2/">gmwmx2</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="download-a-station-from-nevada-geodetic-laboratory">Download a station from Nevada Geodetic Laboratory<a class="anchor" aria-label="anchor" href="#download-a-station-from-nevada-geodetic-laboratory"></a>
-</h2>
+<div class="section level3">
+<h3 id="download-a-station-from-nevada-geodetic-laboratory">Download a station from Nevada Geodetic Laboratory<a class="anchor" aria-label="anchor" href="#download-a-station-from-nevada-geodetic-laboratory"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">station_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="plot-station">Plot Station<a class="anchor" aria-label="anchor" href="#plot-station"></a>
-</h2>
+<div class="section level3">
+<h3 id="plot-station">Plot Station<a class="anchor" aria-label="anchor" href="#plot-station"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">station_data</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
-<h2 id="plot-northing-component">Plot Northing component<a class="anchor" aria-label="anchor" href="#plot-northing-component"></a>
-</h2>
+<div class="section level3">
+<h3 id="plot-northing-component">Plot Northing component<a class="anchor" aria-label="anchor" href="#plot-northing-component"></a>
+</h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">station_data</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level2">
-<h2 id="estimate-model-on-station-data">Estimate model on station data<a class="anchor" aria-label="anchor" href="#estimate-model-on-station-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="estimate-models-on-station-data">Estimate models on station data<a class="anchor" aria-label="anchor" href="#estimate-models-on-station-data"></a>
+</h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwmx2_new.html">gmwmx2_new</a></span><span class="op">(</span><span class="va">station_data</span>, n_seasonal <span class="op">=</span> <span class="fl">2</span>, component <span class="op">=</span> <span class="st">"N"</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit1</span></span></code></pre></div>
@@ -303,11 +302,7 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##   Parameters : sigma2 = 1.65e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.5817</span></span></code></pre>
-</div>
-<div class="section level2">
-<h2 id="plot-estimated-model">Plot estimated model<a class="anchor" aria-label="anchor" href="#plot-estimated-model"></a>
-</h2>
+<span><span class="co">##   Total              : 1.5267</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -348,7 +343,7 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : kappa =    -1, sigma2 = 9.708e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 2.0485</span></span></code></pre>
+<span><span class="co">##   Total              : 1.9611</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -389,10 +384,11 @@ component (North, East, or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.9803, sigma2 = 1.35e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.5820</span></span></code></pre>
+<span><span class="co">##   Total              : 1.5344</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+</div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
