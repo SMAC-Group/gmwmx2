@@ -120,9 +120,9 @@ errors and missing observations</h1>
 <div class="section level2">
 <h2 id="model-and-estimator">Model and estimator<a class="anchor" aria-label="anchor" href="#model-and-estimator"></a>
 </h2>
-<p>The <code>gmwmx2</code> <code>R</code> package allows to estimate
-linear model with dependent errors described by composite stochastic
-model in presence of missing data.</p>
+<p>The <code>gmwmx2</code> R package supports estimation of linear
+models with dependent errors described by a composite stochastic model
+in the presence of missing data.</p>
 <p>More precisely, we assume the following model:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
     \boldsymbol{Y} = \boldsymbol{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
@@ -131,44 +131,47 @@ model in presence of missing data.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{X} \in \mathbb{R}^{n \times p}</annotation></semantics></math>
 is a design matrix of observed predictors,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛃</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>p</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\beta} \in \mathbb{R}^p</annotation></semantics></math>
-is the regression parameter vector and
+is the regression parameter vector, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛆</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>ε</mi><mi>i</mi></msub><msub><mo stretchy="false" form="postfix">}</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}</annotation></semantics></math>
 is a zero-mean process following an unspecified joint distribution
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℱ</mi><annotation encoding="application/x-tex">\mathcal{F}</annotation></semantics></math>
 with positive-definite covariance function
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}</annotation></semantics></math>,
 characterizing the second-order dependence structure of the process and
 parameterized by the vector
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛄</mi><mo>∈</mo><mi>𝚪</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>q</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q</annotation></semantics></math>.</p>
-<p>We then define the a random variable
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐙</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>Z</mi><mi>i</mi></msub><msub><mo stretchy="false" form="postfix">}</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{Z} =\{Z_{i}\}_{i=1,\ldots,n}</annotation></semantics></math>
-which describes the missing observation mechanism. More specifically,
-the vector
+<p>We then define a random variable
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐙</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>Z</mi><mi>i</mi></msub><msub><mo stretchy="false" form="postfix">}</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{Z} = \{Z_{i}\}_{i=1,\ldots,n}</annotation></semantics></math>
+that describes the missing-observation mechanism. More specifically, the
+vector
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐙</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">}</mo><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{Z} \in \{0, 1\}^n</annotation></semantics></math>
 is a binary-valued stationary process independent of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐘</mi><annotation encoding="application/x-tex">\boldsymbol{Y}</annotation></semantics></math>
 with expectation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>Z</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mspace width="0.167em"></mspace><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in [0, \, 1)</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∀</mo><mspace width="0.167em"></mspace><mi>i</mi></mrow><annotation encoding="application/x-tex">\forall \, i</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>Z</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in [0, 1)</annotation></semantics></math>,
+for all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
 and covariance matrix
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚲</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>𝕍</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>𝐙</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \mathbb{V}[\boldsymbol{Z}] \in \mathbb{R}^{n\times n}</annotation></semantics></math>
-whose structure is assumed known up to the parameter vector
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛝</mi><mo>∈</mo><mi>𝚼</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k</annotation></semantics></math></p>
-<p>We then assume that we only observe the stochastic process
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚲</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛝</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>𝕍</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>𝐙</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \mathbb{V}[\boldsymbol{Z}]
+\in \mathbb{R}^{n\times n}</annotation></semantics></math> whose
+structure is assumed known up to the parameter vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝛝</mi><mo>∈</mo><mi>𝚼</mi><mo>⊂</mo><msup><mi>ℝ</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k</annotation></semantics></math>.</p>
+<p>We observe only the stochastic process
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐙</mi><mo>⊙</mo><mi>𝐘</mi></mrow><annotation encoding="application/x-tex">\tilde{\boldsymbol{Y}} = \boldsymbol{Z} \odot \boldsymbol{Y}</annotation></semantics></math>,
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊙</mo><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
 denotes the Hadamard product. Hence,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>∈</mo><msup><mi>ℝ</mi><mi>n</mi></msup><mo>=</mo><mi>𝐘</mi><mo>⊙</mo><mi>𝐙</mi></mrow><annotation encoding="application/x-tex">\tilde{\boldsymbol{Y}} \in \mathbb{R}^n = \boldsymbol{Y} \odot \boldsymbol{Z}</annotation></semantics></math>
-represents the observed process vector with null elements in the
-positions where observations are missing.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>∈</mo><msup><mi>ℝ</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">\tilde{\boldsymbol{Y}} \in \mathbb{R}^n</annotation></semantics></math>
+represents the observed process vector with null elements at positions
+where observations are missing.</p>
 <p>Using
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊗</mo><annotation encoding="application/x-tex">\otimes</annotation></semantics></math>
-to denote the Kronecker product, we then define
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐙</mi><mo>⊗</mo><msup><mn>𝟏</mn><mi>T</mi></msup><mo>⊙</mo><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X} \in \mathbb{R}^{n \times p}</annotation></semantics></math>
-as the design matrix
+to denote the Kronecker product, we define
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>𝐙</mi><mo>⊗</mo><msup><mn>𝟏</mn><mi>T</mi></msup><mo>⊙</mo><mi>𝐗</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\tilde{\boldsymbol{X}} = \boldsymbol{Z} \otimes \boldsymbol{1}^T \odot \boldsymbol{X}
+\in \mathbb{R}^{n \times p}</annotation></semantics></math> as the
+design matrix
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐗</mi><annotation encoding="application/x-tex">\boldsymbol{X}</annotation></semantics></math>
-with zero-valued vectors for the rows where observations are missing in
+with zero-valued rows where observations are missing in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐘</mi><annotation encoding="application/x-tex">\boldsymbol{Y}</annotation></semantics></math>
 (where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>𝟏</mn><annotation encoding="application/x-tex">\boldsymbol{1}</annotation></semantics></math>
@@ -176,17 +179,17 @@ represents a vector of ones of dimension
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>).</p>
 <p>We estimate the parameters
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛃</mi><annotation encoding="application/x-tex">\boldsymbol{\beta}</annotation></semantics></math>
-with the least square estimator:</p>
+with the least-squares estimator:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mi>T</mi></msup><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
     \hat{\boldsymbol{\beta}} = \left(\tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{X}}\right)^{-1} \tilde{\boldsymbol{X}}^T \tilde{\boldsymbol{Y}}.
 \end{equation}</annotation></semantics></math></p>
 <p>We compute the estimated residuals as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>𝛆</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>𝐘</mi><mo accent="true">̃</mo></mover><mo>−</mo><mover><mi>𝐗</mi><mo accent="true">̃</mo></mover><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\boldsymbol{\varepsilon}} = {\tilde{\boldsymbol{Y}}} - \tilde{{\boldsymbol{X}}} \hat{\boldsymbol{\beta}}</annotation></semantics></math>.</p>
-<p>We then estimate with the Maximum Likelihood Estimator the parameters
+<p>We estimate the parameters
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛝</mi><annotation encoding="application/x-tex">\boldsymbol{\vartheta}</annotation></semantics></math>
 of the missingness process
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐙</mi><annotation encoding="application/x-tex">\boldsymbol{Z}</annotation></semantics></math>
-assuming that
+via maximum likelihood, assuming that
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐙</mi><annotation encoding="application/x-tex">\boldsymbol{Z}</annotation></semantics></math>
 is generated from a Markov model with the following transition
 probabilities:</p>
@@ -201,58 +204,56 @@ probabilities:</p>
 \end{equation}</annotation></semantics></math></p>
 <p>We then estimate the parameters
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛄</mi><annotation encoding="application/x-tex">\boldsymbol{\gamma}</annotation></semantics></math>
-using a Generalized method of Wavelet Moments approach <span class="citation">(Guerrier et al. 2013)</span>.</p>
-<p>More precisely, we rely on the result of <span class="citation">Xu et
-al. (2017)</span> that provide a computationally efficient form of the
+using a Generalized Method of Wavelet Moments approach <span class="citation">(Guerrier et al. 2013)</span>.</p>
+<p>More precisely, we rely on results from <span class="citation">Xu et
+al. (2017)</span>, which provide a computationally efficient form of the
 theoretical Allan variance (equivalent to the Haar wavelet variance up
 to a constant) for zero-mean stochastic processes such as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>
-to avoid computing these large matrices multiplication in the objective
-function. Indeed in <span class="citation">Xu et al. (2017)</span> they
-generalize the results in <span class="citation">Zhang (2008)</span> to
-zero-mean non-stationary processes by using averages of the diagonals
-and super-diagonals of the covariance matrix of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
+avoiding large matrix multiplications in the objective function. In
+<span class="citation">Xu et al. (2017)</span> they generalize the
+results in <span class="citation">Zhang (2008)</span> to zero-mean
+non-stationary processes by using averages of the diagonals and
+super-diagonals of the covariance matrix of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>.
-What this implies is that the GMWM, which uses this form, does not
-require the storage of the
+This implies that the GMWM does not require storage of the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n \times n</annotation></semantics></math>
 covariance matrix of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛆</mi><annotation encoding="application/x-tex">\boldsymbol{\varepsilon}</annotation></semantics></math>,
-but only of a vector of dimension
+but only a vector of length
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-which is then plugged into an explicit formula consisting in a linear
-combination of the elements of this vector (these elements being
-averages of the diagonal and super-diagonals of the covariance
-matrix).</p>
+that is plugged into an explicit formula consisting of a linear
+combination of its elements (these elements are averages of the diagonal
+and super-diagonals of the covariance matrix).</p>
 </div>
 <div class="section level2">
 <h2 id="estimating-tectonic-velocities-and-crustal-uplift">Estimating tectonic velocities and crustal uplift<a class="anchor" aria-label="anchor" href="#estimating-tectonic-velocities-and-crustal-uplift"></a>
 </h2>
-<p>While the GMWMX as described above and in more details in <span class="citation">Voirol et al. (2024)</span>, is a general method for
-estimating large linear model with complex dependence structure in
-presence of missing data, the <code>gmwmx2</code> <code>R</code> package
-is currently developed specifically to estimate tectonic velocities from
-position times series in graticule distance coordinates system (GD)
-provided by the Nevada geodetic Laboratory <span class="citation">(Blewitt 2024; Blewitt, Hammond, and Kreemer
-2018)</span>.</p>
+<p>While the GMWMX, as described above and in more detail in <span class="citation">Voirol et al. (2024)</span>, is a general method for
+estimating large linear models with complex dependence structures in the
+presence of missing data, the <code>gmwmx2</code> R package is currently
+developed specifically to estimate tectonic velocities from position
+time series in graticule distance (GD) coordinates provided by the
+Nevada Geodetic Laboratory <span class="citation">(Blewitt 2024;
+Blewitt, Hammond, and Kreemer 2018)</span>.</p>
 <div class="section level3">
 <h3 id="trajectory-model">Trajectory model<a class="anchor" aria-label="anchor" href="#trajectory-model"></a>
 </h3>
-<p>To estimate the trajectory model (see e.g., <span class="citation">Bevis and Brown (2014)</span> for more details), we
+<p>To estimate the trajectory model (see, e.g., <span class="citation">Bevis and Brown (2014)</span> for more details), we
 construct the design matrix
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐗</mi><annotation encoding="application/x-tex">\boldsymbol{X}</annotation></semantics></math>
-such that
+such that the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
 component of the vector
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mi>𝛃</mi></mrow><annotation encoding="application/x-tex">\mathbf{X} {{\boldsymbol{\beta}}}</annotation></semantics></math>
-can be described as follows with
+can be described as follows, with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>i</mi></msub><annotation encoding="application/x-tex">t_i</annotation></semantics></math>
 representing the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>i</mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">i^{th}</annotation></semantics></math>
-ordered time point (epoch) indicated in Modified Julian Date and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>i</mi><mtext mathvariant="normal">th</mtext></msup><annotation encoding="application/x-tex">i^{\text{th}}</annotation></semantics></math>
+ordered time point (epoch) in Modified Julian Date and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>0</mn></msub><annotation encoding="application/x-tex">t_0</annotation></semantics></math>
-representing the reference epoch located exactly in the middle of start
-and end point of the time series:</p>
+representing the reference epoch located exactly in the middle of the
+start and end points of the time series:</p>
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>𝔼</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>𝐘</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mi>𝐗</mi><mi>i</mi><mi>T</mi></msubsup><mi>𝛃</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>a</mi><mo>+</mo><mi>b</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mi>i</mi></msub><mo>−</mo><msub><mi>t</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><munderover><mo>∑</mo><mrow><mi>h</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>c</mi><mi>h</mi></msub><mo>sin</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>π</mi><msub><mi>f</mi><mi>h</mi></msub><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>d</mi><mi>h</mi></msub><mo>cos</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>π</mi><msub><mi>f</mi><mi>h</mi></msub><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>r</mi></munderover><msub><mi>e</mi><mi>j</mi></msub><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mi>i</mi></msub><mo>−</mo><msub><mi>t</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>s</mi></munderover><msub><mi>l</mi><mi>k</mi></msub><mrow><mo stretchy="true" form="prefix">[</mo><mn>1</mn><mo>−</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mi>i</mi></msub><mo>−</mo><msub><mi>t</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>τ</mi><mi>k</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mi>i</mi></msub><mo>−</mo><msub><mi>τ</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{split}
  \mathbb{E}[\mathbf{Y}_i] &amp;= \mathbf{X}_i^T {{\boldsymbol{\beta}}}  \\
 &amp;= a + b \left(t_{i} - t_0\right) +  \sum_{h=1}^{m}\left[c_{h} \sin \left(2 \pi f_{h} t_{i}\right)  + d_h \cos \left(2 \pi f_h t_i\right)\right] + \\&amp; \sum_{j=1}^{r}e_j H\left(t_i - t_j\right) + \sum_{k = 1 }^{s} l_k \left[1- \exp\left(\frac{-(t_i-t_k)}{\tau_k}\right)\right]H\left(t_{i}-\tau_k\right) 
@@ -261,7 +262,7 @@ and end point of the time series:</p>
 is the initial position at the reference epoch
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mn>0</mn></msub><annotation encoding="application/x-tex">t_0</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
-is the velocity parameter,
+is the velocity parameter, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>h</mi></msub><annotation encoding="application/x-tex">c_h</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>h</mi></msub><annotation encoding="application/x-tex">d_h</annotation></semantics></math>
@@ -273,45 +274,45 @@ represent the annual and semi-annual seasonal terms, respectively with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mn>1</mn></msub><mo>=</mo><mfrac><mn>1</mn><mn>365.25</mn></mfrac></mrow><annotation encoding="application/x-tex">f_1 = \frac{1}{365.25}</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mn>2</mn></msub><mo>=</mo><mfrac><mn>2</mn><mn>365.25</mn></mfrac></mrow><annotation encoding="application/x-tex">f_2 = \frac{2}{365.25}</annotation></semantics></math>).
-The offset terms models earthquakes, equipment changes or human
-intervention in which
+The offset terms model earthquakes, equipment changes, or human
+intervention, in which
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>e</mi><mi>j</mi></msub><annotation encoding="application/x-tex">e_j</annotation></semantics></math>
 is the magnitude of the step at epochs
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>j</mi></msub><annotation encoding="application/x-tex">t_j</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
-is the total number of offsets,
+is the total number of offsets, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>
 is the Heaviside step function defined as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>:=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>1</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>x</mi><mo>≥</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>x</mi><mo>&lt;</mo><mn>0</mn></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">H(x):= \begin{cases}1, &amp; x \geq 0 \\ 0, &amp; x&lt;0\end{cases}</annotation></semantics></math>
-and the last term allow to model post-seismic deformation (see e.g.,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>:=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>1</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>x</mi><mo>≥</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>x</mi><mo>&lt;</mo><mn>0</mn></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">H(x):= \begin{cases}1, &amp; x \geq 0 \\ 0, &amp; x&lt;0\end{cases}</annotation></semantics></math>.
+The last term allows us to model post-seismic deformation (see, e.g.,
 <span class="citation">Sobrero et al. (2020)</span>) where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-is the number of post seismic relaxation time specified,
+is the number of post-seismic relaxation times specified,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>k</mi></msub><annotation encoding="application/x-tex">t_k</annotation></semantics></math>
 is the time when the relaxation
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 starts in Modified Julian Date (MJD),
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\tau_k</annotation></semantics></math>
 is the relaxation period in days for the post-seismic relaxation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>,
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>l</mi><mi>k</mi></msub><annotation encoding="application/x-tex">l_k</annotation></semantics></math>
 is the amplitude of the transient. Note that by default the estimates of
-the functional parameters are provided in unit/day.</p>
-<p>When loading data from a specific station using the function
+the functional parameters are provided in units/day.</p>
+<p>When loading data from a specific station using
 <code><a href="../reference/download_station_ngl.html">gmwmx2::download_station_ngl()</a></code>, we extract from the Nevada
 Geodetic Laboratory the position time series in GD coordinates, the time
-steps associated with a equipment or software change and the time steps
-associated with an earthquake near the station. All these objects are
-stored in a object of class <code>gnss_ts_ngl</code>.</p>
+steps associated with equipment or software changes, and the time steps
+associated with earthquakes near the station. All these objects are
+stored in an object of class <code>gnss_ts_ngl</code>.</p>
 <p>When applying the function <code><a href="../reference/gmwmx2.html">gmwmx2::gmwmx2()</a></code> to an object
 of class <code>gnss_ts_ngl</code>, we construct the design matrix
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐗</mi><annotation encoding="application/x-tex">\boldsymbol{X}</annotation></semantics></math>
-by considering an offset term for all equipment or software changes
-steps and all earthquakes indicated by the NGL. We also specify a
-post-seismic relaxation term for all earthquakes indicated by the NGL.
-If no relaxation time is specified in the argument
-<code>vec_earthquakes_relaxation_time</code>, we consider a default
+by considering an offset term for all equipment or software change steps
+and all earthquakes indicated by the NGL. We also specify a post-seismic
+relaxation term for all earthquakes indicated by the NGL. If no
+relaxation time is specified in the argument
+<code>vec_earthquakes_relaxation_time</code>, we use a default
 relaxation time of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>365.25</mn><annotation encoding="application/x-tex">365.25</annotation></semantics></math>
 days.</p>
@@ -321,17 +322,17 @@ days.</p>
 </h3>
 <p>It is generally recognized that noise in GNSS time series is best
 described by a combination of colored noise plus white noise <span class="citation">(He et al. 2017; Langbein 2008; Williams et al. 2004;
-Bos et al. 2013)</span> where the white noise generally model noise at
-high frequencies and the colored noise model the lower frequencies of
+Bos et al. 2013)</span>, where the white noise generally models noise at
+high frequencies and the colored noise models the lower frequencies of
 the spectrum.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="example-of-estimation">Example of estimation<a class="anchor" aria-label="anchor" href="#example-of-estimation"></a>
 </h2>
-<p>Let us showcase how to estimate the tectonic velocity in for one
-specific component (North, East or Vertical) of one station.</p>
-<p>Let us first load the <code>gmwmx2</code> package.</p>
+<p>Let us showcase how to estimate tectonic velocity for one specific
+component (North, East, or Vertical) of one station.</p>
+<p>First, load the <code>gmwmx2</code> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://smac-group.github.io/gmwmx2/">gmwmx2</a></span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -401,7 +402,7 @@ specific component (North, East or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.7261, sigma2 = 3.75e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.8868</span></span></code></pre>
+<span><span class="co">##   Total              : 0.9074</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="plot-estimated-model">Plot estimated model<a class="anchor" aria-label="anchor" href="#plot-estimated-model"></a>
@@ -452,7 +453,7 @@ specific component (North, East or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : sigma2 = 2.062e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5082</span></span></code></pre>
+<span><span class="co">##   Total              : 0.5112</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -499,7 +500,7 @@ specific component (North, East or Vertical) of one station.</p>
 <span><span class="co">##        Estimated parameters : phi = 0.782, sigma2 = 9.644e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.1926</span></span></code></pre>
+<span><span class="co">##   Total              : 0.1950</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_geodetic_time_series_from_ngl_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>

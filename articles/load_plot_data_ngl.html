@@ -117,7 +117,7 @@ Laboratory</h1>
 
     
     
-<p>Let us first load the <code>gmwmx2</code> package.</p>
+<p>First, load the <code>gmwmx2</code> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://smac-group.github.io/gmwmx2/">gmwmx2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -142,7 +142,7 @@ Laboratory</h1>
 <code class="sourceCode R"><span><span class="va">data_1LSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="extract-gnss-position-time-series-of-station">Extract GNSS position time series of station<a class="anchor" aria-label="anchor" href="#extract-gnss-position-time-series-of-station"></a>
+<h2 id="extract-gnss-position-time-series-for-the-station">Extract GNSS position time series for the station<a class="anchor" aria-label="anchor" href="#extract-gnss-position-time-series-for-the-station"></a>
 </h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
@@ -220,7 +220,7 @@ Laboratory</h1>
 <span><span class="co">## 6:                 -91.18026               -6.51980</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="extract-equipment-or-software-changes-steps">Extract equipment or software changes steps<a class="anchor" aria-label="anchor" href="#extract-equipment-or-software-changes-steps"></a>
+<h2 id="extract-equipment-or-software-change-steps">Extract equipment or software change steps<a class="anchor" aria-label="anchor" href="#extract-equipment-or-software-change-steps"></a>
 </h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
@@ -242,7 +242,7 @@ Laboratory</h1>
 <span><span class="co">## 6:                55300</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="extract-earthquakes-steps">Extract earthquakes steps<a class="anchor" aria-label="anchor" href="#extract-earthquakes-steps"></a>
+<h2 id="extract-earthquake-steps">Extract earthquake steps<a class="anchor" aria-label="anchor" href="#extract-earthquake-steps"></a>
 </h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>

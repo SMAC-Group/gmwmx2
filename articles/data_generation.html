@@ -207,19 +207,41 @@ numeric series in <code>$series</code>:</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="reproducible-generation">Reproducible generation<a class="anchor" aria-label="anchor" href="#reproducible-generation"></a>
+</h2>
+<p>You can set a random seed before calling <code><a href="../reference/generate.html">generate()</a></code>, or
+pass a seed directly to <code><a href="../reference/generate.html">generate()</a></code>, to make the output
+deterministic. Using the same seed and model parameters produces the
+exact same time series.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model_wn_repro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">series_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_wn_repro</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">series_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_wn_repro</span>, n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">series_c</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_wn_repro</span>, n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">4321</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">series_a</span><span class="op">$</span><span class="va">series</span>, <span class="va">series_b</span><span class="op">$</span><span class="va">series</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">series_a</span><span class="op">$</span><span class="va">series</span>, <span class="va">series_c</span><span class="op">$</span><span class="va">series</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "Mean relative difference: 1.310458"</span></span></code></pre>
+</div>
+<div class="section level2">
 <h2 id="composite-models-sum-of-processes">Composite models (sum of processes)<a class="anchor" aria-label="anchor" href="#composite-models-sum-of-processes"></a>
 </h2>
 <p>Use <code>+</code> to build a composite model from multiple
 stochastic processes. The result is a <code>sum_model</code> that can be
 passed to <code><a href="../reference/generate.html">generate()</a></code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_wn_ar1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.8</span>, sigma2 <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">model_wn_ar1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "sum_model"</span></span></code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">series_wn_ar1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">model_wn_ar1</span>, n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">series_wn_ar1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data_generation_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<p><img src="data_generation_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <p>The composite output is a
 <code>generated_composite_model_time_series</code> with:</p>
 <ul>
@@ -234,7 +256,7 @@ passed to <code><a href="../reference/generate.html">generate()</a></code>.</p>
 <li>
 <code>parameters</code> (parameters of each component)</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">series_wn_ar1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "series"     "components" "n"          "model"      "parameters"</span></span></code></pre>
 </div>
