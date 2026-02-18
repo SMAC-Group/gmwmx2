@@ -10,11 +10,11 @@ vignette: >
 This vignette demonstrate on to use the GMWMX estimator to estimate linear models with dependent errors described by a composite stochastic process in presence of missing observations. Consider the model defined as:
 
 \begin{equation}
-    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{0, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
+    \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
 Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with \(Z_t = 1\) indicating
-observation, and \(Z_t = 0\) a missing observation. The missingness process is independent of $\mathbf{Y} and respect the following definition:
+observation, and \(Z_t = 0\) a missing observation with $t \in \{1,\ldots, n\}$. The missingness process is independent of $\mathbf{Y}$ and respect the following definition:
 \begin{equation}
   Z_i =
 \begin{cases}
@@ -22,7 +22,7 @@ observation, and \(Z_t = 0\) a missing observation. The missingness process is i
     W_i \sim \mathrm{Bernoulli}(\mu(\bm{\vartheta})), & \text{with probability } 1-\rho,
 \end{cases}
 \end{equation}
-with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, \, 1]$, for all $i \in \{1, \ldots n\}$, with covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right) \in \mathbb{R}^{n\times n}$  whose structure is assumed known up to the parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$ The observed series is
+with expectation $\mu(\boldsymbol{\vartheta}) = \mathbb{E}[Z_i] \in (0, 1]$, for all $i \in \{1, \ldots n\}$, with covariance matrix $\boldsymbol{\Lambda}(\boldsymbol{\vartheta}) = \operatorname{var}\left(\mathbf{Z}\right) \in \mathbb{R}^{n\times n}$  whose structure is assumed known up to the parameter vector $\boldsymbol{\vartheta} \in \boldsymbol{\Upsilon} \subset \mathbb{R}^k$ The observed series is
 \[
   \tilde{\mathbf{Y}} = \mathbf{Y} \odot \mathbf{Z}.
 \]
@@ -41,7 +41,7 @@ We then estimate the parameters of the missingness process using maximum likelih
 We then estimate the stochastic parameters using the GMWM estimator:
 
 \begin{equation}
-    \hat{\boldsymbol{\gamma}} = \argmin_{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}} \,\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\}^{\trans} \, \boldsymbol{\Omega} \, \{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\},
+    \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \,\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\}^{T} \, \boldsymbol{\Omega} \, \{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma}, \hat{\boldsymbol{\vartheta}})\},
 \end{equation}
 
 where $\hat{\boldsymbol{\nu}}$ is the estimated wavelet variance computed on the estimated residuals $\hat{\boldsymbol{\varepsilon}}$ and $\hat{\boldsymbol{\vartheta}}$ is the pre-computed estimator of the parameter $\boldsymbol{\vartheta}$, with $\boldsymbol{\Omega}$ being any positive-definite matrix.
