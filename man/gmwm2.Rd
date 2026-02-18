@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwm2.R
 \name{gmwm2}
 \alias{gmwm2}
-\title{Estimate composite stochastic model}
+\title{Estimate composite stochastic models}
 \usage{
 gmwm2(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...)
 }
@@ -33,9 +33,9 @@ to fit a \code{time_series_model}, a \code{sum_model} or a numeric vector.
 \details{
 The GMWM estimator solves a weighted least-squares criterion of the form
 \deqn{
-  (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))^\top
+  \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta})\right\}^\top
   \boldsymbol{\Omega}
-  (\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta}))
+  \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta})\right\}
 }
 where \eqn{\hat{\boldsymbol{\nu}}} denotes the empirical wavelet
 variance and \eqn{\boldsymbol{\nu}(\boldsymbol{\theta})}
