@@ -124,7 +124,7 @@ plot(station_data, component = "N")
 
 ## Estimate models on station data
 ```{r}
-fit1 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn())
+fit1 <- gmwmx2(station_data, n_seasonal = 2, component = "N", model = wn())
 fit1
 ```
 
@@ -134,7 +134,7 @@ plot(fit1)
 ```
 
 ```{r}
-fit2 <- gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn()+ pl())
+fit2 <- gmwmx2(station_data, n_seasonal = 2, component = "N", model = wn()+ pl())
 fit2
 ```
 
@@ -143,7 +143,7 @@ plot(fit2)
 ```
 
 ```{r}
-fit3 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + flicker())
+fit3 = gmwmx2(station_data, n_seasonal = 2, component = "N", model = wn() + flicker())
 fit3
 ```
 
@@ -152,7 +152,7 @@ fit3
 plot(fit3)
 ```
 ```{r}
-fit4 = gmwmx2_new(station_data, n_seasonal = 2, component = "N", model = wn() + ar1())
+fit4 = gmwmx2(station_data, n_seasonal = 2, component = "N", model = wn() + ar1())
 fit4
 ```
 

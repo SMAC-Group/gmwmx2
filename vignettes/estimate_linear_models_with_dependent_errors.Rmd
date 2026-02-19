@@ -74,7 +74,7 @@ $\hat{\boldsymbol{\beta}}$ is then obtained as:
 \end{equation}
 
 This vignette is a detailed, self-contained simulation walkthrough that showcases
-`gmwmx2_new()` for an arbitrary design matrix `X` and response vector `y`. We build the
+`gmwmx2()` for an arbitrary design matrix `X` and response vector `y`. We build the
 signal, generate noise, fit models, and run Monte Carlo experiments to check coverage of
 confidence intervals. For each setting, we also plot the empirical distributions of the
 estimated functional and stochastic parameters.
@@ -118,7 +118,6 @@ X[, 2] = 1:n
 omega_1 <- (1 / 365.25) * 2 * pi
 X[, 3] <- sin((1:n) * omega_1)
 X[, 4] <- cos((1:n) * omega_1)
-beta = c(1, 0.01, 2, 1.5)
 beta = c(0.5 , 0.00004, 0.005,  0.0008)
 
 
@@ -145,10 +144,10 @@ plot(X[, 2], y, type = "l", main = "Simulated y (WN + AR1)")
 
 ## Fit model
 
-We fit using `gmwmx2_new()` with a composite model composed of white noise and autoregressive process of order 1.
+We fit using `gmwmx2()` with a composite model composed of white noise and autoregressive process of order 1.
 
 ```{r}
-fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
+fit = gmwmx2(X = X, y = y, model = wn() + ar1() )
 print(fit)
 
 ```
@@ -164,7 +163,7 @@ mat_res = matrix(NA, nrow=B, ncol=19)
 for(b in seq(B)){
   eps = generate(ar1(phi=phi_ar1, sigma2=sigma2_ar1) + wn(sigma2_wn), n=n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new(X = X, y = y, model = wn() + ar1() )
+  fit = gmwmx2(X = X, y = y, model = wn() + ar1() )
   # misspecified model assuming white noise as the stochastic model
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 
@@ -275,7 +274,7 @@ plot(X[, 2], y_pl, type = "l", main = "Simulated y (WN + PL)")
 ## Fit model
 
 ```{r}
-fit_pl = gmwmx2_new(X = X, y = y_pl, model = wn() + pl())
+fit_pl = gmwmx2(X = X, y = y_pl, model = wn() + pl())
 fit_pl
 ```
 
@@ -287,9 +286,9 @@ B_pl = 100
 mat_res_pl = matrix(NA, nrow = B_pl, ncol = 19)
 for(b in seq(B_pl)){
   eps = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
-                 n = n, seed = (123 + b))$series
+                 n = n, seed = (12345 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new(X = X, y = y, model = wn() + pl())
+  fit = gmwmx2(X = X, y = y, model = wn() + pl())
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 
   mat_res_pl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
@@ -392,7 +391,7 @@ plot(X[, 2], y_fl, type = "l", main = "Simulated y (WN + Flicker)")
 
 ## Fit model
 ```{r}
-fit_fl = gmwmx2_new(X = X, y = y_fl, model = wn() + flicker())
+fit_fl = gmwmx2(X = X, y = y_fl, model = wn() + flicker())
 fit_fl
 ```
 
@@ -406,7 +405,7 @@ for(b in seq(B_fl)){
   eps = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                  n = n, seed = (123 + b))$series
   y = X %*% beta + eps
-  fit = gmwmx2_new(X = X, y = y, model = wn() + flicker())
+  fit = gmwmx2(X = X, y = y, model = wn() + flicker())
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
 
   mat_res_fl[b, ] = c(fit$beta_hat, fit$std_beta_hat,

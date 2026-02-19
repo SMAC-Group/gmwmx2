@@ -2,34 +2,58 @@
 % Please edit documentation in R/gmwmx2.R
 \name{gmwmx2}
 \alias{gmwmx2}
-\title{Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.}
+\alias{gmwmx2.default}
+\alias{gmwmx2.gnss_ts_ngl}
+\title{GMWMX estimator}
 \usage{
-gmwmx2(
-  x,
+gmwmx2(X, ...)
+
+\method{gmwmx2}{default}(X, y, model, omega = NULL, method = "L-BFGS-B", control = list(), ...)
+
+\method{gmwmx2}{gnss_ts_ngl}(
+  X,
   n_seasonal = 2,
   vec_earthquakes_relaxation_time = NULL,
-  component = "N",
-  toeplitz_approx_var_cov_wv = TRUE,
-  stochastic_model = "wn + fl"
+  component = NULL,
+  model = NULL,
+  omega = NULL,
+  method = "L-BFGS-B",
+  control = list(),
+  ...
 )
 }
 \arguments{
-\item{x}{A \code{gnss_ts_ngl} object.}
+\item{X}{A \code{gnss_ts_ngl} object (GNSS time-series interface).}
 
-\item{n_seasonal}{An \code{integer} specifying the number of seasonal signals in the time series. "1" specify only one annual periodic signal and "2"specify an annual and a semiannual periodic signal.}
+\item{...}{Reserved for future extensions.}
 
-\item{vec_earthquakes_relaxation_time}{A \code{vector} specifying the relaxation time for each earthquakes indicated for the time series.}
+\item{y}{Response vector for a generic regression interface.}
 
-\item{component}{A \code{string} with value either "N", "E" or "V" that specify which component to estimate (Northing, Easting or Vertical).}
+\item{model}{Stochastic model specification.}
 
-\item{toeplitz_approx_var_cov_wv}{A \code{boolean} that specify if the variance of the wavelet variance should be computed based on a toeplitz approximation of the variance covariance matrix of the residuals.}
+\item{omega}{Optional weighting matrix. If \code{NULL}, uses inverse CI width.}
 
-\item{stochastic_model}{A \code{string} that specify the stochastic model considered for the residuals. Either "wn + fl" for white noise and flicker/pink noise or "wn + pl" for white noise and stationary power-law noise.}
+\item{method}{Optimization method passed to \code{stats::optim}.}
+
+\item{control}{Control list passed to \code{stats::optim}.}
+
+\item{n_seasonal}{Number of seasonal signals.}
+
+\item{vec_earthquakes_relaxation_time}{Relaxation time for each earthquake.}
+
+\item{component}{Component to estimate ("N", "E", or "V").}
+}
+\value{
+A fitted model object.
+
+A fitted model object.
+
+A fitted model object.
 }
 \description{
-Estimate a trajectory model for a \code{gnss_ts_ngl} object considering a white noise plus colored noise as the stochastic model for the residuals and model missingness with a Markov process using the GMWMX estimator.
-}
-\examples{
-x <- download_station_ngl("CHML")
-fit <- gmwmx2(x, n_seasonal = 2, component = "N")
+Dispatches either to the generic regression interface (design matrix + response)
+or to a \code{gnss_ts_ngl} workflow.
+
+Convenience wrapper that selects the missing or non-missing implementation
+based on the presence of \code{NA} values in \code{y}.
 }

@@ -92,7 +92,7 @@ knitr::opts_chunk$set(
 # knitr::opts_chunk$set(eval = FALSE)
 ```
 
-Overall, these examples illustrate how `gmwmx2_new()` supports inference for
+Overall, these examples illustrate how `gmwmx2()` supports inference for
 linear regression models with dependent errors in presence of missing observations,
 and how the results compare to a naive OLS fit that ignores dependence.
 
@@ -139,8 +139,7 @@ plot(x = X[, 2], y = X %*% beta, type = "l",
 ```
 
 Next we simulate dependent errors, add them to the signal, and then introduce
-missing observations using a two‑state Markov model. This is the key difference
-from `vignettes/gmwmx2_new.Rmd`, which uses fully observed data.
+missing observations using a two‑state Markov model. 
 
 
 # Example 1: White noise + AR(1)
@@ -171,19 +170,19 @@ for(i in id_not_observed){
 }
 ```
 
-We then fit the dependent‑error regression using `gmwmx2_new()`, which accounts
+We then fit the dependent‑error regression using `gmwmx2()`, which accounts
 for the stochastic error model and the missing observations.
 
 
 ## Fit model
 ```{r}
-fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
+fit = gmwmx2(X = X, y = y_observed, model = wn() + ar1() )
 print(fit)
 ```
 
 ## Monte Carlo simulation
 We now assess inference quality under missingness by repeating the simulation,
-fitting the correct dependent‑error model with `gmwmx2_new()`, and comparing
+fitting the correct dependent‑error model with `gmwmx2()`, and comparing
 against a misspecified OLS fit that treats the errors as i.i.d. and uses only
 observed data.
 
@@ -196,7 +195,7 @@ for(b in seq(B)){
   y = X %*% beta + eps
   Z = generate(mod_missing, n = n, seed = 123 + b)$series
   y_observed = ifelse(Z == 1, y, NA)
-  fit = gmwmx2_new(X = X, y = y_observed, model = wn() + ar1() )
+  fit = gmwmx2(X = X, y = y_observed, model = wn() + ar1() )
   # misspecified model assuming white noise as the stochastic model and only on observed data
   fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
@@ -271,7 +270,7 @@ shown as horizontal lines.
 
 
 We report the empirical fraction of times the true \(\boldsymbol{\beta}\)
-entries fall inside the estimated intervals for both `gmwmx2_new()` and OLS.
+entries fall inside the estimated intervals for both `gmwmx2()` and OLS.
 
 ## Compute empirical coverage of confidence intervals
 ```{r}
@@ -290,7 +289,7 @@ dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_c
 
 We now repeat the workflow for a long‑memory error model (white noise +
 stationary power‑law). The steps mirror the AR(1) case: simulate with
-missingness, fit `gmwmx2_new()`, and compare to a misspecified OLS fit.
+missingness, fit `gmwmx2()`, and compare to a misspecified OLS fit.
 
 The parameter \(\kappa\) controls the long‑memory behavior of the power‑law
 component.
@@ -322,7 +321,7 @@ for(i in id_not_observed){
 
 ## Fit model
 ```{r}
-fit_pl = gmwmx2_new(X = X, y = y_observed, model = wn() + pl())
+fit_pl = gmwmx2(X = X, y = y_observed, model = wn() + pl())
 fit_pl
 ```
 
@@ -340,7 +339,7 @@ for(b in seq(B_pl)){
   Z_process = Z$series
   y_observed = ifelse(Z_process == 1, y, NA)
 
-  fit = gmwmx2_new(X = X, y = y_observed, model = wn() + pl())
+  fit = gmwmx2(X = X, y = y_observed, model = wn() + pl())
   fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
   mat_res_pl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
@@ -467,7 +466,7 @@ for(i in id_not_observed){
 
 ## Fit model
 ```{r}
-fit_fl = gmwmx2_new(X = X, y = y_observed, model = wn() + flicker())
+fit_fl = gmwmx2(X = X, y = y_observed, model = wn() + flicker())
 fit_fl
 ```
 
@@ -487,7 +486,7 @@ for(b in seq(B_fl)){
 
 
 
-  fit = gmwmx2_new(X = X, y = y_observed, model = wn() + flicker())
+  fit = gmwmx2(X = X, y = y_observed, model = wn() + flicker())
   fit2 = lm(y_observed~X[,2] + X[,3] + X[,4])
 
   mat_res_fl[b, ] = c(fit$beta_hat, fit$std_beta_hat,
