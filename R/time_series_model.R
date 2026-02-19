@@ -51,8 +51,7 @@ Ma <- function(x, alpha){
 #' and for \eqn{h > 0}{h > 0}
 #' \eqn{\gamma(h) = \frac{-\kappa/2 + h - 1}{\kappa/2 + h}\,\gamma(h-1)}.
 #'
-#' @param kappa Power-law parameter in (-1, 1). Use `inv_trans_kappa_pl`
-#'   for unconstrained optimization.
+#' @param kappa Power-law parameter in (-1, 1).
 #' @param sigma2 Process variance (> 0).
 #' @return A `time_series_model` object.
 #' @examples
@@ -426,7 +425,7 @@ flicker = function(sigma2 = NULL){
 
 
 
-#' Markov two-state missingness model
+#' Markov two-state missingness model (`missingness_model`)
 #'
 #' Constructs a `missingness_model` representing a two-state Markov process
 #' for missing/observed indicators. The process takes values in \{0, 1\},

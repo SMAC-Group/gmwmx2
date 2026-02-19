@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{rw}
 \alias{rw}
-\title{Random walk process}
+\title{Random walk process (\code{time_series_model})}
 \usage{
 rw(sigma2 = NULL)
 }

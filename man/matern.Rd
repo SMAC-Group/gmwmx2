@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{matern}
 \alias{matern}
-\title{Matern process}
+\title{Matern process (\code{time_series_model})}
 \usage{
 matern(sigma2 = NULL, lambda = NULL, alpha = NULL)
 }

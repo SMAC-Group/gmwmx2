@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{wn}
 \alias{wn}
-\title{White noise process}
+\title{White noise process (\code{time_series_model})}
 \usage{
 wn(sigma2 = NULL)
 }

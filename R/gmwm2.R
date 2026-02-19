@@ -6,83 +6,6 @@
 #' @keywords internal
 .comp_prefix <- function(i) paste0("m", i, "_")
 
-#' Prepare optimization layout for a model
-#'
-#' Creates a layout to map a flat parameter vector `theta` (real space)
-#' into component parameters for a `sum_model`.
-#'
-#' @param model A `time_series_model` or `sum_model`.
-#' @return A list with `kind`, `theta0`, and (for sums) a `layout`.
-#' @keywords internal
-#' @examples
-#' mod <- wn(1) + pl(kappa = 0.5, sigma2 = 2)
-prepare_optim_layout <- function(model) {
-  get_param_names <- function(m) {
-    pnames <- names(formals(m$transformation_function))
-    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
-    pnames <- names(formals(m$inv_transformation_function))
-    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
-    pnames <- names(m$parameters)
-    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
-    NULL
-  }
-
-  if (inherits(model, "time_series_model")) {
-    pnames <- get_param_names(model)
-    if (is.null(pnames) || length(pnames) == 0L) {
-      stop("Model parameters must be named.", call. = FALSE)
-    }
-
-    if (is.null(model$parameters)) {
-      theta0 <- rep(0, length(pnames))
-      names(theta0) <- pnames
-    } else {
-      theta0 <- do.call(model$inv_transformation_function, as.list(model$parameters))
-      theta0 <- as.numeric(theta0)
-      names(theta0) <- names(model$parameters)
-    }
-
-    return(list(kind = "single", theta0 = theta0, pnames = pnames))
-  }
-
-  if (inherits(model, "sum_model")) {
-    theta0 <- c()
-    layout <- vector("list", length(model$models))
-    idx <- 1L
-
-    for (i in seq_along(model$models)) {
-      m <- model$models[[i]]
-      pnames <- get_param_names(m)
-      if (is.null(pnames) || length(pnames) == 0L) {
-        stop("Model parameters must be named.", call. = FALSE)
-      }
-      k <- length(pnames)
-
-      if (is.null(m$parameters)) {
-        th_i <- rep(0, k)
-      } else {
-        th_i <- do.call(m$inv_transformation_function, as.list(m$parameters))
-        th_i <- as.numeric(th_i)
-      }
-      names(th_i) <- paste0(.comp_prefix(i), pnames)
-
-      theta0 <- c(theta0, th_i)
-
-      layout[[i]] <- list(
-        i = i,
-        idx = idx:(idx + k - 1L),
-        pnames = pnames
-      )
-      idx <- idx + k
-    }
-
-    return(list(kind = "sum", theta0 = theta0, layout = layout))
-  }
-
-  stop("model must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
-}
-
-
 
 
 
@@ -391,12 +314,19 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
     stop("`model` must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
   }
 
+  # if the model has missing parameters, fill them using the model's get_initial_parameters_function
   model <- fill_missing_parameters(model, signal = x)
 
+  # get length of signal
   n <- length(x)
+
+  # prepare optim layout
   prep <- prepare_optim_layout(model)
+
+  # compute empirical WV on signal
   wv_emp <- wv::wvar(x)
 
+  # perform optimization
   res <- optim(
     par = prep$theta0,
     fn = loss_fn,

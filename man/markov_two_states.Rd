@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{markov_two_states}
 \alias{markov_two_states}
-\title{Markov two-state missingness model}
+\title{Markov two-state missingness model (\code{missingness_model})}
 \usage{
 markov_two_states(p1 = NULL, p2 = NULL)
 }

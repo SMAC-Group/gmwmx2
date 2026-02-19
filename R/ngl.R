@@ -319,7 +319,7 @@ download_station_ngl <- function(station_name, verbose = FALSE, reference_frame 
 
 
 
-#' Download estimated velocities provided by the Nevada Geodetic Laboratory for all stations.
+#' Download estimated velocities using the MIDAS estimator provided by the Nevada Geodetic Laboratory for all stations.
 #' @export
 #' @param verbose A \code{boolean} that controls the level of detail in the output of the \code{wget} command used to load data. Default is \code{FALSE}.
 #' @return Return a \code{data.frame} with all stations name, information about the time series for each station, estimated velocities and estimated standard deviation of the estimated velocities.

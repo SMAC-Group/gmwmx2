@@ -2,13 +2,12 @@
 % Please edit documentation in R/time_series_model.R
 \name{pl}
 \alias{pl}
-\title{Stationary Power-Law process}
+\title{Stationary Power-Law process (\code{time_series_model})}
 \usage{
 pl(kappa = NULL, sigma2 = NULL)
 }
 \arguments{
-\item{kappa}{Power-law parameter in (-1, 1). Use \code{inv_trans_kappa_pl}
-for unconstrained optimization.}
+\item{kappa}{Power-law parameter in (-1, 1).}
 
 \item{sigma2}{Process variance (> 0).}
 }

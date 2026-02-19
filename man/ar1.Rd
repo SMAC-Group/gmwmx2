@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{ar1}
 \alias{ar1}
-\title{AR(1) process}
+\title{AR(1) process (\code{time_series_model})}
 \usage{
 ar1(phi = NULL, sigma2 = NULL)
 }

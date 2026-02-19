@@ -2,7 +2,7 @@
 % Please edit documentation in R/time_series_model.R
 \name{flicker}
 \alias{flicker}
-\title{Flicker noise process}
+\title{Flicker noise process (\code{time_series_model})}
 \usage{
 flicker(sigma2 = NULL)
 }
