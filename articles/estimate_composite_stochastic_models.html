@@ -138,10 +138,21 @@ is the empirical wavelet variance of the observed series and
 is the theoretical wavelet variance implied by the model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://smac-group.github.io/gmwmx2/">gmwmx2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">boxplot_mean_dot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span>  <span class="va">x_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="va">mean_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">x_mat</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">mean_vals</span><span class="op">)</span>, <span class="va">mean_vals</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="st">"black"</span>, cex <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="example-1-white-noise-ar1">Example 1 (White noise + AR(1))<a class="anchor" aria-label="anchor" href="#example-1-white-noise-ar1"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
-<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="fl">25</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.99</span>, sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">25</span></span>
+<span><span class="va">phi_ar1</span> <span class="op">=</span> <span class="fl">0.99</span></span>
+<span><span class="va">sigma2_ar1</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="va">phi_ar1</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span></span>
 <span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod1</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -161,22 +172,53 @@ is the theoretical wavelet variance implied by the model.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Estimated parameters</span></span>
-<span><span class="co">##   1) White Noise: sigma2 = 24.97</span></span>
-<span><span class="co">##   2) AR(1): phi = 0.9882, sigma2 = 0.9416</span></span>
+<span><span class="co">##   1) White Noise: sigma2 = 24.34</span></span>
+<span><span class="co">##   2) AR(1): phi = 0.9887, sigma2 = 1.063</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Optimization</span></span>
 <span><span class="co">##   Convergence : converged (code 0)</span></span>
-<span><span class="co">##   Iterations  : 80</span></span>
-<span><span class="co">##   Loss        : 0.06493</span></span></code></pre>
+<span><span class="co">##   Iterations  : 74</span></span>
+<span><span class="co">##   Loss        : 0.06334</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-2-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="section level3">
+<h3 id="monte-carlo-simulation">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation"></a>
+</h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="op">-</span><span class="fl">0.9</span>, sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">B</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod1</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">mat_res</span><span class="op">[</span><span class="va">b</span>,<span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`White Noise_1`</span>, <span class="va">fit</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`AR(1)_2`</span><span class="op">)</span></span>
+<span>  <span class="co"># cat("Done with b =", b, "\n")</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">WN</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">phi</span><span class="op">[</span><span class="va">AR1</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">phi_ar1</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">AR1</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example-2-white-noise-stationary-powerlaw">Example 2 (White noise + stationary powerlaw)<a class="anchor" aria-label="anchor" href="#example-2-white-noise-stationary-powerlaw"></a>
+</h2>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="va">kappa_pl</span> <span class="op">=</span> <span class="op">-</span><span class="fl">0.9</span></span>
+<span><span class="va">sigma2_pl</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="va">kappa_pl</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_pl</span><span class="op">)</span></span>
 <span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod2</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y2</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit2</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWM fit</span></span>
@@ -192,22 +234,54 @@ is the theoretical wavelet variance implied by the model.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Estimated parameters</span></span>
-<span><span class="co">##   1) White Noise: sigma2 = 4.753</span></span>
-<span><span class="co">##   2) Stationary PowerLaw: kappa = -0.8534, sigma2 = 1.181</span></span>
+<span><span class="co">##   1) White Noise: sigma2 =  4.67</span></span>
+<span><span class="co">##   2) Stationary PowerLaw: kappa = -0.8562, sigma2 =   1.2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Optimization</span></span>
 <span><span class="co">##   Convergence : converged (code 0)</span></span>
-<span><span class="co">##   Iterations  : 58</span></span>
-<span><span class="co">##   Loss        : 0.06118</span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<span><span class="co">##   Iterations  : 52</span></span>
+<span><span class="co">##   Loss        : 0.04163</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-3-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="fl">0.98</span>, sigma2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-5-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="section level3">
+<h3 id="monte-carlo-simulation-1">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-1"></a>
+</h3>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">B</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod2</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">fit2</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">mat_res</span><span class="op">[</span><span class="va">b</span>,<span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`White Noise_1`</span>, <span class="va">fit2</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`Stationary PowerLaw_2`</span><span class="op">)</span></span>
+<span>  <span class="co"># cat("Done with b =", b, "\n")</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">WN</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">kappa</span><span class="op">[</span><span class="va">PL</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">kappa_pl</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">PL</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_pl</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example-3-white-noise-ar1-random-walk">Example 3 (White noise + AR(1) + random walk)<a class="anchor" aria-label="anchor" href="#example-3-white-noise-ar1-random-walk"></a>
+</h2>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="va">phi_ar1</span> <span class="op">=</span> <span class="fl">0.98</span></span>
+<span><span class="va">sigma2_ar1</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="va">sigma2_rw</span> <span class="op">=</span> <span class="fl">0.1</span></span>
+<span><span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="va">phi_ar1</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="va">sigma2_rw</span><span class="op">)</span></span>
 <span><span class="va">y3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod3</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y3</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit3</span>        </span></code></pre></div>
 <pre><code><span><span class="co">## GMWM fit</span></span>
@@ -226,23 +300,50 @@ is the theoretical wavelet variance implied by the model.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Estimated parameters</span></span>
-<span><span class="co">##   1) White Noise: sigma2 = 5.129</span></span>
-<span><span class="co">##   2) AR(1): phi = 0.9823, sigma2 = 0.9313</span></span>
-<span><span class="co">##   3) Random Walk: sigma2 = 0.107</span></span>
+<span><span class="co">##   1) White Noise: sigma2 = 5.118</span></span>
+<span><span class="co">##   2) AR(1): phi = 0.9724, sigma2 = 1.046</span></span>
+<span><span class="co">##   3) Random Walk: sigma2 = 0.1309</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Optimization</span></span>
 <span><span class="co">##   Convergence : converged (code 0)</span></span>
-<span><span class="co">##   Iterations  : 118</span></span>
-<span><span class="co">##   Loss        : 0.0198</span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<span><span class="co">##   Iterations  : 100</span></span>
+<span><span class="co">##   Loss        : 0.02272</span></span></code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-4-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="fl">0.1</span><span class="op">)</span></span>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-8-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="section level3">
+<h3 id="monte-carlo-simulation-2">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-2"></a>
+</h3>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">B</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod3</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">fit3</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">mat_res</span><span class="op">[</span><span class="va">b</span>,<span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`White Noise_1`</span>, <span class="va">fit3</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`AR(1)_2`</span>, <span class="va">fit3</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`Random Walk_3`</span><span class="op">)</span></span>
+<span>  <span class="co"># cat("Done with b =", b, "\n")</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">WN</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">phi</span><span class="op">[</span><span class="va">AR1</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">phi_ar1</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">AR1</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">RW</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_rw</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="va">sigma2_rw</span> <span class="op">=</span> <span class="fl">0.1</span></span>
+<span><span class="va">mod4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="va">sigma2_rw</span><span class="op">)</span></span>
 <span><span class="va">y4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod4</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y4</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit4</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWM fit</span></span>
@@ -258,16 +359,40 @@ is the theoretical wavelet variance implied by the model.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Estimated parameters</span></span>
-<span><span class="co">##   1) White Noise: sigma2 = 19.84</span></span>
-<span><span class="co">##   2) Random Walk: sigma2 = 0.1139</span></span>
+<span><span class="co">##   1) White Noise: sigma2 = 20.31</span></span>
+<span><span class="co">##   2) Random Walk: sigma2 = 0.08104</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Optimization</span></span>
 <span><span class="co">##   Convergence : converged (code 0)</span></span>
-<span><span class="co">##   Iterations  : 60</span></span>
-<span><span class="co">##   Loss        : 0.08408</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<span><span class="co">##   Iterations  : 62</span></span>
+<span><span class="co">##   Loss        : 0.09572</span></span></code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-5-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
+<h3 id="monte-carlo-simulation-3">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-3"></a>
+</h3>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">B</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="va">mat_res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">B</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">b</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">B</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="va">mod4</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">fit4</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwm2.html">gmwm2</a></span><span class="op">(</span><span class="va">y</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="../reference/rw.html">rw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">mat_res</span><span class="op">[</span><span class="va">b</span>,<span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fit4</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`White Noise_1`</span>, <span class="va">fit4</span><span class="op">$</span><span class="va">theta_domain</span><span class="op">$</span><span class="va">`Random Walk_2`</span><span class="op">)</span></span>
+<span>  <span class="co"># cat("Done with b =", b, "\n")</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">WN</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_wn</span><span class="op">)</span></span>
+<span><span class="fu">boxplot_mean_dot</span><span class="op">(</span><span class="va">mat_res</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">[</span><span class="va">RW</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">"Estimated Value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">sigma2_rw</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_composite_stochastic_models_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
