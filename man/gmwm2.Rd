@@ -2,7 +2,7 @@
 % Please edit documentation in R/gmwm2.R
 \name{gmwm2}
 \alias{gmwm2}
-\title{Estimate composite stochastic models}
+\title{GMWM estimator}
 \usage{
 gmwm2(x, model, omega = NULL, method = "L-BFGS-B", control = list(), ...)
 }

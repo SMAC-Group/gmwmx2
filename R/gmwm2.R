@@ -1,110 +1,4 @@
-# Prefix for component i in a sum_model
-#' Component name prefix for summed models
-#'
-#' @param i Component index.
-#' @return Prefix string like `m1_`.
-#' @keywords internal
-.comp_prefix <- function(i) paste0("m", i, "_")
-
-
-
-
-## -------------------------- fill missing parameters --------------------------
-#' Fill missing model parameters using initial-parameter functions
-#'
-#' Ensures any NULL / missing parameters are populated from the model's
-#' `get_initial_parameters_function(signal)` while preserving any user-provided
-#' parameters (assumed to be in the domain).
-#'
-#' @param model A `time_series_model` or `sum_model`.
-#' @param signal Numeric vector used to derive initial parameters.
-#' @return Model with all parameters populated.
-#' @keywords internal
-fill_missing_parameters <- function(model, signal) {
-  get_param_names <- function(m) {
-    pnames <- names(formals(m$transformation_function))
-    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
-    pnames <- names(formals(m$inv_transformation_function))
-    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
-    pnames <- names(m$parameters)
-    if (!is.null(pnames) && length(pnames) > 0L) return(pnames)
-    NULL
-  }
-
-  fill_one <- function(m) {
-    pnames <- get_param_names(m)
-    if (is.null(pnames) || length(pnames) == 0L) {
-      stop("Model parameters must be named.", call. = FALSE)
-    }
-
-    current <- rep(NA_real_, length(pnames))
-    names(current) <- pnames
-
-    pars <- m$parameters
-    if (!is.null(pars) && length(pars) > 0L) {
-      if (is.null(names(pars)) || any(names(pars) == "")) {
-        stop("Model parameters must be named.", call. = FALSE)
-      }
-      extra <- setdiff(names(pars), pnames)
-      if (length(extra) > 0L) {
-        stop("Unknown parameter(s): ", paste(extra, collapse = ", "), call. = FALSE)
-      }
-      shared <- intersect(names(pars), pnames)
-      current[shared] <- pars[shared]
-    }
-
-    missing <- is.na(current)
-    if (any(missing)) {
-      init_fn <- m$get_initial_parameters_function
-      if (is.null(init_fn) || !is.function(init_fn)) {
-        stop("Missing parameters but no `get_initial_parameters_function` available.", call. = FALSE)
-      }
-      init <- init_fn(signal)
-      if (is.null(init) || length(init) == 0L) {
-        stop("Initial parameters function returned nothing.", call. = FALSE)
-      }
-      if (is.null(names(init)) || any(names(init) == "")) {
-        stop("Initial parameters must be named.", call. = FALSE)
-      }
-      needed <- pnames[missing]
-      if (!all(needed %in% names(init))) {
-        stop("Initial parameters missing: ",
-             paste(setdiff(needed, names(init)), collapse = ", "),
-             call. = FALSE)
-      }
-      current[needed] <- init[needed]
-    }
-
-    m$parameters <- current
-    m
-  }
-
-  if (inherits(model, "time_series_model")) {
-    return(fill_one(model))
-  }
-
-  if (inherits(model, "sum_model")) {
-    model$models <- lapply(model$models, fill_one)
-    return(model)
-  }
-
-  stop("model must be a 'time_series_model' or 'sum_model'.", call. = FALSE)
-}
-
-
-
-#----------------------------------------------- try procedure to estimate parameters by matching autocovariance
-
-#
-# mod = wn(sigma2 = 5) +rw(sigma2=.1)
-# x = generate(mod, n = 10000, seed=123)
-# x
-# prep = prepare_optim_layout(mod)
-# # compute empirical wv
-# wv_emp = wv::wvar(x)
-# plot(wv_emp)
-
-#' Loss function for GMWM2 optimization (internal)
+#' Loss function for GMWM optimization (internal)
 #'
 #' Computes the weighted squared error between empirical wavelet variance
 #' and theoretical wavelet variance implied by a model and parameter vector.
@@ -117,7 +11,7 @@ fill_missing_parameters <- function(model, signal) {
 #' @param omega Optional weighting matrix. If `NULL`, uses inverse CI width.
 #' @return Scalar objective value.
 #' @keywords internal
-loss_fn <- function(theta, model, n, prep, wv_obj, omega = NULL) {
+loss_fn_gmwm <- function(theta, model, n, prep, wv_obj, omega = NULL) {
   # compute autocovariance from theta
 
   autocov_vec <- get_autocovariance(object = model, n = n, theta = theta, prep = prep)
@@ -329,7 +223,7 @@ gmwm2 <- function(x, model, omega = NULL, method = "L-BFGS-B", control = list(),
   # perform optimization
   res <- optim(
     par = prep$theta0,
-    fn = loss_fn,
+    fn = loss_fn_gmwm,
     model = model,
     n = n,
     prep = prep,
@@ -455,23 +349,7 @@ print.gmwm2_fit <- function(x, digits = 4,show_initial_parameters = FALSE, ...) 
 }
 
 
-#' Format model text
-#'
-#' Internal helper to create a human-readable model label for printing.
-#'
-#' @param model A \code{time_series_model} or \code{sum_model}.
-#' @return A single string describing the model.
-#' @keywords internal
-format_model_text <- function(model) {
-  if (inherits(model, "sum_model")) {
-    parts <- vapply(model$models, function(m) m$model, character(1))
-    paste(parts, collapse = " + ")
-  } else if (inherits(model, "time_series_model")) {
-    model$model
-  } else {
-    "Unknown model"
-  }
-}
+
 
 #' Plot method for a \code{gmwm2_fit} object
 #'
