@@ -31,7 +31,6 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/get_variance_covariance_matrix_model.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwm2.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2.html</loc></url>
-<url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new_no_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_new_with_missing.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/gmwmx2_plot_colors.html</loc></url>
@@ -45,7 +44,6 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/markov_two_states.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/matern.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/pl.html</loc></url>
-<url><loc>https://smac-group.github.io/gmwmx2/reference/plot.fit_gnss_ts_ngl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.generated_composite_model_time_series.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.generated_missingness.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/plot.generated_time_series.html</loc></url>
@@ -60,7 +58,6 @@
 <url><loc>https://smac-group.github.io/gmwmx2/reference/print.gmwmx2_fit_gnss_ts_ngl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/rw.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/sum_model.html</loc></url>
-<url><loc>https://smac-group.github.io/gmwmx2/reference/summary.fit_gnss_ts_ngl.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/theta_to_domain.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/trans_alpha_matern.html</loc></url>
 <url><loc>https://smac-group.github.io/gmwmx2/reference/trans_from_real_to_minus_1_and_1.html</loc></url>
