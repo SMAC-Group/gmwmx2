@@ -233,7 +233,7 @@ across examples.</p>
 <h2 id="build-an-arbitrary-design-matrix-x">Build an arbitrary design matrix X<a class="anchor" aria-label="anchor" href="#build-an-arbitrary-design-matrix-x"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">10</span><span class="op">*</span><span class="fl">365</span></span>
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">15</span><span class="op">*</span><span class="fl">365</span></span>
 <span><span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, nrow <span class="op">=</span> <span class="va">n</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co"># intercept</span></span>
 <span><span class="va">X</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1</span></span>
@@ -243,7 +243,7 @@ across examples.</p>
 <span><span class="va">omega_1</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fl">365.25</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span></span>
 <span><span class="va">X</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="va">omega_1</span><span class="op">)</span></span>
 <span><span class="va">X</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="va">omega_1</span><span class="op">)</span></span>
-<span><span class="va">beta</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.01</span>, <span class="fl">2</span>, <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">beta</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span> , <span class="fl">0.00004</span>, <span class="fl">0.005</span>,  <span class="fl">0.0008</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># visualize the deterministic signal</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">X</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, y <span class="op">=</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">beta</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
@@ -260,8 +260,8 @@ introduce missing observations using a two‑state Markov model.</p>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phi_ar1</span> <span class="op">=</span> <span class="fl">0.95</span></span>
-<span><span class="va">sigma2_ar1</span> <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="va">sigma2_wn</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="va">sigma2_ar1</span> <span class="op">=</span>  <span class="fl">5e-07</span></span>
+<span><span class="va">sigma2_wn</span> <span class="op">=</span>  <span class="fl">5e-07</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="va">phi_ar1</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">$</span><span class="va">series</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_linear_models_with_dependent_errors_and_missing_observations_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -296,27 +296,27 @@ the missing observations.</p>
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2.html">gmwmx2</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_observed</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
-<span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1 1.778606  0.702485</span></span>
-<span><span class="co">## beta2 0.009616  0.000333</span></span>
-<span><span class="co">## beta3 1.847444  0.467891</span></span>
-<span><span class="co">## beta4 0.947159  0.463950</span></span>
+<span><span class="co">##        Estimate Std.Error</span></span>
+<span><span class="co">## beta1 0.5003036 3.593e-04</span></span>
+<span><span class="co">## beta2 0.0000399 1.136e-07</span></span>
+<span><span class="co">## beta3 0.0050788 2.430e-04</span></span>
+<span><span class="co">## beta4 0.0005231 2.420e-04</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0455 </span></span>
-<span><span class="co">##   p1                 : 0.0451 </span></span>
-<span><span class="co">##   p2                 : 0.9458 </span></span>
-<span><span class="co">##   p*                 : 0.9545 </span></span>
+<span><span class="co">##   Proportion missing : 0.0482 </span></span>
+<span><span class="co">##   p1                 : 0.0480 </span></span>
+<span><span class="co">##   p2                 : 0.9470 </span></span>
+<span><span class="co">##   p*                 : 0.9518 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 1.076 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 4.855e-07 </span></span>
 <span><span class="co">##   [2] AR(1)</span></span>
-<span><span class="co">##        Estimated parameters : phi = 0.9562, sigma2 = 0.8705 </span></span>
+<span><span class="co">##        Estimated parameters : phi = 0.9478, sigma2 = 4.817e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.9172</span></span></code></pre>
+<span><span class="co">##   Total              : 2.2492</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation"></a>
@@ -421,13 +421,13 @@ entries fall inside the estimated intervals for both
 <span><span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span> <span class="op">=</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">gmwmx_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">gmwmx_std_beta1_hat</span></span>
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B</span><span class="op">)</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.91</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.89</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B</span><span class="op">)</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.25</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.2</span></span></code></pre>
 <p>We now repeat the workflow for a long‑memory error model (white noise
 + stationary power‑law). The steps mirror the AR(1) case: simulate with
 missingness, fit <code><a href="../reference/gmwmx2.html">gmwmx2()</a></code>, and compare to a misspecified
@@ -444,9 +444,9 @@ controls the long‑memory behavior of the power‑law component.</p>
 <h3 id="generate-signal-1">Generate signal<a class="anchor" aria-label="anchor" href="#generate-signal-1"></a>
 </h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">kappa_pl</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.8</span></span>
-<span><span class="va">sigma2_wn</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span><span class="va">sigma2_pl</span> <span class="op">&lt;-</span> <span class="fl">.8</span></span>
+<code class="sourceCode R"><span><span class="va">kappa_pl</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">0.75</span></span>
+<span><span class="va">sigma2_wn</span> <span class="op">&lt;-</span> <span class="fl">2e-07</span></span>
+<span><span class="va">sigma2_pl</span> <span class="op">&lt;-</span> <span class="fl">2.25e-06</span></span>
 <span><span class="va">eps_pl</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span>kappa <span class="op">=</span> <span class="va">kappa_pl</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_pl</span><span class="op">)</span>,</span>
 <span>                  n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eps_pl</span><span class="op">$</span><span class="va">series</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
@@ -477,27 +477,27 @@ controls the long‑memory behavior of the power‑law component.</p>
 <code class="sourceCode R"><span><span class="va">fit_pl</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2.html">gmwmx2</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_observed</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/pl.html">pl</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit_pl</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
-<span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1  0.86562 0.5214672</span></span>
-<span><span class="co">## beta2  0.01028 0.0001791</span></span>
-<span><span class="co">## beta3  2.19066 0.1051664</span></span>
-<span><span class="co">## beta4  1.51667 0.1029350</span></span>
+<span><span class="co">##        Estimate Std.Error</span></span>
+<span><span class="co">## beta1 5.002e-01 7.289e-04</span></span>
+<span><span class="co">## beta2 3.982e-05 1.702e-07</span></span>
+<span><span class="co">## beta3 4.977e-03 1.300e-04</span></span>
+<span><span class="co">## beta4 6.726e-04 1.281e-04</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0485 </span></span>
-<span><span class="co">##   p1                 : 0.0475 </span></span>
-<span><span class="co">##   p2                 : 0.9322 </span></span>
-<span><span class="co">##   p*                 : 0.9515 </span></span>
+<span><span class="co">##   Proportion missing : 0.0482 </span></span>
+<span><span class="co">##   p1                 : 0.0482 </span></span>
+<span><span class="co">##   p2                 : 0.9508 </span></span>
+<span><span class="co">##   p*                 : 0.9518 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 0.8601 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 2.689e-14 </span></span>
 <span><span class="co">##   [2] Stationary PowerLaw</span></span>
-<span><span class="co">##        Estimated parameters : kappa = -0.7344, sigma2 = 0.9371 </span></span>
+<span><span class="co">##        Estimated parameters : kappa = -0.7154, sigma2 = 2.46e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 0.5971</span></span></code></pre>
+<span><span class="co">##   Total              : 1.0486</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation-1">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-1"></a>
@@ -596,14 +596,14 @@ power‑law error model and compare against OLS.</p>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">gmwmx_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">gmwmx_std_beta1_hat</span></span>
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.89</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.92</span></span></code></pre>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_pl</span><span class="op">)</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_pl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.15</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.2</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -613,8 +613,8 @@ power‑law error model and compare against OLS.</p>
 <h3 id="generate-signal-2">Generate signal<a class="anchor" aria-label="anchor" href="#generate-signal-2"></a>
 </h3>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sigma2_wn_fl</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span><span class="va">sigma2_fl</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<code class="sourceCode R"><span><span class="va">sigma2_wn_fl</span> <span class="op">&lt;-</span> <span class="fl">8e-07</span></span>
+<span><span class="va">sigma2_fl</span> <span class="op">&lt;-</span> <span class="fl">1e-06</span></span>
 <span><span class="va">eps_fl</span> <span class="op">=</span> <span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn_fl</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span>sigma2 <span class="op">=</span> <span class="va">sigma2_fl</span><span class="op">)</span>,</span>
 <span>                  n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eps_fl</span><span class="op">$</span><span class="va">series</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
@@ -650,27 +650,27 @@ power‑law error model and compare against OLS.</p>
 <code class="sourceCode R"><span><span class="va">fit_fl</span> <span class="op">=</span> <span class="fu"><a href="../reference/gmwmx2.html">gmwmx2</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, y <span class="op">=</span> <span class="va">y_observed</span>, model <span class="op">=</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/flicker.html">flicker</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">fit_fl</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
-<span><span class="co">##       Estimate Std.Error</span></span>
-<span><span class="co">## beta1  0.44556 0.8698443</span></span>
-<span><span class="co">## beta2  0.01013 0.0004128</span></span>
-<span><span class="co">## beta3  1.95655 0.1746552</span></span>
-<span><span class="co">## beta4  1.53098 0.1689793</span></span>
+<span><span class="co">##        Estimate Std.Error</span></span>
+<span><span class="co">## beta1 4.996e-01 9.208e-04</span></span>
+<span><span class="co">## beta2 4.022e-05 2.913e-07</span></span>
+<span><span class="co">## beta3 4.993e-03 1.496e-04</span></span>
+<span><span class="co">## beta4 6.913e-04 1.461e-04</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Missingness model</span></span>
-<span><span class="co">##   Proportion missing : 0.0485 </span></span>
-<span><span class="co">##   p1                 : 0.0475 </span></span>
-<span><span class="co">##   p2                 : 0.9322 </span></span>
-<span><span class="co">##   p*                 : 0.9515 </span></span>
+<span><span class="co">##   Proportion missing : 0.0482 </span></span>
+<span><span class="co">##   p1                 : 0.0482 </span></span>
+<span><span class="co">##   p2                 : 0.9508 </span></span>
+<span><span class="co">##   p*                 : 0.9518 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 1.092 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 8.366e-07 </span></span>
 <span><span class="co">##   [2] Flicker</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 0.8848 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 9.952e-07 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.2472</span></span></code></pre>
+<span><span class="co">##   Total              : 1.8746</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation-2">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-2"></a>
@@ -764,7 +764,7 @@ power‑law error model and compare against OLS.</p>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">gmwmx_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">gmwmx_std_beta1_hat</span></span>
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_fl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.93</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.94</span></span></code></pre>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
