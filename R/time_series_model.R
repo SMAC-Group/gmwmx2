@@ -36,7 +36,7 @@ Ma <- function(x, alpha){
 
 
 # define stationary powerlaw model
-#' Stationary Power-Law process
+#' Stationary Power-Law process (`time_series_model`)
 #'
 #' Constructs a `time_series_model` representing a stationary power-law
 #' process with parameters `kappa` and `sigma2`.
@@ -106,7 +106,7 @@ pl = function(kappa = NULL, sigma2 = NULL){
 
 
 # function to define a white noise
-#' White noise process
+#' White noise process (`time_series_model`)
 #'
 #' Constructs a `time_series_model` for white noise with variance `sigma2`.
 #' The process is defined as
@@ -160,7 +160,7 @@ wn = function(sigma2 = NULL){
 
 
 # define matern model
-#' Matern process
+#' Matern process (`time_series_model`)
 #'
 #' Constructs a `time_series_model` for a Matern covariance process with
 #' variance `sigma2`, range `lambda`, and smoothness `alpha`.
@@ -222,7 +222,7 @@ matern = function(sigma2=NULL, lambda=NULL, alpha=NULL){
 }
 
 # define ar1
-#' AR(1) process
+#' AR(1) process (`time_series_model`)
 #'
 #' Constructs a `time_series_model` for a stationary AR(1) process with parameter
 #' `phi` and innovation variance `sigma2`.
@@ -294,7 +294,7 @@ ar1 <- function(phi = NULL, sigma2 = NULL) {
 }
 
 
-#' Random walk process
+#' Random walk process (`time_series_model`)
 #'
 #' Constructs a `time_series_model` for a random walk with innovation
 #' variance `sigma2`. The autocovariance returned is the mean of the
@@ -347,7 +347,7 @@ rw = function(sigma2 =NULL){
 
 
 # define flicker noise model
-#' Flicker noise process
+#' Flicker noise process (`time_series_model`)
 #'
 #' Constructs a `time_series_model` for flicker noise with
 #' variance `sigma2`.

@@ -108,7 +108,7 @@ This is arbitrary and can be replaced with any design matrix suitable to your
 application.
 
 ```{r}
-n = 10*365 
+n = 15*365 
 X = matrix(NA, nrow = n, ncol = 4)
 # intercept
 X[, 1] = 1
@@ -286,7 +286,7 @@ B_pl = 100
 mat_res_pl = matrix(NA, nrow = B_pl, ncol = 19)
 for(b in seq(B_pl)){
   eps = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
-                 n = n, seed = (12345 + b))$series
+                 n = n, seed = (123 + b))$series
   y = X %*% beta + eps
   fit = gmwmx2(X = X, y = y, model = wn() + pl())
   fit2 = lm(y~X[,2] + X[,3] + X[,4])
