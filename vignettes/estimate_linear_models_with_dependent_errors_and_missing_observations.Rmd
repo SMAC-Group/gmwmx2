@@ -48,13 +48,14 @@ The least‑squares estimator based on observed data is
   \hat{\boldsymbol{\beta}} =
   \left(\tilde{\mathbf{X}}^T \tilde{\mathbf{X}}\right)^{-1}\tilde{\mathbf{X}}^T \tilde{\mathbf{Y}},
 \]
+
 and we compute residuals
 
 \begin{equation}
 \hat{\boldsymbol{\varepsilon}} = \tilde{\mathbf{Y}} - \tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}.
 \end{equation}
 
-We then obtain $\boldsymbol{\vartheta}$, the estimated parameters of the missingness process using the maximum likelihood estimator, assuming a two-state Markov model.
+We then obtain $\hat{\boldsymbol{\vartheta}}$, the estimated parameters of the missingness process using the maximum likelihood estimator, assuming a two-state Markov model.
 
 We then estimate the stochastic parameters using the GMWM estimator:
 
@@ -147,9 +148,9 @@ missing observations using a two‑state Markov model.
 ## Generate signal
 
 ```{r}
-phi_ar1 = 0.95
-sigma2_ar1 =  5e-07
-sigma2_wn =  5e-07
+phi_ar1 = 0.985
+sigma2_ar1 =  8e-07
+sigma2_wn =  7e-05
 eps = generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
