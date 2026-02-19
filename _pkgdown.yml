@@ -30,9 +30,6 @@ reference:
     - print.gmwmx2_fit
     - print.gmwmx2_fit_gnss_ts_ngl
     - plot.gmwmx2_fit_gnss_ts_ngl
-    - gmwmx2
-    - summary.fit_gnss_ts_ngl
-    - plot.fit_gnss_ts_ngl
   - title: Load and plot NGL data
     contents:
     - download_station_ngl
