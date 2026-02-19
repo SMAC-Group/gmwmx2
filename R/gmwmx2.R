@@ -695,6 +695,8 @@ gmwmx2.default <- function(X, y, model, omega = NULL, method = "L-BFGS-B", contr
 #' @param control Control list passed to `stats::optim`.
 #' @param ... Reserved for future extensions.
 #' @return A fitted model object.
+#' @importFrom stats .lm.fit qnorm
+#' @importFrom graphics axis grid mtext polygon
 #' @rdname gmwmx2
 #' @export
 gmwmx2.gnss_ts_ngl <- function(

@@ -149,8 +149,8 @@ missing observations using a two‑state Markov model.
 
 ```{r}
 phi_ar1 = 0.975
-sigma2_ar1 =  5e-06
-sigma2_wn =  7e-05
+sigma2_ar1 =  5e-05
+sigma2_wn =  7e-04
 eps = generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps

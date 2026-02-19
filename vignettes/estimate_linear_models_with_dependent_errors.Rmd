@@ -133,9 +133,9 @@ We now define three different stochastic noise settings using the same `X` and `
 ## Generate signal
 
 ```{r}
-phi_ar1 = 0.965
-sigma2_ar1 =  8e-06
-sigma2_wn =  7e-05
+phi_ar1 = 0.975
+sigma2_ar1 =  5e-05
+sigma2_wn =  7e-04
 eps = gmwmx2::generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 ```
