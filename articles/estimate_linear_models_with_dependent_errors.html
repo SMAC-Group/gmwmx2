@@ -248,9 +248,9 @@ same <code>X</code> and <code>beta</code>.</p>
 <h3 id="generate-signal">Generate signal<a class="anchor" aria-label="anchor" href="#generate-signal"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">phi_ar1</span> <span class="op">=</span> <span class="fl">0.965</span></span>
-<span><span class="va">sigma2_ar1</span> <span class="op">=</span>  <span class="fl">8e-06</span></span>
-<span><span class="va">sigma2_wn</span> <span class="op">=</span>  <span class="fl">7e-05</span></span>
+<code class="sourceCode R"><span><span class="va">phi_ar1</span> <span class="op">=</span> <span class="fl">0.975</span></span>
+<span><span class="va">sigma2_ar1</span> <span class="op">=</span>  <span class="fl">5e-05</span></span>
+<span><span class="va">sigma2_wn</span> <span class="op">=</span>  <span class="fl">7e-04</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu">gmwmx2</span><span class="fu">::</span><span class="fu"><a href="../reference/generate.html">generate</a></span><span class="op">(</span><span class="fu"><a href="../reference/ar1.html">ar1</a></span><span class="op">(</span>phi <span class="op">=</span> <span class="va">phi_ar1</span>, sigma2 <span class="op">=</span> <span class="va">sigma2_ar1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/wn.html">wn</a></span><span class="op">(</span><span class="va">sigma2_wn</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span><span class="op">$</span><span class="va">series</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">wv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wv/man/wvar.html" class="external-link">wvar</a></span><span class="op">(</span><span class="va">eps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_linear_models_with_dependent_errors_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
@@ -269,20 +269,20 @@ white noise and autoregressive process of order 1.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## GMWMX fit</span></span>
 <span><span class="co">##         Estimate Std.Error</span></span>
-<span><span class="co">## beta1  5.016e-01 1.999e-03</span></span>
-<span><span class="co">## beta2  3.947e-05 6.319e-07</span></span>
-<span><span class="co">## beta3  5.239e-03 1.308e-03</span></span>
-<span><span class="co">## beta4 -9.661e-04 1.301e-03</span></span>
+<span><span class="co">## beta1  0.5055257 6.619e-03</span></span>
+<span><span class="co">## beta2  0.0000381 2.091e-06</span></span>
+<span><span class="co">## beta3  0.0049642 4.115e-03</span></span>
+<span><span class="co">## beta4 -0.0049813 4.088e-03</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Stochastic model</span></span>
 <span><span class="co">##   Sum of 2 processes</span></span>
 <span><span class="co">##   [1] White Noise</span></span>
-<span><span class="co">##        Estimated parameters : sigma2 = 6.916e-05 </span></span>
+<span><span class="co">##        Estimated parameters : sigma2 = 0.0006936 </span></span>
 <span><span class="co">##   [2] AR(1)</span></span>
-<span><span class="co">##        Estimated parameters : phi = 0.9609, sigma2 = 8.329e-06 </span></span>
+<span><span class="co">##        Estimated parameters : phi = 0.9701, sigma2 = 5.367e-05 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 2.1831</span></span></code></pre>
+<span><span class="co">##   Total              : 2.3833</span></span></code></pre>
 <p>To assess uncertainty, we run a Monte Carlo simulation and check
 empirical coverage of the confidence intervals for the trend.</p>
 </div>
@@ -372,13 +372,13 @@ empirical coverage of the confidence intervals for the trend.</p>
 <span><span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span> <span class="op">=</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">gmwmx_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">gmwmx_std_beta1_hat</span></span>
 <span><span class="co"># empirical coverage of gmwmx beta</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B</span><span class="op">)</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_gmwmx_beta1</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">upper_ci_gmwmx_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.88</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.87</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># do the same for lm beta</span></span>
 <span><span class="va">mat_res_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B</span><span class="op">)</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.18</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.16</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -425,7 +425,7 @@ empirical coverage of the confidence intervals for the trend.</p>
 <span><span class="co">##        Estimated parameters : kappa = -0.7057, sigma2 = 2.52e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 1.2343</span></span></code></pre>
+<span><span class="co">##   Total              : 1.2013</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation-1">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-1"></a>
@@ -569,7 +569,7 @@ but is handled explicitly by <code><a href="../reference/flicker.html">flicker()
 <span><span class="co">##        Estimated parameters : sigma2 = 1.006e-06 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Runtime (seconds)</span></span>
-<span><span class="co">##   Total              : 2.3682</span></span></code></pre>
+<span><span class="co">##   Total              : 2.3383</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="monte-carlo-simulation-2">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation-2"></a>
