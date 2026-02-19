@@ -15,9 +15,11 @@ the presence of missing observations. Consider the model defined as:
     \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}
 
+where $\mathbf{X} \in \mathbb{R}^{n \times p}$ is a design matrix of observed predictors, $\boldsymbol{\beta} \in \mathbb{R}^p$ is the regression parameter vector and $\boldsymbol{\varepsilon} = \{\varepsilon_{i}\}_{i=1,\ldots,n}$ is a zero-mean process following an unspecified joint distribution $\mathcal{F}$ with positive-definite covariance function $\boldsymbol{\Sigma}(\boldsymbol{\gamma}) \in \mathbb{R}^{n\times n}$ characterizing the second-order dependence structure of the process and parameterized by the vector $\boldsymbol{\gamma} \in \boldsymbol{\Gamma} \subset \mathbb{R}^q$.
+
 Missingness is modeled by a binary process \(\mathbf{Z} \in \{0,1\}^n\) with
 \(Z_i = 1\) indicating an observation and \(Z_i = 0\) a missing observation. The missingness process is independent of
-$\mathbf{Y}$ and follows the definition:
+$\mathbf{Y}$ and assumes the definition:
 
 \begin{equation}
   Z_i =

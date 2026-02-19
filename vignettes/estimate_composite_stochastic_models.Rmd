@@ -23,7 +23,7 @@ We consider a zero-mean stochastic process \(\{Y_t\}_{t=1}^n\) generated from a
 composite model parameterized by \(\boldsymbol{\gamma} \in \boldsymbol{\Gamma}\).
 
 Given a parametric model with parameters \(\boldsymbol{\gamma}\), the GMWM
-estimator computes $\boldsymbol{\gamma}$ by solving:
+estimator computes $\hat{\boldsymbol{\gamma}}$ by solving:
 \begin{equation}
     \hat{\boldsymbol{\gamma}} = \underset{\boldsymbol{\gamma} \in \boldsymbol{\Gamma}}{\arg\min} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\}^{\top} \boldsymbol{\Omega} \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\gamma})\right\},
 \end{equation}

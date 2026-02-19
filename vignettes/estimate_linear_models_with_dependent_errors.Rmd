@@ -119,6 +119,8 @@ omega_1 <- (1 / 365.25) * 2 * pi
 X[, 3] <- sin((1:n) * omega_1)
 X[, 4] <- cos((1:n) * omega_1)
 beta = c(1, 0.01, 2, 1.5)
+beta = c(0.5 , 0.00004, 0.005,  0.0008)
+
 
 # visualize the deterministic signal
 plot(x = X[, 2], y = X %*% beta, type = "l",
@@ -133,8 +135,8 @@ We now define three different stochastic noise settings using the same `X` and `
 
 ```{r}
 phi_ar1 = 0.95
-sigma2_ar1 = 1
-sigma2_wn = 1
+sigma2_ar1 =  2e-07
+sigma2_wn =  2e-07
 eps = gmwmx2::generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
@@ -259,9 +261,9 @@ dplyr::between(rep(beta[2], B), mat_res_df$lower_ci_lm_beta1, mat_res_df$upper_c
 Here we replace AR(1) by a stationary power-law component.
 
 ```{r}
-kappa_pl <- -0.85
-sigma2_wn <- .5
-sigma2_pl <- .5
+kappa_pl <- -0.75
+sigma2_wn <- 2e-07
+sigma2_pl <- 2.25e-06
 eps_pl = generate(wn(sigma2_wn) + pl(kappa = kappa_pl, sigma2 = sigma2_pl),
                   n = n, seed = 123)
 plot(eps_pl$series, type = "l")
@@ -377,8 +379,9 @@ Flicker noise corresponds to a non stationary power-law with spectral index $\ka
 ## Generate signal
 
 ```{r}
-sigma2_wn_fl <- 1
-sigma2_fl <- 1
+# fix stochastic parameters
+sigma2_wn_fl <- 8e-07
+sigma2_fl <- 1e-06
 eps_fl = generate(wn(sigma2_wn_fl) + flicker(sigma2 = sigma2_fl),
                   n = n, seed = 123)
 plot(eps_fl$series, type = "l")

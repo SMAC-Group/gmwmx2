@@ -348,7 +348,7 @@ get_theoretical_wv <- function(theta, model, n, wv_obj = NULL, tau = NULL, prep 
 #' @details
 #' The GMWM estimator solves a weighted least-squares criterion of the form
 #' \deqn{
-#'   \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta})\right\}^\top
+#'   \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta})\right\}^{\top}
 #'   \boldsymbol{\Omega}
 #'   \left\{\hat{\boldsymbol{\nu}} - \boldsymbol{\nu}(\boldsymbol{\theta})\right\}
 #' }
