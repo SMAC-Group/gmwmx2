@@ -124,7 +124,7 @@ beta = c(0.5 , 0.00004, 0.005,  0.0008)
 
 # visualize the deterministic signal
 plot(x = X[, 2], y = X %*% beta, type = "l",
-     main = "Signal", xlab = "Time", ylab = "Signal")
+     main = "Signal", xlab = "Time", ylab = "Signal", las = 1)
 ```
 
 We now define three different stochastic noise settings using the same `X` and `beta`.
@@ -135,8 +135,8 @@ We now define three different stochastic noise settings using the same `X` and `
 
 ```{r}
 phi_ar1 = 0.95
-sigma2_ar1 =  2e-07
-sigma2_wn =  2e-07
+sigma2_ar1 =  5e-07
+sigma2_wn =  5e-07
 eps = gmwmx2::generate(ar1(phi = phi_ar1, sigma2 = sigma2_ar1) + wn(sigma2_wn), n = n, seed = 123)$series
 plot(wv::wvar(eps))
 y = X %*% beta + eps
