@@ -1,16 +1,3 @@
-
-# trans_kappa_pl <- function(x) {
-#   # exp(x) - 1
-#   tanh(x)
-# }
-
-# inv_trans_kappa_pl <- function(x){
-#   # log(x + 1)
-#   atanh(x)
-# }
-
-
-
 # transform from real line to domain
 #' Transform power-law kappa from real line to domain
 #'
