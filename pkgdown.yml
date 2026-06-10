@@ -1,4 +1,4 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -10,7 +10,7 @@ articles:
   estimate_small_network: estimate_small_network.html
   load_plot_data_ngl: load_plot_data_ngl.html
   plot_large_network: plot_large_network.html
-last_built: 2026-02-19T15:37Z
+last_built: 2026-06-10T07:41Z
 urls:
   reference: https://smac-group.github.io/gmwmx2/reference
   article: https://smac-group.github.io/gmwmx2/articles
