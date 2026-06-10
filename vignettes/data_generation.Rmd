@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   fig.height = 6,
   fig.align = "center"
 )
+
+
 ```
 
 This vignette shows how to build stochastic models, combine them with `+`,
