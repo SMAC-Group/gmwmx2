@@ -13,9 +13,6 @@ knitr::opts_chunk$set(
   fig.height = 8, # Set default plot height (adjust as needed)
   fig.align = "center" # Center align all plots
 )
-
-
-
 ```
 
 

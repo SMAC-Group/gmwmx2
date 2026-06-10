@@ -90,7 +90,7 @@ knitr::opts_chunk$set(
 )
 
 # so as not to execute this vignette during package development
-# knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
 ```
 
 Overall, these examples illustrate how `gmwmx2()` supports inference for
