@@ -110,51 +110,15 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">station_data</span> <span class="op">=</span> <span class="fu">gmwmx2</span><span class="fu">::</span><span class="fu"><a href="download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># station_data = gmwmx2::download_station_ngl("1LSU")</span></span></span>
 <span class="r-in"><span><span class="co"># fit station with WN and PL</span></span></span>
-<span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="gmwmx2.html">gmwmx2</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">station_data</span>,</span></span>
-<span class="r-in"><span>  n_seasonal <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>  model <span class="op">=</span> <span class="fu"><a href="wn.html">wn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="pl.html">pl</a></span><span class="op">(</span><span class="op">)</span>, component <span class="op">=</span> <span class="st">"N"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fit1</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GMWMX fit GNSS Times Series (Nevada Geodetic Laboratory)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         Estimate Std.Error   CI.Lower  CI.Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Intercept              8.148e-01 5.623e-01 -2.874e-01 1.917e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Trend                 -1.275e-06 1.366e-05 -2.806e-05 2.551e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Annual)          -5.644e-04 8.334e-03 -1.690e-02 1.577e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Annual)          -4.097e-03 8.314e-03 -2.039e-02 1.220e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sin (Semi-Annual)      1.124e-03 8.010e-03 -1.458e-02 1.682e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cos (Semi-Annual)     -4.307e-04 7.991e-03 -1.609e-02 1.523e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 52920        5.892e-04 4.565e-02 -8.888e-02 9.006e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53619       -2.957e-03 3.968e-02 -8.074e-02 7.482e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 53866       -4.751e-04 3.939e-02 -7.767e-02 7.672e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54637       -2.108e-04 1.303e-01 -2.557e-01 2.553e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 54640        6.484e-03 1.304e-01 -2.491e-01 2.621e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 55300       -2.310e-03 2.882e-02 -5.879e-02 5.417e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56671       -1.010e-03 4.176e-02 -8.286e-02 8.084e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 56868        1.196e-03 4.180e-02 -8.073e-02 8.312e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58298        3.127e-03 6.837e-02 -1.309e-01 1.371e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Jump: MJD 58004        1.098e-03 4.618e-02 -8.942e-02 9.162e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Earthquake: MJD 58004 -6.512e-03 1.131e-01 -2.282e-01 2.152e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Missingness model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Proportion missing : 0.0576 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   p1                 : 0.0072 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   p2                 : 0.1173 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   p*                 : 0.9424 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Stochastic model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sum of 2 processes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] White Noise</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : sigma2 = 8.2e-07 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [2] Stationary PowerLaw</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Estimated parameters : kappa =    -1, sigma2 = 9.783e-07 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Runtime (seconds)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Total              : 3.4955 </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot.gmwmx2_fit_gnss_ts_ngl-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># fit1 &lt;- gmwmx2(</span></span></span>
+<span class="r-in"><span><span class="co">#   station_data,</span></span></span>
+<span class="r-in"><span><span class="co">#   n_seasonal = 2,</span></span></span>
+<span class="r-in"><span><span class="co">#   model = wn() + pl(), component = "N"</span></span></span>
+<span class="r-in"><span><span class="co"># )</span></span></span>
+<span class="r-in"><span><span class="co"># fit1</span></span></span>
+<span class="r-in"><span><span class="co"># plot(fit1)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
