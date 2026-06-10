@@ -1,12 +1,32 @@
 # gmwmx2 version 0.0.5
 
-- Added a new composable stochastic-model framework with `time_series_model` / `sum_model` objects and component constructors: `wn()`, `ar1()`, `rw()`, `pl()`, `flicker()`, and `matern()`.
-- Added `gmwm2()` to fit stochastic models directly from wavelet variance, with new helpers for parameter layout, transformations, theoretical WV computation, and model printing/plotting.
-- Added `gmwmx2_new()` as a generic GMWMX interface for arbitrary `X` and `y` (in addition to GNSS-specific workflows), including explicit paths for complete and incomplete series (`gmwmx2_new_no_missing()` / `gmwmx2_new_with_missing()`).
-- Extended simulation/generation utilities with `generate()` methods for single and composite models plus missingness support (`markov_two_states()` and related plotting methods).
-- Added random-walk covariance C++ back-end routines (`get_sigma_mat_rw()`, `get_mean_diagonal_super_diagonals_cov_mat_rw_cpp()`) and integrated them through `RcppExports`.
-- Expanded documentation with many new man pages and three new vignettes: `data_generation.Rmd`, `estimate_composite_stochastic_models.Rmd`, and `gmwmx2_new.Rmd`.
-- Updated package metadata and dependencies for the new modeling stack (notably adding `longmemo` and pkgdown URL metadata updates).
+- Added a composable stochastic-model interface. Models are now built with
+  `wn()`, `ar1()`, `rw()`, `pl()`, `flicker()`, and `matern()`, and independent
+  components can be combined with `+`.
+- Added `gmwm2()` for fitting stochastic models directly from a time series by
+  matching empirical and theoretical wavelet variances. The returned
+  `gmwm2_fit` objects include print and plot methods.
+- Reworked `gmwmx2()` as an S3 generic. It now supports both the GNSS workflow
+  for `gnss_ts_ngl` objects and a generic regression interface
+  `gmwmx2(X, y, model, ...)` for arbitrary design matrices and response
+  vectors, including responses with missing observations.
+- Changed GNSS model specification from string labels such as
+  `stochastic_model = "wn + pl"` to model objects such as
+  `model = wn() + pl()` or `model = wn() + flicker()`. GNSS fit objects now use
+  class `gmwmx2_fit_gnss_ts_ngl` and have updated print and plot methods.
+- Added simulation utilities through `generate()` methods for single
+  stochastic models, composite stochastic models, and two-state Markov
+  missingness models created with `markov_two_states()`.
+- Added infrastructure for model parameter initialization, constrained
+  parameter transformations, autocovariance evaluation, theoretical wavelet
+  variance computation, and model-implied covariance matrices.
+- Added random-walk covariance C++ routines and registered them through
+  `RcppExports`.
+- Expanded documentation and vignettes for data generation, composite
+  stochastic model estimation, generic dependent-error regression, regression
+  with missing observations, and GNSS time-series estimation.
+- Updated package metadata for the new modeling stack, including the `longmemo`
+  dependency and pkgdown website URL.
 
 # gmwmx2 version 0.0.4
 

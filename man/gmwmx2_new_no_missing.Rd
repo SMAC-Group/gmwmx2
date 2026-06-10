@@ -33,8 +33,6 @@ gmwmx2_new_no_missing(
 A fitted model object (to be defined).
 }
 \description{
-Draft interface for a future \code{gmwmx2()} that can be called either with a
-\code{gnss_ts_ngl} object (current workflow) or with a generic design matrix
-and response vector.
+GMWMX estimator
 }
 \keyword{internal}
