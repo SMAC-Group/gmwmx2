@@ -1,8 +1,5 @@
 #' GMWMX estimator
 #'
-#' Draft interface for a future `gmwmx2()` that can be called either with a
-#' \code{gnss_ts_ngl} object (current workflow) or with a generic design matrix
-#' and response vector.
 #'
 #' @param X Design matrix for a generic regression interface.
 #' @param y Response vector for a generic regression interface.

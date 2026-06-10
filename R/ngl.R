@@ -98,10 +98,10 @@ download_station_ngl <- function(station_name, verbose = FALSE, reference_frame 
 
   # ------------------------------------------------------------------------------- Load all stations to check if specified station is accesible
   # check that station is available
-  df_all_stations <- download_all_stations_ngl()
-  if (!station_name %in% df_all_stations$station_name) {
-    stop("Invalid station name")
-  }
+  # df_all_stations <- download_all_stations_ngl()
+  # if (!station_name %in% df_all_stations$station_name) {
+  #   stop("Invalid station name")
+  # }
 
   # ------------------------------------------------------------------------------- Load position time series
   file_name <- tempfile()
