@@ -257,15 +257,15 @@ print.gmwmx2_fit_gnss_ts_ngl <- function(x, digits = 4, ...) {
 #' @param ... Additional graphical parameters.
 #' @return No return value. Plot a \code{gmwmx2_fit_gnss_ts_ngl} object.
 #' @examples
-#' station_data = gmwmx2::download_station_ngl("1LSU")
+#' # station_data = gmwmx2::download_station_ngl("1LSU")
 #' # fit station with WN and PL
-#' fit1 <- gmwmx2(
-#'   station_data,
-#'   n_seasonal = 2,
-#'   model = wn() + pl(), component = "N"
-#' )
-#' fit1
-#' plot(fit1)
+#' # fit1 <- gmwmx2(
+#' #   station_data,
+#' #   n_seasonal = 2,
+#' #   model = wn() + pl(), component = "N"
+#' # )
+#' # fit1
+#' # plot(fit1)
 #'
 #' @export
 plot.gmwmx2_fit_gnss_ts_ngl <- function(x, ...) {
