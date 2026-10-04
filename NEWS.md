@@ -1,8 +1,15 @@
 # gmwmx2 version 0.0.6
 
+- Added clear errors when plotting GNSS objects of class `gnss_ts_ngl` with
+  missing or empty position data.
+- Added calendar-year axes to time-series plots of `gnss_ts_ngl` objects.
+- Updated the NGL load-and-plot vignette to use station CERN and skip plotting
+  when downloaded position data are empty.
 - Registered the S3 methods for internal autocovariance and model covariance
   calculations, resolving roxygen2 registration warnings while keeping the
   generics internal.
+- Updated the README to describe Wavelet Moment Regression (WAMORE) and cite
+  the 2026 arxiv preprint.
 
 # gmwmx2 version 0.0.5
 
