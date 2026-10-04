@@ -31,6 +31,7 @@ Imports:
     rlang,
     longmemo
 Suggests: knitr,
+          leaflet,
           rmarkdown,
           knitcitations,
           raster,

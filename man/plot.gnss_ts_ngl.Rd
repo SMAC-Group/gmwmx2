@@ -19,6 +19,11 @@ No return value. Plot a \code{gnss_ts_ngl} object.
 \description{
 Plot a \code{gnss_ts_ngl} object
 }
+\details{
+Calendar years are shown above each time-series panel, with spacing
+chosen automatically from the time span (approximately six labels).
+Modified Julian Dates are retained below.
+}
 \examples{
 station_1LSU <- download_station_ngl("1LSU")
 plot(station_1LSU)

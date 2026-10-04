@@ -15,6 +15,7 @@ get_variance_covariance_matrix_model <- function(model, n, theta = NULL, prep = 
 }
 
 #' @keywords internal
+#' @export
 get_variance_covariance_matrix_model.time_series_model <- function(model, n, theta = NULL, prep = NULL, ...) {
   n <- as.integer(n)
   if (length(n) != 1L || is.na(n) || n <= 0L) {
@@ -36,6 +37,7 @@ get_variance_covariance_matrix_model.time_series_model <- function(model, n, the
 }
 
 #' @keywords internal
+#' @export
 get_variance_covariance_matrix_model.sum_model <- function(model, n, theta = NULL, prep = NULL, ...) {
   #------------------------
   # model = ar1() +rw()

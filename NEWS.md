@@ -1,3 +1,9 @@
+# gmwmx2 version 0.0.6
+
+- Registered the S3 methods for internal autocovariance and model covariance
+  calculations, resolving roxygen2 registration warnings while keeping the
+  generics internal.
+
 # gmwmx2 version 0.0.5
 
 - Added a composable stochastic-model interface. Models are now built with

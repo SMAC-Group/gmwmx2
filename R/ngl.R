@@ -421,6 +421,9 @@ download_estimated_velocities_ngl <- function(verbose = FALSE) {
 
 
 #' Plot a \code{gnss_ts_ngl} object
+#' @details Calendar years are shown above each time-series panel, with spacing
+#'   chosen automatically from the time span (approximately six labels).
+#'   Modified Julian Dates are retained below.
 #' @param x A \code{gnss_ts_ngl} object.
 #' @param component A \code{string} with value either "N", "E" or "V" that specify which component to plot (Northing, Easting or Vertical).
 #' @param ... Additional graphical parameters.
@@ -452,6 +455,26 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       "must contain a finite numeric date for every position observation.",
       call. = FALSE
     )
+  }
+
+  # Align calendar labels to January 1, using a readable spacing for the span.
+  date_range <- as.Date(range(mjd), origin = "1858-11-17")
+  year_range <- as.integer(format(date_range, "%Y"))
+  year_step <- max(1, ceiling(diff(pretty(year_range, n = 6))[1L]))
+  years <- seq(floor(year_range[1L] / year_step) * year_step,
+               year_range[2L], by = year_step)
+  year_mjd <- as.numeric(as.Date(paste0(years, "-01-01")) -
+                          as.Date("1858-11-17"))
+  keep <- year_mjd >= min(mjd) & year_mjd <= max(mjd)
+  year_mjd <- year_mjd[keep]
+  years <- years[keep]
+  # A short series may contain no January 1; still identify its calendar year.
+  if (length(year_mjd) == 0L) {
+    year_mjd <- mean(range(mjd))
+    years <- format(as.Date(year_mjd, origin = "1858-11-17"), "%Y")
+  }
+  add_year_axis <- function() {
+    graphics::axis(3, at = year_mjd, labels = years, cex.axis = 0.85)
   }
 
   # compute NA over the time series
@@ -497,6 +520,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$northings_fractional_portion, type = "l",
       xlab = "", ylab = "", las = 1
     )
+    add_year_axis()
     grid(col = "grey90", lty = 2)
     lines(x$df_position$modified_julian_day,
       y = x$df_position$northings_fractional_portion
@@ -527,6 +551,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$eastings_fractional_portion, type = "l",
       xlab = "", ylab = "", las = 1
     )
+    add_year_axis()
     grid(col = "grey90", lty = 2)
 
     lines(x$df_position$modified_julian_day,
@@ -557,6 +582,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = x$df_position$vertical_fractional_portion,
       type = "l", xlab = "", ylab = "", las = 1
     )
+    add_year_axis()
     grid(col = "grey90", lty = 2)
 
 
@@ -638,6 +664,7 @@ plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
       y = y, type = "l",
       xlab = "", ylab = "", las = 1
     )
+    add_year_axis()
     grid(col = "grey90", lty = 2)
 
     lines(x$df_position$modified_julian_day,

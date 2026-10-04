@@ -33,6 +33,7 @@ get_autocovariance <- function(object, n, theta = NULL, prep = NULL, ...) {
 
 # -------------------------- SINGLE MODEL CASE --------------------------
 #' @keywords internal
+#' @export
 get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep = NULL, ...) {
   # Basic input checks
   n <- as.integer(n)
@@ -101,6 +102,7 @@ get_autocovariance.time_series_model <- function(object, n, theta = NULL, prep =
 
 # -------------------------- SUM MODEL CASE --------------------------
 #' @keywords internal
+#' @export
 get_autocovariance.sum_model <- function(object, n, theta = NULL, prep = NULL, return_components = FALSE, ...) {
 
 
