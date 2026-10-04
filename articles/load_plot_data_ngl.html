@@ -103,7 +103,11 @@
 
 
 
-      </header><div class="row">
+      </header><link href="load_plot_data_ngl_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="load_plot_data_ngl_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="load_plot_data_ngl_files/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="load_plot_data_ngl_files/leaflet-1.3.1/leaflet.js"></script><link href="load_plot_data_ngl_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="load_plot_data_ngl_files/proj4-2.6.2/proj4.min.js"></script><script src="load_plot_data_ngl_files/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="load_plot_data_ngl_files/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="load_plot_data_ngl_files/leaflet-binding-2.2.3/leaflet.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Load and plot data from Nevada Geodetic
@@ -139,13 +143,13 @@ Laboratory</h1>
 <h2 id="download-one-station">Download one station<a class="anchor" aria-label="anchor" href="#download-one-station"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_1LSU</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"1LSU"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data_CERN</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/download_station_ngl.html">download_station_ngl</a></span><span class="op">(</span><span class="st">"CERN"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="extract-gnss-position-time-series-for-the-station">Extract GNSS position time series for the station<a class="anchor" aria-label="anchor" href="#extract-gnss-position-time-series-for-the-station"></a>
 </h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $names</span></span>
 <span><span class="co">## [1] "df_position"                   "df_equipment_software_changes"</span></span>
 <span><span class="co">## [3] "df_earthquakes"               </span></span>
@@ -153,124 +157,135 @@ Laboratory</h1>
 <span><span class="co">## $class</span></span>
 <span><span class="co">## [1] "gnss_ts_ngl"</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    station_name    date decimal_year modified_julian_day gps_week</span></span>
 <span><span class="co">##          &lt;char&gt;  &lt;char&gt;        &lt;num&gt;               &lt;int&gt;    &lt;int&gt;</span></span>
-<span><span class="co">## 1:         1LSU 03APR23     2003.307               52752     1215</span></span>
-<span><span class="co">## 2:         1LSU 03APR24     2003.310               52753     1215</span></span>
-<span><span class="co">## 3:         1LSU 03APR25     2003.313               52754     1215</span></span>
-<span><span class="co">## 4:         1LSU 03APR26     2003.315               52755     1215</span></span>
-<span><span class="co">## 5:         1LSU 03APR27     2003.318               52756     1216</span></span>
-<span><span class="co">## 6:         1LSU 03APR28     2003.321               52757     1216</span></span>
+<span><span class="co">## 1:         CERN 11JAN09     2011.023               55570     1618</span></span>
+<span><span class="co">## 2:         CERN 11JAN10     2011.025               55571     1618</span></span>
+<span><span class="co">## 3:         CERN 11JAN11     2011.028               55572     1618</span></span>
+<span><span class="co">## 4:         CERN 11JAN12     2011.031               55573     1618</span></span>
+<span><span class="co">## 5:         CERN 11JAN13     2011.034               55574     1618</span></span>
+<span><span class="co">## 6:         CERN 11JAN14     2011.036               55575     1618</span></span>
 <span><span class="co">##    day_of_gps_week longitude_reference_meridian eastings_integer_portion</span></span>
 <span><span class="co">##              &lt;int&gt;                        &lt;num&gt;                    &lt;int&gt;</span></span>
-<span><span class="co">## 1:               3                        -91.2                     1896</span></span>
-<span><span class="co">## 2:               4                        -91.2                     1896</span></span>
-<span><span class="co">## 3:               5                        -91.2                     1896</span></span>
-<span><span class="co">## 4:               6                        -91.2                     1896</span></span>
-<span><span class="co">## 5:               0                        -91.2                     1896</span></span>
-<span><span class="co">## 6:               1                        -91.2                     1896</span></span>
+<span><span class="co">## 1:               0                          6.1                    -3040</span></span>
+<span><span class="co">## 2:               1                          6.1                    -3040</span></span>
+<span><span class="co">## 3:               2                          6.1                    -3040</span></span>
+<span><span class="co">## 4:               3                          6.1                    -3040</span></span>
+<span><span class="co">## 5:               4                          6.1                    -3040</span></span>
+<span><span class="co">## 6:               5                          6.1                    -3040</span></span>
 <span><span class="co">##    eastings_fractional_portion northings_integer_portion</span></span>
 <span><span class="co">##                          &lt;num&gt;                     &lt;int&gt;</span></span>
-<span><span class="co">## 1:                    0.710905                   3365278</span></span>
-<span><span class="co">## 2:                    0.711658                   3365278</span></span>
-<span><span class="co">## 3:                    0.710608                   3365278</span></span>
-<span><span class="co">## 4:                    0.710365                   3365278</span></span>
-<span><span class="co">## 5:                    0.710191                   3365278</span></span>
-<span><span class="co">## 6:                    0.709996                   3365278</span></span>
+<span><span class="co">## 1:                   -0.514880                   5124647</span></span>
+<span><span class="co">## 2:                   -0.516516                   5124647</span></span>
+<span><span class="co">## 3:                   -0.515332                   5124647</span></span>
+<span><span class="co">## 4:                   -0.513767                   5124647</span></span>
+<span><span class="co">## 5:                   -0.514585                   5124647</span></span>
+<span><span class="co">## 6:                   -0.513555                   5124647</span></span>
 <span><span class="co">##    northings_fractional_portion vertical_integer_portion</span></span>
 <span><span class="co">##                           &lt;num&gt;                    &lt;int&gt;</span></span>
-<span><span class="co">## 1:                     0.822462                       -6</span></span>
-<span><span class="co">## 2:                     0.822461                       -6</span></span>
-<span><span class="co">## 3:                     0.821198                       -6</span></span>
-<span><span class="co">## 4:                     0.822708                       -6</span></span>
-<span><span class="co">## 5:                     0.823504                       -6</span></span>
-<span><span class="co">## 6:                     0.821861                       -6</span></span>
+<span><span class="co">## 1:                     0.449870                      525</span></span>
+<span><span class="co">## 2:                     0.450337                      525</span></span>
+<span><span class="co">## 3:                     0.449564                      525</span></span>
+<span><span class="co">## 4:                     0.449247                      525</span></span>
+<span><span class="co">## 5:                     0.448877                      525</span></span>
+<span><span class="co">## 6:                     0.450695                      525</span></span>
 <span><span class="co">##    vertical_fractional_portion antenna_height east_sigma north_sigma</span></span>
 <span><span class="co">##                          &lt;num&gt;          &lt;num&gt;      &lt;num&gt;       &lt;num&gt;</span></span>
-<span><span class="co">## 1:                   -0.518135              0   0.000770    0.000826</span></span>
-<span><span class="co">## 2:                   -0.513158              0   0.000814    0.000838</span></span>
-<span><span class="co">## 3:                   -0.512472              0   0.000789    0.000829</span></span>
-<span><span class="co">## 4:                   -0.522002              0   0.000810    0.000851</span></span>
-<span><span class="co">## 5:                   -0.516939              0   0.000810    0.000851</span></span>
-<span><span class="co">## 6:                   -0.519796              0   0.000802    0.000858</span></span>
+<span><span class="co">## 1:                    0.932432              0   0.000709    0.000890</span></span>
+<span><span class="co">## 2:                    0.926775              0   0.000719    0.000935</span></span>
+<span><span class="co">## 3:                    0.936433              0   0.000738    0.000947</span></span>
+<span><span class="co">## 4:                    0.930674              0   0.000706    0.000898</span></span>
+<span><span class="co">## 5:                    0.932144              0   0.000707    0.000912</span></span>
+<span><span class="co">## 6:                    0.930274              0   0.000716    0.000896</span></span>
 <span><span class="co">##    vertical_sigma east_north_correlation east_vertical_correlation</span></span>
 <span><span class="co">##             &lt;num&gt;                  &lt;num&gt;                     &lt;num&gt;</span></span>
-<span><span class="co">## 1:       0.003138              -0.016190                  0.051348</span></span>
-<span><span class="co">## 2:       0.003325              -0.045837                  0.028720</span></span>
-<span><span class="co">## 3:       0.003217              -0.005310                 -0.038035</span></span>
-<span><span class="co">## 4:       0.003332              -0.040613                 -0.025021</span></span>
-<span><span class="co">## 5:       0.003306              -0.002084                  0.023121</span></span>
-<span><span class="co">## 6:       0.003336               0.000188                  0.024412</span></span>
+<span><span class="co">## 1:       0.002850               0.052565                  0.013069</span></span>
+<span><span class="co">## 2:       0.002885               0.066901                 -0.014813</span></span>
+<span><span class="co">## 3:       0.003010               0.018697                 -0.000089</span></span>
+<span><span class="co">## 4:       0.002836               0.059289                 -0.004831</span></span>
+<span><span class="co">## 5:       0.002871               0.061830                 -0.000196</span></span>
+<span><span class="co">## 6:       0.002896               0.044424                 -0.014705</span></span>
 <span><span class="co">##    north_vertical_correlation nominal_station_latitude</span></span>
 <span><span class="co">##                         &lt;num&gt;                    &lt;num&gt;</span></span>
-<span><span class="co">## 1:                  -0.079018                 30.40742</span></span>
-<span><span class="co">## 2:                  -0.133744                 30.40742</span></span>
-<span><span class="co">## 3:                  -0.065320                 30.40742</span></span>
-<span><span class="co">## 4:                  -0.098485                 30.40742</span></span>
-<span><span class="co">## 5:                  -0.054431                 30.40742</span></span>
-<span><span class="co">## 6:                  -0.068907                 30.40742</span></span>
+<span><span class="co">## 1:                  -0.136312                 46.25695</span></span>
+<span><span class="co">## 2:                  -0.128660                 46.25695</span></span>
+<span><span class="co">## 3:                  -0.101435                 46.25695</span></span>
+<span><span class="co">## 4:                  -0.132695                 46.25695</span></span>
+<span><span class="co">## 5:                  -0.142020                 46.25695</span></span>
+<span><span class="co">## 6:                  -0.131013                 46.25695</span></span>
 <span><span class="co">##    nominal_station_longitude nominal_station_height</span></span>
 <span><span class="co">##                        &lt;num&gt;                  &lt;num&gt;</span></span>
-<span><span class="co">## 1:                 -91.18026               -6.51814</span></span>
-<span><span class="co">## 2:                 -91.18026               -6.51316</span></span>
-<span><span class="co">## 3:                 -91.18026               -6.51247</span></span>
-<span><span class="co">## 4:                 -91.18026               -6.52200</span></span>
-<span><span class="co">## 5:                 -91.18026               -6.51694</span></span>
-<span><span class="co">## 6:                 -91.18026               -6.51980</span></span></code></pre>
+<span><span class="co">## 1:                 -353.9394               525.9324</span></span>
+<span><span class="co">## 2:                 -353.9394               525.9268</span></span>
+<span><span class="co">## 3:                 -353.9394               525.9364</span></span>
+<span><span class="co">## 4:                 -353.9394               525.9307</span></span>
+<span><span class="co">## 5:                 -353.9394               525.9321</span></span>
+<span><span class="co">## 6:                 -353.9394               525.9303</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="locate-the-station-on-a-map">Locate the station on a map<a class="anchor" aria-label="anchor" href="#locate-the-station-on-a-map"></a>
+</h2>
+<p>The interactive map uses the nominal station coordinates returned by
+<code><a href="../reference/download_station_ngl.html">download_station_ngl()</a></code> and OpenStreetMap tiles via the
+optional <code>leaflet</code> package. No account or API key is needed.
+The map background requires an internet connection when viewing the
+vignette; attribution is shown on the map.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0L</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Skipping map: no position data were downloaded for CERN."</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"leaflet"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Install the optional 'leaflet' package to display the station map."</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">latitude</span> <span class="op">&lt;-</span> <span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">$</span><span class="va">nominal_station_latitude</span></span>
+<span>  <span class="va">longitude</span> <span class="op">&lt;-</span> <span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">$</span><span class="va">nominal_station_longitude</span></span>
+<span>  <span class="va">valid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite</a></span><span class="op">(</span><span class="va">latitude</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">latitude</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">90</span> <span class="op">&amp;</span></span>
+<span>                   <span class="fu"><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite</a></span><span class="op">(</span><span class="va">longitude</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">valid</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0L</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Skipping map: no valid station coordinates are available for CERN."</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">latitude</span> <span class="op">&lt;-</span> <span class="va">latitude</span><span class="op">[</span><span class="va">valid</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="va">longitude</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="op">(</span><span class="va">longitude</span><span class="op">[</span><span class="va">valid</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="fl">180</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">360</span><span class="op">)</span> <span class="op">-</span> <span class="fl">180</span></span>
+<span></span>
+<span>    <span class="va">station_map</span> <span class="op">&lt;-</span> <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/leaflet.html" class="external-link">leaflet</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">station_map</span> <span class="op">&lt;-</span> <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addTiles</a></span><span class="op">(</span><span class="va">station_map</span><span class="op">)</span></span>
+<span>    <span class="va">station_map</span> <span class="op">&lt;-</span> <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-methods.html" class="external-link">setView</a></span><span class="op">(</span><span class="va">station_map</span>, lng <span class="op">=</span> <span class="va">longitude</span>,</span>
+<span>                                    lat <span class="op">=</span> <span class="va">latitude</span>, zoom <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span>    <span class="fu">leaflet</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/leaflet/reference/map-layers.html" class="external-link">addMarkers</a></span><span class="op">(</span><span class="va">station_map</span>, lng <span class="op">=</span> <span class="va">longitude</span>, lat <span class="op">=</span> <span class="va">latitude</span>,</span>
+<span>                        popup <span class="op">=</span> <span class="st">"CERN GNSS station"</span>, label <span class="op">=</span> <span class="st">"CERN"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:960px;height:768px;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addMarkers","args":[46.2569549245,6.060566023600018,null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},"CERN GNSS station",null,null,null,"CERN",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"setView":[[46.2569549245,6.060566023600018],12,[]],"limits":{"lat":[46.2569549245,46.2569549245],"lng":[6.060566023600018,6.060566023600018]}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="extract-equipment-or-software-change-steps">Extract equipment or software change steps<a class="anchor" aria-label="anchor" href="#extract-equipment-or-software-change-steps"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    station_name date_YYMMDD step_type_code type_equipment_change</span></span>
-<span><span class="co">##          &lt;char&gt;      &lt;char&gt;          &lt;int&gt;                &lt;char&gt;</span></span>
-<span><span class="co">## 1:         1LSU     03OCT08              1       Logfile_Changed</span></span>
-<span><span class="co">## 2:         1LSU     03OCT08              1       Logfile_Changed</span></span>
-<span><span class="co">## 3:         1LSU     03OCT08              1       Logfile_Changed</span></span>
-<span><span class="co">## 4:         1LSU     03OCT08              1       Logfile_Changed</span></span>
-<span><span class="co">## 5:         1LSU     03OCT08              1       Logfile_Changed</span></span>
-<span><span class="co">## 6:         1LSU     03OCT08              1       Logfile_Changed</span></span>
-<span><span class="co">##    modified_julian_date</span></span>
-<span><span class="co">##                   &lt;num&gt;</span></span>
-<span><span class="co">## 1:                52920</span></span>
-<span><span class="co">## 2:                52920</span></span>
-<span><span class="co">## 3:                52920</span></span>
-<span><span class="co">## 4:                52920</span></span>
-<span><span class="co">## 5:                52920</span></span>
-<span><span class="co">## 6:                52920</span></span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_equipment_software_changes</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Empty data.table (0 rows and 5 cols): station_name,date_YYMMDD,step_type_code,type_equipment_change,modified_julian_date</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="extract-earthquake-steps">Extract earthquake steps<a class="anchor" aria-label="anchor" href="#extract-earthquake-steps"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    station_name date_YYMMDD step_type_code treshold_distance_km</span></span>
-<span><span class="co">##          &lt;char&gt;      &lt;char&gt;          &lt;int&gt;               &lt;char&gt;</span></span>
-<span><span class="co">## 1:         1LSU     17SEP08              2             2041.738</span></span>
-<span><span class="co">##    distance_station_to_epicenter_km event_magnitude usgs_event_id</span></span>
-<span><span class="co">##                               &lt;num&gt;           &lt;num&gt;        &lt;char&gt;</span></span>
-<span><span class="co">## 1:                         1733.135             8.2    us2000ahv0</span></span>
-<span><span class="co">##    modified_julian_date</span></span>
-<span><span class="co">##                   &lt;num&gt;</span></span>
-<span><span class="co">## 1:                58004</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_earthquakes</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Empty data.table (0 rows and 8 cols): station_name,date_YYMMDD,step_type_code,treshold_distance_km,distance_station_to_epicenter_km,event_magnitude...</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="plot-gnss-position-time-series">Plot GNSS position time series<a class="anchor" aria-label="anchor" href="#plot-gnss-position-time-series"></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span><span class="op">)</span></span></code></pre></div>
-<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"E"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-3.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_1LSU</span>, component <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-4.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">$</span><span class="va">df_position</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0L</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_CERN</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_CERN</span>, component <span class="op">=</span> <span class="st">"N"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_CERN</span>, component <span class="op">=</span> <span class="st">"E"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">data_CERN</span>, component <span class="op">=</span> <span class="st">"V"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Skipping plots: no position data were downloaded for CERN. Check the download warnings and try again later."</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-3.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"><img src="load_plot_data_ngl_files/figure-html/unnamed-chunk-7-4.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
   </div>
 
