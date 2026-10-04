@@ -435,6 +435,25 @@ download_estimated_velocities_ngl <- function(verbose = FALSE) {
 #' plot(station_1LSU, component = "V")
 #' @return No return value. Plot a \code{gnss_ts_ngl} object.
 plot.gnss_ts_ngl <- function(x, component = NULL, ...) {
+  if (!is.data.frame(x$df_position) || nrow(x$df_position) == 0L) {
+    stop(
+      "Cannot plot GNSS time series: `df_position` is missing or empty. ",
+      "The station download may have failed; check the download warnings ",
+      "and retry `download_station_ngl()`.",
+      call. = FALSE
+    )
+  }
+
+  mjd <- x$df_position$modified_julian_day
+  if (!is.numeric(mjd) || length(mjd) != nrow(x$df_position) ||
+      any(!is.finite(mjd))) {
+    stop(
+      "Cannot plot GNSS time series: `df_position$modified_julian_day` ",
+      "must contain a finite numeric date for every position observation.",
+      call. = FALSE
+    )
+  }
+
   # compute NA over the time series
   # x = download_station_ngl("CHML")
   # component ="N"
