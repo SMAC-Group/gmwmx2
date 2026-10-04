@@ -119,8 +119,8 @@ errors and missing observations</h1>
     
 <p>This vignette demonstrates how to use the GMWMX estimator to estimate
 linear models with dependent errors described by a composite stochastic
-process in the presence of missing observations. Consider the model
-defined as:</p>
+process in the presence of missing observations <span class="citation">(Voirol et al. 2026)</span>. Consider the model defined
+as:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mi>𝐗</mi><mi>𝛃</mi><mo>+</mo><mi>𝛆</mi><mo>,</mo><mspace width="1.0em"></mspace><mi>𝛆</mi><mo>∼</mo><mi>ℱ</mi><mrow><mo stretchy="true" form="prefix">{</mo><mn>𝟎</mn><mo>,</mo><mi>𝚺</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝛄</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
     \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},
 \end{equation}</annotation></semantics></math></p>
@@ -673,6 +673,14 @@ power‑law error model and compare against OLS.</p>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">+</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span> <span class="op">=</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_beta1_hat</span> <span class="op">-</span> <span class="va">zval</span> <span class="op">*</span> <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lm_std_beta1_hat</span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">beta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">B_fl</span><span class="op">)</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">lower_ci_lm_beta1</span>, <span class="va">mat_res_fl_df</span><span class="op">$</span><span class="va">upper_ci_lm_beta1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-voirol2026towards" class="csl-entry">
+Voirol, Lionel, Haotian Xu, Yuming Zhang, Luca Insolia, Roberto
+Molinari, and Stéphane Guerrier. 2026. <span>“<span class="nocase">Towards Open Science: Monitoring Crustal Deformations in
+North America</span>.”</span> <em>arXiv Preprint arXiv:2607.16264</em>,
+ahead of print. <a href="https://doi.org/10.48550/arXiv.2607.16264" class="external-link">https://doi.org/10.48550/arXiv.2607.16264</a>.
+</div>
+</div>
 </div>
 </div>
   </div>
