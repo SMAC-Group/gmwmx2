@@ -34,40 +34,50 @@ export(rw)
 export(wn)
 importFrom(Rcpp,sourceCpp)
 importFrom(data.table,fread)
-importFrom(dplyr,filter)
-importFrom(dplyr,select)
-importFrom(graphics,abline)
-importFrom(graphics,axis)
-importFrom(graphics,box)
-importFrom(graphics,grid)
-importFrom(graphics,layout)
-importFrom(graphics,legend)
-importFrom(graphics,lines)
-importFrom(graphics,mtext)
-importFrom(graphics,par)
-importFrom(graphics,plot.new)
-importFrom(graphics,polygon)
-importFrom(httr2,req_options)
-importFrom(httr2,req_perform)
-importFrom(httr2,req_timeout)
-importFrom(httr2,req_verbose)
-importFrom(httr2,request)
-importFrom(httr2,resp_body_raw)
-importFrom(httr2,resp_check_status)
+importFrom(dplyr,
+  filter,
+  select
+)
+importFrom(graphics,
+  abline,
+  axis,
+  box,
+  grid,
+  layout,
+  legend,
+  lines,
+  mtext,
+  par,
+  plot.new,
+  polygon
+)
+importFrom(httr2,
+  req_options,
+  req_perform,
+  req_timeout,
+  req_verbose,
+  request,
+  resp_body_raw,
+  resp_check_status
+)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)
-importFrom(stats,.lm.fit)
-importFrom(stats,optim)
-importFrom(stats,plogis)
-importFrom(stats,qlogis)
-importFrom(stats,qnorm)
-importFrom(stats,rbinom)
-importFrom(stats,rnorm)
-importFrom(stats,runif)
-importFrom(stats,var)
-importFrom(utils,download.file)
-importFrom(utils,head)
-importFrom(utils,read.table)
-importFrom(utils,tail)
+importFrom(stats,
+  .lm.fit,
+  optim,
+  plogis,
+  qlogis,
+  qnorm,
+  rbinom,
+  rnorm,
+  runif,
+  var
+)
+importFrom(utils,
+  download.file,
+  head,
+  read.table,
+  tail
+)
 importFrom(wv,wvar)
 useDynLib(gmwmx2, .registration = TRUE)

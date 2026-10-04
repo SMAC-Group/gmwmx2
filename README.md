@@ -13,14 +13,17 @@ downloads](https://cranlogs.r-pkg.org/badges/grand-total/gmwmx2)](https://www.r-
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-4.0.0-6666ff.svg)](https://cran.r-project.org/)
 <!-- badges: end -->
 
-The `gmwmx2` `R` package implements the Generalized Method of Wavelet Moments with Exogenous Inputs estimator (GMWMX) presented in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2024)](https://arxiv.org/abs/2409.05160).
-The GMWMX estimator is a computationally efficient estimator to estimate large scale regression problems with dependent errors in presence of missing data.
-The `gmwmx2` `R` package  allows to estimate (i) functional/structural parameters, (ii) stochastic parameters describing the dependence structure and (iii) nuisance parameters of the missingness process of large regression models with dependent observations and missing data.
-To illustrate the capability of the GMWMX estimator, the `gmwmx2` `R` package provides functions to download an plot Global Navigation Satellite System (GNSS) position time series from the [Nevada Geodetic Laboratory](https://geodesy.unr.edu/) and allow to estimate linear model with a specific dependence structure modeled by composite stochastic processes, allowing to estimate tectonic velocities and crustal uplift from GNSS position time series.
-The package also provides an implementation of the Generalized Method of Wavelet Moments (GMWM) estimator proposed in [Guerrier, S., Skaloud, J., Stebler, Y., Victoria-Feser, M.-P., (2013)](https://doi.org/10.1080/01621459.2013.799920).
-Find vignettes with detailed examples as well as the user's manual at the [package website](https://smac-group.github.io/gmwmx2/index.html).
+The `gmwmx2` `R` package implements the **Wavelet Moment Regression (WAMORE)** inference framework presented in [Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R. and Guerrier, S. (2026)](https://arxiv.org/abs/2607.16264). WAMORE enables computationally efficient estimation and inference for large-scale regression problems with dependent errors, including settings with missing data.
 
-Below are instructions on how to install and make use of the `gmwmx2` package.
+The package supports the joint estimation of (i) functional or structural parameters, (ii) stochastic parameters characterizing the dependence structure of the errors, and (iii) nuisance parameters governing the missingness process.
+
+To illustrate the capabilities of WAMORE, `gmwmx2` provides functions to download and visualize Global Navigation Satellite System (GNSS) position time series from the [Nevada Geodetic Laboratory](https://geodesy.unr.edu/). The package enables the estimation of regression models with complex dependence structures represented by composite stochastic processes, with applications including the estimation of tectonic velocities and crustal uplift from GNSS position time series.
+
+The package also provides an implementation of the **Generalized Method of Wavelet Moments (GMWM)** estimator proposed in [Guerrier, S., Skaloud, J., Stebler, Y. and Victoria-Feser, M.-P. (2013)](https://doi.org/10.1080/01621459.2013.799920).
+
+Detailed examples, vignettes, and the user's manual are available on the [package website](https://smac-group.github.io/gmwmx2/index.html).
+
+Below are instructions for installing and using the `gmwmx2` package.
 
 ## Installation Instructions
 
@@ -81,6 +84,7 @@ The `gmwmx2` package is currently in the early stages of development. While the 
 This source code is released under is the GNU AFFERO GENERAL PUBLIC LICENSE (AGPL) v3.0. 
 
 ## References
-Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R., and Guerrier, S. (2024). Inference for Large Scale Regression Models with Dependent Errors. [doi:10.48550/arXiv.2409.05160](https://doi.org/10.48550/arXiv.2409.05160).
+
+Voirol, L., Xu, H., Zhang, Y., Insolia, L., Molinari, R., and Guerrier, S. (2026). Towards Open Science: Monitoring Crustal Deformations in North America. [doi:10.48550/arXiv.2607.16264](https://doi.org/10.48550/arXiv.2607.16264).
 
 Guerrier, S., Skaloud, J., Stebler, Y. and Victoria-Feser, M.P., 2013. Wavelet-variance-based estimation for composite stochastic processes. Journal of the American Statistical Association, 108(503), pp.1021-1030. [doi:10.1080/01621459.2013.799920](https://doi.org/10.1080/01621459.2013.799920)

@@ -15,7 +15,6 @@ Description: Implements the Generalized Method of Wavelet Moments with Exogenous
 License: AGPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Language: en-US
 Depends:
     R (>= 4.0.0)
@@ -44,3 +43,4 @@ Suggests: knitr,
 URL: https://smac-group.github.io/gmwmx2/, https://github.com/SMAC-Group/gmwmx2
 BugReports: https://github.com/SMAC-Group/gmwmx2/issues
 LazyData: true
+Config/roxygen2/version: 8.1.0
