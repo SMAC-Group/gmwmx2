@@ -29,7 +29,7 @@ hands-on guide for geodetic time series from the Nevada Geodetic Laboratory.
 # Estimating tectonic velocities and crustal uplift
 
 While the GMWMX, as described above and in more detail in
-@voirol2024inference, is a general method for estimating large linear models
+@voirol2026towards, is a general method for estimating large linear models
 with complex dependence structures in presence of missing observations, the
 `gmwmx2` `R` package allows to estimate tectonic
 velocities and crustal uplift from position time series in graticule distance (GD) coordinates

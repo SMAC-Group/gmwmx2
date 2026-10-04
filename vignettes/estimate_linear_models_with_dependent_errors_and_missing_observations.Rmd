@@ -1,6 +1,7 @@
 ---
 title: "GMWMX: Estimate linear models with dependent errors and missing observations"
 output: rmarkdown::html_vignette
+bibliography: REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{GMWMX: Estimate linear models with dependent errors and missing observations}
   %\VignetteEngine{knitr::rmarkdown}
@@ -9,7 +10,7 @@ vignette: >
 
 This vignette demonstrates how to use the GMWMX estimator to estimate linear
 models with dependent errors described by a composite stochastic process in
-the presence of missing observations. Consider the model defined as:
+the presence of missing observations [@voirol2026towards]. Consider the model defined as:
 
 \begin{equation}
     \mathbf{Y} =  \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \boldsymbol{\varepsilon} \sim \mathcal{F}\left\{\mathbf{0}, \boldsymbol{\Sigma}\left(\boldsymbol{\gamma}\right)\right\},

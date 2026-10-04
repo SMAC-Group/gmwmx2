@@ -20,7 +20,8 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 This vignette demonstrates how to use the GMWMX estimator to estimate linear
-models with dependent errors described by a composite stochastic process.
+models with dependent errors described by a composite stochastic process
+[@voirol2026towards].
 Consider the model defined as:
 
 \begin{equation}
@@ -491,6 +492,5 @@ mat_res_fl_df$upper_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat + zval * mat_res_fl
 mat_res_fl_df$lower_ci_lm_beta1 = mat_res_fl_df$lm_beta1_hat - zval * mat_res_fl_df$lm_std_beta1_hat
 dplyr::between(rep(beta[2], B_pl), mat_res_fl_df$lower_ci_lm_beta1, mat_res_fl_df$upper_ci_lm_beta1) %>% mean()
 ```
-
 
 
